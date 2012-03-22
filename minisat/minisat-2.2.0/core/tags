@@ -1,0 +1,779 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+CMap	SolverTypes.h	/^class CMap$/;"	c	namespace:Minisat
+CRef	SolverTypes.h	/^typedef RegionAllocator<uint32_t>::Ref CRef;$/;"	t	namespace:Minisat
+CRefHash	SolverTypes.h	/^    struct CRefHash {$/;"	s	class:Minisat::CMap	access:private
+CRef_Undef	SolverTypes.h	/^const CRef CRef_Undef = RegionAllocator<uint32_t>::Ref_Undef;$/;"	m	namespace:Minisat
+Clause	SolverTypes.h	/^    Clause(const V& ps, bool use_extra, bool learnt) {$/;"	f	class:Minisat::Clause	access:private	signature:(const V& ps, bool use_extra, bool learnt)
+Clause	SolverTypes.h	/^class Clause {$/;"	c	namespace:Minisat
+ClauseAllocator	SolverTypes.h	/^    ClauseAllocator() : extra_clause_field(false){}$/;"	f	class:Minisat::ClauseAllocator	access:public	signature:()
+ClauseAllocator	SolverTypes.h	/^    ClauseAllocator(uint32_t start_cap) : RegionAllocator<uint32_t>(start_cap), extra_clause_field(false){}$/;"	f	class:Minisat::ClauseAllocator	access:public	signature:(uint32_t start_cap)
+ClauseAllocator	SolverTypes.h	/^class ClauseAllocator : public RegionAllocator<uint32_t>$/;"	c	namespace:Minisat	inherits:RegionAllocator
+DEPDIR	Makefile	/^DEPDIR    = mtl utils$/;"	m
+EXEC	Makefile	/^EXEC      = minisat$/;"	m
+HashTable	SolverTypes.h	/^    typedef Map<CRef, T, CRefHash> HashTable;$/;"	t	class:Minisat::CMap	access:private
+Lit	SolverTypes.h	/^struct Lit {$/;"	s	namespace:Minisat
+Minisat	Dimacs.h	/^namespace Minisat {$/;"	n
+Minisat	Solver.h	/^namespace Minisat {$/;"	n
+Minisat	SolverTypes.h	/^namespace Minisat {$/;"	n
+Minisat::CMap	SolverTypes.h	/^class CMap$/;"	c	namespace:Minisat
+Minisat::CMap::CRefHash	SolverTypes.h	/^    struct CRefHash {$/;"	s	class:Minisat::CMap	access:private
+Minisat::CMap::CRefHash::operator ()	SolverTypes.h	/^        uint32_t operator()(CRef cr) const { return (uint32_t)cr; } };$/;"	f	struct:Minisat::CMap::CRefHash	access:public	signature:(CRef cr) const
+Minisat::CMap::HashTable	SolverTypes.h	/^    typedef Map<CRef, T, CRefHash> HashTable;$/;"	t	class:Minisat::CMap	access:private
+Minisat::CMap::bucket	SolverTypes.h	/^    const vec<typename HashTable::Pair>& bucket(int i) const { return map.bucket(i); }$/;"	f	class:Minisat::CMap	access:public	signature:(int i) const
+Minisat::CMap::bucket_count	SolverTypes.h	/^    int  bucket_count() const { return map.bucket_count(); }$/;"	f	class:Minisat::CMap	access:public	signature:() const
+Minisat::CMap::clear	SolverTypes.h	/^    void     clear       ()                           { map.clear(); }$/;"	f	class:Minisat::CMap	access:public	signature:()
+Minisat::CMap::debug	SolverTypes.h	/^    void debug(){$/;"	f	class:Minisat::CMap	access:public	signature:()
+Minisat::CMap::growTo	SolverTypes.h	/^    void     growTo      (CRef cr, const T& t){ map.insert(cr, t); } \/\/ NOTE: for compatibility$/;"	f	class:Minisat::CMap	access:public	signature:(CRef cr, const T& t)
+Minisat::CMap::has	SolverTypes.h	/^    bool     has         (CRef cr, T& t)      { return map.peek(cr, t); }$/;"	f	class:Minisat::CMap	access:public	signature:(CRef cr, T& t)
+Minisat::CMap::insert	SolverTypes.h	/^    void     insert      (CRef cr, const T& t){ map.insert(cr, t); }$/;"	f	class:Minisat::CMap	access:public	signature:(CRef cr, const T& t)
+Minisat::CMap::map	SolverTypes.h	/^    HashTable map;$/;"	m	class:Minisat::CMap	access:private
+Minisat::CMap::moveTo	SolverTypes.h	/^    void moveTo(CMap& other){ map.moveTo(other.map); }$/;"	f	class:Minisat::CMap	access:public	signature:(CMap& other)
+Minisat::CMap::operator []	SolverTypes.h	/^    T&       operator [] (CRef cr)            { return map[cr]; }$/;"	f	class:Minisat::CMap	access:public	signature:(CRef cr)
+Minisat::CMap::operator []	SolverTypes.h	/^    const T& operator [] (CRef cr) const      { return map[cr]; }$/;"	f	class:Minisat::CMap	access:public	signature:(CRef cr) const
+Minisat::CMap::remove	SolverTypes.h	/^    void     remove      (CRef cr)            { map.remove(cr); }$/;"	f	class:Minisat::CMap	access:public	signature:(CRef cr)
+Minisat::CMap::size	SolverTypes.h	/^    int      size        ()                const      { return map.elems(); }$/;"	f	class:Minisat::CMap	access:public	signature:() const
+Minisat::CRef	SolverTypes.h	/^typedef RegionAllocator<uint32_t>::Ref CRef;$/;"	t	namespace:Minisat
+Minisat::CRef_Undef	SolverTypes.h	/^const CRef CRef_Undef = RegionAllocator<uint32_t>::Ref_Undef;$/;"	m	namespace:Minisat
+Minisat::Clause	SolverTypes.h	/^class Clause {$/;"	c	namespace:Minisat
+Minisat::Clause::Clause	SolverTypes.h	/^    Clause(const V& ps, bool use_extra, bool learnt) {$/;"	f	class:Minisat::Clause	access:private	signature:(const V& ps, bool use_extra, bool learnt)
+Minisat::Clause::__anon1::has_extra	SolverTypes.h	/^        unsigned has_extra : 1;$/;"	m	struct:Minisat::Clause::__anon1	access:public
+Minisat::Clause::__anon1::learnt	SolverTypes.h	/^        unsigned learnt    : 1;$/;"	m	struct:Minisat::Clause::__anon1	access:public
+Minisat::Clause::__anon1::literals_blocks_distance	SolverTypes.h	/^	uint32_t literals_blocks_distance; \/\/ As in GLUCOSE 1.1: a solver that predicts learnt clauses quality $/;"	m	struct:Minisat::Clause::__anon1	access:public
+Minisat::Clause::__anon1::mark	SolverTypes.h	/^        unsigned mark      : 2;$/;"	m	struct:Minisat::Clause::__anon1	access:public
+Minisat::Clause::__anon1::reloced	SolverTypes.h	/^        unsigned reloced   : 1;$/;"	m	struct:Minisat::Clause::__anon1	access:public
+Minisat::Clause::__anon1::size	SolverTypes.h	/^        unsigned size      : 27; $/;"	m	struct:Minisat::Clause::__anon1	access:public
+Minisat::Clause::__anon2::abs	SolverTypes.h	/^    union { Lit lit; float act; uint32_t abs; CRef rel; } data[0];$/;"	m	union:Minisat::Clause::__anon2	access:public
+Minisat::Clause::__anon2::act	SolverTypes.h	/^    union { Lit lit; float act; uint32_t abs; CRef rel; } data[0];$/;"	m	union:Minisat::Clause::__anon2	access:public
+Minisat::Clause::__anon2::lit	SolverTypes.h	/^    union { Lit lit; float act; uint32_t abs; CRef rel; } data[0];$/;"	m	union:Minisat::Clause::__anon2	access:public
+Minisat::Clause::__anon2::rel	SolverTypes.h	/^    union { Lit lit; float act; uint32_t abs; CRef rel; } data[0];$/;"	m	union:Minisat::Clause::__anon2	access:public
+Minisat::Clause::abstraction	SolverTypes.h	/^    uint32_t     abstraction () const        { assert(header.has_extra); return data[header.size].abs; }$/;"	f	class:Minisat::Clause	access:public	signature:() const
+Minisat::Clause::activity	SolverTypes.h	/^    float&       activity    ()              { assert(header.has_extra); return data[header.size].act; }$/;"	f	class:Minisat::Clause	access:public	signature:()
+Minisat::Clause::calcAbstraction	SolverTypes.h	/^    void calcAbstraction() {$/;"	f	class:Minisat::Clause	access:public	signature:()
+Minisat::Clause::data	SolverTypes.h	/^    union { Lit lit; float act; uint32_t abs; CRef rel; } data[0];$/;"	m	class:Minisat::Clause	typeref:union:Minisat::Clause::__anon2	access:private
+Minisat::Clause::has_extra	SolverTypes.h	/^    bool         has_extra   ()      const   { return header.has_extra; }$/;"	f	class:Minisat::Clause	access:public	signature:() const
+Minisat::Clause::header	SolverTypes.h	/^	}                            header;$/;"	m	class:Minisat::Clause	typeref:struct:Minisat::Clause::__anon1	access:private
+Minisat::Clause::last	SolverTypes.h	/^    const Lit&   last        ()      const   { return data[header.size-1].lit; }$/;"	f	class:Minisat::Clause	access:public	signature:() const
+Minisat::Clause::lbd	SolverTypes.h	/^    uint32_t lbd() { return header.linears_block_distance; } ;$/;"	f	class:Minisat::Clause	access:public	signature:()
+Minisat::Clause::learnt	SolverTypes.h	/^    bool         learnt      ()      const   { return header.learnt; }$/;"	f	class:Minisat::Clause	access:public	signature:() const
+Minisat::Clause::mark	SolverTypes.h	/^    uint32_t     mark        ()      const   { return header.mark; }$/;"	f	class:Minisat::Clause	access:public	signature:() const
+Minisat::Clause::mark	SolverTypes.h	/^    void         mark        (uint32_t m)    { header.mark = m; }$/;"	f	class:Minisat::Clause	access:public	signature:(uint32_t m)
+Minisat::Clause::operator []	SolverTypes.h	/^    Lit          operator [] (int i) const   { return data[i].lit; }$/;"	f	class:Minisat::Clause	access:public	signature:(int i) const
+Minisat::Clause::operator []	SolverTypes.h	/^    Lit&         operator [] (int i)         { return data[i].lit; }$/;"	f	class:Minisat::Clause	access:public	signature:(int i)
+Minisat::Clause::operator const Lit*	SolverTypes.h	/^    operator const Lit* (void) const         { return (Lit*)data; }$/;"	f	class:Minisat::Clause	access:public	signature:(void) const
+Minisat::Clause::pop	SolverTypes.h	/^    void         pop         ()              { shrink(1); }$/;"	f	class:Minisat::Clause	access:public	signature:()
+Minisat::Clause::relocate	SolverTypes.h	/^    void         relocate    (CRef c)        { header.reloced = 1; data[0].rel = c; }$/;"	f	class:Minisat::Clause	access:public	signature:(CRef c)
+Minisat::Clause::relocation	SolverTypes.h	/^    CRef         relocation  ()      const   { return data[0].rel; }$/;"	f	class:Minisat::Clause	access:public	signature:() const
+Minisat::Clause::reloced	SolverTypes.h	/^    bool         reloced     ()      const   { return header.reloced; }$/;"	f	class:Minisat::Clause	access:public	signature:() const
+Minisat::Clause::setLbd	SolverTypes.h	/^    void     setLbd(uint32_t lbd) { header.linears_blocks_distance = lbd; }$/;"	f	class:Minisat::Clause	access:public	signature:(uint32_t lbd)
+Minisat::Clause::shrink	SolverTypes.h	/^    void         shrink      (int i)         { assert(i <= size()); if (header.has_extra) data[header.size-i] = data[header.size]; header.size -= i; }$/;"	f	class:Minisat::Clause	access:public	signature:(int i)
+Minisat::Clause::size	SolverTypes.h	/^    int          size        ()      const   { return header.size; }$/;"	f	class:Minisat::Clause	access:public	signature:() const
+Minisat::Clause::strengthen	SolverTypes.h	/^    void         strengthen  (Lit p);$/;"	p	class:Minisat::Clause	access:public	signature:(Lit p)
+Minisat::Clause::strengthen	SolverTypes.h	/^inline void Clause::strengthen(Lit p)$/;"	f	class:Minisat::Clause	signature:(Lit p)
+Minisat::Clause::subsumes	SolverTypes.h	/^    Lit          subsumes    (const Clause& other) const;$/;"	p	class:Minisat::Clause	access:public	signature:(const Clause& other) const
+Minisat::Clause::subsumes	SolverTypes.h	/^inline Lit Clause::subsumes(const Clause& other) const$/;"	f	class:Minisat::Clause	signature:(const Clause& other) const
+Minisat::ClauseAllocator	SolverTypes.h	/^class ClauseAllocator : public RegionAllocator<uint32_t>$/;"	c	namespace:Minisat	inherits:RegionAllocator
+Minisat::ClauseAllocator::ClauseAllocator	SolverTypes.h	/^    ClauseAllocator() : extra_clause_field(false){}$/;"	f	class:Minisat::ClauseAllocator	access:public	signature:()
+Minisat::ClauseAllocator::ClauseAllocator	SolverTypes.h	/^    ClauseAllocator(uint32_t start_cap) : RegionAllocator<uint32_t>(start_cap), extra_clause_field(false){}$/;"	f	class:Minisat::ClauseAllocator	access:public	signature:(uint32_t start_cap)
+Minisat::ClauseAllocator::ael	SolverTypes.h	/^    Ref           ael       (const Clause* t){ return RegionAllocator<uint32_t>::ael((uint32_t*)t); }$/;"	f	class:Minisat::ClauseAllocator	access:public	signature:(const Clause* t)
+Minisat::ClauseAllocator::alloc	SolverTypes.h	/^    CRef alloc(const Lits& ps, bool learnt = false)$/;"	f	class:Minisat::ClauseAllocator	access:public	signature:(const Lits& ps, bool learnt = false)
+Minisat::ClauseAllocator::clauseWord32Size	SolverTypes.h	/^    static int clauseWord32Size(int size, bool has_extra){$/;"	f	class:Minisat::ClauseAllocator	access:private	signature:(int size, bool has_extra)
+Minisat::ClauseAllocator::extra_clause_field	SolverTypes.h	/^    bool extra_clause_field;$/;"	m	class:Minisat::ClauseAllocator	access:public
+Minisat::ClauseAllocator::free	SolverTypes.h	/^    void free(CRef cid)$/;"	f	class:Minisat::ClauseAllocator	access:public	signature:(CRef cid)
+Minisat::ClauseAllocator::lea	SolverTypes.h	/^    Clause*       lea       (Ref r)       { return (Clause*)RegionAllocator<uint32_t>::lea(r); }$/;"	f	class:Minisat::ClauseAllocator	access:public	signature:(Ref r)
+Minisat::ClauseAllocator::lea	SolverTypes.h	/^    const Clause* lea       (Ref r) const { return (Clause*)RegionAllocator<uint32_t>::lea(r); }$/;"	f	class:Minisat::ClauseAllocator	access:public	signature:(Ref r) const
+Minisat::ClauseAllocator::moveTo	SolverTypes.h	/^    void moveTo(ClauseAllocator& to){$/;"	f	class:Minisat::ClauseAllocator	access:public	signature:(ClauseAllocator& to)
+Minisat::ClauseAllocator::operator []	SolverTypes.h	/^    Clause&       operator[](Ref r)       { return (Clause&)RegionAllocator<uint32_t>::operator[](r); }$/;"	f	class:Minisat::ClauseAllocator	access:public	signature:(Ref r)
+Minisat::ClauseAllocator::operator []	SolverTypes.h	/^    const Clause& operator[](Ref r) const { return (Clause&)RegionAllocator<uint32_t>::operator[](r); }$/;"	f	class:Minisat::ClauseAllocator	access:public	signature:(Ref r) const
+Minisat::ClauseAllocator::reloc	SolverTypes.h	/^    void reloc(CRef& cr, ClauseAllocator& to)$/;"	f	class:Minisat::ClauseAllocator	access:public	signature:(CRef& cr, ClauseAllocator& to)
+Minisat::Lit	SolverTypes.h	/^struct Lit {$/;"	s	namespace:Minisat
+Minisat::Lit::mkLit	SolverTypes.h	/^    friend Lit mkLit(Var var, bool sign = false);$/;"	p	struct:Minisat::Lit	access:friend	signature:(Var var, bool sign = false)
+Minisat::Lit::operator !=	SolverTypes.h	/^    bool operator != (Lit p) const { return x != p.x; }$/;"	f	struct:Minisat::Lit	access:public	signature:(Lit p) const
+Minisat::Lit::operator <	SolverTypes.h	/^    bool operator <  (Lit p) const { return x < p.x;  } \/\/ '<' makes p, ~p adjacent in the ordering.$/;"	f	struct:Minisat::Lit	access:public	signature:(Lit p) const
+Minisat::Lit::operator ==	SolverTypes.h	/^    bool operator == (Lit p) const { return x == p.x; }$/;"	f	struct:Minisat::Lit	access:public	signature:(Lit p) const
+Minisat::Lit::x	SolverTypes.h	/^    int     x;$/;"	m	struct:Minisat::Lit	access:public
+Minisat::OccLists	SolverTypes.h	/^class OccLists$/;"	c	namespace:Minisat
+Minisat::OccLists::OccLists	SolverTypes.h	/^    OccLists(const Deleted& d) : deleted(d) {}$/;"	f	class:Minisat::OccLists	access:public	signature:(const Deleted& d)
+Minisat::OccLists::clean	SolverTypes.h	/^    void  clean     (const Idx& idx);$/;"	p	class:Minisat::OccLists	access:public	signature:(const Idx& idx)
+Minisat::OccLists::clean	SolverTypes.h	/^void OccLists<Idx,Vec,Deleted>::clean(const Idx& idx)$/;"	f	class:Minisat::OccLists	signature:(const Idx& idx)
+Minisat::OccLists::cleanAll	SolverTypes.h	/^    void  cleanAll  ();$/;"	p	class:Minisat::OccLists	access:public	signature:()
+Minisat::OccLists::cleanAll	SolverTypes.h	/^void OccLists<Idx,Vec,Deleted>::cleanAll()$/;"	f	class:Minisat::OccLists	signature:()
+Minisat::OccLists::clear	SolverTypes.h	/^    void  clear(bool free = true){$/;"	f	class:Minisat::OccLists	access:public	signature:(bool free = true)
+Minisat::OccLists::deleted	SolverTypes.h	/^    Deleted   deleted;$/;"	m	class:Minisat::OccLists	access:private
+Minisat::OccLists::dirties	SolverTypes.h	/^    vec<Idx>  dirties;$/;"	m	class:Minisat::OccLists	access:private
+Minisat::OccLists::dirty	SolverTypes.h	/^    vec<char> dirty;$/;"	m	class:Minisat::OccLists	access:private
+Minisat::OccLists::init	SolverTypes.h	/^    void  init      (const Idx& idx){ occs.growTo(toInt(idx)+1); dirty.growTo(toInt(idx)+1, 0); }$/;"	f	class:Minisat::OccLists	access:public	signature:(const Idx& idx)
+Minisat::OccLists::lookup	SolverTypes.h	/^    Vec&  lookup    (const Idx& idx){ if (dirty[toInt(idx)]) clean(idx); return occs[toInt(idx)]; }$/;"	f	class:Minisat::OccLists	access:public	signature:(const Idx& idx)
+Minisat::OccLists::occs	SolverTypes.h	/^    vec<Vec>  occs;$/;"	m	class:Minisat::OccLists	access:private
+Minisat::OccLists::operator []	SolverTypes.h	/^    Vec&  operator[](const Idx& idx){ return occs[toInt(idx)]; }$/;"	f	class:Minisat::OccLists	access:public	signature:(const Idx& idx)
+Minisat::OccLists::smudge	SolverTypes.h	/^    void  smudge    (const Idx& idx){$/;"	f	class:Minisat::OccLists	access:public	signature:(const Idx& idx)
+Minisat::Solver	Solver.h	/^class Solver {$/;"	c	namespace:Minisat
+Minisat::Solver::Solver	Solver.h	/^    Solver();$/;"	p	class:Minisat::Solver	access:public	signature:()
+Minisat::Solver::VarOrderLt	Solver.h	/^    struct VarOrderLt {$/;"	s	class:Minisat::Solver	access:protected
+Minisat::Solver::VarOrderLt::VarOrderLt	Solver.h	/^        VarOrderLt(const vec<double>&  act) : activity(act) { }$/;"	f	struct:Minisat::Solver::VarOrderLt	access:public	signature:(const vec<double>& act)
+Minisat::Solver::VarOrderLt::activity	Solver.h	/^        const vec<double>&  activity;$/;"	m	struct:Minisat::Solver::VarOrderLt	access:public
+Minisat::Solver::VarOrderLt::operator ()	Solver.h	/^        bool operator () (Var x, Var y) const { return activity[x] > activity[y]; }$/;"	f	struct:Minisat::Solver::VarOrderLt	access:public	signature:(Var x, Var y) const
+Minisat::Solver::Watcher	Solver.h	/^    struct Watcher {$/;"	s	class:Minisat::Solver	access:protected
+Minisat::Solver::Watcher::Watcher	Solver.h	/^        Watcher(CRef cr, Lit p) : cref(cr), blocker(p) {}$/;"	f	struct:Minisat::Solver::Watcher	access:public	signature:(CRef cr, Lit p)
+Minisat::Solver::Watcher::blocker	Solver.h	/^        Lit  blocker;$/;"	m	struct:Minisat::Solver::Watcher	access:public
+Minisat::Solver::Watcher::cref	Solver.h	/^        CRef cref;$/;"	m	struct:Minisat::Solver::Watcher	access:public
+Minisat::Solver::Watcher::operator !=	Solver.h	/^        bool operator!=(const Watcher& w) const { return cref != w.cref; }$/;"	f	struct:Minisat::Solver::Watcher	access:public	signature:(const Watcher& w) const
+Minisat::Solver::Watcher::operator ==	Solver.h	/^        bool operator==(const Watcher& w) const { return cref == w.cref; }$/;"	f	struct:Minisat::Solver::Watcher	access:public	signature:(const Watcher& w) const
+Minisat::Solver::WatcherDeleted	Solver.h	/^    struct WatcherDeleted$/;"	s	class:Minisat::Solver	access:protected
+Minisat::Solver::WatcherDeleted::WatcherDeleted	Solver.h	/^        WatcherDeleted(const ClauseAllocator& _ca) : ca(_ca) {}$/;"	f	struct:Minisat::Solver::WatcherDeleted	access:public	signature:(const ClauseAllocator& _ca)
+Minisat::Solver::WatcherDeleted::ca	Solver.h	/^        const ClauseAllocator& ca;$/;"	m	struct:Minisat::Solver::WatcherDeleted	access:public
+Minisat::Solver::WatcherDeleted::operator ()	Solver.h	/^        bool operator()(const Watcher& w) const { return ca[w.cref].mark() == 1; }$/;"	f	struct:Minisat::Solver::WatcherDeleted	access:public	signature:(const Watcher& w) const
+Minisat::Solver::abstractLevel	Solver.h	/^    uint32_t abstractLevel    (Var x) const; \/\/ Used to represent an abstraction of sets of decision levels.$/;"	p	class:Minisat::Solver	access:protected	signature:(Var x) const
+Minisat::Solver::abstractLevel	Solver.h	/^inline uint32_t Solver::abstractLevel (Var x) const   { return 1 << (level(x) & 31); }$/;"	f	class:Minisat::Solver	signature:(Var x) const
+Minisat::Solver::activity	Solver.h	/^    vec<double>         activity;         \/\/ A heuristic measurement of the activity of a variable.$/;"	m	class:Minisat::Solver	access:protected
+Minisat::Solver::addClause	Solver.h	/^    bool    addClause (Lit p);                                  \/\/ Add a unit clause to the solver. $/;"	p	class:Minisat::Solver	access:public	signature:(Lit p)
+Minisat::Solver::addClause	Solver.h	/^    bool    addClause (Lit p, Lit q);                           \/\/ Add a binary clause to the solver. $/;"	p	class:Minisat::Solver	access:public	signature:(Lit p, Lit q)
+Minisat::Solver::addClause	Solver.h	/^    bool    addClause (Lit p, Lit q, Lit r);                    \/\/ Add a ternary clause to the solver. $/;"	p	class:Minisat::Solver	access:public	signature:(Lit p, Lit q, Lit r)
+Minisat::Solver::addClause	Solver.h	/^    bool    addClause (const vec<Lit>& ps);                     \/\/ Add a clause to the solver. $/;"	p	class:Minisat::Solver	access:public	signature:(const vec<Lit>& ps)
+Minisat::Solver::addClause	Solver.h	/^inline bool     Solver::addClause       (Lit p)                 { add_tmp.clear(); add_tmp.push(p); return addClause_(add_tmp); }$/;"	f	class:Minisat::Solver	signature:(Lit p)
+Minisat::Solver::addClause	Solver.h	/^inline bool     Solver::addClause       (Lit p, Lit q)          { add_tmp.clear(); add_tmp.push(p); add_tmp.push(q); return addClause_(add_tmp); }$/;"	f	class:Minisat::Solver	signature:(Lit p, Lit q)
+Minisat::Solver::addClause	Solver.h	/^inline bool     Solver::addClause       (Lit p, Lit q, Lit r)   { add_tmp.clear(); add_tmp.push(p); add_tmp.push(q); add_tmp.push(r); return addClause_(add_tmp); }$/;"	f	class:Minisat::Solver	signature:(Lit p, Lit q, Lit r)
+Minisat::Solver::addClause	Solver.h	/^inline bool     Solver::addClause       (const vec<Lit>& ps)    { ps.copyTo(add_tmp); return addClause_(add_tmp); }$/;"	f	class:Minisat::Solver	signature:(const vec<Lit>& ps)
+Minisat::Solver::addClause_	Solver.h	/^    bool    addClause_(      vec<Lit>& ps);                     \/\/ Add a clause to the solver without making superflous internal copy. Will$/;"	p	class:Minisat::Solver	access:public	signature:( vec<Lit>& ps)
+Minisat::Solver::addEmptyClause	Solver.h	/^    bool    addEmptyClause();                                   \/\/ Add the empty clause, making the solver contradictory.$/;"	p	class:Minisat::Solver	access:public	signature:()
+Minisat::Solver::addEmptyClause	Solver.h	/^inline bool     Solver::addEmptyClause  ()                      { add_tmp.clear(); return addClause_(add_tmp); }$/;"	f	class:Minisat::Solver	signature:()
+Minisat::Solver::addLearnt	Solver.h	/^    CRef 		addLearnt			(vec<Lit>& , float );		\/\/ Agrega una cl√°usula a la base de datos de learnts$/;"	p	class:Minisat::Solver	access:public	signature:(vec<Lit>& , float )
+Minisat::Solver::add_tmp	Solver.h	/^    vec<Lit>            add_tmp;$/;"	m	class:Minisat::Solver	access:protected
+Minisat::Solver::analyze	Solver.h	/^    void     analyze          (CRef confl, vec<Lit>& out_learnt, int& out_btlevel);    \/\/ (bt = backtrack)$/;"	p	class:Minisat::Solver	access:protected	signature:(CRef confl, vec<Lit>& out_learnt, int& out_btlevel)
+Minisat::Solver::analyzeFinal	Solver.h	/^    void     analyzeFinal     (Lit p, vec<Lit>& out_conflict);                         \/\/ COULD THIS BE IMPLEMENTED BY THE ORDINARIY "analyze" BY SOME REASONABLE GENERALIZATION?$/;"	p	class:Minisat::Solver	access:protected	signature:(Lit p, vec<Lit>& out_conflict)
+Minisat::Solver::analyze_stack	Solver.h	/^    vec<Lit>            analyze_stack;$/;"	m	class:Minisat::Solver	access:protected
+Minisat::Solver::analyze_toclear	Solver.h	/^    vec<Lit>            analyze_toclear;$/;"	m	class:Minisat::Solver	access:protected
+Minisat::Solver::assigns	Solver.h	/^    vec<lbool>          assigns;          \/\/ The current assignments.$/;"	m	class:Minisat::Solver	access:protected
+Minisat::Solver::assumptions	Solver.h	/^    vec<Lit>            assumptions;      \/\/ Current set of assumptions provided to solve by the user.$/;"	m	class:Minisat::Solver	access:protected
+Minisat::Solver::asynch_interrupt	Solver.h	/^    bool                asynch_interrupt;$/;"	m	class:Minisat::Solver	access:protected
+Minisat::Solver::attachClause	Solver.h	/^    void     attachClause     (CRef cr);               \/\/ Attach a clause to watcher lists.$/;"	p	class:Minisat::Solver	access:protected	signature:(CRef cr)
+Minisat::Solver::budgetOff	Solver.h	/^    void    budgetOff();$/;"	p	class:Minisat::Solver	access:public	signature:()
+Minisat::Solver::budgetOff	Solver.h	/^inline void     Solver::budgetOff(){ conflict_budget = propagation_budget = -1; }$/;"	f	class:Minisat::Solver	signature:()
+Minisat::Solver::ca	Solver.h	/^    ClauseAllocator     ca;$/;"	m	class:Minisat::Solver	access:protected
+Minisat::Solver::cancelUntil	Solver.h	/^    void     cancelUntil      (int level);                                             \/\/ Backtrack until a certain level.$/;"	p	class:Minisat::Solver	access:protected	signature:(int level)
+Minisat::Solver::ccmin_mode	Solver.h	/^    int       ccmin_mode;         \/\/ Controls conflict clause minimization (0=none, 1=basic, 2=deep).$/;"	m	class:Minisat::Solver	access:public
+Minisat::Solver::checkGarbage	Solver.h	/^    void    checkGarbage();$/;"	p	class:Minisat::Solver	access:public	signature:()
+Minisat::Solver::checkGarbage	Solver.h	/^    void    checkGarbage(double gf);$/;"	p	class:Minisat::Solver	access:public	signature:(double gf)
+Minisat::Solver::checkGarbage	Solver.h	/^inline void Solver::checkGarbage(double gf){$/;"	f	class:Minisat::Solver	signature:(double gf)
+Minisat::Solver::checkGarbage	Solver.h	/^inline void Solver::checkGarbage(void){ return checkGarbage(garbage_frac); }$/;"	f	class:Minisat::Solver	signature:(void)
+Minisat::Solver::claBumpActivity	Solver.h	/^    void     claBumpActivity  (Clause& c);             \/\/ Increase a clause with the current 'bump' value.$/;"	p	class:Minisat::Solver	access:protected	signature:(Clause& c)
+Minisat::Solver::claBumpActivity	Solver.h	/^inline void Solver::claBumpActivity (Clause& c) {$/;"	f	class:Minisat::Solver	signature:(Clause& c)
+Minisat::Solver::claDecayActivity	Solver.h	/^    void     claDecayActivity ();                      \/\/ Decay all clauses with the specified factor. Implemented by increasing the 'bump' value instead.$/;"	p	class:Minisat::Solver	access:protected	signature:()
+Minisat::Solver::claDecayActivity	Solver.h	/^inline void Solver::claDecayActivity() { cla_inc *= (1 \/ clause_decay); }$/;"	f	class:Minisat::Solver	signature:()
+Minisat::Solver::cla_inc	Solver.h	/^    double              cla_inc;          \/\/ Amount to bump next clause with.$/;"	m	class:Minisat::Solver	access:protected
+Minisat::Solver::clause_decay	Solver.h	/^    double    clause_decay;$/;"	m	class:Minisat::Solver	access:public
+Minisat::Solver::clauses	Solver.h	/^    vec<CRef>           clauses;          \/\/ List of problem clauses.$/;"	m	class:Minisat::Solver	access:protected
+Minisat::Solver::clauses_literals	Solver.h	/^    uint64_t dec_vars, clauses_literals, learnts_literals, max_literals, tot_literals;$/;"	m	class:Minisat::Solver	access:public
+Minisat::Solver::clearInterrupt	Solver.h	/^    void    clearInterrupt();     \/\/ Clear interrupt indicator flag.$/;"	p	class:Minisat::Solver	access:public	signature:()
+Minisat::Solver::clearInterrupt	Solver.h	/^inline void     Solver::clearInterrupt(){ asynch_interrupt = false; }$/;"	f	class:Minisat::Solver	signature:()
+Minisat::Solver::conflict	Solver.h	/^    vec<Lit>   conflict;          \/\/ If problem is unsatisfiable (possibly under assumptions),$/;"	m	class:Minisat::Solver	access:public
+Minisat::Solver::conflict_budget	Solver.h	/^    int64_t             conflict_budget;    \/\/ -1 means no budget.$/;"	m	class:Minisat::Solver	access:protected
+Minisat::Solver::conflicts	Solver.h	/^    uint64_t solves, starts, decisions, rnd_decisions, propagations, conflicts;$/;"	m	class:Minisat::Solver	access:public
+Minisat::Solver::dec_vars	Solver.h	/^    uint64_t dec_vars, clauses_literals, learnts_literals, max_literals, tot_literals;$/;"	m	class:Minisat::Solver	access:public
+Minisat::Solver::decision	Solver.h	/^    vec<char>           decision;         \/\/ Declares if a variable is eligible for selection in the decision heuristic.$/;"	m	class:Minisat::Solver	access:protected
+Minisat::Solver::decisionLevel	Solver.h	/^    int      decisionLevel    ()      const; \/\/ Gives the current decisionlevel.$/;"	p	class:Minisat::Solver	access:protected	signature:() const
+Minisat::Solver::decisionLevel	Solver.h	/^inline int      Solver::decisionLevel ()      const   { return trail_lim.size(); }$/;"	f	class:Minisat::Solver	signature:() const
+Minisat::Solver::decisions	Solver.h	/^    uint64_t solves, starts, decisions, rnd_decisions, propagations, conflicts;$/;"	m	class:Minisat::Solver	access:public
+Minisat::Solver::detachClause	Solver.h	/^    void     detachClause     (CRef cr, bool strict = false); \/\/ Detach a clause to watcher lists.$/;"	p	class:Minisat::Solver	access:protected	signature:(CRef cr, bool strict = false)
+Minisat::Solver::drand	Solver.h	/^    static inline double drand(double& seed) {$/;"	f	class:Minisat::Solver	access:protected	signature:(double& seed)
+Minisat::Solver::enqueue	Solver.h	/^    bool     enqueue          (Lit p, CRef from = CRef_Undef);                         \/\/ Test if fact 'p' contradicts current state, enqueue otherwise.$/;"	p	class:Minisat::Solver	access:protected	signature:(Lit p, CRef from = CRef_Undef)
+Minisat::Solver::enqueue	Solver.h	/^inline bool     Solver::enqueue         (Lit p, CRef from)      { return value(p) != l_Undef ? value(p) != l_False : (uncheckedEnqueue(p, from), true); }$/;"	f	class:Minisat::Solver	signature:(Lit p, CRef from)
+Minisat::Solver::garbageCollect	Solver.h	/^    virtual void garbageCollect();$/;"	p	class:Minisat::Solver	access:public	signature:()
+Minisat::Solver::garbage_frac	Solver.h	/^    double    garbage_frac;       \/\/ The fraction of wasted memory allowed before a garbage collection is triggered.$/;"	m	class:Minisat::Solver	access:public
+Minisat::Solver::getLearnts	Solver.h	/^    vec<CRef> &	getLearnts			();								\/\/ Retorna las cl√°usulas aprendidas$/;"	p	class:Minisat::Solver	access:public	signature:()
+Minisat::Solver::insertVarOrder	Solver.h	/^    void     insertVarOrder   (Var x);                                                 \/\/ Insert a variable in the decision order priority queue.$/;"	p	class:Minisat::Solver	access:protected	signature:(Var x)
+Minisat::Solver::insertVarOrder	Solver.h	/^inline void Solver::insertVarOrder(Var x) {$/;"	f	class:Minisat::Solver	signature:(Var x)
+Minisat::Solver::interrupt	Solver.h	/^    void    interrupt();          \/\/ Trigger a (potentially asynchronous) interruption of the solver.$/;"	p	class:Minisat::Solver	access:public	signature:()
+Minisat::Solver::interrupt	Solver.h	/^inline void     Solver::interrupt(){ asynch_interrupt = true; }$/;"	f	class:Minisat::Solver	signature:()
+Minisat::Solver::irand	Solver.h	/^    static inline int irand(double& seed, int size) {$/;"	f	class:Minisat::Solver	access:protected	signature:(double& seed, int size)
+Minisat::Solver::learntMode	Solver.h	/^	int			learntMode;$/;"	m	class:Minisat::Solver	access:public
+Minisat::Solver::learntParam	Solver.h	/^	int			learntParam;$/;"	m	class:Minisat::Solver	access:public
+Minisat::Solver::learnts	Solver.h	/^    vec<CRef>           learnts;          \/\/ List of learnt clauses.$/;"	m	class:Minisat::Solver	access:protected
+Minisat::Solver::learnts_literals	Solver.h	/^    uint64_t dec_vars, clauses_literals, learnts_literals, max_literals, tot_literals;$/;"	m	class:Minisat::Solver	access:public
+Minisat::Solver::learntsize_adjust_cnt	Solver.h	/^    int                 learntsize_adjust_cnt;$/;"	m	class:Minisat::Solver	access:protected
+Minisat::Solver::learntsize_adjust_confl	Solver.h	/^    double              learntsize_adjust_confl;$/;"	m	class:Minisat::Solver	access:protected
+Minisat::Solver::learntsize_adjust_inc	Solver.h	/^    double    learntsize_adjust_inc;$/;"	m	class:Minisat::Solver	access:public
+Minisat::Solver::learntsize_adjust_start_confl	Solver.h	/^    int       learntsize_adjust_start_confl;$/;"	m	class:Minisat::Solver	access:public
+Minisat::Solver::learntsize_factor	Solver.h	/^    double    learntsize_factor;  \/\/ The intitial limit for learnt clauses is a factor of the original clauses.                (default 1 \/ 3)$/;"	m	class:Minisat::Solver	access:public
+Minisat::Solver::learntsize_inc	Solver.h	/^    double    learntsize_inc;     \/\/ The limit for learnt clauses is multiplied with this factor each restart.                 (default 1.1)$/;"	m	class:Minisat::Solver	access:public
+Minisat::Solver::level	Solver.h	/^    int      level            (Var x) const;$/;"	p	class:Minisat::Solver	access:protected	signature:(Var x) const
+Minisat::Solver::level	Solver.h	/^inline int  Solver::level (Var x) const { return vardata[x].level; }$/;"	f	class:Minisat::Solver	signature:(Var x) const
+Minisat::Solver::litRedundant	Solver.h	/^    bool     litRedundant     (Lit p, uint32_t abstract_levels);                       \/\/ (helper method for 'analyze()')$/;"	p	class:Minisat::Solver	access:protected	signature:(Lit p, uint32_t abstract_levels)
+Minisat::Solver::locked	Solver.h	/^    bool     locked           (const Clause& c) const; \/\/ Returns TRUE if a clause is a reason for some implication in the current state.$/;"	p	class:Minisat::Solver	access:protected	signature:(const Clause& c) const
+Minisat::Solver::locked	Solver.h	/^inline bool     Solver::locked          (const Clause& c) const { return value(c[0]) == l_True && reason(var(c[0])) != CRef_Undef && ca.lea(reason(var(c[0]))) == &c; }$/;"	f	class:Minisat::Solver	signature:(const Clause& c) const
+Minisat::Solver::luby_restart	Solver.h	/^    bool      luby_restart;$/;"	m	class:Minisat::Solver	access:public
+Minisat::Solver::max_learnts	Solver.h	/^    double              max_learnts;$/;"	m	class:Minisat::Solver	access:protected
+Minisat::Solver::max_literals	Solver.h	/^    uint64_t dec_vars, clauses_literals, learnts_literals, max_literals, tot_literals;$/;"	m	class:Minisat::Solver	access:public
+Minisat::Solver::mkVarData	Solver.h	/^    static inline VarData mkVarData(CRef cr, int l){ VarData d = {cr, l}; return d; }$/;"	f	class:Minisat::Solver	access:protected	signature:(CRef cr, int l)
+Minisat::Solver::model	Solver.h	/^    vec<lbool> model;             \/\/ If problem is satisfiable, this vector contains the model (if any).$/;"	m	class:Minisat::Solver	access:public
+Minisat::Solver::modelValue	Solver.h	/^    lbool   modelValue (Lit p) const;       \/\/ The value of a literal in the last model. The last call to solve must have been satisfiable.$/;"	p	class:Minisat::Solver	access:public	signature:(Lit p) const
+Minisat::Solver::modelValue	Solver.h	/^    lbool   modelValue (Var x) const;       \/\/ The value of a variable in the last model. The last call to solve must have been satisfiable.$/;"	p	class:Minisat::Solver	access:public	signature:(Var x) const
+Minisat::Solver::modelValue	Solver.h	/^inline lbool    Solver::modelValue    (Lit p) const   { return model[var(p)] ^ sign(p); }$/;"	f	class:Minisat::Solver	signature:(Lit p) const
+Minisat::Solver::modelValue	Solver.h	/^inline lbool    Solver::modelValue    (Var x) const   { return model[x]; }$/;"	f	class:Minisat::Solver	signature:(Var x) const
+Minisat::Solver::nAssigns	Solver.h	/^    int     nAssigns   ()      const;       \/\/ The current number of assigned literals.$/;"	p	class:Minisat::Solver	access:public	signature:() const
+Minisat::Solver::nAssigns	Solver.h	/^inline int      Solver::nAssigns      ()      const   { return trail.size(); }$/;"	f	class:Minisat::Solver	signature:() const
+Minisat::Solver::nClauses	Solver.h	/^    int     nClauses   ()      const;       \/\/ The current number of original clauses.$/;"	p	class:Minisat::Solver	access:public	signature:() const
+Minisat::Solver::nClauses	Solver.h	/^inline int      Solver::nClauses      ()      const   { return clauses.size(); }$/;"	f	class:Minisat::Solver	signature:() const
+Minisat::Solver::nFreeVars	Solver.h	/^    int     nFreeVars  ()      const;$/;"	p	class:Minisat::Solver	access:public	signature:() const
+Minisat::Solver::nFreeVars	Solver.h	/^inline int      Solver::nFreeVars     ()      const   { return (int)dec_vars - (trail_lim.size() == 0 ? trail.size() : trail_lim[0]); }$/;"	f	class:Minisat::Solver	signature:() const
+Minisat::Solver::nLearnts	Solver.h	/^    int     nLearnts   ()      const;       \/\/ The current number of learnt clauses.$/;"	p	class:Minisat::Solver	access:public	signature:() const
+Minisat::Solver::nLearnts	Solver.h	/^inline int      Solver::nLearnts      ()      const   { return learnts.size(); }$/;"	f	class:Minisat::Solver	signature:() const
+Minisat::Solver::nVars	Solver.h	/^    int     nVars      ()      const;       \/\/ The current number of variables.$/;"	p	class:Minisat::Solver	access:public	signature:() const
+Minisat::Solver::nVars	Solver.h	/^inline int      Solver::nVars         ()      const   { return vardata.size(); }$/;"	f	class:Minisat::Solver	signature:() const
+Minisat::Solver::newDecisionLevel	Solver.h	/^    void     newDecisionLevel ();                                                      \/\/ Begins a new decision level.$/;"	p	class:Minisat::Solver	access:protected	signature:()
+Minisat::Solver::newDecisionLevel	Solver.h	/^inline void     Solver::newDecisionLevel()                      { trail_lim.push(trail.size()); }$/;"	f	class:Minisat::Solver	signature:()
+Minisat::Solver::newVar	Solver.h	/^    Var     newVar    (bool polarity = true, bool dvar = true); \/\/ Add a new variable with parameters specifying variable mode.$/;"	p	class:Minisat::Solver	access:public	signature:(bool polarity = true, bool dvar = true)
+Minisat::Solver::ok	Solver.h	/^    bool                ok;               \/\/ If FALSE, the constraints are already unsatisfiable. No part of the solver state may be used!$/;"	m	class:Minisat::Solver	access:protected
+Minisat::Solver::okay	Solver.h	/^    bool    okay         () const;                  \/\/ FALSE means solver is in a conflicting state$/;"	p	class:Minisat::Solver	access:public	signature:() const
+Minisat::Solver::okay	Solver.h	/^inline bool     Solver::okay          ()      const   { return ok; }$/;"	f	class:Minisat::Solver	signature:() const
+Minisat::Solver::order_heap	Solver.h	/^    Heap<VarOrderLt>    order_heap;       \/\/ A priority queue of variables ordered with respect to the variable activity.$/;"	m	class:Minisat::Solver	access:protected
+Minisat::Solver::phase_saving	Solver.h	/^    int       phase_saving;       \/\/ Controls the level of phase saving (0=none, 1=limited, 2=full).$/;"	m	class:Minisat::Solver	access:public
+Minisat::Solver::pickBranchLit	Solver.h	/^    Lit      pickBranchLit    ();                                                      \/\/ Return the next decision variable.$/;"	p	class:Minisat::Solver	access:protected	signature:()
+Minisat::Solver::polarity	Solver.h	/^    vec<char>           polarity;         \/\/ The preferred polarity of each variable.$/;"	m	class:Minisat::Solver	access:protected
+Minisat::Solver::progressEstimate	Solver.h	/^    double   progressEstimate ()      const; \/\/ DELETE THIS ?? IT'S NOT VERY USEFUL ...$/;"	p	class:Minisat::Solver	access:protected	signature:() const
+Minisat::Solver::progress_estimate	Solver.h	/^    double              progress_estimate;\/\/ Set by 'search()'.$/;"	m	class:Minisat::Solver	access:protected
+Minisat::Solver::propagate	Solver.h	/^    CRef     propagate        ();                                                      \/\/ Perform unit propagation. Returns possibly conflicting clause.$/;"	p	class:Minisat::Solver	access:protected	signature:()
+Minisat::Solver::propagation_budget	Solver.h	/^    int64_t             propagation_budget; \/\/ -1 means no budget.$/;"	m	class:Minisat::Solver	access:protected
+Minisat::Solver::propagations	Solver.h	/^    uint64_t solves, starts, decisions, rnd_decisions, propagations, conflicts;$/;"	m	class:Minisat::Solver	access:public
+Minisat::Solver::qhead	Solver.h	/^    int                 qhead;            \/\/ Head of queue (as index into the trail -- no more explicit propagation queue in MiniSat).$/;"	m	class:Minisat::Solver	access:protected
+Minisat::Solver::random_seed	Solver.h	/^    double    random_seed;$/;"	m	class:Minisat::Solver	access:public
+Minisat::Solver::random_var_freq	Solver.h	/^    double    random_var_freq;$/;"	m	class:Minisat::Solver	access:public
+Minisat::Solver::reason	Solver.h	/^    CRef     reason           (Var x) const;$/;"	p	class:Minisat::Solver	access:protected	signature:(Var x) const
+Minisat::Solver::reason	Solver.h	/^inline CRef Solver::reason(Var x) const { return vardata[x].reason; }$/;"	f	class:Minisat::Solver	signature:(Var x) const
+Minisat::Solver::rebuildOrderHeap	Solver.h	/^    void     rebuildOrderHeap ();$/;"	p	class:Minisat::Solver	access:protected	signature:()
+Minisat::Solver::reduceDB	Solver.h	/^    void     reduceDB         ();                                                      \/\/ Reduce the set of learnt clauses.$/;"	p	class:Minisat::Solver	access:protected	signature:()
+Minisat::Solver::relocAll	Solver.h	/^    void     relocAll         (ClauseAllocator& to);$/;"	p	class:Minisat::Solver	access:protected	signature:(ClauseAllocator& to)
+Minisat::Solver::removeClause	Solver.h	/^    void     removeClause     (CRef cr);               \/\/ Detach and free a clause.$/;"	p	class:Minisat::Solver	access:protected	signature:(CRef cr)
+Minisat::Solver::removeSatisfied	Solver.h	/^    void     removeSatisfied  (vec<CRef>& cs);                                         \/\/ Shrink 'cs' to contain only non-satisfied clauses.$/;"	p	class:Minisat::Solver	access:protected	signature:(vec<CRef>& cs)
+Minisat::Solver::remove_satisfied	Solver.h	/^    bool                remove_satisfied; \/\/ Indicates whether possibly inefficient linear scan for satisfied clauses should be performed in 'simplify'.$/;"	m	class:Minisat::Solver	access:protected
+Minisat::Solver::restart_first	Solver.h	/^    int       restart_first;      \/\/ The initial restart limit.                                                                (default 100)$/;"	m	class:Minisat::Solver	access:public
+Minisat::Solver::restart_inc	Solver.h	/^    double    restart_inc;        \/\/ The factor with which the restart limit is multiplied in each restart.                    (default 1.5)$/;"	m	class:Minisat::Solver	access:public
+Minisat::Solver::rnd_decisions	Solver.h	/^    uint64_t solves, starts, decisions, rnd_decisions, propagations, conflicts;$/;"	m	class:Minisat::Solver	access:public
+Minisat::Solver::rnd_init_act	Solver.h	/^    bool      rnd_init_act;       \/\/ Initialize variable activities with a small random value.$/;"	m	class:Minisat::Solver	access:public
+Minisat::Solver::rnd_pol	Solver.h	/^    bool      rnd_pol;            \/\/ Use random polarities for branching heuristics.$/;"	m	class:Minisat::Solver	access:public
+Minisat::Solver::satisfied	Solver.h	/^    bool     satisfied        (const Clause& c) const; \/\/ Returns TRUE if a clause is satisfied in the current state.$/;"	p	class:Minisat::Solver	access:protected	signature:(const Clause& c) const
+Minisat::Solver::saveLearntClauses	Solver.h	/^    void 		saveLearntClauses	(int howMany);$/;"	p	class:Minisat::Solver	access:public	signature:(int howMany)
+Minisat::Solver::search	Solver.h	/^    lbool    search           (int nof_conflicts);                                     \/\/ Search for a given number of conflicts.$/;"	p	class:Minisat::Solver	access:protected	signature:(int nof_conflicts)
+Minisat::Solver::seen	Solver.h	/^    vec<char>           seen;$/;"	m	class:Minisat::Solver	access:protected
+Minisat::Solver::setConfBudget	Solver.h	/^    void    setConfBudget(int64_t x);$/;"	p	class:Minisat::Solver	access:public	signature:(int64_t x)
+Minisat::Solver::setConfBudget	Solver.h	/^inline void     Solver::setConfBudget(int64_t x){ conflict_budget    = conflicts    + x; }$/;"	f	class:Minisat::Solver	signature:(int64_t x)
+Minisat::Solver::setDecisionVar	Solver.h	/^    void    setDecisionVar (Var v, bool b); \/\/ Declare if a variable should be eligible for selection in the decision heuristic.$/;"	p	class:Minisat::Solver	access:public	signature:(Var v, bool b)
+Minisat::Solver::setDecisionVar	Solver.h	/^inline void     Solver::setDecisionVar(Var v, bool b) $/;"	f	class:Minisat::Solver	signature:(Var v, bool b)
+Minisat::Solver::setPolarity	Solver.h	/^    void    setPolarity    (Var v, bool b); \/\/ Declare which polarity the decision heuristic should use for a variable. Requires mode 'polarity_user'.$/;"	p	class:Minisat::Solver	access:public	signature:(Var v, bool b)
+Minisat::Solver::setPolarity	Solver.h	/^inline void     Solver::setPolarity   (Var v, bool b) { polarity[v] = b; }$/;"	f	class:Minisat::Solver	signature:(Var v, bool b)
+Minisat::Solver::setPropBudget	Solver.h	/^    void    setPropBudget(int64_t x);$/;"	p	class:Minisat::Solver	access:public	signature:(int64_t x)
+Minisat::Solver::setPropBudget	Solver.h	/^inline void     Solver::setPropBudget(int64_t x){ propagation_budget = propagations + x; }$/;"	f	class:Minisat::Solver	signature:(int64_t x)
+Minisat::Solver::simpDB_assigns	Solver.h	/^    int                 simpDB_assigns;   \/\/ Number of top-level assignments since last execution of 'simplify()'.$/;"	m	class:Minisat::Solver	access:protected
+Minisat::Solver::simpDB_props	Solver.h	/^    int64_t             simpDB_props;     \/\/ Remaining number of propagations that must be made before next execution of 'simplify()'.$/;"	m	class:Minisat::Solver	access:protected
+Minisat::Solver::simplify	Solver.h	/^    bool    simplify     ();                        \/\/ Removes already satisfied clauses.$/;"	p	class:Minisat::Solver	access:public	signature:()
+Minisat::Solver::solve	Solver.h	/^    bool    solve        ();                        \/\/ Search without assumptions.$/;"	p	class:Minisat::Solver	access:public	signature:()
+Minisat::Solver::solve	Solver.h	/^    bool    solve        (Lit p);                   \/\/ Search for a model that respects a single assumption.$/;"	p	class:Minisat::Solver	access:public	signature:(Lit p)
+Minisat::Solver::solve	Solver.h	/^    bool    solve        (Lit p, Lit q);            \/\/ Search for a model that respects two assumptions.$/;"	p	class:Minisat::Solver	access:public	signature:(Lit p, Lit q)
+Minisat::Solver::solve	Solver.h	/^    bool    solve        (Lit p, Lit q, Lit r);     \/\/ Search for a model that respects three assumptions.$/;"	p	class:Minisat::Solver	access:public	signature:(Lit p, Lit q, Lit r)
+Minisat::Solver::solve	Solver.h	/^    bool    solve        (const vec<Lit>& assumps); \/\/ Search for a model that respects a given set of assumptions.$/;"	p	class:Minisat::Solver	access:public	signature:(const vec<Lit>& assumps)
+Minisat::Solver::solve	Solver.h	/^inline bool     Solver::solve         ()                    { budgetOff(); assumptions.clear(); return solve_() == l_True; }$/;"	f	class:Minisat::Solver	signature:()
+Minisat::Solver::solve	Solver.h	/^inline bool     Solver::solve         (Lit p)               { budgetOff(); assumptions.clear(); assumptions.push(p); return solve_() == l_True; }$/;"	f	class:Minisat::Solver	signature:(Lit p)
+Minisat::Solver::solve	Solver.h	/^inline bool     Solver::solve         (Lit p, Lit q)        { budgetOff(); assumptions.clear(); assumptions.push(p); assumptions.push(q); return solve_() == l_True; }$/;"	f	class:Minisat::Solver	signature:(Lit p, Lit q)
+Minisat::Solver::solve	Solver.h	/^inline bool     Solver::solve         (Lit p, Lit q, Lit r) { budgetOff(); assumptions.clear(); assumptions.push(p); assumptions.push(q); assumptions.push(r); return solve_() == l_True; }$/;"	f	class:Minisat::Solver	signature:(Lit p, Lit q, Lit r)
+Minisat::Solver::solve	Solver.h	/^inline bool     Solver::solve         (const vec<Lit>& assumps){ budgetOff(); assumps.copyTo(assumptions); return solve_() == l_True; }$/;"	f	class:Minisat::Solver	signature:(const vec<Lit>& assumps)
+Minisat::Solver::solveLimited	Solver.h	/^    lbool   solveLimited (const vec<Lit>& assumps); \/\/ Search for a model that respects a given set of assumptions (With resource constraints).$/;"	p	class:Minisat::Solver	access:public	signature:(const vec<Lit>& assumps)
+Minisat::Solver::solveLimited	Solver.h	/^inline lbool    Solver::solveLimited  (const vec<Lit>& assumps){ assumps.copyTo(assumptions); return solve_(); }$/;"	f	class:Minisat::Solver	signature:(const vec<Lit>& assumps)
+Minisat::Solver::solve_	Solver.h	/^    lbool    solve_           ();                                                      \/\/ Main solve method (assumptions given in 'assumptions').$/;"	p	class:Minisat::Solver	access:protected	signature:()
+Minisat::Solver::solves	Solver.h	/^    uint64_t solves, starts, decisions, rnd_decisions, propagations, conflicts;$/;"	m	class:Minisat::Solver	access:public
+Minisat::Solver::starts	Solver.h	/^    uint64_t solves, starts, decisions, rnd_decisions, propagations, conflicts;$/;"	m	class:Minisat::Solver	access:public
+Minisat::Solver::toDimacs	Solver.h	/^    void    toDimacs     (FILE* f, Clause& c, vec<Var>& map, Var& max);$/;"	p	class:Minisat::Solver	access:public	signature:(FILE* f, Clause& c, vec<Var>& map, Var& max)
+Minisat::Solver::toDimacs	Solver.h	/^    void    toDimacs     (FILE* f, const vec<Lit>& assumps);            \/\/ Write CNF to file in DIMACS-format.$/;"	p	class:Minisat::Solver	access:public	signature:(FILE* f, const vec<Lit>& assumps)
+Minisat::Solver::toDimacs	Solver.h	/^    void    toDimacs     (const char *file, const vec<Lit>& assumps);$/;"	p	class:Minisat::Solver	access:public	signature:(const char *file, const vec<Lit>& assumps)
+Minisat::Solver::toDimacs	Solver.h	/^    void    toDimacs     (const char* file);$/;"	p	class:Minisat::Solver	access:public	signature:(const char* file)
+Minisat::Solver::toDimacs	Solver.h	/^    void    toDimacs     (const char* file, Lit p);$/;"	p	class:Minisat::Solver	access:public	signature:(const char* file, Lit p)
+Minisat::Solver::toDimacs	Solver.h	/^    void    toDimacs     (const char* file, Lit p, Lit q);$/;"	p	class:Minisat::Solver	access:public	signature:(const char* file, Lit p, Lit q)
+Minisat::Solver::toDimacs	Solver.h	/^    void    toDimacs     (const char* file, Lit p, Lit q, Lit r);$/;"	p	class:Minisat::Solver	access:public	signature:(const char* file, Lit p, Lit q, Lit r)
+Minisat::Solver::toDimacs	Solver.h	/^inline void     Solver::toDimacs     (const char* file){ vec<Lit> as; toDimacs(file, as); }$/;"	f	class:Minisat::Solver	signature:(const char* file)
+Minisat::Solver::toDimacs	Solver.h	/^inline void     Solver::toDimacs     (const char* file, Lit p){ vec<Lit> as; as.push(p); toDimacs(file, as); }$/;"	f	class:Minisat::Solver	signature:(const char* file, Lit p)
+Minisat::Solver::toDimacs	Solver.h	/^inline void     Solver::toDimacs     (const char* file, Lit p, Lit q){ vec<Lit> as; as.push(p); as.push(q); toDimacs(file, as); }$/;"	f	class:Minisat::Solver	signature:(const char* file, Lit p, Lit q)
+Minisat::Solver::toDimacs	Solver.h	/^inline void     Solver::toDimacs     (const char* file, Lit p, Lit q, Lit r){ vec<Lit> as; as.push(p); as.push(q); as.push(r); toDimacs(file, as); }$/;"	f	class:Minisat::Solver	signature:(const char* file, Lit p, Lit q, Lit r)
+Minisat::Solver::tot_literals	Solver.h	/^    uint64_t dec_vars, clauses_literals, learnts_literals, max_literals, tot_literals;$/;"	m	class:Minisat::Solver	access:public
+Minisat::Solver::trail	Solver.h	/^    vec<Lit>            trail;            \/\/ Assignment stack; stores all assigments made in the order they were made.$/;"	m	class:Minisat::Solver	access:protected
+Minisat::Solver::trail_lim	Solver.h	/^    vec<int>            trail_lim;        \/\/ Separator indices for different decision levels in 'trail'.$/;"	m	class:Minisat::Solver	access:protected
+Minisat::Solver::uncheckedEnqueue	Solver.h	/^    void     uncheckedEnqueue (Lit p, CRef from = CRef_Undef);                         \/\/ Enqueue a literal. Assumes value of literal is undefined.$/;"	p	class:Minisat::Solver	access:protected	signature:(Lit p, CRef from = CRef_Undef)
+Minisat::Solver::value	Solver.h	/^    lbool   value      (Lit p) const;       \/\/ The current value of a literal.$/;"	p	class:Minisat::Solver	access:public	signature:(Lit p) const
+Minisat::Solver::value	Solver.h	/^    lbool   value      (Var x) const;       \/\/ The current value of a variable.$/;"	p	class:Minisat::Solver	access:public	signature:(Var x) const
+Minisat::Solver::value	Solver.h	/^inline lbool    Solver::value         (Lit p) const   { return assigns[var(p)] ^ sign(p); }$/;"	f	class:Minisat::Solver	signature:(Lit p) const
+Minisat::Solver::value	Solver.h	/^inline lbool    Solver::value         (Var x) const   { return assigns[x]; }$/;"	f	class:Minisat::Solver	signature:(Var x) const
+Minisat::Solver::varBumpActivity	Solver.h	/^    void     varBumpActivity  (Var v);                 \/\/ Increase a variable with the current 'bump' value.$/;"	p	class:Minisat::Solver	access:protected	signature:(Var v)
+Minisat::Solver::varBumpActivity	Solver.h	/^    void     varBumpActivity  (Var v, double inc);     \/\/ Increase a variable with the current 'bump' value.$/;"	p	class:Minisat::Solver	access:protected	signature:(Var v, double inc)
+Minisat::Solver::varBumpActivity	Solver.h	/^inline void Solver::varBumpActivity(Var v) { varBumpActivity(v, var_inc); }$/;"	f	class:Minisat::Solver	signature:(Var v)
+Minisat::Solver::varBumpActivity	Solver.h	/^inline void Solver::varBumpActivity(Var v, double inc) {$/;"	f	class:Minisat::Solver	signature:(Var v, double inc)
+Minisat::Solver::varDecayActivity	Solver.h	/^    void     varDecayActivity ();                      \/\/ Decay all variables with the specified factor. Implemented by increasing the 'bump' value instead.$/;"	p	class:Minisat::Solver	access:protected	signature:()
+Minisat::Solver::varDecayActivity	Solver.h	/^inline void Solver::varDecayActivity() { var_inc *= (1 \/ var_decay); }$/;"	f	class:Minisat::Solver	signature:()
+Minisat::Solver::var_decay	Solver.h	/^    double    var_decay;$/;"	m	class:Minisat::Solver	access:public
+Minisat::Solver::var_inc	Solver.h	/^    double              var_inc;          \/\/ Amount to bump next variable with.$/;"	m	class:Minisat::Solver	access:protected
+Minisat::Solver::vardata	Solver.h	/^    vec<VarData>        vardata;          \/\/ Stores reason and level for each variable.$/;"	m	class:Minisat::Solver	access:protected
+Minisat::Solver::verbosity	Solver.h	/^    int       verbosity;$/;"	m	class:Minisat::Solver	access:public
+Minisat::Solver::watches	Solver.h	/^                        watches;          \/\/ 'watches[lit]' is a list of constraints watching 'lit' (will go there if literal becomes true).$/;"	m	class:Minisat::Solver	access:protected
+Minisat::Solver::withinBudget	Solver.h	/^    bool     withinBudget     ()      const;$/;"	p	class:Minisat::Solver	access:protected	signature:() const
+Minisat::Solver::withinBudget	Solver.h	/^inline bool     Solver::withinBudget() const {$/;"	f	class:Minisat::Solver	signature:() const
+Minisat::Solver::~Solver	Solver.h	/^    virtual ~Solver();$/;"	p	class:Minisat::Solver	access:public	signature:()
+Minisat::Var	SolverTypes.h	/^typedef int Var;$/;"	t	namespace:Minisat
+Minisat::VarData	SolverTypes.h	/^struct VarData { CRef reason; int level; };$/;"	s	namespace:Minisat
+Minisat::VarData::level	SolverTypes.h	/^struct VarData { CRef reason; int level; };$/;"	m	struct:Minisat::VarData	access:public
+Minisat::VarData::reason	SolverTypes.h	/^struct VarData { CRef reason; int level; };$/;"	m	struct:Minisat::VarData	access:public
+Minisat::lbool	SolverTypes.h	/^class lbool {$/;"	c	namespace:Minisat
+Minisat::lbool::lbool	SolverTypes.h	/^    explicit lbool(bool x) : value(!x) { }$/;"	f	class:Minisat::lbool	access:public	signature:(bool x)
+Minisat::lbool::lbool	SolverTypes.h	/^    explicit lbool(uint8_t v) : value(v) { }$/;"	f	class:Minisat::lbool	access:public	signature:(uint8_t v)
+Minisat::lbool::lbool	SolverTypes.h	/^    lbool()       : value(0) { }$/;"	f	class:Minisat::lbool	access:public	signature:()
+Minisat::lbool::operator !=	SolverTypes.h	/^    bool  operator != (lbool b) const { return !(*this == b); }$/;"	f	class:Minisat::lbool	access:public	signature:(lbool b) const
+Minisat::lbool::operator &&	SolverTypes.h	/^    lbool operator && (lbool b) const { $/;"	f	class:Minisat::lbool	access:public	signature:(lbool b) const
+Minisat::lbool::operator ==	SolverTypes.h	/^    bool  operator == (lbool b) const { return ((b.value&2) & (value&2)) | (!(b.value&2)&(value == b.value)); }$/;"	f	class:Minisat::lbool	access:public	signature:(lbool b) const
+Minisat::lbool::operator ^	SolverTypes.h	/^    lbool operator ^  (bool  b) const { return lbool((uint8_t)(value^(uint8_t)b)); }$/;"	f	class:Minisat::lbool	access:public	signature:(bool b) const
+Minisat::lbool::operator ||	SolverTypes.h	/^    lbool operator || (lbool b) const {$/;"	f	class:Minisat::lbool	access:public	signature:(lbool b) const
+Minisat::lbool::toInt	SolverTypes.h	/^    friend int   toInt  (lbool l);$/;"	p	class:Minisat::lbool	access:friend	signature:(lbool l)
+Minisat::lbool::toLbool	SolverTypes.h	/^    friend lbool toLbool(int   v);$/;"	p	class:Minisat::lbool	access:friend	signature:(int v)
+Minisat::lbool::value	SolverTypes.h	/^    uint8_t value;$/;"	m	class:Minisat::lbool	access:private
+Minisat::lit_Error	SolverTypes.h	/^const Lit lit_Error = { -1 };  \/\/ }$/;"	m	namespace:Minisat
+Minisat::lit_Undef	SolverTypes.h	/^const Lit lit_Undef = { -2 };  \/\/ }- Useful special constants.$/;"	m	namespace:Minisat
+Minisat::mkLit	SolverTypes.h	/^inline  Lit  mkLit     (Var var, bool sign) { Lit p; p.x = var + var + (int)sign; return p; }$/;"	f	namespace:Minisat	signature:(Var var, bool sign)
+Minisat::operator ^	SolverTypes.h	/^inline  Lit  operator ^(Lit p, bool b)      { Lit q; q.x = p.x ^ (unsigned int)b; return q; }$/;"	f	namespace:Minisat	signature:(Lit p, bool b)
+Minisat::operator ~	SolverTypes.h	/^inline  Lit  operator ~(Lit p)              { Lit q; q.x = p.x ^ 1; return q; }$/;"	f	namespace:Minisat	signature:(Lit p)
+Minisat::parse_DIMACS	Dimacs.h	/^static void parse_DIMACS(gzFile input_stream, Solver& S) {$/;"	f	namespace:Minisat	signature:(gzFile input_stream, Solver& S)
+Minisat::parse_DIMACS_main	Dimacs.h	/^static void parse_DIMACS_main(B& in, Solver& S) {$/;"	f	namespace:Minisat	signature:(B& in, Solver& S)
+Minisat::readAllLearnt	Dimacs.h	/^static void readAllLearnt(Solver & S, B& learntFile) {$/;"	f	namespace:Minisat	signature:(Solver & S, B& learntFile)
+Minisat::readClause	Dimacs.h	/^static void readClause(B& in, Solver& S, vec<Lit>& lits) {$/;"	f	namespace:Minisat	signature:(B& in, Solver& S, vec<Lit>& lits)
+Minisat::readLearntClauses	Dimacs.h	/^static void readLearntClauses(Solver & S, B& learntFile) {$/;"	f	namespace:Minisat	signature:(Solver & S, B& learntFile)
+Minisat::readLessActive	Dimacs.h	/^static void readLessActive(Solver & S, B& learntFile) {$/;"	f	namespace:Minisat	signature:(Solver & S, B& learntFile)
+Minisat::readMoreActive	Dimacs.h	/^static void readMoreActive(Solver & S, B& learntFile) {$/;"	f	namespace:Minisat	signature:(Solver & S, B& learntFile)
+Minisat::readSmallerThan	Dimacs.h	/^static void readSmallerThan(Solver & S, B& learntFile) {$/;"	f	namespace:Minisat	signature:(Solver & S, B& learntFile)
+Minisat::sign	SolverTypes.h	/^inline  bool sign      (Lit p)              { return p.x & 1; }$/;"	f	namespace:Minisat	signature:(Lit p)
+Minisat::toInt	SolverTypes.h	/^inline  int  toInt     (Lit p)              { return p.x; } $/;"	f	namespace:Minisat	signature:(Lit p)
+Minisat::toInt	SolverTypes.h	/^inline  int  toInt     (Var v)              { return v; } $/;"	f	namespace:Minisat	signature:(Var v)
+Minisat::toInt	SolverTypes.h	/^inline int   toInt  (lbool l) { return l.value; }$/;"	f	namespace:Minisat	signature:(lbool l)
+Minisat::toLbool	SolverTypes.h	/^inline lbool toLbool(int   v) { return lbool((uint8_t)v);  }$/;"	f	namespace:Minisat	signature:(int v)
+Minisat::toLit	SolverTypes.h	/^inline  Lit  toLit     (int i)              { Lit p; p.x = i; return p; } $/;"	f	namespace:Minisat	signature:(int i)
+Minisat::var	SolverTypes.h	/^inline  int  var       (Lit p)              { return p.x >> 1; }$/;"	f	namespace:Minisat	signature:(Lit p)
+Minisat_Dimacs_h	Dimacs.h	22;"	d
+Minisat_SolverTypes_h	SolverTypes.h	23;"	d
+Minisat_Solver_h	Solver.h	22;"	d
+OccLists	SolverTypes.h	/^    OccLists(const Deleted& d) : deleted(d) {}$/;"	f	class:Minisat::OccLists	access:public	signature:(const Deleted& d)
+OccLists	SolverTypes.h	/^class OccLists$/;"	c	namespace:Minisat
+SIGINT_exit	Main.cc	/^static void SIGINT_exit(int signum) {$/;"	f	file:	signature:(int signum)
+SIGINT_interrupt	Main.cc	/^static void SIGINT_interrupt(int signum) { $/;"	f	file:	signature:(int signum)
+Solver	Solver.cc	/^Solver::Solver() :$/;"	f	class:Solver	signature:()
+Solver	Solver.h	/^    Solver();$/;"	p	class:Minisat::Solver	access:public	signature:()
+Solver	Solver.h	/^class Solver {$/;"	c	namespace:Minisat
+Solver::Solver	Solver.cc	/^Solver::Solver() :$/;"	f	class:Solver	signature:()
+Solver::addClause_	Solver.cc	/^bool Solver::addClause_(vec<Lit>& ps)$/;"	f	class:Solver	signature:(vec<Lit>& ps)
+Solver::addLearnt	Solver.cc	/^CRef Solver::addLearnt(vec<Lit>& learnt_clause, float act = -1.0) {$/;"	f	class:Solver	signature:(vec<Lit>& learnt_clause, float act = -1.0)
+Solver::analyze	Solver.cc	/^void Solver::analyze(CRef confl, vec<Lit>& out_learnt, int& out_btlevel)$/;"	f	class:Solver	signature:(CRef confl, vec<Lit>& out_learnt, int& out_btlevel)
+Solver::analyzeFinal	Solver.cc	/^void Solver::analyzeFinal(Lit p, vec<Lit>& out_conflict)$/;"	f	class:Solver	signature:(Lit p, vec<Lit>& out_conflict)
+Solver::attachClause	Solver.cc	/^void Solver::attachClause(CRef cr) {$/;"	f	class:Solver	signature:(CRef cr)
+Solver::cancelUntil	Solver.cc	/^void Solver::cancelUntil(int level) {$/;"	f	class:Solver	signature:(int level)
+Solver::detachClause	Solver.cc	/^void Solver::detachClause(CRef cr, bool strict) {$/;"	f	class:Solver	signature:(CRef cr, bool strict)
+Solver::garbageCollect	Solver.cc	/^void Solver::garbageCollect()$/;"	f	class:Solver	signature:()
+Solver::getLearnts	Solver.cc	/^vec<CRef> & Solver::getLearnts() $/;"	f	class:Solver	signature:()
+Solver::litRedundant	Solver.cc	/^bool Solver::litRedundant(Lit p, uint32_t abstract_levels)$/;"	f	class:Solver	signature:(Lit p, uint32_t abstract_levels)
+Solver::newVar	Solver.cc	/^Var Solver::newVar(bool sign, bool dvar)$/;"	f	class:Solver	signature:(bool sign, bool dvar)
+Solver::pickBranchLit	Solver.cc	/^Lit Solver::pickBranchLit()$/;"	f	class:Solver	signature:()
+Solver::progressEstimate	Solver.cc	/^double Solver::progressEstimate() const$/;"	f	class:Solver	signature:() const
+Solver::propagate	Solver.cc	/^CRef Solver::propagate()$/;"	f	class:Solver	signature:()
+Solver::rebuildOrderHeap	Solver.cc	/^void Solver::rebuildOrderHeap()$/;"	f	class:Solver	signature:()
+Solver::reduceDB	Solver.cc	/^void Solver::reduceDB()$/;"	f	class:Solver	signature:()
+Solver::relocAll	Solver.cc	/^void Solver::relocAll(ClauseAllocator& to)$/;"	f	class:Solver	signature:(ClauseAllocator& to)
+Solver::removeClause	Solver.cc	/^void Solver::removeClause(CRef cr) {$/;"	f	class:Solver	signature:(CRef cr)
+Solver::removeSatisfied	Solver.cc	/^void Solver::removeSatisfied(vec<CRef>& cs)$/;"	f	class:Solver	signature:(vec<CRef>& cs)
+Solver::satisfied	Solver.cc	/^bool Solver::satisfied(const Clause& c) const {$/;"	f	class:Solver	signature:(const Clause& c) const
+Solver::saveLearntClauses	Solver.cc	/^void Solver::saveLearntClauses(int howMany) {$/;"	f	class:Solver	signature:(int howMany)
+Solver::search	Solver.cc	/^lbool Solver::search(int nof_conflicts)$/;"	f	class:Solver	signature:(int nof_conflicts)
+Solver::simplify	Solver.cc	/^bool Solver::simplify()$/;"	f	class:Solver	signature:()
+Solver::solve_	Solver.cc	/^lbool Solver::solve_()$/;"	f	class:Solver	signature:()
+Solver::toDimacs	Solver.cc	/^void Solver::toDimacs(FILE* f, Clause& c, vec<Var>& map, Var& max)$/;"	f	class:Solver	signature:(FILE* f, Clause& c, vec<Var>& map, Var& max)
+Solver::toDimacs	Solver.cc	/^void Solver::toDimacs(FILE* f, const vec<Lit>& assumps)$/;"	f	class:Solver	signature:(FILE* f, const vec<Lit>& assumps)
+Solver::toDimacs	Solver.cc	/^void Solver::toDimacs(const char *file, const vec<Lit>& assumps)$/;"	f	class:Solver	signature:(const char *file, const vec<Lit>& assumps)
+Solver::uncheckedEnqueue	Solver.cc	/^void Solver::uncheckedEnqueue(Lit p, CRef from)$/;"	f	class:Solver	signature:(Lit p, CRef from)
+Solver::~Solver	Solver.cc	/^Solver::~Solver()$/;"	f	class:Solver	signature:()
+Var	SolverTypes.h	/^typedef int Var;$/;"	t	namespace:Minisat
+VarData	SolverTypes.h	/^struct VarData { CRef reason; int level; };$/;"	s	namespace:Minisat
+VarOrderLt	Solver.h	/^        VarOrderLt(const vec<double>&  act) : activity(act) { }$/;"	f	struct:Minisat::Solver::VarOrderLt	access:public	signature:(const vec<double>& act)
+VarOrderLt	Solver.h	/^    struct VarOrderLt {$/;"	s	class:Minisat::Solver	access:protected
+Watcher	Solver.h	/^        Watcher(CRef cr, Lit p) : cref(cr), blocker(p) {}$/;"	f	struct:Minisat::Solver::Watcher	access:public	signature:(CRef cr, Lit p)
+Watcher	Solver.h	/^    struct Watcher {$/;"	s	class:Minisat::Solver	access:protected
+WatcherDeleted	Solver.h	/^        WatcherDeleted(const ClauseAllocator& _ca) : ca(_ca) {}$/;"	f	struct:Minisat::Solver::WatcherDeleted	access:public	signature:(const ClauseAllocator& _ca)
+WatcherDeleted	Solver.h	/^    struct WatcherDeleted$/;"	s	class:Minisat::Solver	access:protected
+_cat	Solver.cc	/^static const char* _cat = "CORE";$/;"	v	file:
+abs	SolverTypes.h	/^    union { Lit lit; float act; uint32_t abs; CRef rel; } data[0];$/;"	m	union:Minisat::Clause::__anon2	access:public
+abstractLevel	Solver.h	/^    uint32_t abstractLevel    (Var x) const; \/\/ Used to represent an abstraction of sets of decision levels.$/;"	p	class:Minisat::Solver	access:protected	signature:(Var x) const
+abstractLevel	Solver.h	/^inline uint32_t Solver::abstractLevel (Var x) const   { return 1 << (level(x) & 31); }$/;"	f	class:Minisat::Solver	signature:(Var x) const
+abstraction	SolverTypes.h	/^    uint32_t     abstraction () const        { assert(header.has_extra); return data[header.size].abs; }$/;"	f	class:Minisat::Clause	access:public	signature:() const
+act	SolverTypes.h	/^    union { Lit lit; float act; uint32_t abs; CRef rel; } data[0];$/;"	m	union:Minisat::Clause::__anon2	access:public
+activity	Solver.h	/^        const vec<double>&  activity;$/;"	m	struct:Minisat::Solver::VarOrderLt	access:public
+activity	Solver.h	/^    vec<double>         activity;         \/\/ A heuristic measurement of the activity of a variable.$/;"	m	class:Minisat::Solver	access:protected
+activity	SolverTypes.h	/^    float&       activity    ()              { assert(header.has_extra); return data[header.size].act; }$/;"	f	class:Minisat::Clause	access:public	signature:()
+addClause	Solver.h	/^    bool    addClause (Lit p);                                  \/\/ Add a unit clause to the solver. $/;"	p	class:Minisat::Solver	access:public	signature:(Lit p)
+addClause	Solver.h	/^    bool    addClause (Lit p, Lit q);                           \/\/ Add a binary clause to the solver. $/;"	p	class:Minisat::Solver	access:public	signature:(Lit p, Lit q)
+addClause	Solver.h	/^    bool    addClause (Lit p, Lit q, Lit r);                    \/\/ Add a ternary clause to the solver. $/;"	p	class:Minisat::Solver	access:public	signature:(Lit p, Lit q, Lit r)
+addClause	Solver.h	/^    bool    addClause (const vec<Lit>& ps);                     \/\/ Add a clause to the solver. $/;"	p	class:Minisat::Solver	access:public	signature:(const vec<Lit>& ps)
+addClause	Solver.h	/^inline bool     Solver::addClause       (Lit p)                 { add_tmp.clear(); add_tmp.push(p); return addClause_(add_tmp); }$/;"	f	class:Minisat::Solver	signature:(Lit p)
+addClause	Solver.h	/^inline bool     Solver::addClause       (Lit p, Lit q)          { add_tmp.clear(); add_tmp.push(p); add_tmp.push(q); return addClause_(add_tmp); }$/;"	f	class:Minisat::Solver	signature:(Lit p, Lit q)
+addClause	Solver.h	/^inline bool     Solver::addClause       (Lit p, Lit q, Lit r)   { add_tmp.clear(); add_tmp.push(p); add_tmp.push(q); add_tmp.push(r); return addClause_(add_tmp); }$/;"	f	class:Minisat::Solver	signature:(Lit p, Lit q, Lit r)
+addClause	Solver.h	/^inline bool     Solver::addClause       (const vec<Lit>& ps)    { ps.copyTo(add_tmp); return addClause_(add_tmp); }$/;"	f	class:Minisat::Solver	signature:(const vec<Lit>& ps)
+addClause_	Solver.cc	/^bool Solver::addClause_(vec<Lit>& ps)$/;"	f	class:Solver	signature:(vec<Lit>& ps)
+addClause_	Solver.h	/^    bool    addClause_(      vec<Lit>& ps);                     \/\/ Add a clause to the solver without making superflous internal copy. Will$/;"	p	class:Minisat::Solver	access:public	signature:( vec<Lit>& ps)
+addEmptyClause	Solver.h	/^    bool    addEmptyClause();                                   \/\/ Add the empty clause, making the solver contradictory.$/;"	p	class:Minisat::Solver	access:public	signature:()
+addEmptyClause	Solver.h	/^inline bool     Solver::addEmptyClause  ()                      { add_tmp.clear(); return addClause_(add_tmp); }$/;"	f	class:Minisat::Solver	signature:()
+addLearnt	Solver.cc	/^CRef Solver::addLearnt(vec<Lit>& learnt_clause, float act = -1.0) {$/;"	f	class:Solver	signature:(vec<Lit>& learnt_clause, float act = -1.0)
+addLearnt	Solver.h	/^    CRef 		addLearnt			(vec<Lit>& , float );		\/\/ Agrega una cl√°usula a la base de datos de learnts$/;"	p	class:Minisat::Solver	access:public	signature:(vec<Lit>& , float )
+add_tmp	Solver.h	/^    vec<Lit>            add_tmp;$/;"	m	class:Minisat::Solver	access:protected
+ael	SolverTypes.h	/^    Ref           ael       (const Clause* t){ return RegionAllocator<uint32_t>::ael((uint32_t*)t); }$/;"	f	class:Minisat::ClauseAllocator	access:public	signature:(const Clause* t)
+alloc	SolverTypes.h	/^    CRef alloc(const Lits& ps, bool learnt = false)$/;"	f	class:Minisat::ClauseAllocator	access:public	signature:(const Lits& ps, bool learnt = false)
+analyze	Solver.cc	/^void Solver::analyze(CRef confl, vec<Lit>& out_learnt, int& out_btlevel)$/;"	f	class:Solver	signature:(CRef confl, vec<Lit>& out_learnt, int& out_btlevel)
+analyze	Solver.h	/^    void     analyze          (CRef confl, vec<Lit>& out_learnt, int& out_btlevel);    \/\/ (bt = backtrack)$/;"	p	class:Minisat::Solver	access:protected	signature:(CRef confl, vec<Lit>& out_learnt, int& out_btlevel)
+analyzeFinal	Solver.cc	/^void Solver::analyzeFinal(Lit p, vec<Lit>& out_conflict)$/;"	f	class:Solver	signature:(Lit p, vec<Lit>& out_conflict)
+analyzeFinal	Solver.h	/^    void     analyzeFinal     (Lit p, vec<Lit>& out_conflict);                         \/\/ COULD THIS BE IMPLEMENTED BY THE ORDINARIY "analyze" BY SOME REASONABLE GENERALIZATION?$/;"	p	class:Minisat::Solver	access:protected	signature:(Lit p, vec<Lit>& out_conflict)
+analyze_stack	Solver.h	/^    vec<Lit>            analyze_stack;$/;"	m	class:Minisat::Solver	access:protected
+analyze_toclear	Solver.h	/^    vec<Lit>            analyze_toclear;$/;"	m	class:Minisat::Solver	access:protected
+assigns	Solver.h	/^    vec<lbool>          assigns;          \/\/ The current assignments.$/;"	m	class:Minisat::Solver	access:protected
+assumptions	Solver.h	/^    vec<Lit>            assumptions;      \/\/ Current set of assumptions provided to solve by the user.$/;"	m	class:Minisat::Solver	access:protected
+asynch_interrupt	Solver.h	/^    bool                asynch_interrupt;$/;"	m	class:Minisat::Solver	access:protected
+attachClause	Solver.cc	/^void Solver::attachClause(CRef cr) {$/;"	f	class:Solver	signature:(CRef cr)
+attachClause	Solver.h	/^    void     attachClause     (CRef cr);               \/\/ Attach a clause to watcher lists.$/;"	p	class:Minisat::Solver	access:protected	signature:(CRef cr)
+blocker	Solver.h	/^        Lit  blocker;$/;"	m	struct:Minisat::Solver::Watcher	access:public
+bucket	SolverTypes.h	/^    const vec<typename HashTable::Pair>& bucket(int i) const { return map.bucket(i); }$/;"	f	class:Minisat::CMap	access:public	signature:(int i) const
+bucket_count	SolverTypes.h	/^    int  bucket_count() const { return map.bucket_count(); }$/;"	f	class:Minisat::CMap	access:public	signature:() const
+budgetOff	Solver.h	/^    void    budgetOff();$/;"	p	class:Minisat::Solver	access:public	signature:()
+budgetOff	Solver.h	/^inline void     Solver::budgetOff(){ conflict_budget = propagation_budget = -1; }$/;"	f	class:Minisat::Solver	signature:()
+ca	Solver.cc	/^    ClauseAllocator& ca;$/;"	m	struct:reduceDB_gt	file:	access:public
+ca	Solver.cc	/^    ClauseAllocator& ca;$/;"	m	struct:reduceDB_lt	file:	access:public
+ca	Solver.h	/^        const ClauseAllocator& ca;$/;"	m	struct:Minisat::Solver::WatcherDeleted	access:public
+ca	Solver.h	/^    ClauseAllocator     ca;$/;"	m	class:Minisat::Solver	access:protected
+calcAbstraction	SolverTypes.h	/^    void calcAbstraction() {$/;"	f	class:Minisat::Clause	access:public	signature:()
+cancelUntil	Solver.cc	/^void Solver::cancelUntil(int level) {$/;"	f	class:Solver	signature:(int level)
+cancelUntil	Solver.h	/^    void     cancelUntil      (int level);                                             \/\/ Backtrack until a certain level.$/;"	p	class:Minisat::Solver	access:protected	signature:(int level)
+ccmin_mode	Solver.h	/^    int       ccmin_mode;         \/\/ Controls conflict clause minimization (0=none, 1=basic, 2=deep).$/;"	m	class:Minisat::Solver	access:public
+checkGarbage	Solver.h	/^    void    checkGarbage();$/;"	p	class:Minisat::Solver	access:public	signature:()
+checkGarbage	Solver.h	/^    void    checkGarbage(double gf);$/;"	p	class:Minisat::Solver	access:public	signature:(double gf)
+checkGarbage	Solver.h	/^inline void Solver::checkGarbage(double gf){$/;"	f	class:Minisat::Solver	signature:(double gf)
+checkGarbage	Solver.h	/^inline void Solver::checkGarbage(void){ return checkGarbage(garbage_frac); }$/;"	f	class:Minisat::Solver	signature:(void)
+claBumpActivity	Solver.h	/^    void     claBumpActivity  (Clause& c);             \/\/ Increase a clause with the current 'bump' value.$/;"	p	class:Minisat::Solver	access:protected	signature:(Clause& c)
+claBumpActivity	Solver.h	/^inline void Solver::claBumpActivity (Clause& c) {$/;"	f	class:Minisat::Solver	signature:(Clause& c)
+claDecayActivity	Solver.h	/^    void     claDecayActivity ();                      \/\/ Decay all clauses with the specified factor. Implemented by increasing the 'bump' value instead.$/;"	p	class:Minisat::Solver	access:protected	signature:()
+claDecayActivity	Solver.h	/^inline void Solver::claDecayActivity() { cla_inc *= (1 \/ clause_decay); }$/;"	f	class:Minisat::Solver	signature:()
+cla_inc	Solver.h	/^    double              cla_inc;          \/\/ Amount to bump next clause with.$/;"	m	class:Minisat::Solver	access:protected
+clauseWord32Size	SolverTypes.h	/^    static int clauseWord32Size(int size, bool has_extra){$/;"	f	class:Minisat::ClauseAllocator	access:private	signature:(int size, bool has_extra)
+clause_decay	Solver.h	/^    double    clause_decay;$/;"	m	class:Minisat::Solver	access:public
+clauses	Solver.h	/^    vec<CRef>           clauses;          \/\/ List of problem clauses.$/;"	m	class:Minisat::Solver	access:protected
+clauses_literals	Solver.h	/^    uint64_t dec_vars, clauses_literals, learnts_literals, max_literals, tot_literals;$/;"	m	class:Minisat::Solver	access:public
+clean	SolverTypes.h	/^    void  clean     (const Idx& idx);$/;"	p	class:Minisat::OccLists	access:public	signature:(const Idx& idx)
+clean	SolverTypes.h	/^void OccLists<Idx,Vec,Deleted>::clean(const Idx& idx)$/;"	f	class:Minisat::OccLists	signature:(const Idx& idx)
+cleanAll	SolverTypes.h	/^    void  cleanAll  ();$/;"	p	class:Minisat::OccLists	access:public	signature:()
+cleanAll	SolverTypes.h	/^void OccLists<Idx,Vec,Deleted>::cleanAll()$/;"	f	class:Minisat::OccLists	signature:()
+clear	SolverTypes.h	/^    void     clear       ()                           { map.clear(); }$/;"	f	class:Minisat::CMap	access:public	signature:()
+clear	SolverTypes.h	/^    void  clear(bool free = true){$/;"	f	class:Minisat::OccLists	access:public	signature:(bool free = true)
+clearInterrupt	Solver.h	/^    void    clearInterrupt();     \/\/ Clear interrupt indicator flag.$/;"	p	class:Minisat::Solver	access:public	signature:()
+clearInterrupt	Solver.h	/^inline void     Solver::clearInterrupt(){ asynch_interrupt = false; }$/;"	f	class:Minisat::Solver	signature:()
+conflict	Solver.h	/^    vec<Lit>   conflict;          \/\/ If problem is unsatisfiable (possibly under assumptions),$/;"	m	class:Minisat::Solver	access:public
+conflict_budget	Solver.h	/^    int64_t             conflict_budget;    \/\/ -1 means no budget.$/;"	m	class:Minisat::Solver	access:protected
+conflicts	Solver.h	/^    uint64_t solves, starts, decisions, rnd_decisions, propagations, conflicts;$/;"	m	class:Minisat::Solver	access:public
+cref	Solver.h	/^        CRef cref;$/;"	m	struct:Minisat::Solver::Watcher	access:public
+data	SolverTypes.h	/^    union { Lit lit; float act; uint32_t abs; CRef rel; } data[0];$/;"	m	class:Minisat::Clause	typeref:union:Minisat::Clause::__anon2	access:private
+debug	SolverTypes.h	/^    void debug(){$/;"	f	class:Minisat::CMap	access:public	signature:()
+dec_vars	Solver.h	/^    uint64_t dec_vars, clauses_literals, learnts_literals, max_literals, tot_literals;$/;"	m	class:Minisat::Solver	access:public
+decision	Solver.h	/^    vec<char>           decision;         \/\/ Declares if a variable is eligible for selection in the decision heuristic.$/;"	m	class:Minisat::Solver	access:protected
+decisionLevel	Solver.h	/^    int      decisionLevel    ()      const; \/\/ Gives the current decisionlevel.$/;"	p	class:Minisat::Solver	access:protected	signature:() const
+decisionLevel	Solver.h	/^inline int      Solver::decisionLevel ()      const   { return trail_lim.size(); }$/;"	f	class:Minisat::Solver	signature:() const
+decisions	Solver.h	/^    uint64_t solves, starts, decisions, rnd_decisions, propagations, conflicts;$/;"	m	class:Minisat::Solver	access:public
+deleted	SolverTypes.h	/^    Deleted   deleted;$/;"	m	class:Minisat::OccLists	access:private
+detachClause	Solver.cc	/^void Solver::detachClause(CRef cr, bool strict) {$/;"	f	class:Solver	signature:(CRef cr, bool strict)
+detachClause	Solver.h	/^    void     detachClause     (CRef cr, bool strict = false); \/\/ Detach a clause to watcher lists.$/;"	p	class:Minisat::Solver	access:protected	signature:(CRef cr, bool strict = false)
+dirties	SolverTypes.h	/^    vec<Idx>  dirties;$/;"	m	class:Minisat::OccLists	access:private
+dirty	SolverTypes.h	/^    vec<char> dirty;$/;"	m	class:Minisat::OccLists	access:private
+drand	Solver.h	/^    static inline double drand(double& seed) {$/;"	f	class:Minisat::Solver	access:protected	signature:(double& seed)
+enqueue	Solver.h	/^    bool     enqueue          (Lit p, CRef from = CRef_Undef);                         \/\/ Test if fact 'p' contradicts current state, enqueue otherwise.$/;"	p	class:Minisat::Solver	access:protected	signature:(Lit p, CRef from = CRef_Undef)
+enqueue	Solver.h	/^inline bool     Solver::enqueue         (Lit p, CRef from)      { return value(p) != l_Undef ? value(p) != l_False : (uncheckedEnqueue(p, from), true); }$/;"	f	class:Minisat::Solver	signature:(Lit p, CRef from)
+extra_clause_field	SolverTypes.h	/^    bool extra_clause_field;$/;"	m	class:Minisat::ClauseAllocator	access:public
+free	SolverTypes.h	/^    void free(CRef cid)$/;"	f	class:Minisat::ClauseAllocator	access:public	signature:(CRef cid)
+garbageCollect	Solver.cc	/^void Solver::garbageCollect()$/;"	f	class:Solver	signature:()
+garbageCollect	Solver.h	/^    virtual void garbageCollect();$/;"	p	class:Minisat::Solver	access:public	signature:()
+garbage_frac	Solver.h	/^    double    garbage_frac;       \/\/ The fraction of wasted memory allowed before a garbage collection is triggered.$/;"	m	class:Minisat::Solver	access:public
+getLearnts	Solver.cc	/^vec<CRef> & Solver::getLearnts() $/;"	f	class:Solver	signature:()
+getLearnts	Solver.h	/^    vec<CRef> &	getLearnts			();								\/\/ Retorna las cl√°usulas aprendidas$/;"	p	class:Minisat::Solver	access:public	signature:()
+growTo	SolverTypes.h	/^    void     growTo      (CRef cr, const T& t){ map.insert(cr, t); } \/\/ NOTE: for compatibility$/;"	f	class:Minisat::CMap	access:public	signature:(CRef cr, const T& t)
+has	SolverTypes.h	/^    bool     has         (CRef cr, T& t)      { return map.peek(cr, t); }$/;"	f	class:Minisat::CMap	access:public	signature:(CRef cr, T& t)
+has_extra	SolverTypes.h	/^        unsigned has_extra : 1;$/;"	m	struct:Minisat::Clause::__anon1	access:public
+has_extra	SolverTypes.h	/^    bool         has_extra   ()      const   { return header.has_extra; }$/;"	f	class:Minisat::Clause	access:public	signature:() const
+header	SolverTypes.h	/^	}                            header;$/;"	m	class:Minisat::Clause	typeref:struct:Minisat::Clause::__anon1	access:private
+init	SolverTypes.h	/^    void  init      (const Idx& idx){ occs.growTo(toInt(idx)+1); dirty.growTo(toInt(idx)+1, 0); }$/;"	f	class:Minisat::OccLists	access:public	signature:(const Idx& idx)
+insert	SolverTypes.h	/^    void     insert      (CRef cr, const T& t){ map.insert(cr, t); }$/;"	f	class:Minisat::CMap	access:public	signature:(CRef cr, const T& t)
+insertVarOrder	Solver.h	/^    void     insertVarOrder   (Var x);                                                 \/\/ Insert a variable in the decision order priority queue.$/;"	p	class:Minisat::Solver	access:protected	signature:(Var x)
+insertVarOrder	Solver.h	/^inline void Solver::insertVarOrder(Var x) {$/;"	f	class:Minisat::Solver	signature:(Var x)
+interrupt	Solver.h	/^    void    interrupt();          \/\/ Trigger a (potentially asynchronous) interruption of the solver.$/;"	p	class:Minisat::Solver	access:public	signature:()
+interrupt	Solver.h	/^inline void     Solver::interrupt(){ asynch_interrupt = true; }$/;"	f	class:Minisat::Solver	signature:()
+irand	Solver.h	/^    static inline int irand(double& seed, int size) {$/;"	f	class:Minisat::Solver	access:protected	signature:(double& seed, int size)
+l_False	SolverTypes.h	84;"	d
+l_True	SolverTypes.h	83;"	d
+l_Undef	SolverTypes.h	85;"	d
+last	SolverTypes.h	/^    const Lit&   last        ()      const   { return data[header.size-1].lit; }$/;"	f	class:Minisat::Clause	access:public	signature:() const
+lbd	SolverTypes.h	/^    uint32_t lbd() { return header.linears_block_distance; } ;$/;"	f	class:Minisat::Clause	access:public	signature:()
+lbool	SolverTypes.h	/^    explicit lbool(bool x) : value(!x) { }$/;"	f	class:Minisat::lbool	access:public	signature:(bool x)
+lbool	SolverTypes.h	/^    explicit lbool(uint8_t v) : value(v) { }$/;"	f	class:Minisat::lbool	access:public	signature:(uint8_t v)
+lbool	SolverTypes.h	/^    lbool()       : value(0) { }$/;"	f	class:Minisat::lbool	access:public	signature:()
+lbool	SolverTypes.h	/^class lbool {$/;"	c	namespace:Minisat
+lea	SolverTypes.h	/^    Clause*       lea       (Ref r)       { return (Clause*)RegionAllocator<uint32_t>::lea(r); }$/;"	f	class:Minisat::ClauseAllocator	access:public	signature:(Ref r)
+lea	SolverTypes.h	/^    const Clause* lea       (Ref r) const { return (Clause*)RegionAllocator<uint32_t>::lea(r); }$/;"	f	class:Minisat::ClauseAllocator	access:public	signature:(Ref r) const
+learnt	SolverTypes.h	/^        unsigned learnt    : 1;$/;"	m	struct:Minisat::Clause::__anon1	access:public
+learnt	SolverTypes.h	/^    bool         learnt      ()      const   { return header.learnt; }$/;"	f	class:Minisat::Clause	access:public	signature:() const
+learntMode	Solver.h	/^	int			learntMode;$/;"	m	class:Minisat::Solver	access:public
+learntParam	Solver.h	/^	int			learntParam;$/;"	m	class:Minisat::Solver	access:public
+learnts	Solver.h	/^    vec<CRef>           learnts;          \/\/ List of learnt clauses.$/;"	m	class:Minisat::Solver	access:protected
+learnts_literals	Solver.h	/^    uint64_t dec_vars, clauses_literals, learnts_literals, max_literals, tot_literals;$/;"	m	class:Minisat::Solver	access:public
+learntsize_adjust_cnt	Solver.h	/^    int                 learntsize_adjust_cnt;$/;"	m	class:Minisat::Solver	access:protected
+learntsize_adjust_confl	Solver.h	/^    double              learntsize_adjust_confl;$/;"	m	class:Minisat::Solver	access:protected
+learntsize_adjust_inc	Solver.h	/^    double    learntsize_adjust_inc;$/;"	m	class:Minisat::Solver	access:public
+learntsize_adjust_start_confl	Solver.h	/^    int       learntsize_adjust_start_confl;$/;"	m	class:Minisat::Solver	access:public
+learntsize_factor	Solver.h	/^    double    learntsize_factor;  \/\/ The intitial limit for learnt clauses is a factor of the original clauses.                (default 1 \/ 3)$/;"	m	class:Minisat::Solver	access:public
+learntsize_inc	Solver.h	/^    double    learntsize_inc;     \/\/ The limit for learnt clauses is multiplied with this factor each restart.                 (default 1.1)$/;"	m	class:Minisat::Solver	access:public
+level	Solver.h	/^    int      level            (Var x) const;$/;"	p	class:Minisat::Solver	access:protected	signature:(Var x) const
+level	Solver.h	/^inline int  Solver::level (Var x) const { return vardata[x].level; }$/;"	f	class:Minisat::Solver	signature:(Var x) const
+level	SolverTypes.h	/^struct VarData { CRef reason; int level; };$/;"	m	struct:Minisat::VarData	access:public
+lit	SolverTypes.h	/^    union { Lit lit; float act; uint32_t abs; CRef rel; } data[0];$/;"	m	union:Minisat::Clause::__anon2	access:public
+litRedundant	Solver.cc	/^bool Solver::litRedundant(Lit p, uint32_t abstract_levels)$/;"	f	class:Solver	signature:(Lit p, uint32_t abstract_levels)
+litRedundant	Solver.h	/^    bool     litRedundant     (Lit p, uint32_t abstract_levels);                       \/\/ (helper method for 'analyze()')$/;"	p	class:Minisat::Solver	access:protected	signature:(Lit p, uint32_t abstract_levels)
+lit_Error	SolverTypes.h	/^const Lit lit_Error = { -1 };  \/\/ }$/;"	m	namespace:Minisat
+lit_Undef	SolverTypes.h	/^const Lit lit_Undef = { -2 };  \/\/ }- Useful special constants.$/;"	m	namespace:Minisat
+literals_blocks_distance	SolverTypes.h	/^	uint32_t literals_blocks_distance; \/\/ As in GLUCOSE 1.1: a solver that predicts learnt clauses quality $/;"	m	struct:Minisat::Clause::__anon1	access:public
+locked	Solver.h	/^    bool     locked           (const Clause& c) const; \/\/ Returns TRUE if a clause is a reason for some implication in the current state.$/;"	p	class:Minisat::Solver	access:protected	signature:(const Clause& c) const
+locked	Solver.h	/^inline bool     Solver::locked          (const Clause& c) const { return value(c[0]) == l_True && reason(var(c[0])) != CRef_Undef && ca.lea(reason(var(c[0]))) == &c; }$/;"	f	class:Minisat::Solver	signature:(const Clause& c) const
+lookup	SolverTypes.h	/^    Vec&  lookup    (const Idx& idx){ if (dirty[toInt(idx)]) clean(idx); return occs[toInt(idx)]; }$/;"	f	class:Minisat::OccLists	access:public	signature:(const Idx& idx)
+luby	Solver.cc	/^static double luby(double y, int x){$/;"	f	file:	signature:(double y, int x)
+luby_restart	Solver.h	/^    bool      luby_restart;$/;"	m	class:Minisat::Solver	access:public
+main	Main.cc	/^int main(int argc, char** argv)$/;"	f	signature:(int argc, char** argv)
+map	SolverTypes.h	/^    HashTable map;$/;"	m	class:Minisat::CMap	access:private
+mapVar	Solver.cc	/^static Var mapVar(Var x, vec<Var>& map, Var& max)$/;"	f	file:	signature:(Var x, vec<Var>& map, Var& max)
+mark	SolverTypes.h	/^        unsigned mark      : 2;$/;"	m	struct:Minisat::Clause::__anon1	access:public
+mark	SolverTypes.h	/^    uint32_t     mark        ()      const   { return header.mark; }$/;"	f	class:Minisat::Clause	access:public	signature:() const
+mark	SolverTypes.h	/^    void         mark        (uint32_t m)    { header.mark = m; }$/;"	f	class:Minisat::Clause	access:public	signature:(uint32_t m)
+max_learnts	Solver.h	/^    double              max_learnts;$/;"	m	class:Minisat::Solver	access:protected
+max_literals	Solver.h	/^    uint64_t dec_vars, clauses_literals, learnts_literals, max_literals, tot_literals;$/;"	m	class:Minisat::Solver	access:public
+mkLit	SolverTypes.h	/^    friend Lit mkLit(Var var, bool sign = false);$/;"	p	struct:Minisat::Lit	access:friend	signature:(Var var, bool sign = false)
+mkLit	SolverTypes.h	/^inline  Lit  mkLit     (Var var, bool sign) { Lit p; p.x = var + var + (int)sign; return p; }$/;"	f	namespace:Minisat	signature:(Var var, bool sign)
+mkVarData	Solver.h	/^    static inline VarData mkVarData(CRef cr, int l){ VarData d = {cr, l}; return d; }$/;"	f	class:Minisat::Solver	access:protected	signature:(CRef cr, int l)
+model	Solver.h	/^    vec<lbool> model;             \/\/ If problem is satisfiable, this vector contains the model (if any).$/;"	m	class:Minisat::Solver	access:public
+modelValue	Solver.h	/^    lbool   modelValue (Lit p) const;       \/\/ The value of a literal in the last model. The last call to solve must have been satisfiable.$/;"	p	class:Minisat::Solver	access:public	signature:(Lit p) const
+modelValue	Solver.h	/^    lbool   modelValue (Var x) const;       \/\/ The value of a variable in the last model. The last call to solve must have been satisfiable.$/;"	p	class:Minisat::Solver	access:public	signature:(Var x) const
+modelValue	Solver.h	/^inline lbool    Solver::modelValue    (Lit p) const   { return model[var(p)] ^ sign(p); }$/;"	f	class:Minisat::Solver	signature:(Lit p) const
+modelValue	Solver.h	/^inline lbool    Solver::modelValue    (Var x) const   { return model[x]; }$/;"	f	class:Minisat::Solver	signature:(Var x) const
+moveTo	SolverTypes.h	/^    void moveTo(CMap& other){ map.moveTo(other.map); }$/;"	f	class:Minisat::CMap	access:public	signature:(CMap& other)
+moveTo	SolverTypes.h	/^    void moveTo(ClauseAllocator& to){$/;"	f	class:Minisat::ClauseAllocator	access:public	signature:(ClauseAllocator& to)
+nAssigns	Solver.h	/^    int     nAssigns   ()      const;       \/\/ The current number of assigned literals.$/;"	p	class:Minisat::Solver	access:public	signature:() const
+nAssigns	Solver.h	/^inline int      Solver::nAssigns      ()      const   { return trail.size(); }$/;"	f	class:Minisat::Solver	signature:() const
+nClauses	Solver.h	/^    int     nClauses   ()      const;       \/\/ The current number of original clauses.$/;"	p	class:Minisat::Solver	access:public	signature:() const
+nClauses	Solver.h	/^inline int      Solver::nClauses      ()      const   { return clauses.size(); }$/;"	f	class:Minisat::Solver	signature:() const
+nFreeVars	Solver.h	/^    int     nFreeVars  ()      const;$/;"	p	class:Minisat::Solver	access:public	signature:() const
+nFreeVars	Solver.h	/^inline int      Solver::nFreeVars     ()      const   { return (int)dec_vars - (trail_lim.size() == 0 ? trail.size() : trail_lim[0]); }$/;"	f	class:Minisat::Solver	signature:() const
+nLearnts	Solver.h	/^    int     nLearnts   ()      const;       \/\/ The current number of learnt clauses.$/;"	p	class:Minisat::Solver	access:public	signature:() const
+nLearnts	Solver.h	/^inline int      Solver::nLearnts      ()      const   { return learnts.size(); }$/;"	f	class:Minisat::Solver	signature:() const
+nVars	Solver.h	/^    int     nVars      ()      const;       \/\/ The current number of variables.$/;"	p	class:Minisat::Solver	access:public	signature:() const
+nVars	Solver.h	/^inline int      Solver::nVars         ()      const   { return vardata.size(); }$/;"	f	class:Minisat::Solver	signature:() const
+newDecisionLevel	Solver.h	/^    void     newDecisionLevel ();                                                      \/\/ Begins a new decision level.$/;"	p	class:Minisat::Solver	access:protected	signature:()
+newDecisionLevel	Solver.h	/^inline void     Solver::newDecisionLevel()                      { trail_lim.push(trail.size()); }$/;"	f	class:Minisat::Solver	signature:()
+newVar	Solver.cc	/^Var Solver::newVar(bool sign, bool dvar)$/;"	f	class:Solver	signature:(bool sign, bool dvar)
+newVar	Solver.h	/^    Var     newVar    (bool polarity = true, bool dvar = true); \/\/ Add a new variable with parameters specifying variable mode.$/;"	p	class:Minisat::Solver	access:public	signature:(bool polarity = true, bool dvar = true)
+occs	SolverTypes.h	/^    vec<Vec>  occs;$/;"	m	class:Minisat::OccLists	access:private
+ok	Solver.h	/^    bool                ok;               \/\/ If FALSE, the constraints are already unsatisfiable. No part of the solver state may be used!$/;"	m	class:Minisat::Solver	access:protected
+okay	Solver.h	/^    bool    okay         () const;                  \/\/ FALSE means solver is in a conflicting state$/;"	p	class:Minisat::Solver	access:public	signature:() const
+okay	Solver.h	/^inline bool     Solver::okay          ()      const   { return ok; }$/;"	f	class:Minisat::Solver	signature:() const
+operator !=	Solver.h	/^        bool operator!=(const Watcher& w) const { return cref != w.cref; }$/;"	f	struct:Minisat::Solver::Watcher	access:public	signature:(const Watcher& w) const
+operator !=	SolverTypes.h	/^    bool  operator != (lbool b) const { return !(*this == b); }$/;"	f	class:Minisat::lbool	access:public	signature:(lbool b) const
+operator !=	SolverTypes.h	/^    bool operator != (Lit p) const { return x != p.x; }$/;"	f	struct:Minisat::Lit	access:public	signature:(Lit p) const
+operator &&	SolverTypes.h	/^    lbool operator && (lbool b) const { $/;"	f	class:Minisat::lbool	access:public	signature:(lbool b) const
+operator ()	Solver.cc	/^    bool operator () (CRef x, CRef y) { $/;"	f	struct:reduceDB_gt	access:public	signature:(CRef x, CRef y)
+operator ()	Solver.cc	/^    bool operator () (CRef x, CRef y) { $/;"	f	struct:reduceDB_lt	access:public	signature:(CRef x, CRef y)
+operator ()	Solver.h	/^        bool operator () (Var x, Var y) const { return activity[x] > activity[y]; }$/;"	f	struct:Minisat::Solver::VarOrderLt	access:public	signature:(Var x, Var y) const
+operator ()	Solver.h	/^        bool operator()(const Watcher& w) const { return ca[w.cref].mark() == 1; }$/;"	f	struct:Minisat::Solver::WatcherDeleted	access:public	signature:(const Watcher& w) const
+operator ()	SolverTypes.h	/^        uint32_t operator()(CRef cr) const { return (uint32_t)cr; } };$/;"	f	struct:Minisat::CMap::CRefHash	access:public	signature:(CRef cr) const
+operator <	SolverTypes.h	/^    bool operator <  (Lit p) const { return x < p.x;  } \/\/ '<' makes p, ~p adjacent in the ordering.$/;"	f	struct:Minisat::Lit	access:public	signature:(Lit p) const
+operator ==	Solver.h	/^        bool operator==(const Watcher& w) const { return cref == w.cref; }$/;"	f	struct:Minisat::Solver::Watcher	access:public	signature:(const Watcher& w) const
+operator ==	SolverTypes.h	/^    bool  operator == (lbool b) const { return ((b.value&2) & (value&2)) | (!(b.value&2)&(value == b.value)); }$/;"	f	class:Minisat::lbool	access:public	signature:(lbool b) const
+operator ==	SolverTypes.h	/^    bool operator == (Lit p) const { return x == p.x; }$/;"	f	struct:Minisat::Lit	access:public	signature:(Lit p) const
+operator []	SolverTypes.h	/^    Clause&       operator[](Ref r)       { return (Clause&)RegionAllocator<uint32_t>::operator[](r); }$/;"	f	class:Minisat::ClauseAllocator	access:public	signature:(Ref r)
+operator []	SolverTypes.h	/^    Lit          operator [] (int i) const   { return data[i].lit; }$/;"	f	class:Minisat::Clause	access:public	signature:(int i) const
+operator []	SolverTypes.h	/^    Lit&         operator [] (int i)         { return data[i].lit; }$/;"	f	class:Minisat::Clause	access:public	signature:(int i)
+operator []	SolverTypes.h	/^    T&       operator [] (CRef cr)            { return map[cr]; }$/;"	f	class:Minisat::CMap	access:public	signature:(CRef cr)
+operator []	SolverTypes.h	/^    Vec&  operator[](const Idx& idx){ return occs[toInt(idx)]; }$/;"	f	class:Minisat::OccLists	access:public	signature:(const Idx& idx)
+operator []	SolverTypes.h	/^    const Clause& operator[](Ref r) const { return (Clause&)RegionAllocator<uint32_t>::operator[](r); }$/;"	f	class:Minisat::ClauseAllocator	access:public	signature:(Ref r) const
+operator []	SolverTypes.h	/^    const T& operator [] (CRef cr) const      { return map[cr]; }$/;"	f	class:Minisat::CMap	access:public	signature:(CRef cr) const
+operator ^	SolverTypes.h	/^    lbool operator ^  (bool  b) const { return lbool((uint8_t)(value^(uint8_t)b)); }$/;"	f	class:Minisat::lbool	access:public	signature:(bool b) const
+operator ^	SolverTypes.h	/^inline  Lit  operator ^(Lit p, bool b)      { Lit q; q.x = p.x ^ (unsigned int)b; return q; }$/;"	f	namespace:Minisat	signature:(Lit p, bool b)
+operator const Lit*	SolverTypes.h	/^    operator const Lit* (void) const         { return (Lit*)data; }$/;"	f	class:Minisat::Clause	access:public	signature:(void) const
+operator ||	SolverTypes.h	/^    lbool operator || (lbool b) const {$/;"	f	class:Minisat::lbool	access:public	signature:(lbool b) const
+operator ~	SolverTypes.h	/^inline  Lit  operator ~(Lit p)              { Lit q; q.x = p.x ^ 1; return q; }$/;"	f	namespace:Minisat	signature:(Lit p)
+opt_ccmin_mode	Solver.cc	/^static IntOption     opt_ccmin_mode        (_cat, "ccmin-mode",  "Controls conflict clause minimization (0=none, 1=basic, 2=deep)", 2, IntRange(0, 2));$/;"	p	file:	signature:(_cat, ”, ”, 2, IntRange(0, 2))
+opt_clause_decay	Solver.cc	/^static DoubleOption  opt_clause_decay      (_cat, "cla-decay",   "The clause activity decay factor",              0.999,    DoubleRange(0, false, 1, false));$/;"	p	file:	signature:(_cat, ”, ”, 0.999, DoubleRange(0, false, 1, false))
+opt_garbage_frac	Solver.cc	/^static DoubleOption  opt_garbage_frac      (_cat, "gc-frac",     "The fraction of wasted memory allowed before a garbage collection is triggered",  0.20, DoubleRange(0, false, HUGE_VAL, false));$/;"	p	file:	signature:(_cat, ”, ”, 0.20, DoubleRange(0, false, HUGE_VAL, false))
+opt_luby_restart	Solver.cc	/^static BoolOption    opt_luby_restart      (_cat, "luby",        "Use the Luby restart sequence", true);$/;"	p	file:	signature:(_cat, ”, ”, true)
+opt_phase_saving	Solver.cc	/^static IntOption     opt_phase_saving      (_cat, "phase-saving", "Controls the level of phase saving (0=none, 1=limited, 2=full)", 2, IntRange(0, 2));$/;"	p	file:	signature:(_cat, ”, ”, 2, IntRange(0, 2))
+opt_random_seed	Solver.cc	/^static DoubleOption  opt_random_seed       (_cat, "rnd-seed",    "Used by the random variable selection",         91648253, DoubleRange(0, false, HUGE_VAL, false));$/;"	p	file:	signature:(_cat, ”, ”, 91648253, DoubleRange(0, false, HUGE_VAL, false))
+opt_random_var_freq	Solver.cc	/^static DoubleOption  opt_random_var_freq   (_cat, "rnd-freq",    "The frequency with which the decision heuristic tries to choose a random variable", 0, DoubleRange(0, true, 1, true));$/;"	p	file:	signature:(_cat, ”, ”, 0, DoubleRange(0, true, 1, true))
+opt_restart_first	Solver.cc	/^static IntOption     opt_restart_first     (_cat, "rfirst",      "The base restart interval", 100, IntRange(1, INT32_MAX));$/;"	p	file:	signature:(_cat, ”, ”, 100, IntRange(1, INT32_MAX))
+opt_restart_inc	Solver.cc	/^static DoubleOption  opt_restart_inc       (_cat, "rinc",        "Restart interval increase factor", 2, DoubleRange(1, false, HUGE_VAL, false));$/;"	p	file:	signature:(_cat, ”, ”, 2, DoubleRange(1, false, HUGE_VAL, false))
+opt_rnd_init_act	Solver.cc	/^static BoolOption    opt_rnd_init_act      (_cat, "rnd-init",    "Randomize the initial activity", false);$/;"	p	file:	signature:(_cat, ”, ”, false)
+opt_var_decay	Solver.cc	/^static DoubleOption  opt_var_decay         (_cat, "var-decay",   "The variable activity decay factor",            0.95,     DoubleRange(0, false, 1, false));$/;"	p	file:	signature:(_cat, ”, ”, 0.95, DoubleRange(0, false, 1, false))
+order_heap	Solver.h	/^    Heap<VarOrderLt>    order_heap;       \/\/ A priority queue of variables ordered with respect to the variable activity.$/;"	m	class:Minisat::Solver	access:protected
+parse_DIMACS	Dimacs.h	/^static void parse_DIMACS(gzFile input_stream, Solver& S) {$/;"	f	namespace:Minisat	signature:(gzFile input_stream, Solver& S)
+parse_DIMACS_main	Dimacs.h	/^static void parse_DIMACS_main(B& in, Solver& S) {$/;"	f	namespace:Minisat	signature:(B& in, Solver& S)
+phase_saving	Solver.h	/^    int       phase_saving;       \/\/ Controls the level of phase saving (0=none, 1=limited, 2=full).$/;"	m	class:Minisat::Solver	access:public
+pickBranchLit	Solver.cc	/^Lit Solver::pickBranchLit()$/;"	f	class:Solver	signature:()
+pickBranchLit	Solver.h	/^    Lit      pickBranchLit    ();                                                      \/\/ Return the next decision variable.$/;"	p	class:Minisat::Solver	access:protected	signature:()
+polarity	Solver.h	/^    vec<char>           polarity;         \/\/ The preferred polarity of each variable.$/;"	m	class:Minisat::Solver	access:protected
+pop	SolverTypes.h	/^    void         pop         ()              { shrink(1); }$/;"	f	class:Minisat::Clause	access:public	signature:()
+printStats	Main.cc	/^void printStats(Solver& solver)$/;"	f	signature:(Solver& solver)
+progressEstimate	Solver.cc	/^double Solver::progressEstimate() const$/;"	f	class:Solver	signature:() const
+progressEstimate	Solver.h	/^    double   progressEstimate ()      const; \/\/ DELETE THIS ?? IT'S NOT VERY USEFUL ...$/;"	p	class:Minisat::Solver	access:protected	signature:() const
+progress_estimate	Solver.h	/^    double              progress_estimate;\/\/ Set by 'search()'.$/;"	m	class:Minisat::Solver	access:protected
+propagate	Solver.cc	/^CRef Solver::propagate()$/;"	f	class:Solver	signature:()
+propagate	Solver.h	/^    CRef     propagate        ();                                                      \/\/ Perform unit propagation. Returns possibly conflicting clause.$/;"	p	class:Minisat::Solver	access:protected	signature:()
+propagation_budget	Solver.h	/^    int64_t             propagation_budget; \/\/ -1 means no budget.$/;"	m	class:Minisat::Solver	access:protected
+propagations	Solver.h	/^    uint64_t solves, starts, decisions, rnd_decisions, propagations, conflicts;$/;"	m	class:Minisat::Solver	access:public
+qhead	Solver.h	/^    int                 qhead;            \/\/ Head of queue (as index into the trail -- no more explicit propagation queue in MiniSat).$/;"	m	class:Minisat::Solver	access:protected
+random_seed	Solver.h	/^    double    random_seed;$/;"	m	class:Minisat::Solver	access:public
+random_var_freq	Solver.h	/^    double    random_var_freq;$/;"	m	class:Minisat::Solver	access:public
+readAllLearnt	Dimacs.h	/^static void readAllLearnt(Solver & S, B& learntFile) {$/;"	f	namespace:Minisat	signature:(Solver & S, B& learntFile)
+readClause	Dimacs.h	/^static void readClause(B& in, Solver& S, vec<Lit>& lits) {$/;"	f	namespace:Minisat	signature:(B& in, Solver& S, vec<Lit>& lits)
+readLearntClauses	Dimacs.h	/^static void readLearntClauses(Solver & S, B& learntFile) {$/;"	f	namespace:Minisat	signature:(Solver & S, B& learntFile)
+readLessActive	Dimacs.h	/^static void readLessActive(Solver & S, B& learntFile) {$/;"	f	namespace:Minisat	signature:(Solver & S, B& learntFile)
+readMoreActive	Dimacs.h	/^static void readMoreActive(Solver & S, B& learntFile) {$/;"	f	namespace:Minisat	signature:(Solver & S, B& learntFile)
+readSmallerThan	Dimacs.h	/^static void readSmallerThan(Solver & S, B& learntFile) {$/;"	f	namespace:Minisat	signature:(Solver & S, B& learntFile)
+reason	Solver.h	/^    CRef     reason           (Var x) const;$/;"	p	class:Minisat::Solver	access:protected	signature:(Var x) const
+reason	Solver.h	/^inline CRef Solver::reason(Var x) const { return vardata[x].reason; }$/;"	f	class:Minisat::Solver	signature:(Var x) const
+reason	SolverTypes.h	/^struct VarData { CRef reason; int level; };$/;"	m	struct:Minisat::VarData	access:public
+rebuildOrderHeap	Solver.cc	/^void Solver::rebuildOrderHeap()$/;"	f	class:Solver	signature:()
+rebuildOrderHeap	Solver.h	/^    void     rebuildOrderHeap ();$/;"	p	class:Minisat::Solver	access:protected	signature:()
+reduceDB	Solver.cc	/^void Solver::reduceDB()$/;"	f	class:Solver	signature:()
+reduceDB	Solver.h	/^    void     reduceDB         ();                                                      \/\/ Reduce the set of learnt clauses.$/;"	p	class:Minisat::Solver	access:protected	signature:()
+reduceDB_gt	Solver.cc	/^    reduceDB_gt(ClauseAllocator& ca_) : ca(ca_) {}$/;"	f	struct:reduceDB_gt	access:public	signature:(ClauseAllocator& ca_)
+reduceDB_gt	Solver.cc	/^struct reduceDB_gt { $/;"	s	file:
+reduceDB_gt::ca	Solver.cc	/^    ClauseAllocator& ca;$/;"	m	struct:reduceDB_gt	file:	access:public
+reduceDB_gt::operator ()	Solver.cc	/^    bool operator () (CRef x, CRef y) { $/;"	f	struct:reduceDB_gt	access:public	signature:(CRef x, CRef y)
+reduceDB_gt::reduceDB_gt	Solver.cc	/^    reduceDB_gt(ClauseAllocator& ca_) : ca(ca_) {}$/;"	f	struct:reduceDB_gt	access:public	signature:(ClauseAllocator& ca_)
+reduceDB_lt	Solver.cc	/^    reduceDB_lt(ClauseAllocator& ca_) : ca(ca_) {}$/;"	f	struct:reduceDB_lt	access:public	signature:(ClauseAllocator& ca_)
+reduceDB_lt	Solver.cc	/^struct reduceDB_lt { $/;"	s	file:
+reduceDB_lt::ca	Solver.cc	/^    ClauseAllocator& ca;$/;"	m	struct:reduceDB_lt	file:	access:public
+reduceDB_lt::operator ()	Solver.cc	/^    bool operator () (CRef x, CRef y) { $/;"	f	struct:reduceDB_lt	access:public	signature:(CRef x, CRef y)
+reduceDB_lt::reduceDB_lt	Solver.cc	/^    reduceDB_lt(ClauseAllocator& ca_) : ca(ca_) {}$/;"	f	struct:reduceDB_lt	access:public	signature:(ClauseAllocator& ca_)
+rel	SolverTypes.h	/^    union { Lit lit; float act; uint32_t abs; CRef rel; } data[0];$/;"	m	union:Minisat::Clause::__anon2	access:public
+reloc	SolverTypes.h	/^    void reloc(CRef& cr, ClauseAllocator& to)$/;"	f	class:Minisat::ClauseAllocator	access:public	signature:(CRef& cr, ClauseAllocator& to)
+relocAll	Solver.cc	/^void Solver::relocAll(ClauseAllocator& to)$/;"	f	class:Solver	signature:(ClauseAllocator& to)
+relocAll	Solver.h	/^    void     relocAll         (ClauseAllocator& to);$/;"	p	class:Minisat::Solver	access:protected	signature:(ClauseAllocator& to)
+relocate	SolverTypes.h	/^    void         relocate    (CRef c)        { header.reloced = 1; data[0].rel = c; }$/;"	f	class:Minisat::Clause	access:public	signature:(CRef c)
+relocation	SolverTypes.h	/^    CRef         relocation  ()      const   { return data[0].rel; }$/;"	f	class:Minisat::Clause	access:public	signature:() const
+reloced	SolverTypes.h	/^        unsigned reloced   : 1;$/;"	m	struct:Minisat::Clause::__anon1	access:public
+reloced	SolverTypes.h	/^    bool         reloced     ()      const   { return header.reloced; }$/;"	f	class:Minisat::Clause	access:public	signature:() const
+remove	SolverTypes.h	/^    void     remove      (CRef cr)            { map.remove(cr); }$/;"	f	class:Minisat::CMap	access:public	signature:(CRef cr)
+removeClause	Solver.cc	/^void Solver::removeClause(CRef cr) {$/;"	f	class:Solver	signature:(CRef cr)
+removeClause	Solver.h	/^    void     removeClause     (CRef cr);               \/\/ Detach and free a clause.$/;"	p	class:Minisat::Solver	access:protected	signature:(CRef cr)
+removeSatisfied	Solver.cc	/^void Solver::removeSatisfied(vec<CRef>& cs)$/;"	f	class:Solver	signature:(vec<CRef>& cs)
+removeSatisfied	Solver.h	/^    void     removeSatisfied  (vec<CRef>& cs);                                         \/\/ Shrink 'cs' to contain only non-satisfied clauses.$/;"	p	class:Minisat::Solver	access:protected	signature:(vec<CRef>& cs)
+remove_satisfied	Solver.h	/^    bool                remove_satisfied; \/\/ Indicates whether possibly inefficient linear scan for satisfied clauses should be performed in 'simplify'.$/;"	m	class:Minisat::Solver	access:protected
+restart_first	Solver.h	/^    int       restart_first;      \/\/ The initial restart limit.                                                                (default 100)$/;"	m	class:Minisat::Solver	access:public
+restart_inc	Solver.h	/^    double    restart_inc;        \/\/ The factor with which the restart limit is multiplied in each restart.                    (default 1.5)$/;"	m	class:Minisat::Solver	access:public
+rnd_decisions	Solver.h	/^    uint64_t solves, starts, decisions, rnd_decisions, propagations, conflicts;$/;"	m	class:Minisat::Solver	access:public
+rnd_init_act	Solver.h	/^    bool      rnd_init_act;       \/\/ Initialize variable activities with a small random value.$/;"	m	class:Minisat::Solver	access:public
+rnd_pol	Solver.h	/^    bool      rnd_pol;            \/\/ Use random polarities for branching heuristics.$/;"	m	class:Minisat::Solver	access:public
+satisfied	Solver.cc	/^bool Solver::satisfied(const Clause& c) const {$/;"	f	class:Solver	signature:(const Clause& c) const
+satisfied	Solver.h	/^    bool     satisfied        (const Clause& c) const; \/\/ Returns TRUE if a clause is satisfied in the current state.$/;"	p	class:Minisat::Solver	access:protected	signature:(const Clause& c) const
+saveLearntClauses	Solver.cc	/^void Solver::saveLearntClauses(int howMany) {$/;"	f	class:Solver	signature:(int howMany)
+saveLearntClauses	Solver.h	/^    void 		saveLearntClauses	(int howMany);$/;"	p	class:Minisat::Solver	access:public	signature:(int howMany)
+search	Solver.cc	/^lbool Solver::search(int nof_conflicts)$/;"	f	class:Solver	signature:(int nof_conflicts)
+search	Solver.h	/^    lbool    search           (int nof_conflicts);                                     \/\/ Search for a given number of conflicts.$/;"	p	class:Minisat::Solver	access:protected	signature:(int nof_conflicts)
+seen	Solver.h	/^    vec<char>           seen;$/;"	m	class:Minisat::Solver	access:protected
+setConfBudget	Solver.h	/^    void    setConfBudget(int64_t x);$/;"	p	class:Minisat::Solver	access:public	signature:(int64_t x)
+setConfBudget	Solver.h	/^inline void     Solver::setConfBudget(int64_t x){ conflict_budget    = conflicts    + x; }$/;"	f	class:Minisat::Solver	signature:(int64_t x)
+setDecisionVar	Solver.h	/^    void    setDecisionVar (Var v, bool b); \/\/ Declare if a variable should be eligible for selection in the decision heuristic.$/;"	p	class:Minisat::Solver	access:public	signature:(Var v, bool b)
+setDecisionVar	Solver.h	/^inline void     Solver::setDecisionVar(Var v, bool b) $/;"	f	class:Minisat::Solver	signature:(Var v, bool b)
+setLbd	SolverTypes.h	/^    void     setLbd(uint32_t lbd) { header.linears_blocks_distance = lbd; }$/;"	f	class:Minisat::Clause	access:public	signature:(uint32_t lbd)
+setPolarity	Solver.h	/^    void    setPolarity    (Var v, bool b); \/\/ Declare which polarity the decision heuristic should use for a variable. Requires mode 'polarity_user'.$/;"	p	class:Minisat::Solver	access:public	signature:(Var v, bool b)
+setPolarity	Solver.h	/^inline void     Solver::setPolarity   (Var v, bool b) { polarity[v] = b; }$/;"	f	class:Minisat::Solver	signature:(Var v, bool b)
+setPropBudget	Solver.h	/^    void    setPropBudget(int64_t x);$/;"	p	class:Minisat::Solver	access:public	signature:(int64_t x)
+setPropBudget	Solver.h	/^inline void     Solver::setPropBudget(int64_t x){ propagation_budget = propagations + x; }$/;"	f	class:Minisat::Solver	signature:(int64_t x)
+shrink	SolverTypes.h	/^    void         shrink      (int i)         { assert(i <= size()); if (header.has_extra) data[header.size-i] = data[header.size]; header.size -= i; }$/;"	f	class:Minisat::Clause	access:public	signature:(int i)
+sign	SolverTypes.h	/^inline  bool sign      (Lit p)              { return p.x & 1; }$/;"	f	namespace:Minisat	signature:(Lit p)
+simpDB_assigns	Solver.h	/^    int                 simpDB_assigns;   \/\/ Number of top-level assignments since last execution of 'simplify()'.$/;"	m	class:Minisat::Solver	access:protected
+simpDB_props	Solver.h	/^    int64_t             simpDB_props;     \/\/ Remaining number of propagations that must be made before next execution of 'simplify()'.$/;"	m	class:Minisat::Solver	access:protected
+simplify	Solver.cc	/^bool Solver::simplify()$/;"	f	class:Solver	signature:()
+simplify	Solver.h	/^    bool    simplify     ();                        \/\/ Removes already satisfied clauses.$/;"	p	class:Minisat::Solver	access:public	signature:()
+size	SolverTypes.h	/^        unsigned size      : 27; $/;"	m	struct:Minisat::Clause::__anon1	access:public
+size	SolverTypes.h	/^    int          size        ()      const   { return header.size; }$/;"	f	class:Minisat::Clause	access:public	signature:() const
+size	SolverTypes.h	/^    int      size        ()                const      { return map.elems(); }$/;"	f	class:Minisat::CMap	access:public	signature:() const
+smudge	SolverTypes.h	/^    void  smudge    (const Idx& idx){$/;"	f	class:Minisat::OccLists	access:public	signature:(const Idx& idx)
+solve	Solver.h	/^    bool    solve        ();                        \/\/ Search without assumptions.$/;"	p	class:Minisat::Solver	access:public	signature:()
+solve	Solver.h	/^    bool    solve        (Lit p);                   \/\/ Search for a model that respects a single assumption.$/;"	p	class:Minisat::Solver	access:public	signature:(Lit p)
+solve	Solver.h	/^    bool    solve        (Lit p, Lit q);            \/\/ Search for a model that respects two assumptions.$/;"	p	class:Minisat::Solver	access:public	signature:(Lit p, Lit q)
+solve	Solver.h	/^    bool    solve        (Lit p, Lit q, Lit r);     \/\/ Search for a model that respects three assumptions.$/;"	p	class:Minisat::Solver	access:public	signature:(Lit p, Lit q, Lit r)
+solve	Solver.h	/^    bool    solve        (const vec<Lit>& assumps); \/\/ Search for a model that respects a given set of assumptions.$/;"	p	class:Minisat::Solver	access:public	signature:(const vec<Lit>& assumps)
+solve	Solver.h	/^inline bool     Solver::solve         ()                    { budgetOff(); assumptions.clear(); return solve_() == l_True; }$/;"	f	class:Minisat::Solver	signature:()
+solve	Solver.h	/^inline bool     Solver::solve         (Lit p)               { budgetOff(); assumptions.clear(); assumptions.push(p); return solve_() == l_True; }$/;"	f	class:Minisat::Solver	signature:(Lit p)
+solve	Solver.h	/^inline bool     Solver::solve         (Lit p, Lit q)        { budgetOff(); assumptions.clear(); assumptions.push(p); assumptions.push(q); return solve_() == l_True; }$/;"	f	class:Minisat::Solver	signature:(Lit p, Lit q)
+solve	Solver.h	/^inline bool     Solver::solve         (Lit p, Lit q, Lit r) { budgetOff(); assumptions.clear(); assumptions.push(p); assumptions.push(q); assumptions.push(r); return solve_() == l_True; }$/;"	f	class:Minisat::Solver	signature:(Lit p, Lit q, Lit r)
+solve	Solver.h	/^inline bool     Solver::solve         (const vec<Lit>& assumps){ budgetOff(); assumps.copyTo(assumptions); return solve_() == l_True; }$/;"	f	class:Minisat::Solver	signature:(const vec<Lit>& assumps)
+solveLimited	Solver.h	/^    lbool   solveLimited (const vec<Lit>& assumps); \/\/ Search for a model that respects a given set of assumptions (With resource constraints).$/;"	p	class:Minisat::Solver	access:public	signature:(const vec<Lit>& assumps)
+solveLimited	Solver.h	/^inline lbool    Solver::solveLimited  (const vec<Lit>& assumps){ assumps.copyTo(assumptions); return solve_(); }$/;"	f	class:Minisat::Solver	signature:(const vec<Lit>& assumps)
+solve_	Solver.cc	/^lbool Solver::solve_()$/;"	f	class:Solver	signature:()
+solve_	Solver.h	/^    lbool    solve_           ();                                                      \/\/ Main solve method (assumptions given in 'assumptions').$/;"	p	class:Minisat::Solver	access:protected	signature:()
+solver	Main.cc	/^static Solver* solver;$/;"	v	file:
+solves	Solver.h	/^    uint64_t solves, starts, decisions, rnd_decisions, propagations, conflicts;$/;"	m	class:Minisat::Solver	access:public
+starts	Solver.h	/^    uint64_t solves, starts, decisions, rnd_decisions, propagations, conflicts;$/;"	m	class:Minisat::Solver	access:public
+strengthen	SolverTypes.h	/^    void         strengthen  (Lit p);$/;"	p	class:Minisat::Clause	access:public	signature:(Lit p)
+strengthen	SolverTypes.h	/^inline void Clause::strengthen(Lit p)$/;"	f	class:Minisat::Clause	signature:(Lit p)
+subsumes	SolverTypes.h	/^    Lit          subsumes    (const Clause& other) const;$/;"	p	class:Minisat::Clause	access:public	signature:(const Clause& other) const
+subsumes	SolverTypes.h	/^inline Lit Clause::subsumes(const Clause& other) const$/;"	f	class:Minisat::Clause	signature:(const Clause& other) const
+toDimacs	Solver.cc	/^void Solver::toDimacs(FILE* f, Clause& c, vec<Var>& map, Var& max)$/;"	f	class:Solver	signature:(FILE* f, Clause& c, vec<Var>& map, Var& max)
+toDimacs	Solver.cc	/^void Solver::toDimacs(FILE* f, const vec<Lit>& assumps)$/;"	f	class:Solver	signature:(FILE* f, const vec<Lit>& assumps)
+toDimacs	Solver.cc	/^void Solver::toDimacs(const char *file, const vec<Lit>& assumps)$/;"	f	class:Solver	signature:(const char *file, const vec<Lit>& assumps)
+toDimacs	Solver.h	/^    void    toDimacs     (FILE* f, Clause& c, vec<Var>& map, Var& max);$/;"	p	class:Minisat::Solver	access:public	signature:(FILE* f, Clause& c, vec<Var>& map, Var& max)
+toDimacs	Solver.h	/^    void    toDimacs     (FILE* f, const vec<Lit>& assumps);            \/\/ Write CNF to file in DIMACS-format.$/;"	p	class:Minisat::Solver	access:public	signature:(FILE* f, const vec<Lit>& assumps)
+toDimacs	Solver.h	/^    void    toDimacs     (const char *file, const vec<Lit>& assumps);$/;"	p	class:Minisat::Solver	access:public	signature:(const char *file, const vec<Lit>& assumps)
+toDimacs	Solver.h	/^    void    toDimacs     (const char* file);$/;"	p	class:Minisat::Solver	access:public	signature:(const char* file)
+toDimacs	Solver.h	/^    void    toDimacs     (const char* file, Lit p);$/;"	p	class:Minisat::Solver	access:public	signature:(const char* file, Lit p)
+toDimacs	Solver.h	/^    void    toDimacs     (const char* file, Lit p, Lit q);$/;"	p	class:Minisat::Solver	access:public	signature:(const char* file, Lit p, Lit q)
+toDimacs	Solver.h	/^    void    toDimacs     (const char* file, Lit p, Lit q, Lit r);$/;"	p	class:Minisat::Solver	access:public	signature:(const char* file, Lit p, Lit q, Lit r)
+toDimacs	Solver.h	/^inline void     Solver::toDimacs     (const char* file){ vec<Lit> as; toDimacs(file, as); }$/;"	f	class:Minisat::Solver	signature:(const char* file)
+toDimacs	Solver.h	/^inline void     Solver::toDimacs     (const char* file, Lit p){ vec<Lit> as; as.push(p); toDimacs(file, as); }$/;"	f	class:Minisat::Solver	signature:(const char* file, Lit p)
+toDimacs	Solver.h	/^inline void     Solver::toDimacs     (const char* file, Lit p, Lit q){ vec<Lit> as; as.push(p); as.push(q); toDimacs(file, as); }$/;"	f	class:Minisat::Solver	signature:(const char* file, Lit p, Lit q)
+toDimacs	Solver.h	/^inline void     Solver::toDimacs     (const char* file, Lit p, Lit q, Lit r){ vec<Lit> as; as.push(p); as.push(q); as.push(r); toDimacs(file, as); }$/;"	f	class:Minisat::Solver	signature:(const char* file, Lit p, Lit q, Lit r)
+toInt	SolverTypes.h	/^    friend int   toInt  (lbool l);$/;"	p	class:Minisat::lbool	access:friend	signature:(lbool l)
+toInt	SolverTypes.h	/^inline  int  toInt     (Lit p)              { return p.x; } $/;"	f	namespace:Minisat	signature:(Lit p)
+toInt	SolverTypes.h	/^inline  int  toInt     (Var v)              { return v; } $/;"	f	namespace:Minisat	signature:(Var v)
+toInt	SolverTypes.h	/^inline int   toInt  (lbool l) { return l.value; }$/;"	f	namespace:Minisat	signature:(lbool l)
+toLbool	SolverTypes.h	/^    friend lbool toLbool(int   v);$/;"	p	class:Minisat::lbool	access:friend	signature:(int v)
+toLbool	SolverTypes.h	/^inline lbool toLbool(int   v) { return lbool((uint8_t)v);  }$/;"	f	namespace:Minisat	signature:(int v)
+toLit	SolverTypes.h	/^inline  Lit  toLit     (int i)              { Lit p; p.x = i; return p; } $/;"	f	namespace:Minisat	signature:(int i)
+tot_literals	Solver.h	/^    uint64_t dec_vars, clauses_literals, learnts_literals, max_literals, tot_literals;$/;"	m	class:Minisat::Solver	access:public
+trail	Solver.h	/^    vec<Lit>            trail;            \/\/ Assignment stack; stores all assigments made in the order they were made.$/;"	m	class:Minisat::Solver	access:protected
+trail_lim	Solver.h	/^    vec<int>            trail_lim;        \/\/ Separator indices for different decision levels in 'trail'.$/;"	m	class:Minisat::Solver	access:protected
+uncheckedEnqueue	Solver.cc	/^void Solver::uncheckedEnqueue(Lit p, CRef from)$/;"	f	class:Solver	signature:(Lit p, CRef from)
+uncheckedEnqueue	Solver.h	/^    void     uncheckedEnqueue (Lit p, CRef from = CRef_Undef);                         \/\/ Enqueue a literal. Assumes value of literal is undefined.$/;"	p	class:Minisat::Solver	access:protected	signature:(Lit p, CRef from = CRef_Undef)
+value	Solver.h	/^    lbool   value      (Lit p) const;       \/\/ The current value of a literal.$/;"	p	class:Minisat::Solver	access:public	signature:(Lit p) const
+value	Solver.h	/^    lbool   value      (Var x) const;       \/\/ The current value of a variable.$/;"	p	class:Minisat::Solver	access:public	signature:(Var x) const
+value	Solver.h	/^inline lbool    Solver::value         (Lit p) const   { return assigns[var(p)] ^ sign(p); }$/;"	f	class:Minisat::Solver	signature:(Lit p) const
+value	Solver.h	/^inline lbool    Solver::value         (Var x) const   { return assigns[x]; }$/;"	f	class:Minisat::Solver	signature:(Var x) const
+value	SolverTypes.h	/^    uint8_t value;$/;"	m	class:Minisat::lbool	access:private
+var	SolverTypes.h	/^inline  int  var       (Lit p)              { return p.x >> 1; }$/;"	f	namespace:Minisat	signature:(Lit p)
+varBumpActivity	Solver.h	/^    void     varBumpActivity  (Var v);                 \/\/ Increase a variable with the current 'bump' value.$/;"	p	class:Minisat::Solver	access:protected	signature:(Var v)
+varBumpActivity	Solver.h	/^    void     varBumpActivity  (Var v, double inc);     \/\/ Increase a variable with the current 'bump' value.$/;"	p	class:Minisat::Solver	access:protected	signature:(Var v, double inc)
+varBumpActivity	Solver.h	/^inline void Solver::varBumpActivity(Var v) { varBumpActivity(v, var_inc); }$/;"	f	class:Minisat::Solver	signature:(Var v)
+varBumpActivity	Solver.h	/^inline void Solver::varBumpActivity(Var v, double inc) {$/;"	f	class:Minisat::Solver	signature:(Var v, double inc)
+varDecayActivity	Solver.h	/^    void     varDecayActivity ();                      \/\/ Decay all variables with the specified factor. Implemented by increasing the 'bump' value instead.$/;"	p	class:Minisat::Solver	access:protected	signature:()
+varDecayActivity	Solver.h	/^inline void Solver::varDecayActivity() { var_inc *= (1 \/ var_decay); }$/;"	f	class:Minisat::Solver	signature:()
+var_Undef	SolverTypes.h	43;"	d
+var_decay	Solver.h	/^    double    var_decay;$/;"	m	class:Minisat::Solver	access:public
+var_inc	Solver.h	/^    double              var_inc;          \/\/ Amount to bump next variable with.$/;"	m	class:Minisat::Solver	access:protected
+vardata	Solver.h	/^    vec<VarData>        vardata;          \/\/ Stores reason and level for each variable.$/;"	m	class:Minisat::Solver	access:protected
+verbosity	Solver.h	/^    int       verbosity;$/;"	m	class:Minisat::Solver	access:public
+watches	Solver.h	/^                        watches;          \/\/ 'watches[lit]' is a list of constraints watching 'lit' (will go there if literal becomes true).$/;"	m	class:Minisat::Solver	access:protected
+withinBudget	Solver.h	/^    bool     withinBudget     ()      const;$/;"	p	class:Minisat::Solver	access:protected	signature:() const
+withinBudget	Solver.h	/^inline bool     Solver::withinBudget() const {$/;"	f	class:Minisat::Solver	signature:() const
+x	SolverTypes.h	/^    int     x;$/;"	m	struct:Minisat::Lit	access:public
+~Solver	Solver.cc	/^Solver::~Solver()$/;"	f	class:Solver	signature:()
+~Solver	Solver.h	/^    virtual ~Solver();$/;"	p	class:Minisat::Solver	access:public	signature:()
