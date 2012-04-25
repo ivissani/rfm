@@ -1,8 +1,0 @@
-# Compiled sources
-*.or
-
-# Binaries
-minisat_static
-
-# Dependencies makefiles
-depend.mk
