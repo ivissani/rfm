@@ -10,7 +10,7 @@ class DIMACSParserSuite extends FunSuite {
   test("dimacs parser can parse a dimacs file") {
     object parser extends DIMACSParser
     
-    def parserResult = parser.parseAll(parser.dimacs, Source.fromFile("src/test/data/pamela9.cnf").getLines().mkString("\n"))
+    def parserResult = parser.parseAll(parser.dimacs, Source.fromFile("src/test/data/pamela9.cnf").bufferedReader)
      
     assert(parserResult.successful)
     assert(parserResult.get.clauses.length == 56536)
