@@ -11,7 +11,11 @@ class DIMACSParserSuite extends FunSuite {
     object parser extends DIMACSParser
     
     def parserResult = parser.parseAll(parser.dimacs, Source.fromFile("src/test/data/pamela9.cnf").getLines().mkString("\n"))
-    
+     
     assert(parserResult.successful)
+    assert(parserResult.get.clauses.length == 56536)
+    assert(parserResult.get.clausesamount == 56536)
+    assert(parserResult.get.variablesamount == 26780)
+    assert(parserResult.get.countVariables == 26778)
   }
 }
