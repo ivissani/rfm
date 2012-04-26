@@ -15,7 +15,7 @@ class DIMACSParserSuite extends FunSuite {
     assert(parserResult.successful)
     assert(parserResult.get.clauses.length == 56536)
     assert(parserResult.get.clausesamount == 56536)
-    assert(parserResult.get.variablesamount == 26780)
+    assert(parserResult.get.variablesamount == 26778)
     assert(parserResult.get.countVariables == 26778)
   }
 }
