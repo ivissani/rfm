@@ -13,9 +13,19 @@ import scala.util.parsing.combinator.JavaTokenParsers
 
 class Als2CnfActor extends Actor {
 	def act() {
+	  def translateAsynchronous(alsfile : File, actor : Actor) {
+		  val mainActor = Actor.self
+		  
+		  Actor.actor {
+		    Thread.sleep(1000)
+		    mainActor ! ("TRANSLATION FINISHED", alsfile, actor, translate(alsfile))
+		  }
+	  }
+	  
 	  loop {
 	    react {
-	      case (alsfile : File, actor : Actor) => actor ! translate(alsfile)
+	      case (alsfile : File, actor : Actor) => translateAsynchronous(alsfile, actor) 
+	      case ("TRANSLATION FINISHED", alsfile : File, actor : Actor, translation : String) => actor ! translation
 	    }
 	  }
 	}
