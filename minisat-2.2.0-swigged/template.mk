@@ -105,7 +105,7 @@ swig: minisatJNI.java libminisat.so
 
 minisatJNI.java: minisat.i
 	swig -c++ -java $^
-	cp *.java ~/workspace/eclipseworkspace/testswig/src/
+	cp *.java ../miniJat/src/ar/uba/dc/rfm/minisat/
 
 minisat_wrap.ors:	minisat_wrap.cxx
 	@echo Compiling: $(subst $(MROOT)/,,$@)
