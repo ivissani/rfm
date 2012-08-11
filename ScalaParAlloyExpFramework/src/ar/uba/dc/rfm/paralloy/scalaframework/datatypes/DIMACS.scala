@@ -1,4 +1,4 @@
-package org.rfm.paralloy.scalaframework.datatypes
+package ar.uba.dc.rfm.paralloy.scalaframework.datatypes
 
 case class DIMACS(variablesamount : Int, clausesamount : Int, clauses : List[Clause]) {
   def countVariables = {

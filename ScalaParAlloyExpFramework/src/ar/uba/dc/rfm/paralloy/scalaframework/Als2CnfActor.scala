@@ -1,16 +1,14 @@
-package org.rfm.paralloy.scalaframework
+package ar.uba.dc.rfm.paralloy.scalaframework
 
-import scala.actors.Actor
+import edu.mit.csail.sdg.alloy4compiler.parser.CompUtil
+import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution
+import edu.mit.csail.sdg.alloy4compiler.translator.TranslateAlloyToKodkod
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.PrintStream
 import rfm.alloy.A2C
-import java.io.StringWriter
-import java.io.ByteArrayOutputStream
-import edu.mit.csail.sdg.alloy4compiler.parser.CompUtil
-import edu.mit.csail.sdg.alloy4compiler.translator.TranslateAlloyToKodkod
-import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution
+import scala.actors.Actor
 import scala.util.parsing.combinator.JavaTokenParsers
-import edu.mit.csail.sdg.alloy4.A4Reporter
 
 class Als2CnfActor extends Actor {
 	def act() {

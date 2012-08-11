@@ -1,7 +1,8 @@
-package org.rfm.paralloy.scalaframework.parsers
+package ar.uba.dc.rfm.paralloy.scalaframework.parsers
 
-import scala.util.parsing.combinator._
-import org.rfm.paralloy.scalaframework.datatypes._
+import scala.util.parsing.combinator.JavaTokenParsers
+import ar.uba.dc.rfm.paralloy.scalaframework.datatypes.Clause
+import ar.uba.dc.rfm.paralloy.scalaframework.datatypes.DIMACS
 
 class DIMACSParser extends JavaTokenParsers {
 	val variable = """[1-9][0-9]*""".r ^^ (_.toInt)

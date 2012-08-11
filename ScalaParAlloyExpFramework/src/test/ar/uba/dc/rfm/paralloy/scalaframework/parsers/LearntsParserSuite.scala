@@ -1,14 +1,14 @@
-package test.org.rfm.paralloy.scalaframework.parsers
+package test.ar.uba.dc.rfm.paralloy.scalaframework.parsers
 
-import org.rfm.paralloy.scalaframework.parsers.DIMACSParser
-import org.scalatest.FunSuite
-import scala.io.Source
-import org.junit.runner._
-import org.rfm.paralloy.scalaframework.parsers.LearntsParser
-import java.io.RandomAccessFile
 import java.io.File
-import java.nio.charset.Charset
+import java.io.RandomAccessFile
 import java.nio.channels.FileChannel.MapMode
+import java.nio.charset.Charset
+import org.junit.runner.RunWith
+import org.scalatest.FunSuite
+import org.scalatest.junit.JUnitRunner
+import ar.uba.dc.rfm.paralloy.scalaframework.parsers.LearntsParser
+import scala.io.Source
 
 @RunWith(classOf[org.scalatest.junit.JUnitRunner])
 class LearntsParserSuite extends FunSuite {

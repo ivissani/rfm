@@ -1,6 +1,6 @@
-import org.rfm.paralloy.scalaframework.parsers.LearntsParser
+import ar.uba.dc.rfm.paralloy.scalaframework.parsers.LearntsParser
 import scala.io.Source
-import org.rfm.paralloy.scalaframework.Als2CnfActor
+import ar.uba.dc.rfm.paralloy.scalaframework.Als2CnfActor
 import scala.actors.Actor._
 import java.io.File
 import scala.actors.Actor

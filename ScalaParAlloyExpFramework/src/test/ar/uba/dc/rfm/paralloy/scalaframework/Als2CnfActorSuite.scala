@@ -1,9 +1,10 @@
-package test.org.rfm.paralloy.scalaframework
+package test.ar.uba.dc.rfm.paralloy.scalaframework
 
-import org.scalatest.FunSuite
-import org.junit.runner.RunWith
-import org.rfm.paralloy.scalaframework.Als2CnfActor
 import java.io.File
+import org.junit.runner.RunWith
+import org.scalatest.FunSuite
+import org.scalatest.junit.JUnitRunner
+import ar.uba.dc.rfm.paralloy.scalaframework.Als2CnfActor
 import scala.io.Source
 
 @RunWith(classOf[org.scalatest.junit.JUnitRunner])

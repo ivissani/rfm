@@ -1,9 +1,10 @@
-package test.org.rfm.paralloy.scalaframework.parsers
+package test.ar.uba.dc.rfm.paralloy.scalaframework.parsers
 
-import org.rfm.paralloy.scalaframework.parsers.DIMACSParser
+import org.junit.runner.RunWith
 import org.scalatest.FunSuite
+import org.scalatest.junit.JUnitRunner
+import ar.uba.dc.rfm.paralloy.scalaframework.parsers.DIMACSParser
 import scala.io.Source
-import org.junit.runner._
 
 @RunWith(classOf[org.scalatest.junit.JUnitRunner])
 class DIMACSParserSuite extends FunSuite {

@@ -1,9 +1,9 @@
-package org.rfm.paralloy.scalaframework.parsers
+package ar.uba.dc.rfm.paralloy.scalaframework.parsers
 
 import scala.util.parsing.combinator.JavaTokenParsers
-import org.rfm.paralloy.scalaframework.datatypes.Clause
-import org.rfm.paralloy.scalaframework.datatypes.LearntClause
-import org.rfm.paralloy.scalaframework.datatypes.Learnts
+import ar.uba.dc.rfm.paralloy.scalaframework.datatypes.Clause
+import ar.uba.dc.rfm.paralloy.scalaframework.datatypes.LearntClause
+import ar.uba.dc.rfm.paralloy.scalaframework.datatypes.Learnts
 
 class LearntsParser extends JavaTokenParsers {
 	val variable = """[1-9][0-9]*""".r ^^ (_.toInt)
