@@ -17,7 +17,7 @@ class Minisat extends Solver {
 	  what.foreach(a => this.add_clause(a.toIntseq))
 	  withLearnts.foreach(a => a match {case LearntClause(act, cla, lbd) => this.add_learnt(cla.toIntseq, act.toFloat)})
 	  
-	  // Set solving limits. The solver stops if any of these limits is going to be surpassed
+	  // Set solving limits. The solver stops if any of these limits is surpassed
 	  set_conf_budget(forConflicts)
 	  set_prop_budget(forPropagations)
 	  set_time_budget(forTime)
