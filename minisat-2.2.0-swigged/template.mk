@@ -104,7 +104,7 @@ swig: minisatJNI.java libminisat.so
 	sudo chmod 755 /usr/lib/libminisat.so
 
 minisatJNI.java: minisat.i
-	swig -c++ -java $^
+	swig -c++ -java -package ar.uba.dc.rfm.minisat $^
 	cp *.java ../miniJat/src/ar/uba/dc/rfm/minisat/
 
 minisat_wrap.ors:	minisat_wrap.cxx

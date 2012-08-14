@@ -862,6 +862,7 @@ static int entering = 0;
 // NOTE: assumptions passed in member-variable 'assumptions'.
 lbool Solver::solve_()
 {
+    start_time = cpuTime();
     model.clear();
     conflict.clear();
     if (!ok) return l_False;

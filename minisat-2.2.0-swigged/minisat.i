@@ -82,6 +82,7 @@ class Solver
         bool simplify(void);
         bool solve(void);
         bool okay(void) const;
+        int  nVars();
 
         
         %extend
@@ -94,6 +95,17 @@ class Solver
                         vec<Lit> vec;
                         std2vec(v, vec);
                         $self->addLearnt(vec, act);
+                }
+
+                double get_var_activity(int v)
+                {
+                        return $self->activity[v];
+                }
+
+                std::vector<int> & get_assumptions(std::vector<int> & to)
+                {
+                        vec2std($self->assumptions, to);
+                        return to;
                 }
 
                 void toDimacs(const char * f, std::vector<int> as)

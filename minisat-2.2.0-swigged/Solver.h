@@ -361,7 +361,7 @@ inline void     Solver::setDecisionVar(Var v, bool b)
 }
 inline void     Solver::setConfBudget(int64_t x){ conflict_budget    = conflicts    + x; }
 inline void     Solver::setPropBudget(int64_t x){ propagation_budget = propagations + x; }
-inline void     Solver::setTimeBudget(double x){ time_budget = time_budget + x; }
+inline void     Solver::setTimeBudget(double x){ time_budget = time + x; }
 inline void     Solver::interrupt(){ asynch_interrupt = true; }
 inline void     Solver::clearInterrupt(){ asynch_interrupt = false; }
 inline void     Solver::budgetOff(){ conflict_budget = propagation_budget = -1; time_budget = -1.0; }
@@ -369,7 +369,7 @@ inline bool     Solver::withinBudget() const {
     return !asynch_interrupt &&
            (conflict_budget    < 0      || conflicts < (uint64_t)conflict_budget) &&
            (propagation_budget < 0      || propagations < (uint64_t)propagation_budget) &&
-           (time_budget        < 0.0    || time < (double) time_budget); }
+           (time_budget        < 0.0    || (time - start_time) < (double) time_budget); }
 
 // FIXME: after the introduction of asynchronous interrruptions the solve-versions that return a
 // pure bool do not give a safe interface. Either interrupts must be possible to turn off here, or
