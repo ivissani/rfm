@@ -43,9 +43,7 @@ class StreamBuffer {
     void assureLookahead() {
         if (pos >= size) {
             pos  = 0;
-	    fprintf(stderr, "Muere en el gzread?\n");
             size = gzread(in, buf, sizeof(buf)); 
-	    fprintf(stderr, "No. gz prevails!\n");
         } 
     }
 

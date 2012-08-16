@@ -83,6 +83,7 @@ class Solver
         bool solve(void);
         bool okay(void) const;
         int  nVars();
+        int  nClauses();
 
         
         %extend
@@ -105,6 +106,21 @@ class Solver
                 std::vector<int> & get_assumptions(std::vector<int> & to)
                 {
                         vec2std($self->assumptions, to);
+                        return to;
+                }
+
+                std::vector<int> & get_clause(int i, std::vector<int> & to)
+                {
+                        if((i < $self->nClauses()) && (i > 0))
+                        {
+                                to.clear();
+                                Clause & c = $self->ca[$self->clauses[i]];
+                                for(int j = 0; j < c.size(); j++)
+                                {
+                                        Lit & l = c[j];
+                                        to.push_back(Lit2int(l));
+                                }
+                        }
                         return to;
                 }
 
@@ -138,16 +154,12 @@ class Solver
 
                 void prueba(const char *pathname) {
                         char bufi[1024]; int leidos = 0;
-                        fprintf(stderr, "Vamos a leer de: %s\n", pathname);
                         gzFile in = gzopen(pathname, "rb");
                         if(in == NULL) {
                                 fprintf(stderr, "ERROR abriendo el archivo\n");
                         } else {
-                                fprintf(stderr, "Abrimos el archivo OK\n");
                                 leidos = gzread(in, bufi, sizeof(bufi));
-                                fprintf(stderr, "Hemos leido %d bytes\n", leidos);
                                 gzclose(in);
-                                fprintf(stderr, "Cerramos el archivo OK\n");
                         }
                 }
 
@@ -155,18 +167,14 @@ class Solver
                 {
                         if($self->nVars() > 0)
                                 fprintf(stderr, "Warning: reading on nonempty state\n");
-                        fprintf(stderr, "Vamos a leer de: %s\n", pathname);
                         gzFile in = gzopen(pathname, "rb");
                         if(in == NULL)
                         {
                                 fprintf(stderr, "ERROR abriendo el archivo\n");
                                 return 0;
                         }
-                        fprintf(stderr, "Abrimos el archivo\n");
                         parse_DIMACS(in, *$self);
-                        fprintf(stderr, "Parseamos el contenido\n");
                         gzclose(in);
-                        fprintf(stderr, "Cerramos el archivo\n");
                         return $self->simplify();
                 }
         

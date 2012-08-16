@@ -55,6 +55,10 @@ public class Solver {
     return minisatJNI.Solver_nVars(swigCPtr, this);
   }
 
+  public int nClauses() {
+    return minisatJNI.Solver_nClauses(swigCPtr, this);
+  }
+
   public void add_learnt(intseq v, float act) {
     minisatJNI.Solver_add_learnt(swigCPtr, this, intseq.getCPtr(v), v, act);
   }
@@ -65,6 +69,10 @@ public class Solver {
 
   public intseq get_assumptions(intseq to) {
     return new intseq(minisatJNI.Solver_get_assumptions(swigCPtr, this, intseq.getCPtr(to), to), false);
+  }
+
+  public intseq get_clause(int i, intseq to) {
+    return new intseq(minisatJNI.Solver_get_clause(swigCPtr, this, i, intseq.getCPtr(to), to), false);
   }
 
   public void toDimacs(String f, intseq as) {

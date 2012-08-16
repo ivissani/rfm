@@ -193,7 +193,6 @@ static void parse_DIMACS_main(B& in, Solver& S) {
     int vars    = 0;
     int clauses = 0;
     int cnt     = 0;
-    fprintf(stderr, "Voy a iterar\n");
     for (;;){
         skipWhitespace(in);
         if (*in == EOF) break;
@@ -224,9 +223,7 @@ static void parse_DIMACS_main(B& in, Solver& S) {
 //
 template<class Solver>
 static void parse_DIMACS(gzFile input_stream, Solver& S) {
-    fprintf(stderr, "Antes de hacer el StreamBuffer\n");
     StreamBuffer in(input_stream);
-    fprintf(stderr, "Antes de llamar a parse_DIMACS_main(in, S)\n");
     parse_DIMACS_main(in, S); }
 
 //=================================================================================================

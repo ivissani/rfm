@@ -7,6 +7,7 @@ import ar.uba.dc.rfm.paralloy.scalaframework.Minisat
 import ar.uba.dc.rfm.paralloy.scalaframework.parsers.DIMACSParser
 import scala.io.Source
 import ar.uba.dc.rfm.paralloy.scalaframework.lifters.VarActivityLifter
+import java.io.File
 
 @RunWith(classOf[org.scalatest.junit.JUnitRunner])
 class VarActivityLifterSuite extends FunSuite {
@@ -14,16 +15,18 @@ class VarActivityLifterSuite extends FunSuite {
 	  System.loadLibrary("minisat")
 	  
 	  var m = new Minisat
+	  // Remember you need to increase java stack size in order for this to work
+	  // since the native method uses a stack buffer of 1MB
+	  m.read("src/test/data/pamela9.cnf")
 	  
-	  object parser extends DIMACSParser
-	  val parserResult = parser.parseAll(parser.dimacs, Source.fromFile("src/test/data/pamela9.cnf").bufferedReader)
-	  
-	  val ex = m.solve_time_restricted(parserResult.get.clauses, 5d, Nil, List(1650))
+	  val ex = m.solve_time_restricted(Nil, 5d, Nil, List(-1650))
 	  object v extends VarActivityLifter(5)
 	  
-	  val res = v.variablesToLift()(m)
+	  def f = v.variablesToLift()
+	  val res = f(m)
 	  Console println res
 	  
 	  assert(res.size == 5)
+	  assert(!res.contains(1650))
 	}
 }
