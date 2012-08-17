@@ -1,6 +1,5 @@
 package ar.uba.dc.rfm.paralloy.scalaframework.lifters
 
-import ar.uba.dc.rfm.paralloy.scalaframework.AbstractLifter
 import ar.uba.dc.rfm.paralloy.scalaframework.Minisat
 import scala.collection.mutable.MutableList
 import scala.collection.mutable.PriorityQueue

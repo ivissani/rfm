@@ -40,7 +40,7 @@ object Main {
     //    receiverActor ! (new File("src/test/data/pamela9.als"))
     //  }
     System.loadLibrary("minisat")
-    val ex = new Experiment("/home/ivissani/RFM/miscosas/minisat/cnf/p8.cnf" :: Nil, 3, SolvingBudget(-1, -1, 15d), new VarActivityLifter(2), new NilFilter)
+    val ex = new Experiment("/home/ivissani/RFM/miscosas/minisat/cnf/p8.cnf" :: Nil, 3, SolvingBudget(-1, -1, 10d), new VarActivityLifter(2), new NilFilter)
     ex.run
   }
 }
