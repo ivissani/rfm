@@ -200,6 +200,20 @@ class Solver
                         return $self->addClause_(ps);
                 }
         
+                void set_assumptions(const std::vector<int> & assumps) 
+                { 
+                        // Adds assumptions as unit clauses
+                        for(int i = 0; i < assumps.size(); i++)
+                        {
+                                std::vector<int> v; v.push_back(assumps[i]);
+                                Solver_add_clause($self, v);
+                        }
+
+                        vec<Lit> v; std2vec(assumps, v);
+                        $self->setAssumptions(v);
+                        
+                } 
+
                 bool solve(const std::vector<int> &assumptions)
                 {
                         vec<Lit> assumps;
@@ -209,9 +223,15 @@ class Solver
                 
                 char solve_limited(const std::vector<int> &assumptions)
                 {
-                        vec<Lit> assumps;
-                        std2vec(assumptions, assumps);
-                        lbool res = $self->solveLimited(assumps);
+                        lbool res;
+                        if(assumptions.size() > 0)
+                        {
+                                vec<Lit> assumps;
+                                std2vec(assumptions, assumps);
+                                res = $self->solveLimited(assumps);
+                        }
+                        else
+                                res = $self->solve_();
                         return res == l_True ? 'S' : (res == l_False ? 'U' : 'I');
                 }
                 

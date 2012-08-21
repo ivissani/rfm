@@ -89,7 +89,9 @@ public:
     void    toDimacs     (const char* file, Lit p);
     void    toDimacs     (const char* file, Lit p, Lit q);
     void    toDimacs     (const char* file, Lit p, Lit q, Lit r);
-    
+   
+    vec<Lit> & getAssumptions() { return assumptions; }
+    void setAssumptions(const vec<Lit> & assumps) { assumptions.clear(); assumps.copyTo(assumptions); } 
     // Variable mode:
     // 
     void    setPolarity    (Var v, bool b); // Declare which polarity the decision heuristic should use for a variable. Requires mode 'polarity_user'.

@@ -9,7 +9,7 @@ import ar.uba.dc.rfm.paralloy.scalaframework.parsers.DIMACSParser
 @RunWith(classOf[org.scalatest.junit.JUnitRunner])
 class MinisatSuite extends FunSuite {
 	test("solve_restricted works properly") {
-	  System.loadLibrary("minisat");
+	  //System.loadLibrary("minisat");
 	  
 	  var myMinisat = new Minisat
 	  
@@ -27,7 +27,8 @@ class MinisatSuite extends FunSuite {
 		  end - start
 	  }
 	  
-	  val ex = time(myMinisat.solve_time_restricted(parserResult.get.clauses, solveFor, Nil, Nil))
+	  myMinisat.prepare_for_solving(parserResult.get.clauses, Nil, Nil)
+	  val ex = time(myMinisat.solve_time_restricted(solveFor))
 	  
 	  assert((ex.toDouble/1000 - solveFor).abs < (0.1 * solveFor))
 	}

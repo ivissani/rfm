@@ -55,6 +55,7 @@ public class minisatJNI {
   public final static native boolean Solver_read(long jarg1, Solver jarg1_, String jarg2);
   public final static native void Solver_add_vars(long jarg1, Solver jarg1_, int jarg2);
   public final static native boolean Solver_add_clause(long jarg1, Solver jarg1_, long jarg2, intseq jarg2_);
+  public final static native void Solver_set_assumptions(long jarg1, Solver jarg1_, long jarg2, intseq jarg2_);
   public final static native boolean Solver_solve__SWIG_1(long jarg1, Solver jarg1_, long jarg2, intseq jarg2_);
   public final static native char Solver_solve_limited(long jarg1, Solver jarg1_, long jarg2, intseq jarg2_);
   public final static native void Solver_set_conf_budget(long jarg1, Solver jarg1_, long jarg2);

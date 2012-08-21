@@ -107,6 +107,10 @@ public class Solver {
     return minisatJNI.Solver_add_clause(swigCPtr, this, intseq.getCPtr(lits), lits);
   }
 
+  public void set_assumptions(intseq assumps) {
+    minisatJNI.Solver_set_assumptions(swigCPtr, this, intseq.getCPtr(assumps), assumps);
+  }
+
   public boolean solve(intseq assumptions) {
     return minisatJNI.Solver_solve__SWIG_1(swigCPtr, this, intseq.getCPtr(assumptions), assumptions);
   }

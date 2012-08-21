@@ -19,7 +19,9 @@ class VarActivityLifter(limit: Int, lessActive: Boolean = false) extends Abstrac
 
       var heap = new PriorityQueue[ActivityOrderedVar]
 
-      val assumed = new IntSeq(m.get_assumptions(new intseq)).toList().map(_.abs)
+      var is  = new intseq
+      m.get_assumptions(is)
+      val assumed = new IntSeq(is).toList.map(_.abs)
 
       Range(1, m.nVars() + 1).foreach((v: Int) ⇒ if (!assumed.contains(v)) heap.enqueue(new ActivityOrderedVar((v, m.get_var_activity(v)))))
 

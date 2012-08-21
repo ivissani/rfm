@@ -51,7 +51,7 @@ object Main {
     //  }
     System.loadLibrary("minisat")
 
-    Database.forURL("jdbc:h2:~/scalloy.results", "sa", "", driver = "org.h2.Driver") withSession {
+    Database.forURL("jdbc:h2:~/scalloy.results;AUTO_SERVER=TRUE", "sa", "", driver = "org.h2.Driver") withSession {
       def makeTableMap(implicit dbsess : Session) : Map[String, MTable] = {
         val tableList = MTable.getTables.list()(dbsess);
         val tableMap = tableList.map { t ⇒ (t.name.name, t) }.toMap;
@@ -63,7 +63,7 @@ object Main {
       if (!tables.contains(Experiments.tableName)) { Experiments.ddl create }
       if (!tables.contains(Iterations.tableName)) { Iterations.ddl create }
       if (!tables.contains(AssumedLiterals.tableName)) { AssumedLiterals.ddl create }
-      val e = new Experiment("/home/ivissani/RFM/miscosas/minisat/cnf/p9.cnf" :: Nil, 3, SolvingBudget(-1, -1, 30d), new VarActivityLifter(8), new PercentageActivityFilter(10))
+      val e = new Experiment("/home/ivissani/rfm/miscosas/minisat/cnf/p9.cnf" :: Nil, 3, SolvingBudget(-1, -1, 30d), new VarActivityLifter(4), new PercentageActivityFilter(10))
       e.run()
     }
     return
@@ -105,7 +105,7 @@ object Main {
       new Experiment(cnfs, 3, SolvingBudget(-1, -1, 60d), new VarActivityLifter(4), new NilFilter),
       new Experiment(cnfs, 3, SolvingBudget(-1, -1, 120d), new VarActivityLifter(4), new NilFilter))
       
-    Database.forURL("jdbc:h2:~/scalloy.results", "sa", "", driver = "org.h2.Driver") withSession {
+    Database.forURL("jdbc:h2:~/scalloy.results;AUTO_SERVER=TRUE", "sa", "", driver = "org.h2.Driver") withSession {
       def makeTableMap(implicit dbsess : Session) : Map[String, MTable] = {
         val tableList = MTable.getTables.list()(dbsess);
         val tableMap = tableList.map { t ⇒ (t.name.name, t) }.toMap;

@@ -159,46 +159,68 @@ class Experiment(
     Console.printf("Iterations: %d, assuming: [%s]\n", its, assuming.mkString(" "))
     Console.flush
 
-    val s = new Minisat
+    var s = new Minisat
     s.read(path)
     s.setVerbosity(1)
     val SolvingBudget(p, c, t) = budget
 
     // Save this iteration
     val id = newIteration(expId, pId, its, level, forMeToAssume)
-
+    s.prepare_for_solving(Nil, withLearnts, assuming)
+    
     val (res, elapsed) =
-      if (its <= 1) {
-        // Discard budget and solve to infinity and beyond...
-        val res = s.solve_unrestricted(Nil, withLearnts, assuming)
-        val elapsed = s.get_last_execution_time.toDouble / 1000
-        (res, elapsed)
+      if (s.simplify()) {
+        // If didn't die by propagation
+        if (its <= 1) {
+          // Discard budget and solve to infinity and beyond...
+          val res = s.solve_unrestricted()
+          val elapsed = s.get_last_execution_time.toDouble / 1000
+
+          // Best effort to free memory used by Minisat
+          // once we don't need it anymore
+          s.finalize()
+          s = null
+          System.gc()
+          
+          (res, elapsed)
+        }
+        else {
+          val res = s.solve_restricted(t, c, p)
+          Console flush
+          val elapsed = s.get_last_execution_time.toDouble / 1000
+          if (res == 'I') {
+            // Variables to lift sorted by value
+            val toLift = lifter.variablesToLift()(s).sort((a : Int, b : Int) ⇒ a.abs < b.abs)
+            val learnts = filter.clausesToKeep()(s)
+
+            // Best effort to free memory used by Minisat
+            // once we don't need it anymore
+            s.finalize()
+            s = null
+            System.gc()
+
+            // Try to compute in parallel
+            val partial_res = signPermutations(toLift).map((as : List[Int]) ⇒ {
+              iterate(expId, id, level + 1, its - 1, path, learnts, assuming, as)
+            })
+
+            // Aggregate results
+            // Fold is supposed to be correct even in parallel collections 
+            val (rr, tr) = partial_res.fold(('U', 0.0))((a, b) ⇒ {
+              val (ra, ta) = a
+              val (rb, tb) = b
+              (if (ra == 'S') 'S' else rb, ta + tb)
+            })
+
+            (rr, elapsed + tr)
+          }
+          else
+            (res, elapsed)
+        }
       }
       else {
-        val res = s.solve_restricted(Nil, t, c, p, withLearnts, assuming)
-        val elapsed = s.get_last_execution_time.toDouble / 1000
-        if (res == 'I') {
-          // Variables to lift sorted by value
-          val toLift = lifter.variablesToLift()(s).sort((a : Int, b : Int) ⇒ a.abs < b.abs)
-          val learnts = filter.clausesToKeep()(s)
-
-          // Try to compute in parallel
-          val partial_res = signPermutations(toLift).map((as : List[Int]) ⇒ {
-            iterate(expId, id, level + 1, its - 1, path, learnts, assuming, as)
-          })
-
-          // Aggregate results
-          // Fold is supposed to be correct even in parallel collections 
-          val (rr, tr) = partial_res.fold(('U', 0.0))((a, b) ⇒ {
-            val (ra, ta) = a
-            val (rb, tb) = b
-            (if (ra == 'S') 'S' else rb, ta + tb)
-          })
-
-          (rr, elapsed + tr)
-        }
-        else
-          (res, elapsed)
+        // If killed by propagation
+        ('U', 0.0)
       }
 
     // Update iteration with solving result and total elapsed time
