@@ -43,6 +43,8 @@ public class minisatJNI {
   public final static native boolean Solver_okay(long jarg1, Solver jarg1_);
   public final static native int Solver_nVars(long jarg1, Solver jarg1_);
   public final static native int Solver_nClauses(long jarg1, Solver jarg1_);
+  public final static native void Solver_setVerbosity(long jarg1, Solver jarg1_, int jarg2);
+  public final static native int Solver_getVerbosity(long jarg1, Solver jarg1_);
   public final static native void Solver_add_learnt(long jarg1, Solver jarg1_, long jarg2, intseq jarg2_, float jarg3);
   public final static native double Solver_get_var_activity(long jarg1, Solver jarg1_, int jarg2);
   public final static native long Solver_get_assumptions(long jarg1, Solver jarg1_, long jarg2, intseq jarg2_);

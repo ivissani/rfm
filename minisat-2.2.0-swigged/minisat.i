@@ -84,6 +84,8 @@ class Solver
         bool okay(void) const;
         int  nVars();
         int  nClauses();
+        void setVerbosity(int v );
+        int  getVerbosity();
 
         
         %extend

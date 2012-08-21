@@ -28,4 +28,9 @@ class VarActivityLifter(limit: Int, lessActive: Boolean = false) extends Abstrac
 
     ret
   }
+  
+  def getCannonicalAndParameterizedName() = {
+    val res = getClass().getCanonicalName()
+    res + "(limit=%d, lessActive=%c)".format(limit, if(lessActive) 'T' else 'F')
+  }
 }
