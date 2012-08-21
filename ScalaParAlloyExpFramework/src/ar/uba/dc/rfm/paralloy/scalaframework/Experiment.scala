@@ -200,7 +200,7 @@ class Experiment(
             System.gc()
 
             // Try to compute in parallel
-            val partial_res = signPermutations(toLift).map((as : List[Int]) ⇒ {
+            val partial_res = signPermutations(toLift).par.map((as : List[Int]) ⇒ {
               iterate(expId, id, level + 1, its - 1, path, learnts, assuming, as)
             })
 
