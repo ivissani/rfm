@@ -24,7 +24,7 @@ import java.sql.Timestamp
 
 case class SolvingBudget(propagationsBudget : Int, conflictsBudget : Int, timeBudget : Double)
 
-object Experiments extends Table[(Int, String, Int, Int, Int, Double, String, String, String, Option[Double], String, Timestamp)]("EXPERIMENTS") {
+object Experiments extends Table[(Int, String, Int, Int, Int, Double, String, String, String, Option[Double], String, Timestamp, Option[Timestamp])]("EXPERIMENTS") {
   def id = column[Int]("id", O AutoInc, O NotNull, O PrimaryKey)
   def cnf = column[String]("cnf", O NotNull, O DBType ("varchar(2048)"))
   def iterations = column[Int]("iterations", O NotNull)
@@ -37,12 +37,13 @@ object Experiments extends Table[(Int, String, Int, Int, Int, Double, String, St
   def totalTime = column[Option[Double]]("time", O Nullable)
   def host = column[String]("host", O NotNull)
   def start = column[Timestamp]("start", O NotNull)
+  def end = column[Option[Timestamp]]("end", O Nullable)
 
-  def * = id ~ cnf ~ iterations ~ propagationsBudget ~ conflictsBudget ~ timeBudget ~ lifterClassName ~ filterClassName ~ result ~ totalTime ~ host ~ start
+  def * = id ~ cnf ~ iterations ~ propagationsBudget ~ conflictsBudget ~ timeBudget ~ lifterClassName ~ filterClassName ~ result ~ totalTime ~ host ~ start ~ end
   def newExp = cnf ~ iterations ~ propagationsBudget ~ conflictsBudget ~ timeBudget ~ lifterClassName ~ filterClassName ~ host ~ start
 }
 
-object Iterations extends Table[(Int, Int, Option[Int], Int, Int, String, Option[Double], Timestamp)]("ITERATIONS") {
+object Iterations extends Table[(Int, Int, Option[Int], Int, Int, String, Option[Double], Timestamp, Option[Timestamp])]("ITERATIONS") {
   def id = column[Int]("id", O AutoInc, O NotNull, O PrimaryKey)
   def experimentId = column[Int]("experiment_id", O NotNull)
   def parentIterationId = column[Option[Int]]("parent_id", O Nullable)
@@ -51,8 +52,9 @@ object Iterations extends Table[(Int, Int, Option[Int], Int, Int, String, Option
   def result = column[String]("result", O NotNull, O Default ("I"), O DBType ("char(1)"))
   def totalTime = column[Option[Double]]("time", O Nullable)
   def start = column[Timestamp]("start", O NotNull)
+  def end = column[Option[Timestamp]]("end", O Nullable)
 
-  def * = id ~ experimentId ~ parentIterationId ~ remainingIterations ~ level ~ result ~ totalTime ~ start
+  def * = id ~ experimentId ~ parentIterationId ~ remainingIterations ~ level ~ result ~ totalTime ~ start ~ end
   def newIt = experimentId ~ parentIterationId ~ remainingIterations ~ level ~ start
   def newRootIt = experimentId ~ remainingIterations ~ level ~ start
 
@@ -84,7 +86,7 @@ class Experiment(
     problems.par.map(runProblem(_))
   }
 
-  private def newExperiment(path : String) : Int = {
+  private def newExperiment(path : String) : Int = synchronized {
     val ts = new Timestamp(System.currentTimeMillis())
     val host = InetAddress.getLocalHost().getHostName()
     Experiments.newExp.insert(path,
@@ -111,29 +113,23 @@ class Experiment(
     val (r, t) = iterate(expId = id, its = iterations, path = path, withLearnts = Nil, assumedByParent = Nil, forMeToAssume = Nil)
 
     // Update solving result and total elapsed time (in seconds)
-    val uq = for (e ← Experiments if e.id === id) yield e.result ~ e.totalTime
-    uq.update((r.toString, Option(t)))
+    val uq = for (e ← Experiments if e.id === id) yield e.result ~ e.totalTime ~ e.end
+    uq.update((r.toString, Option(t), Option(new Timestamp(System.currentTimeMillis()))))
 
     (r, t)
   }
 
   def signPermutations(vars : List[Int]) : List[List[Int]] = {
-    def f(l : List[Int], factor : Int) : List[List[Int]] = {
-      var res : List[List[Int]] = Nil
-      for (i ← List.range(0, l.length + 1))
-        for (l2 ← l.combinations(i))
-          res = l2.map(factor * _) :: res
-      res
+    def f(l : List[Int]) : List[List[Int]] = {
+      l match {
+        case x :: Nil => (x :: Nil) :: (x * -1 :: Nil) :: Nil
+        case x :: xs => f(xs).map(x :: _) ::: f(xs).map((-1 * x) :: _)
+      }
     }
-
-    def g(l : List[Int]) : List[List[Int]] = {
-      f(l, -1).zip(f(l, 1).reverse).map(p ⇒ p._1 ::: p._2)
-    }
-
-    g(vars.map(_.abs))
+    f(vars.map(_.abs))
   }
 
-  private def newIteration(expId : Int, pId : Int, its : Int, level : Int, assuming : List[Int]) : Int = {
+  private def newIteration(expId : Int, pId : Int, its : Int, level : Int, assuming : List[Int]) : Int = synchronized {
     val ts = new Timestamp(System.currentTimeMillis())
     val q =
       if (pId <= 0) {
@@ -205,8 +201,8 @@ class Experiment(
             })
 
             // Aggregate results
-            // Fold is supposed to be correct even in parallel collections 
-            val (rr, tr) = partial_res.fold(('U', 0.0))((a, b) ⇒ {
+            // foldLeft should be correct even in parallel collections 
+            val (rr, tr) = partial_res.foldLeft(('U', 0.0))((a, b) ⇒ {
               val (ra, ta) = a
               val (rb, tb) = b
               (if (ra == 'S') 'S' else rb, ta + tb)
@@ -220,14 +216,14 @@ class Experiment(
       }
       else {
         // If killed by propagation
-        ('U', 0.0)
+        ('B', 0.0) // 'B' means UNSAT killed by pure propagation
       }
 
     // Update iteration with solving result and total elapsed time
-    val qu = for (it ← Iterations if it.id === id) yield it.result ~ it.totalTime
-    qu.update(res.toString, Option(elapsed))
+    val qu = for (it ← Iterations if it.id === id) yield it.result ~ it.totalTime ~ it.end
+    qu.update(res.toString, Option(elapsed), Option(new Timestamp(System.currentTimeMillis)))
 
-    Console.printf("-- Ended solving with res: %c and time: %fs\n", res, elapsed)
+    Console.printf("-- Ended solving it: %d with res: %c and time: %fs\n", id, res, elapsed)
     Console.flush
     (res, elapsed)
   }
