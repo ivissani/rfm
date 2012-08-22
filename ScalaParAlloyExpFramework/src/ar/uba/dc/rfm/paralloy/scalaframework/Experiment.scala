@@ -118,19 +118,13 @@ class Experiment(
   }
 
   def signPermutations(vars : List[Int]) : List[List[Int]] = {
-    def f(l : List[Int], factor : Int) : List[List[Int]] = {
-      var res : List[List[Int]] = Nil
-      for (i ← List.range(0, l.length + 1))
-        for (l2 ← l.combinations(i))
-          res = l2.map(factor * _) :: res
-      res
+    def f(l : List[Int]) : List[List[Int]] = {
+      l match {
+        case x :: Nil => (x :: Nil) :: (x * -1 :: Nil) :: Nil
+        case x :: xs => f(xs).map(x :: _) ::: f(xs).map((-1 * x) :: _)
+      }
     }
-
-    def g(l : List[Int]) : List[List[Int]] = {
-      f(l, -1).zip(f(l, 1).reverse).map(p ⇒ p._1 ::: p._2)
-    }
-
-    g(vars.map(_.abs))
+    f(vars.map(_.abs))
   }
 
   private def newIteration(expId : Int, pId : Int, its : Int, level : Int, assuming : List[Int]) : Int = {
