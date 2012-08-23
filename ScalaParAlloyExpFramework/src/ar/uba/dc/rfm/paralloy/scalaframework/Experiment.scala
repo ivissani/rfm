@@ -122,6 +122,7 @@ class Experiment(
   def signPermutations(vars : List[Int]) : List[List[Int]] = {
     def f(l : List[Int]) : List[List[Int]] = {
       l match {
+        case Nil => throw new Exception("Ooops, tratando de generar las permutaciones de signos sobre una lista vacía")
         case x :: Nil => (x :: Nil) :: (x * -1 :: Nil) :: Nil
         case x :: xs => f(xs).map(x :: _) ::: f(xs).map((-1 * x) :: _)
       }

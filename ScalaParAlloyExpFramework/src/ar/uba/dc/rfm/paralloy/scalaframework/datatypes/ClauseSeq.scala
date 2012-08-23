@@ -5,8 +5,8 @@ import ar.uba.dc.rfm.paralloy.scalaframework.Minisat
 
 import scala.collection.mutable.MutableList
 
-class ClauseSeq extends Traversable[LearntClause] {
-	def list = new MutableList[LearntClause]
+class ClauseSeq extends Iterable[LearntClause] {
+	var list = new MutableList[LearntClause]
 	
 	def this(base : clauseseq) {
 	  this()
@@ -18,9 +18,10 @@ class ClauseSeq extends Traversable[LearntClause] {
 	  }
 	}
 	
-	def foreach[U](f : LearntClause => U) {
-	  list.foreach(f)
-	} 
+	def iterator() = list.iterator
+//	def foreach[U](f : LearntClause => U) {
+//	  list.foreach(f)
+//	} 
 }
 
 object ClauseSeq {
