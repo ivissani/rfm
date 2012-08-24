@@ -109,7 +109,7 @@ class Solver
 
                 std::vector<int> & get_assumptions(std::vector<int> & to)
                 {
-                        vec2std($self->assumptions, to);
+                        vec2std($self->my_assumptions, to);
                         return to;
                 }
 
@@ -212,7 +212,8 @@ class Solver
                         }
 
                         vec<Lit> v; std2vec(assumps, v);
-                        $self->setAssumptions(v);
+                        $self->my_assumptions.clear();
+                        v.copyTo($self->my_assumptions);
                         
                 } 
 
@@ -317,7 +318,6 @@ class Solver
 		uint64_t dec_vars, num_clauses, num_learnts, clauses_literals, learnts_literals, max_literals, tot_literals;
 		%mutable;
 		*/
-                
         }
 
 };

@@ -205,7 +205,7 @@ class Experiment(
             val (rr, tr) = partial_res.foldLeft(('U', 0.0))((a, b) ⇒ {
               val (ra, ta) = a
               val (rb, tb) = b
-              (if (ra == 'S') 'S' else rb, ta + tb)
+              (if (ra == 'S') 'S' else if (rb == 'B') ra else rb, ta + tb)
             })
 
             (rr, elapsed + tr)
