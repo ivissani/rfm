@@ -13,7 +13,7 @@ class ClauseSeq extends Iterable[LearntClause] {
 	  
 
 	  for(i <- List.range(0, base.size.toInt)) {
-	    var is = base.get (i)
+	    var is = base.get(i)
 	    list += LearntClause(is.getActivity(), new IntSeq(is.getLiterals).toClause, is.getLBD())
 	  }
 	}
@@ -26,7 +26,8 @@ class ClauseSeq extends Iterable[LearntClause] {
 
 object ClauseSeq {
   def getLearntsFromMinisat(m : Minisat) : ClauseSeq = {
-    val cs = new clauseseq
-    new ClauseSeq(m.get_learnts(cs))
+    var cs = new clauseseq
+    m.get_learnts(cs)
+    new ClauseSeq(cs)
   }
 }

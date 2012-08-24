@@ -13,6 +13,11 @@ class Minisat extends SolverWrapper {
   var lastExStartTimeMillis: Long = 0
   var lastExEndTimeMillis: Long = 0
   
+  def this(path : String) {
+    this()
+    read(path)
+  }
+  
   def solve_restricted(forTime: Double, forConflicts: Int, forPropagations: Int): Char = {
     Console println nClauses()
     set_budget_off() // This resets the budgets

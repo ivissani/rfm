@@ -153,11 +153,10 @@ class Experiment(
 
   def iterate(expId : Int, pId : Int = -1, level : Int = 0, its : Int, path : String, withLearnts : List[LearntClause], assumedByParent : List[Int], forMeToAssume : List[Int]) : (Char, Double) = {
     val assuming = assumedByParent ::: forMeToAssume
-    Console.printf("Iterations: %d, assuming: [%s]\n", its, assuming.mkString(" "))
+    Console.printf("Iterations: %d, assuming: [%s], with this many learnts: %d\n", its, assuming.mkString(" "), withLearnts.size)
     Console.flush
 
-    var s = new Minisat
-    s.read(path)
+    var s = new Minisat(path)
     s.setVerbosity(1)
     val SolvingBudget(p, c, t) = budget
 

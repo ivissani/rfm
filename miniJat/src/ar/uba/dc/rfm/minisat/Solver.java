@@ -59,6 +59,10 @@ public class Solver {
     return minisatJNI.Solver_nClauses(swigCPtr, this);
   }
 
+  public int nLearnts() {
+    return minisatJNI.Solver_nLearnts(swigCPtr, this);
+  }
+
   public void setVerbosity(int v) {
     minisatJNI.Solver_setVerbosity(swigCPtr, this, v);
   }

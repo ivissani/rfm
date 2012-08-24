@@ -84,6 +84,7 @@ class Solver
         bool okay(void) const;
         int  nVars();
         int  nClauses();
+        int  nLearnts();
         void setVerbosity(int v );
         int  getVerbosity();
 
@@ -97,6 +98,7 @@ class Solver
                 {
                         vec<Lit> vec;
                         std2vec(v, vec);
+
                         $self->addLearnt(vec, act);
                 }
 
