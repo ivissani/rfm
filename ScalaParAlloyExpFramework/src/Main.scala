@@ -13,14 +13,11 @@ import ar.uba.dc.rfm.paralloy.scalaframework.datatypes.Clause
 import ar.uba.dc.rfm.paralloy.scalaframework.datatypes.Clause
 import org.scalaquery.session._
 import org.scalaquery.session.Database.threadLocalSession
-import org.scalaquery.meta.{ MTable }
 import org.scalaquery.ql._
 import org.scalaquery.ql.TypeMapper._
 import org.scalaquery.ql.extended.H2Driver.Implicit._
-import ar.uba.dc.rfm.paralloy.scalaframework.Experiments
-import ar.uba.dc.rfm.paralloy.scalaframework.Iterations
-import ar.uba.dc.rfm.paralloy.scalaframework.AssumedLiterals
 import ar.uba.dc.rfm.paralloy.scalaframework.filters.PercentageActivityFilter
+import ar.uba.dc.rfm.paralloy.scalaframework.loggers.H2ExperimentLogger
 
 object Main {
 
@@ -67,15 +64,19 @@ object Main {
 //      e.run()
 //    }
 //    return
-    
+    var logger = new H2ExperimentLogger
+    Database.forURL("jdbc:h2:~/scalloy.results;AUTO_SERVER=TRUE", "sa", "", driver = "org.h2.Driver") withSession {
+      
+      ses : Session  => logger.initialize(ses)
+    }
     val cnfs = List("./p7.cnf",
       "./p8.cnf",
       "./p9.cnf",
       "./k8.cnf",
       "./k9.cnf",
       "./k10.cnf")
-
-    val base = new Experiment(cnfs, 1, SolvingBudget(-1, -1, 15d), new VarActivityLifter(2), new NilFilter)
+    
+    val base = new Experiment(cnfs, 1, SolvingBudget(-1, -1, 15d), new VarActivityLifter(2), new NilFilter, logger)
 
     val perchita = List(
 //      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 15d), new VarActivityLifter(2), new NilFilter),
@@ -87,30 +88,30 @@ object Main {
 //      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 60d), new VarActivityLifter(3), new NilFilter),
 //      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 120d), new VarActivityLifter(3), new NilFilter),
       //new Experiment(cnfs, 2, SolvingBudget(-1, -1, 15d), new VarActivityLifter(4), new NilFilter),
-      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 30d), new VarActivityLifter(4), new NilFilter),
-      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 60d), new VarActivityLifter(4), new NilFilter),
-      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 120d), new VarActivityLifter(4), new NilFilter),
-      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 30d), new VarActivityLifter(4), new PercentageActivityFilter(0.05f)),
-      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 60d), new VarActivityLifter(4), new PercentageActivityFilter(0.05f)),
-      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 120d), new VarActivityLifter(4), new PercentageActivityFilter(0.05f)),
-      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 30d), new VarActivityLifter(4), new PercentageActivityFilter(0.1f)),
-      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 60d), new VarActivityLifter(4), new PercentageActivityFilter(0.1f)),
-      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 120d), new VarActivityLifter(4), new PercentageActivityFilter(0.1f)),
-      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 30d), new VarActivityLifter(4), new PercentageActivityFilter(0.15f)),
-      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 60d), new VarActivityLifter(4), new PercentageActivityFilter(0.15f)),
-      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 120d), new VarActivityLifter(4), new PercentageActivityFilter(0.15f)),
-      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 30d), new VarActivityLifter(4), new PercentageActivityFilter(0.05f)),
-      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 60d), new VarActivityLifter(4), new PercentageActivityFilter(0.05f)),
-      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 120d), new VarActivityLifter(4), new PercentageActivityFilter(0.05f)),
-      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 30d), new VarActivityLifter(4), new PercentageActivityFilter(0.1f, true)),
-      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 60d), new VarActivityLifter(4), new PercentageActivityFilter(0.1f, true)),
-      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 120d), new VarActivityLifter(4), new PercentageActivityFilter(0.1f, true)),
-      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 30d), new VarActivityLifter(4), new PercentageActivityFilter(0.15f, true)),
-      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 60d), new VarActivityLifter(4), new PercentageActivityFilter(0.15f, true)),
-      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 120d), new VarActivityLifter(4), new PercentageActivityFilter(0.15f, true)),
-      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 30d), new VarActivityLifter(4), new PercentageActivityFilter(1f)),
-      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 60d), new VarActivityLifter(4), new PercentageActivityFilter(1f)),
-      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 120d), new VarActivityLifter(4), new PercentageActivityFilter(1f)))
+      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 30d), new VarActivityLifter(4), new NilFilter, logger),
+      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 60d), new VarActivityLifter(4), new NilFilter, logger),
+      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 120d), new VarActivityLifter(4), new NilFilter, logger),
+      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 30d), new VarActivityLifter(4), new PercentageActivityFilter(0.05f), logger),
+      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 60d), new VarActivityLifter(4), new PercentageActivityFilter(0.05f), logger),
+      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 120d), new VarActivityLifter(4), new PercentageActivityFilter(0.05f), logger),
+      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 30d), new VarActivityLifter(4), new PercentageActivityFilter(0.1f), logger),
+      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 60d), new VarActivityLifter(4), new PercentageActivityFilter(0.1f), logger),
+      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 120d), new VarActivityLifter(4), new PercentageActivityFilter(0.1f), logger),
+      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 30d), new VarActivityLifter(4), new PercentageActivityFilter(0.15f), logger),
+      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 60d), new VarActivityLifter(4), new PercentageActivityFilter(0.15f), logger),
+      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 120d), new VarActivityLifter(4), new PercentageActivityFilter(0.15f), logger),
+      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 30d), new VarActivityLifter(4), new PercentageActivityFilter(0.05f), logger),
+      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 60d), new VarActivityLifter(4), new PercentageActivityFilter(0.05f), logger),
+      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 120d), new VarActivityLifter(4), new PercentageActivityFilter(0.05f), logger),
+      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 30d), new VarActivityLifter(4), new PercentageActivityFilter(0.1f, true), logger),
+      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 60d), new VarActivityLifter(4), new PercentageActivityFilter(0.1f, true), logger),
+      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 120d), new VarActivityLifter(4), new PercentageActivityFilter(0.1f, true), logger),
+      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 30d), new VarActivityLifter(4), new PercentageActivityFilter(0.15f, true), logger),
+      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 60d), new VarActivityLifter(4), new PercentageActivityFilter(0.15f, true), logger),
+      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 120d), new VarActivityLifter(4), new PercentageActivityFilter(0.15f, true), logger),
+      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 30d), new VarActivityLifter(4), new PercentageActivityFilter(1f), logger),
+      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 60d), new VarActivityLifter(4), new PercentageActivityFilter(1f), logger),
+      new Experiment(cnfs, 2, SolvingBudget(-1, -1, 120d), new VarActivityLifter(4), new PercentageActivityFilter(1f), logger))
 
 //    val exps = List(
 //      new Experiment(cnfs, 3, SolvingBudget(-1, -1, 15d), new VarActivityLifter(2), new NilFilter),
@@ -126,21 +127,7 @@ object Main {
 //      new Experiment(cnfs, 3, SolvingBudget(-1, -1, 60d), new VarActivityLifter(4), new NilFilter),
 //      new Experiment(cnfs, 3, SolvingBudget(-1, -1, 120d), new VarActivityLifter(4), new NilFilter))
       
-    Database.forURL("jdbc:h2:~/scalloy.results;AUTO_SERVER=TRUE", "sa", "", driver = "org.h2.Driver") withSession {
-      def makeTableMap(implicit dbsess : Session) : Map[String, MTable] = {
-        val tableList = MTable.getTables.list()(dbsess);
-        val tableMap = tableList.map { t ⇒ (t.name.name, t) }.toMap;
-        tableMap;
-      }
-      // Connect to the database and execute the following block within a session
-
-      val tables = makeTableMap
-      if (!tables.contains(Experiments.tableName)) { Experiments.ddl create }
-      if (!tables.contains(Iterations.tableName)) { Iterations.ddl create }
-      if (!tables.contains(AssumedLiterals.tableName)) { AssumedLiterals.ddl create }
       base.run()
       perchita.foreach(_.run)
-//      exps.foreach(_.run)
-    }
   }
 }
