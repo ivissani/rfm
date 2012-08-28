@@ -178,5 +178,4 @@ class H2ExperimentLogger extends ExperimentLogger {
       t
     }
   }
-
 }

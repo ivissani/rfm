@@ -15,6 +15,7 @@ import ar.uba.dc.rfm.paralloy.scalaframework.loggers.ExperimentLogger
 import ar.uba.dc.rfm.paralloy.scalaframework.dispatcher.IterationsQueue
 import ar.uba.dc.rfm.paralloy.scalaframework.dispatcher.ProduceIterationMessage
 import scala.actors.Actor
+
 import ar.uba.dc.rfm.paralloy.scalaframework.dispatcher.IterationFinishedMessage
 
 
@@ -22,12 +23,13 @@ case class SolvingBudget(propagationsBudget: Int, conflictsBudget: Int, timeBudg
 case class ExperimentDefinition(itQueueActor: IterationsQueue, problems: List[String], iterations: Int, budget: SolvingBudget, lifter: AbstractLifter, filter: AbstractFilter, logger: ExperimentLogger)
 case class Iteration(definition: ExperimentDefinition, expId: Int, pId: Int, level: Int = 0, its: Int, path: String, withLearnts: List[LearntClause], assumedByParent: List[Int], forMeToAssume: List[Int])
 
+
 case class EnqueProblemsMessage
 case class ExperimentFinishedMessage(id: Int, r: Char, t: Double)
-
 class Experiment(definition: ExperimentDefinition) extends Actor {
 
   def run() {
+
     this.start()
     definition.problems.map(runProblem)
   }
@@ -57,10 +59,12 @@ class Experiment(definition: ExperimentDefinition) extends Actor {
 
 }
 
+
 case class SolveThisMessage(sender : Actor, i: Iteration)
 case class InterruptSolvingMessage
 
 class IterationSolverActor extends Actor {
+
   case class InternalSolveThisMessage(parent : Actor, sender : Actor, i: Iteration)
   case class InternalIterationFinishedMessage(origSender : Actor, r : (Char, Double))
   
@@ -121,6 +125,7 @@ class IterationSolverActor extends Actor {
             val elapsed = s.get_last_execution_time.toDouble / 1000
             if (res == 'I') {
               // Variables to lift sorted by value
+
               val toLift = definition.lifter.variablesToLift(level)(s).sort((a: Int, b: Int) ⇒ a.abs < b.abs)
               val learnts = definition.filter.clausesToKeep()(s)
 

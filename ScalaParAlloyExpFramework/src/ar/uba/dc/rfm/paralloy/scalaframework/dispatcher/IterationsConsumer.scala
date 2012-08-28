@@ -4,7 +4,6 @@ import scala.actors.Actor
 import ar.uba.dc.rfm.paralloy.scalaframework.Iteration
 import scala.collection.mutable.Queue
 import ar.uba.dc.rfm.paralloy.scalaframework.IterationSolverActor
-import ar.uba.dc.rfm.paralloy.scalaframework.IterationSolverActor
 import ar.uba.dc.rfm.paralloy.scalaframework.SolveThisMessage
 
 case class NewIterationMessage(sender : IterationsQueue)
@@ -65,7 +64,7 @@ class IterationsConsumer() extends Actor {
 	          starts += 1
 	        }
 	      }
-	    }
+	      }
 	  }
 	}
 }
