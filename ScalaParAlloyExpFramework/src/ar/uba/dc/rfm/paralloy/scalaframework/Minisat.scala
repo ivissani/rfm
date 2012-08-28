@@ -5,7 +5,6 @@ import ar.uba.dc.rfm.minisat.Solver
 import ar.uba.dc.rfm.paralloy.scalaframework.datatypes.LearntClause
 import ar.uba.dc.rfm.minisat.intseq
 import scala.collection.mutable.MutableList
-import scala.runtime.RichInt
 import ar.uba.dc.rfm.paralloy.scalaframework.datatypes.IntSeq
 import ar.uba.dc.rfm.minisat.SolverWrapper
 

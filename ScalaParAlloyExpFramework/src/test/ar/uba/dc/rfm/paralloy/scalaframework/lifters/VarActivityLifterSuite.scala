@@ -68,7 +68,7 @@ class VarActivityLifterSuite extends FunSuite {
 		  val ex = m.solve_time_restricted(5d)
 		  object va extends VarActivityLifter(5)
 		  
-		  def f = va.variablesToLift()
+		  def f = va.variablesToLift(1)
 		  val res = f(m)
 		  Console println res
 		  

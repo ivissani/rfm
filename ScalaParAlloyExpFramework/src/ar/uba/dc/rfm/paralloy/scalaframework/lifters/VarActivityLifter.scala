@@ -8,7 +8,7 @@ import ar.uba.dc.rfm.paralloy.scalaframework.datatypes.IntSeq
 
 class VarActivityLifter(limit: Int, lessActive: Boolean = false) extends AbstractLifter {
 
-  def variablesToLift() = {
+  def variablesToLift(level : Int) = {
     def ret(m: Minisat): List[Int] = {
       class ActivityOrderedVar(v: Tuple2[Int, Double]) extends Ordered[ActivityOrderedVar] {
         def activity = this.v._2

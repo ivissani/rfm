@@ -51,9 +51,19 @@ static inline double Minisat::cpuTime(void) { return (double)clock() / CLOCKS_PE
 #include <unistd.h>
 
 static inline double Minisat::cpuTime(void) {
-    struct rusage ru;
-    getrusage(RUSAGE_SELF, &ru);
-    return (double)ru.ru_utime.tv_sec + (double)ru.ru_utime.tv_usec / 1000000; }
+	struct timeval start;
+    	long seconds, useconds;    
+	gettimeofday(&start, NULL);
+    	seconds  = start.tv_sec;
+    	useconds = start.tv_usec;
+
+	return (((seconds) * 1000 + useconds/1000.0) + 0.5)/1000.0;
+}
+
+//static inline double Minisat::cpuTime(void) {
+//    struct rusage ru;
+//    getrusage(RUSAGE_SELF, &ru);
+//    return (double)ru.ru_utime.tv_sec + (double)ru.ru_utime.tv_usec / 1000000; }
 
 #endif
 
