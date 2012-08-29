@@ -24,7 +24,7 @@ case class ExperimentDefinition(itQueueActor: IterationsQueue, problems: List[St
 case class Iteration(definition: ExperimentDefinition, expId: Int, pId: Int, level: Int = 0, its: Int, path: String, withLearnts: List[LearntClause], assumedByParent: List[Int], forMeToAssume: List[Int])
 
 
-case class EnqueProblemsMessage
+case class EnqueProblemsMessage()
 case class ExperimentFinishedMessage(id: Int, r: Char, t: Double)
 class Experiment(definition: ExperimentDefinition) extends Actor {
 
@@ -61,7 +61,7 @@ class Experiment(definition: ExperimentDefinition) extends Actor {
 
 
 case class SolveThisMessage(sender : Actor, i: Iteration)
-case class InterruptSolvingMessage
+case class InterruptSolvingMessage()
 
 class IterationSolverActor extends Actor {
 
@@ -126,7 +126,7 @@ class IterationSolverActor extends Actor {
             if (res == 'I') {
               // Variables to lift sorted by value
 
-              val toLift = definition.lifter.variablesToLift(level)(s).sort((a: Int, b: Int) ⇒ a.abs < b.abs)
+              val toLift = definition.lifter.variablesToLift(level)(s).sortWith((a: Int, b: Int) ⇒ a.abs < b.abs)
               val learnts = definition.filter.clausesToKeep()(s)
 
               // Best effort to free memory used by Minisat

@@ -10,7 +10,7 @@ class PercentageActivityFilter(percentage : Float, lessActive : Boolean = false)
   
   def clausesToKeep() = (m : Minisat) => {
     val all = ClauseSeq.getLearntsFromMinisat(m).toList
-    all.sort((a, b) => ((a.activity < b.activity) != lessActive)).take((all.size.toFloat * percentage).ceil.toInt)
+    all.sortWith((a, b) => ((a.activity < b.activity) != lessActive)).take((all.size.toFloat * percentage).ceil.toInt)
   }
 
   def getCannonicalAndParameterizedName() : String = getClass().getCanonicalName() + "(percentage=%f, lessActive=%c)".format(percentage * 100, if(lessActive) 'T' else 'F') 
