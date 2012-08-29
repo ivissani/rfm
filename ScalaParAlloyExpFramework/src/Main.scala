@@ -72,37 +72,39 @@ object Main {
 
     logger.initialize(Database.forURL("jdbc:h2:~/scalloy.results;AUTO_SERVER=TRUE", "sa", "", driver = "org.h2.Driver"))
 
-//    val cnfs = List("./p7.cnf",
-//      "./p8.cnf",
-//      "./p9.cnf",
-//      "./k8.cnf",
-//      "./k9.cnf",
-//      "./k10.cnf")
+    val cnfs = List("./p7.cnf",
+      "./p8.cnf",
+      "./p9.cnf",
+      "./k8.cnf",
+      "./k9.cnf",
+      "./k10.cnf")
     
-    val cnfs = List("/home/ivissani/RFM/miscosas/minisat/cnf/p7.cnf",
-      "/home/ivissani/RFM/miscosas/minisat/cnf/p8.cnf",
-      "/home/ivissani/RFM/miscosas/minisat/cnf/p9.cnf",
-      "/home/ivissani/RFM/miscosas/minisat/cnf/k8.cnf",
-      "/home/ivissani/RFM/miscosas/minisat/cnf/k9.cnf",
-      "/home/ivissani/RFM/miscosas/minisat/cnf/k10.cnf")
+//    val cnfs = List("/home/ivissani/RFM/miscosas/minisat/cnf/p7.cnf",
+//      "/home/ivissani/RFM/miscosas/minisat/cnf/p8.cnf",
+//      "/home/ivissani/RFM/miscosas/minisat/cnf/p9.cnf",
+//      "/home/ivissani/RFM/miscosas/minisat/cnf/k8.cnf",
+//      "/home/ivissani/RFM/miscosas/minisat/cnf/k9.cnf",
+//      "/home/ivissani/RFM/miscosas/minisat/cnf/k10.cnf")
 
     object itConsumer extends IterationsConsumer(4)
     object itQueueActor extends IterationsQueue(itConsumer)
     val base = new Experiment(ExperimentDefinition(itQueueActor, cnfs, 1, SolvingBudget(-1, -1, 15d), new PseudoRandomLifter(0, 2), new NilFilter, logger))
 
     // 10 seeds generated using pseudo random generator
+//    val seeds = List(
+//      -3869081752602756812L,
+//      -6519113038106920900L,
+//      4541925429225719055L,
+//      2371210991396154438L,
+//      6672958499860008106L,
+//      -3849111578446398228L,
+//      4446533789556373787L,
+//      -8277698858615201367L,
+//      1025911294265486391L,
+//      -442510427907438972L)
     val seeds = List(
-      -3869081752602756812L,
-      -6519113038106920900L,
-      4541925429225719055L,
-      2371210991396154438L,
-      6672958499860008106L,
-      -3849111578446398228L,
-      4446533789556373787L,
-      -8277698858615201367L,
-      1025911294265486391L,
-      -442510427907438972L)
-
+      -3869081752602756812L)
+      
     val perchita = for (s ← seeds) yield List(
       new Experiment(ExperimentDefinition(itQueueActor, cnfs, 2, SolvingBudget(-1, -1, 30d), new PseudoRandomLifter(s, 5), new NilFilter, logger)),
       new Experiment(ExperimentDefinition(itQueueActor, cnfs, 2, SolvingBudget(-1, -1, 30d), new PseudoRandomLifter(s, 5), new PercentageActivityFilter(0.01f), logger)),
