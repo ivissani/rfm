@@ -68,8 +68,10 @@ object AssumedLiterals extends Table[(Int, Int)]("ASSUMED_LITERALS") {
   def fkIteration = foreignKey("FK_ITERATION", iterationId, Iterations)(_.id)
 }
 
-class H2ExperimentLogger extends ExperimentLogger {
-  var db : Database = null
+class H2ExperimentLogger(var db : Database) extends ExperimentLogger {
+  assert(db != null)
+  
+  initialize()
 
   def experimental() {
     var ml = new ParHashSet[Int]
@@ -91,8 +93,7 @@ class H2ExperimentLogger extends ExperimentLogger {
     f(ml)
   }
 
-  def initialize(db : Database) {
-    this.db = db
+  private def initialize() {
     db withSession {
       def makeTableMap(implicit dbsess : Session) : Map[String, MTable] = {
         val tableList = MTable.getTables.list()(dbsess);

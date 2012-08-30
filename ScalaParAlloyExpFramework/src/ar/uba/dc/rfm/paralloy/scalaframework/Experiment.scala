@@ -26,11 +26,11 @@ case class Iteration(definition: ExperimentDefinition, expId: Int, pId: Int, lev
 
 case class EnqueProblemsMessage()
 case class ExperimentFinishedMessage(id: Int, r: Char, t: Double)
-class Experiment(definition: ExperimentDefinition) extends Actor {
+class Experiment(definition: ExperimentDefinition) { //extends Actor {
 
   def run() {
 
-    this.start()
+    //this.start()
     definition.problems.map(runProblem)
   }
 
@@ -48,14 +48,14 @@ class Experiment(definition: ExperimentDefinition) extends Actor {
     definition.itQueueActor ! ProduceIterationMessage(Iteration(definition, id, -1, 0, definition.iterations, path, Nil, Nil, Nil))
   }
 
-  def act() {
-    loop {
-      react {
-        case EnqueProblemsMessage => run()
-        case ExperimentFinishedMessage(id, r, t) => { definition.logger.updateExpTime(id, r, t) }
-      }
-    }
-  }
+//  def act() {
+//    loop {
+//      react {
+//        case EnqueProblemsMessage => run()
+//        case ExperimentFinishedMessage(id, r, t) => { definition.logger.updateExpTime(id, r, t) }
+//      }
+//    }
+//  }
 
 }
 

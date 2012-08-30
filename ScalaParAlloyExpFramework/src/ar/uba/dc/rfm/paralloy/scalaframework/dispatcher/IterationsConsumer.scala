@@ -3,6 +3,7 @@ package ar.uba.dc.rfm.paralloy.scalaframework.dispatcher
 import scala.actors.Actor
 import ar.uba.dc.rfm.paralloy.scalaframework.Iteration
 import scala.collection.mutable.Queue
+import scala.collection.mutable.HashSet
 import ar.uba.dc.rfm.paralloy.scalaframework.IterationSolverActor
 import ar.uba.dc.rfm.paralloy.scalaframework.SolveThisMessage
 
@@ -12,6 +13,7 @@ case class IterationFinishedMessage(sender : IterationSolverActor, r : (Char, Do
 
 class IterationsConsumer() extends Actor {
 	var free = new Queue[IterationSolverActor]
+	var solvers = new HashSet[IterationSolverActor]
 	var waiting = new Queue[Iteration]
 	var toBeConsumed = 0
 	var queueActor : Actor = null
@@ -25,6 +27,7 @@ class IterationsConsumer() extends Actor {
 		  object it extends IterationSolverActor
 		  it.start()
 		  free.enqueue(it)
+		  solvers += it
 		}
 	}
 	
