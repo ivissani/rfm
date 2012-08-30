@@ -15,6 +15,7 @@ import org.scalaquery.meta.{ MTable }
 import scala.collection.parallel.mutable.ParSeq
 import scala.collection.mutable.MutableList
 import scala.collection.parallel.mutable.ParHashSet
+import org.scalaquery.ql.extended.ExtendedColumnOption
 
 object Experiments extends Table[(Int, String, Int, Int, Int, Double, String, String, String, Option[Double], String, Timestamp, Option[Timestamp])]("EXPERIMENTS") {
   def id = column[Int]("id", O AutoInc, O NotNull, O PrimaryKey)
@@ -53,6 +54,15 @@ object Iterations extends Table[(Int, Int, Option[Int], Int, Int, String, Option
   // Foreign keys
   def fkExp = foreignKey("FK_EXPERIMENT", experimentId, Experiments)(_.id)
   def fkParent = foreignKey("FK_PARENT_ITERATION", parentIterationId, Iterations)(_.id.asInstanceOf[NamedColumn[Option[Int]]])
+  
+  // Query fields
+  def criticalPathTime : Column[Option[Double]] =  {
+    val q = (for(i <- Iterations if i.parentIterationId == this.id) yield i.criticalPathTime.max)
+    val d = q.first match {case None => 0.0; case Some(d1) => d1}
+    val o = (for(i <- Iterations if i.id == this.id) yield totalTime).first match { case None => None; case Some(t : Double) => Some(d + t)}
+    object c extends ConstColumn[Option[Double]](o) 
+    c
+  }
 }
 
 object AssumedLiterals extends Table[(Int, Int)]("ASSUMED_LITERALS") {
