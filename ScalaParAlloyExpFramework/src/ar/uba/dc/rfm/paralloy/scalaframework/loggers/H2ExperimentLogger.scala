@@ -54,15 +54,6 @@ object Iterations extends Table[(Int, Int, Option[Int], Int, Int, String, Option
   // Foreign keys
   def fkExp = foreignKey("FK_EXPERIMENT", experimentId, Experiments)(_.id)
   def fkParent = foreignKey("FK_PARENT_ITERATION", parentIterationId, Iterations)(_.id.asInstanceOf[NamedColumn[Option[Int]]])
-  
-  // Query fields
-  def criticalPathTime : Column[Option[Double]] =  {
-    val q = (for(i <- Iterations if i.parentIterationId == this.id) yield i.criticalPathTime.max)
-    val d = q.first match {case None => 0.0; case Some(d1) => d1}
-    val o = (for(i <- Iterations if i.id == this.id) yield totalTime).first match { case None => None; case Some(t : Double) => Some(d + t)}
-    object c extends ConstColumn[Option[Double]](o) 
-    c
-  }
 }
 
 object AssumedLiterals extends Table[(Int, Int)]("ASSUMED_LITERALS") {
@@ -80,28 +71,8 @@ object AssumedLiterals extends Table[(Int, Int)]("ASSUMED_LITERALS") {
 
 class H2ExperimentLogger(var db : Database) extends ExperimentLogger {
   assert(db != null)
-  
+
   initialize()
-
-  def experimental() {
-    var ml = new ParHashSet[Int]
-    ml ++= List.range(1, 1000000)
-
-    var c = 0
-    def count() = synchronized {
-      c += 1
-    }
-
-    def f(l : ParHashSet[Int]) {
-      l.foreach(a ⇒ {
-        Console println a
-        count()
-        if (a % 10 == 0) List.range(10 * 1000000 + 1, 10 * 1000000 + 10).foreach(l.addEntry(_))
-      })
-    }
-
-    f(ml)
-  }
 
   private def initialize() {
     db withSession {
@@ -189,4 +160,41 @@ class H2ExperimentLogger(var db : Database) extends ExperimentLogger {
       t
     }
   }
+
+  def criticalTime(itId : Int) : Option[Double] = {
+    db withSession {
+      val q2 = for (i ← Iterations if i.id === itId) yield i.totalTime
+      val myTime = q2.first()
+      myTime match {
+        case None ⇒ None
+        case Some(t) ⇒ {
+          val q = for (i ← Iterations if i.parentIterationId === itId) yield i.id
+          val l = q.list()
+
+          val children = if (l.size > 0) { l.map(criticalTime _).foldLeft[Option[Double]](Some(0.0))((a, b) ⇒ if (a == None || b == None) None else Some( a.get.max(b.get))) }
+          else Some(0.0)
+
+          if (children == None) Some(t)
+          else Some(t + children.get)
+        }
+      }
+    }
+  }
+  
+  def totalTime(itId : Int) : Option[Double] = {
+    db withSession {
+      val q = for {
+          i <- Iterations
+          i2 <- Iterations if i.id === itId && i2.experimentId === i.experimentId} yield i2.totalTime.sum
+      q.first
+    }
+  }
+
+  def times() = {
+    db withSession {
+      val q = for (i ← Iterations if i.parentIterationId.isNull) yield i.id
+      q.list.map(a ⇒ (a, criticalTime(a), totalTime(a)))
+    }
+  }
+
 }

@@ -39,6 +39,8 @@ object Main {
   var logger = new H2ExperimentLogger(Database.forURL("jdbc:h2:~/scalloy.results;AUTO_SERVER=TRUE", "sa", "", driver = "org.h2.Driver"))
   var waiting = new Queue[Experiment]
   
+  def times() = logger.times
+  
   // 10 seeds generated using pseudo random generator
   def seeds = for(s <- List(
       -3869081752602756812L,
