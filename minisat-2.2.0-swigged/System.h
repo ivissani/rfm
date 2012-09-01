@@ -32,6 +32,7 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 namespace Minisat {
 
 static inline double cpuTime(void); // CPU-time in seconds.
+static inline double cpuTimeStats(void); // CPU-time in seconds.
 extern double memUsed();            // Memory in mega bytes (returns 0 for unsupported architectures).
 extern double memUsedPeak();        // Peak-memory in mega bytes (returns 0 for unsupported architectures).
 
@@ -60,10 +61,10 @@ static inline double Minisat::cpuTime(void) {
 	return (((seconds) * 1000 + useconds/1000.0) + 0.5)/1000.0;
 }
 
-//static inline double Minisat::cpuTime(void) {
-//    struct rusage ru;
-//    getrusage(RUSAGE_SELF, &ru);
-//    return (double)ru.ru_utime.tv_sec + (double)ru.ru_utime.tv_usec / 1000000; }
+static inline double Minisat::cpuTimeStats(void) {
+    struct rusage ru;
+    getrusage(RUSAGE_SELF, &ru);
+    return (double)ru.ru_utime.tv_sec + (double)ru.ru_utime.tv_usec / 1000000; }
 
 #endif
 

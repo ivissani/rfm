@@ -27,6 +27,9 @@ import ar.uba.dc.rfm.paralloy.scalaframework.filters.AbstractFilter
 import ar.uba.dc.rfm.paralloy.scalaframework.ExperimentDefinition
 import ar.uba.dc.rfm.paralloy.scalaframework.SolvingBudget
 import scala.collection.mutable.Queue
+import ar.uba.dc.rfm.paralloy.scalaframework.lifters.VarsFromLearntClauseLifter
+import ar.uba.dc.rfm.paralloy.scalaframework.filters.PercentageActivityFilter
+import ar.uba.dc.rfm.paralloy.scalaframework.lifters.VarsFromLearntClauseLifter
 
 object Main {
   System.loadLibrary("minisat")
@@ -80,39 +83,41 @@ object Main {
   }
   
   def main(args : Array[String]) : Unit = {
-
-    val cnfs = List("./p7.cnf",
-      "./p8.cnf",
-      "./p9.cnf",
-      "./k8.cnf",
-      "./k9.cnf",
-      "./k10.cnf")
-    
-//    val cnfs = List("/home/ivissani/RFM/miscosas/minisat/cnf/p7.cnf",
-//      "/home/ivissani/RFM/miscosas/minisat/cnf/p8.cnf",
-//      "/home/ivissani/RFM/miscosas/minisat/cnf/p9.cnf",
-//      "/home/ivissani/RFM/miscosas/minisat/cnf/k8.cnf",
-//      "/home/ivissani/RFM/miscosas/minisat/cnf/k9.cnf",
-//      "/home/ivissani/RFM/miscosas/minisat/cnf/k10.cnf")
-
-    val base = new Experiment(ExperimentDefinition(itQueueActor, cnfs, 1, SolvingBudget(-1, -1, 15d), new PseudoRandomLifter(0, 2), new NilFilter, logger))
-
-    val seeds = List(
-      -3869081752602756812L)
-      
-    val perchita = for (s ← seeds) yield List(
-      new Experiment(ExperimentDefinition(itQueueActor, cnfs, 2, SolvingBudget(-1, -1, 30d), new PseudoRandomLifter(s, 5), new NilFilter, logger)),
-      new Experiment(ExperimentDefinition(itQueueActor, cnfs, 2, SolvingBudget(-1, -1, 30d), new PseudoRandomLifter(s, 5), new PercentageActivityFilter(0.01f), logger)),
-      new Experiment(ExperimentDefinition(itQueueActor, cnfs, 2, SolvingBudget(-1, -1, 30d), new PseudoRandomLifter(s, 5), new PercentageActivityFilter(0.05f), logger)),
-      new Experiment(ExperimentDefinition(itQueueActor, cnfs, 2, SolvingBudget(-1, -1, 30d), new PseudoRandomLifter(s, 5), new PercentageActivityFilter(0.1f), logger)),
-      new Experiment(ExperimentDefinition(itQueueActor, cnfs, 2, SolvingBudget(-1, -1, 30d), new PseudoRandomLifter(s, 5), new PercentageActivityFilter(0.15f), logger)),
-      new Experiment(ExperimentDefinition(itQueueActor, cnfs, 2, SolvingBudget(-1, -1, 30d), new PseudoRandomLifter(s, 5), new PercentageActivityFilter(0.01f, true), logger)),
-      new Experiment(ExperimentDefinition(itQueueActor, cnfs, 2, SolvingBudget(-1, -1, 30d), new PseudoRandomLifter(s, 5), new PercentageActivityFilter(0.05f, true), logger)),
-      new Experiment(ExperimentDefinition(itQueueActor, cnfs, 2, SolvingBudget(-1, -1, 30d), new PseudoRandomLifter(s, 5), new PercentageActivityFilter(0.1f, true), logger)),
-      new Experiment(ExperimentDefinition(itQueueActor, cnfs, 2, SolvingBudget(-1, -1, 30d), new PseudoRandomLifter(s, 5), new PercentageActivityFilter(0.15f, true), logger)),
-      new Experiment(ExperimentDefinition(itQueueActor, cnfs, 2, SolvingBudget(-1, -1, 30d), new PseudoRandomLifter(s, 5), new PercentageActivityFilter(1f), logger)))
-
-    // For each seed, for each criteria, run!
-    perchita.foreach(_.foreach(_.run))
+	Main.enqueueExperiment("/home/ivissani/RFM/miscosas/minisat/cnf/sat/sgen1-sat-160-100.cnf" :: Nil, 2, -1, -1, 30d, new VarsFromLearntClauseLifter(5), new PercentageActivityFilter(0.1f), false)
+	Main.schedule()
+//	
+//    val cnfs = List("./p7.cnf",
+//      "./p8.cnf",
+//      "./p9.cnf",
+//      "./k8.cnf",
+//      "./k9.cnf",
+//      "./k10.cnf")
+//    
+////    val cnfs = List("/home/ivissani/RFM/miscosas/minisat/cnf/p7.cnf",
+////      "/home/ivissani/RFM/miscosas/minisat/cnf/p8.cnf",
+////      "/home/ivissani/RFM/miscosas/minisat/cnf/p9.cnf",
+////      "/home/ivissani/RFM/miscosas/minisat/cnf/k8.cnf",
+////      "/home/ivissani/RFM/miscosas/minisat/cnf/k9.cnf",
+////      "/home/ivissani/RFM/miscosas/minisat/cnf/k10.cnf")
+//
+//    val base = new Experiment(ExperimentDefinition(itQueueActor, cnfs, 1, SolvingBudget(-1, -1, 15d), new PseudoRandomLifter(0, 2), new NilFilter, logger))
+//
+//    val seeds = List(
+//      -3869081752602756812L)
+//      
+//    val perchita = for (s ← seeds) yield List(
+//      new Experiment(ExperimentDefinition(itQueueActor, cnfs, 2, SolvingBudget(-1, -1, 30d), new PseudoRandomLifter(s, 5), new NilFilter, logger)),
+//      new Experiment(ExperimentDefinition(itQueueActor, cnfs, 2, SolvingBudget(-1, -1, 30d), new PseudoRandomLifter(s, 5), new PercentageActivityFilter(0.01f), logger)),
+//      new Experiment(ExperimentDefinition(itQueueActor, cnfs, 2, SolvingBudget(-1, -1, 30d), new PseudoRandomLifter(s, 5), new PercentageActivityFilter(0.05f), logger)),
+//      new Experiment(ExperimentDefinition(itQueueActor, cnfs, 2, SolvingBudget(-1, -1, 30d), new PseudoRandomLifter(s, 5), new PercentageActivityFilter(0.1f), logger)),
+//      new Experiment(ExperimentDefinition(itQueueActor, cnfs, 2, SolvingBudget(-1, -1, 30d), new PseudoRandomLifter(s, 5), new PercentageActivityFilter(0.15f), logger)),
+//      new Experiment(ExperimentDefinition(itQueueActor, cnfs, 2, SolvingBudget(-1, -1, 30d), new PseudoRandomLifter(s, 5), new PercentageActivityFilter(0.01f, true), logger)),
+//      new Experiment(ExperimentDefinition(itQueueActor, cnfs, 2, SolvingBudget(-1, -1, 30d), new PseudoRandomLifter(s, 5), new PercentageActivityFilter(0.05f, true), logger)),
+//      new Experiment(ExperimentDefinition(itQueueActor, cnfs, 2, SolvingBudget(-1, -1, 30d), new PseudoRandomLifter(s, 5), new PercentageActivityFilter(0.1f, true), logger)),
+//      new Experiment(ExperimentDefinition(itQueueActor, cnfs, 2, SolvingBudget(-1, -1, 30d), new PseudoRandomLifter(s, 5), new PercentageActivityFilter(0.15f, true), logger)),
+//      new Experiment(ExperimentDefinition(itQueueActor, cnfs, 2, SolvingBudget(-1, -1, 30d), new PseudoRandomLifter(s, 5), new PercentageActivityFilter(1f), logger)))
+//
+//    // For each seed, for each criteria, run!
+//    perchita.foreach(_.foreach(_.run))
   }
 }
