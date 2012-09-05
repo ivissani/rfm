@@ -46,7 +46,7 @@ class Minisat extends SolverWrapper {
     // Add problem and learned clauses
     // WARNING: Watch performance here, may be a memory black hole on big problems
     what.map(_.toIntseq).foreach(add_clause)
-    withLearnts.foreach(a ⇒ a match { case LearntClause(act, cla, lbd) ⇒ add_learnt(cla.toIntseq, act.toFloat) })
+    withLearnts.foreach(a ⇒ a match { case LearntClause(act, cla, lbd) ⇒ add_learnt(cla.toIntseq, -1f /*act.toFloat*/) })
 
     // Translate assumptions
     var is = new intseq
