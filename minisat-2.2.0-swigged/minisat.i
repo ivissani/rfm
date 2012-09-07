@@ -94,12 +94,12 @@ class Solver
                 // Ojo, me parece que las stats son demasiado static
                 //void print_stats(void) const { $self->printStats(); }
 
-                void add_learnt(const std::vector<int> & v, float act)
+                void add_learnt(const std::vector<int> & v, float act, int lbd)
                 {
                         vec<Lit> vec;
                         std2vec(v, vec);
 
-                        $self->addLearnt(vec, act);
+                        $self->addLearnt(vec, act, lbd);
                 }
 
                 double get_var_activity(int v)

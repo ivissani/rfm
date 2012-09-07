@@ -71,8 +71,8 @@ public class Solver {
     return minisatJNI.Solver_getVerbosity(swigCPtr, this);
   }
 
-  public void add_learnt(intseq v, float act) {
-    minisatJNI.Solver_add_learnt(swigCPtr, this, intseq.getCPtr(v), v, act);
+  public void add_learnt(intseq v, float act, int lbd) {
+    minisatJNI.Solver_add_learnt(swigCPtr, this, intseq.getCPtr(v), v, act, lbd);
   }
 
   public double get_var_activity(int v) {

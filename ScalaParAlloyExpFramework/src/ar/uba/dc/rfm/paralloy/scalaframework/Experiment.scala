@@ -73,6 +73,8 @@ class IterationSolverActor extends Actor {
   InternalActor.start()
   
   object InternalActor extends Actor {
+    var iteration : Iteration = null
+    
     def signPermutations(vars: List[Int]): List[List[Int]] = {
       def f(l: List[Int]): List[List[Int]] = {
         l match {
@@ -83,24 +85,24 @@ class IterationSolverActor extends Actor {
       }
       f(vars.map(_.abs))
     }
-
-    def iterate(definition: ExperimentDefinition, expId: Int, pId: Int = -1, level: Int = 0, its: Int, path: String, withLearnts: List[LearntClause], assumedByParent: List[Int], forMeToAssume: List[Int]): (Char, Double) = {
-      val assuming = assumedByParent ::: forMeToAssume
-      Console.printf("Iterations: %d, assuming: [%s], with this many learnts: %d\n", its, assuming.mkString(" "), withLearnts.size)
+  
+    def iterate(): (Char, Double) = {
+      val assuming = iteration.assumedByParent ::: iteration.forMeToAssume
+      Console.printf("Iterations: %d, assuming: [%s], with this many learnts: %d\n", iteration.its, assuming.mkString(" "), iteration.withLearnts.size)
       Console.flush
 
-      var s = new Minisat(path)
+      var s = new Minisat(iteration.path)
       s.setVerbosity(1)
-      val SolvingBudget(p, c, t) = definition.budget
+      val SolvingBudget(p, c, t) = iteration.definition.budget
 
       // Save this iteration
-      val id = definition.logger.newIteration(expId, pId, its, level, forMeToAssume)
-      s.prepare_for_solving(Nil, withLearnts, assuming)
+      val id = iteration.definition.logger.newIteration(iteration.expId, iteration.pId, iteration.its, iteration.level, iteration.forMeToAssume)
+      s.prepare_for_solving(Nil, iteration.withLearnts, assuming)
 
       val (res, elapsed) =
         if (s.simplify()) {
           // If didn't die by propagation
-          if (its <= 1) {
+          if (iteration.its <= 1) {
             // Discard budget and solve to infinity and beyond...
             var res = 'I'
             var elapsed = 0d
@@ -126,8 +128,8 @@ class IterationSolverActor extends Actor {
             if (res == 'I') {
               // Variables to lift sorted by value
 
-              val toLift = definition.lifter.variablesToLift(level)(s).sortWith((a: Int, b: Int) ⇒ a.abs < b.abs)
-              val learnts = definition.filter.clausesToKeep()(s)
+              val toLift = iteration.definition.lifter.variablesToLift(iteration.level)(s).sortWith((a: Int, b: Int) ⇒ a.abs < b.abs)
+              val learnts = iteration.definition.filter.clausesToKeep()(s)
 
               // Best effort to free memory used by Minisat
               // once we don't need it anymore
@@ -138,7 +140,7 @@ class IterationSolverActor extends Actor {
               // Try to compute in parallel
               val lifting = signPermutations(toLift)
               lifting.foreach((as: List[Int]) => {
-                definition.itQueueActor ! ProduceIterationMessage(Iteration(definition, expId, id, level + 1, its - 1, path, learnts, assuming, as))
+                iteration.definition.itQueueActor ! ProduceIterationMessage(Iteration(iteration.definition, iteration.expId, id, iteration.level + 1, iteration.its - 1, iteration.path, learnts, assuming, as))
               })
 
               // Aggregate results
@@ -158,17 +160,26 @@ class IterationSolverActor extends Actor {
           ('B', 0.0) // 'B' means UNSAT killed by pure propagation
         }
 
-      definition.logger.updateItTime(id, res, elapsed)
+      iteration.definition.logger.updateItTime(id, res, elapsed)
 
       Console.printf("-- Ended solving it: %d with res: %c and time: %fs\n", id, res, elapsed)
       Console.flush
+      
+      // Try to free some more memory
+      iteration = null
+      System.gc()
+      
       (res, elapsed)
     }
+    
+    
+    
     def act() {
       loop {
         react {
           case InternalSolveThisMessage(parent, sender, i) => {
-            val res = iterate(i.definition, i.expId, i.pId, i.level, i.its, i.path, i.withLearnts, i.assumedByParent, i.forMeToAssume)
+            iteration = i
+            val res = iterate()
             parent ! InternalIterationFinishedMessage(sender, res)
           }
         }
@@ -185,4 +196,6 @@ class IterationSolverActor extends Actor {
       }
     }
   }
+  
+  def iteration() = InternalActor.iteration
 }
