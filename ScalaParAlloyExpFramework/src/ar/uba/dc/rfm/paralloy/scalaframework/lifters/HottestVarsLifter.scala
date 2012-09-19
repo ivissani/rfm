@@ -18,7 +18,13 @@ class HottestVarsLifter(limit : Int) extends AbstractLifter {
         heap += Tuple2(v, m.get_var_activity(v))
       }
       
-      heap.take(limit).toList.map(_._1)
+      val ret = heap.take(limit).toList.map(_._1)
+      
+      // Try to free some memory
+      heap = null
+      System.gc()
+      
+      ret
     }
     
     f

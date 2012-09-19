@@ -25,7 +25,14 @@ class VarActivityLifter(limit: Int, lessActive: Boolean = false) extends Abstrac
 
       Range(1, m.nVars() + 1).foreach((v: Int) ⇒ if (!assumed.contains(v)) heap.enqueue(new ActivityOrderedVar((v, m.get_var_activity(v)))))
 
-      (if (lessActive) heap.reverse else heap).take(limit).toList.map(_.variable)
+      val ret = (if (lessActive) heap.reverse else heap).take(limit).toList.map(_.variable)
+      
+      // Try to free some memory
+      is = null
+      heap = null
+      System.gc()
+      
+      ret
     }
 
     ret
