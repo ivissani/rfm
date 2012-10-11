@@ -122,7 +122,7 @@ class IterationSolverActor extends Actor {
 
             (res, elapsed)
           } else {
-            val res = s.solve_restricted(t, c, p)
+            val res = s.solve_restricted(t * scala.math.pow(1.5, iteration.level), c, p)
             Console flush
             val elapsed = s.get_last_execution_time.toDouble / 1000
             if (res == 'I') {
