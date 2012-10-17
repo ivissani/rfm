@@ -34,8 +34,9 @@ import ar.uba.dc.rfm.paralloy.scalaframework.lifters.VarsFromLearntClauseLifter
 object Main {
   System.loadLibrary("minisat")
   
-  object itConsumer extends IterationsConsumer(3)
-  object itQueueActor extends IterationsQueue(itConsumer)
+  var itConsumer : IterationsConsumer = new IterationsConsumer(3)
+  var itQueueActor : IterationsQueue = new IterationsQueue(itConsumer)
+  
   itConsumer.start()
   itQueueActor.start()
   
