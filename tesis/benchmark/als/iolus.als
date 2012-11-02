@@ -306,7 +306,7 @@ assert InsiderCanRead {
        IsMember[m, msg.sentTime]) => CanReceive[m, t', msg]
 }
 
-check OutsiderCantRead for 5 but 3 Member expect 0
-//check OutsiderCantSend for 5 but 3 Member -- 5 min
+//check OutsiderCantRead for 5 but 3 Member expect 0
+check OutsiderCantSend for 8 but 3 Member -- 5 min
 //check InsiderCanRead for 9 but 2 Member, 1 KDS, 1 Message
 //check InsiderCanRead for 10 but 2 Member, 2 KDS, 2 Message -- not able to check
