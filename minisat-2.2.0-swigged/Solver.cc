@@ -121,7 +121,7 @@ Solver::~Solver()
             // printf(" >>> RELOCING: %s%d\n", sign(p)?"-":"", var(p)+1);
             vec<Watcher>& ws = watches[p];
             for (int j = 0; j < ws.size(); j++)
-                ca.free(ws[j].cref);
+                removeClause(ws[j].cref);
         }
 
     // All reasons:
@@ -130,18 +130,18 @@ Solver::~Solver()
         Var v = var(trail[i]);
 
         if (reason(v) != CRef_Undef && (ca[reason(v)].reloced() || locked(ca[reason(v)])))
-            ca.free(vardata[v].reason);
+            removeClause(vardata[v].reason);
     }
 
     // All learnt:
     //
     for (int i = 0; i < learnts.size(); i++)
-        ca.free(learnts[i]);
+        removeClause(learnts[i]);
 
     // All original:
     //
     for (int i = 0; i < clauses.size(); i++)
-        ca.free(clauses[i]);
+        removeClause(clauses[i]);
 }
 
 
