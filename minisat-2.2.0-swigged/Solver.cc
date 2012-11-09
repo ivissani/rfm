@@ -109,39 +109,6 @@ Solver::Solver() :
 
 Solver::~Solver()
 {
-    // Free all memory
-
-    // All watchers:
-    //
-    // for (int i = 0; i < watches.size(); i++)
-    watches.cleanAll();
-    for (int v = 0; v < nVars(); v++)
-        for (int s = 0; s < 2; s++){
-            Lit p = mkLit(v, s);
-            // printf(" >>> RELOCING: %s%d\n", sign(p)?"-":"", var(p)+1);
-            vec<Watcher>& ws = watches[p];
-            for (int j = 0; j < ws.size(); j++)
-                removeClause(ws[j].cref);
-        }
-
-    // All reasons:
-    //
-    for (int i = 0; i < trail.size(); i++){
-        Var v = var(trail[i]);
-
-        if (reason(v) != CRef_Undef && (ca[reason(v)].reloced() || locked(ca[reason(v)])))
-            removeClause(vardata[v].reason);
-    }
-
-    // All learnt:
-    //
-    for (int i = 0; i < learnts.size(); i++)
-        removeClause(learnts[i]);
-
-    // All original:
-    //
-    for (int i = 0; i < clauses.size(); i++)
-        removeClause(clauses[i]);
 }
 
 

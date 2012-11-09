@@ -6,6 +6,8 @@
 \usepackage{xspace}
 \usepackage{cite}
 \usepackage{listings}
+\usepackage[colorinlistoftodos, shadow]{todonotes}
+% \usepackage[disable]{todonotes}
 
 \begin{document}
 
@@ -41,23 +43,50 @@ aprendidas}
 \mainmatter
 \pagestyle{headings}
 
-\chapter{Introducción}
-ParAlloy \cite{rosner:abz10} es un framework sasrabababara.
-
-\chapter{Preliminares}
-
 \newcommand{\true}{\texttt{TRUE}\xspace}
 \newcommand{\false}{\texttt{FALSE}\xspace}
 \newcommand{\sat}{\emph{sat}\xspace}
 \newcommand{\unsat}{\emph{unsat}\xspace}
 \newcommand{\cnf}{\texttt{\textbf{CNF}}\xspace}
 \newcommand{\npc}{\textbf{NP-Complete}\xspace}
-\newcommand{\bt}{\emph{backtracking}}
+\newcommand{\bt}{\emph{backtracking}\xspace}
+
+\newcommand{\soft}{\emph{software}\xspace}
+\newcommand{\hard}{\emph{hardware}\xspace}
+
+\listoftodos
+
+\chapter{Introducción}
+
+En la actualidad el \soft forma parte integral de nuestra vida cotidiana. El
+mismo interviene en todo tipo de teras. Desde el envío de un mensaje de texto o
+la realización de una llamada telefónica hasta el sistema de control de una
+central nuclear, pasando por el control de un ascensor o el sistema de velocidad
+crucero de un automóvil, utilizan sistemas basados en \hard y \soft
+informático. La variedad, alcance y \textbf{criticidad} de las responsabilidades
+asignadas a las piezas de \soft hacen de las mismas un componente de alto
+impacto en nuestra realidad actual. 
+
+Por otra parte, la alta complejidad del \soft hace que la construcción del mismo
+sea una tarea propensa a errores. El impacto de una falla en un componente de
+\soft puede variar desde la imposibilidad de utilizar un artefacto doméstico
+hasta una catástofre de magnitudes como la fundición del núcleo de un reactor
+nuclear. 
+
+Son estos aspectos los que motivan la necesidad creciente de construir métodos
+(formalismos, metodologías, herramientas, etc.) que permitan garantizar la
+calidad del \soft en un sentido general. La posibilidad de establecer la
+ausencia de errores en un programa radica en la capacidad de establecer
+inequívocamente que ese programa cumple una determinada propiedad. Por ejemplo
+¿Será cierto que no es posible encender el microondas si la puerta está abierta?
+
+
+\chapter{Preliminares}
 
 \newcommand{\disj}[1]{\ensuremath{[#1]}}
 \newcommand{\conj}[1]{\ensuremath{\{#1\}}}
 
-\section{El problema de SATisfactiblidad}
+\section{El problema de la SATisfactiblidad}
 
 El problema de la satisfactibilidad (\emph{SAT problem}) consiste en determinar
 si existe alguna asignación de valores de verdad (\true|\false) a cada una de
@@ -85,9 +114,10 @@ determinar si una fórumla $\phi$ de la lógica proposicional tiene alguna
 valuación que la haga verdadera. El algoritmo general de  \emph{SAT solving}
 consiste en un algoritmo de \bt que podríamos esquematizar como sigue:
 
-\begin{lstlisting}[mathescape,language=python]
-algoritmo?
-\end{lstlisting}
+\missingfigure{Algoritmo DPLL}
+% \begin{lstlisting}[mathescape,language=python]
+% algoritmo?
+% \end{lstlisting}
 
 La mayoría de los \emph{SAT solvers} son
 variaciones del algoritmo general
