@@ -17,7 +17,21 @@ Son estos aspectos los que motivan la necesidad creciente de construir métodos
 (formalismos, metodologías, herramientas, etc.) que permitan garantizar la
 calidad del \soft en un sentido general. La posibilidad de establecer la
 ausencia de errores en un programa radica en la capacidad de establecer
-inequívocamente que ese programa cumple una determinada propiedad que exprese
+inequívocamente que ese programa cumple una determinada propiedad que expresa
 el adecuamiento del mismo al comportamiento esperado.
-Por ejemplo si quisiéramos establecer el correcto  funcionamiento ``¿Será cierto que no es
-posible encender el microondas si la puerta está abierta?''
+Por ejemplo si quisiéramos establecer el correcto  funcionamiento del
+mecanismo de seguridad de un horno de microondas podríamos enunciar una
+propiedad como la siguiente: ``No es posible encender el
+microondas si la puerta está abierta''. 
+
+La \textbf{verificación formal} de \soft consiste en demostrar que un
+determinado sistema o algoritmo es correcto respecto a una
+\textbf{especificación formal} del mismo. Los lenguajes naturales son
+intrínsecamente ambiguos y por lo tanto una descripción de un sistema realizada
+en lenguaje natural no puede ser verificada. Una especificación formal es una
+descripción en un lenguaje no ambiguo (formal) de un sistema de \soft.
+
+\section{Alloy}
+
+Alloy \cite{jackson:acmtosem-11_2} es un lenguaje formal diseñado para expresar
+tanto las propiedades estructurales como operacionales
