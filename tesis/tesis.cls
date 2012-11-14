@@ -677,7 +677,7 @@
 \newcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
                                      {-3.25ex\@plus -1ex \@minus -.2ex}%
                                      {1.5ex \@plus .2ex}%
-                                     {\if@center\centering\else\raggedright\fi
+                                     {%\if@center\centering\else\raggedright\fi
                                       \reset@font\sss@font}}
 \newcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
                                     {3.25ex \@plus1ex \@minus.2ex}%

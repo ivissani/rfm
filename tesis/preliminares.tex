@@ -1,0 +1,90 @@
+\newcommand{\disj}[1]{\ensuremath{[#1]}}
+\newcommand{\conj}[1]{\ensuremath{\{#1\}}}
+
+\section{El problema de la SATisfactiblidad}
+
+El problema de la satisfactibilidad (\emph{SAT problem}) consiste en determinar
+si existe alguna asignación de valores de verdad (\true|\false) a cada una de
+las variables booleanas que aparecen en una fórmula $\phi$ de la lógica
+proposicional de modo que $\phi$ se haga verdadera. En caso de que dicha
+asignación exista decimos que $\phi$ es satisfacible (o simplemente \sat) y la
+asignación o valuación $\{ v_1 \leftarrow V_1, \ldots, v_n \leftarrow V_n \}$
+correspondiente es un \textbf{modelo} de $\phi$. Es importante notar que en caso
+de que una fórmula sea \sat podría existir más de una valuación que haga que la
+fórmula sea verdadera. Si no existe ninguna valuación que haga verdadera a
+$\phi$ decimos que $\phi$ es insatisfacible (o \unsat).
+
+El problema de determinar si una fórmula $\phi$ dada es \sat o \unsat pertenece
+a la clase de problemas \npc\cite{Cook:1971:CTP:800157.805047}. Es decir que no
+se conoce un algoritmo cuya complejidad temporal sea polinomial que pueda determinar si una fórmula es \sat
+o \unsat. La importancia que reviste el problema SAT para diversas áreas de las
+ciencias de la computación, como ser el diseño de circuitos o la verificación
+automática, ha impulsado el desarrollo de algoritmos relativamente eficientes
+para una clase amplia de problemas conocidos como \emph{SAT solvers}.
+
+\subsection{\emph{SAT Solving}}
+
+Se conoce con el nombre de \emph{SAT solvers} a los algoritmos que permiten
+determinar si una fórumla $\phi$ de la lógica proposicional tiene alguna
+valuación que la haga verdadera. El algoritmo general de  \emph{SAT solving}
+consiste en un algoritmo de \bt que podríamos esquematizar como sigue:
+
+\missingfigure{Algoritmo SAT solving backtracking}
+
+La mayoría de los \emph{SAT solvers} son
+variaciones del algoritmo general
+DPLL\cite{Davis:1962:MPT:368273.368557} y actúan sobre fórmulas
+proposicionales expresadas en Forma Normal Conjuntiva (\cnf).
+
+\subsection{Forma Normal Conjuntiva}
+
+Decimos que una fórmula de la lógica proposicional se encuentra en Forma Normal
+Conjuntiva (\cnf por sus siglas en inglés) si la misma es una conjunción de
+cláusulas, donde cada cláusula es una disyunción de literales; un literal es una
+variable $v$ o su negación $-v$.
+
+Por ejemplo, la fórmula $\phi = (p \vee q) \wedge (-p \vee q)$ se encuentra
+en \cnf y posee dos cláusulas $C_1 = p \vee q$ y $C_2 = -p \vee q$. Dado que los
+conectores lógicos están implícitos cuando una fórmula se encuentra en \cnf
+normalmente escribimos $\phi = \conj{\disj{p, q}, \disj{-p, q}}$ de modo equivalente.
+
+\begin{definition} 
+\defname{Cláusula unitaria} Una cláusula se llama \textbf{unitaria} si
+posee un único literal.
+\end{definition}
+Por ejemplo
+en la fórmula $\gamma = \conj{\disj{-p}, \disj{q, r}}$ la clásula $\disj{-p}$ es
+unitaria. Cuando una fórmula \cnf posee una cláusula unitaria, el único modo de
+lograr que la fórmula completa sea verdadera es asignando el valor de verdad
+\true al único literal dentro de la cláusula unitaria.
+
+\subsection{Algoritmo DPLL}
+
+El algoritmo DPLL es un procedimiento 
+
+\begin{lstlisting}[mathescape,language=Pascal,frame=single,numbers=left,caption={Algoritmo
+DPLL}] G = F
+while G includes a clause C such that |C| $\leq$ 1 do
+  if C = $\emptyset$ then return G
+  else if C = {v} then G = G|v
+end while
+while there is a monotone literal in G do
+  v = any monotone literal
+  G = G|v
+end while
+return G
+\end{lstlisting}
+
+\subsection{Aprendizaje}
+\subsubsection{First UIP}
+\subsubsection{Recorte de la base de datos}
+\subsubsection{Actividad y LBD}
+
+\section{Alloy}
+
+\section{ParAlloy}
+\subsection{BEDs}
+
+\section{\emph{SAT Solving} distribuido}
+
+\subsection{Aprendizaje}
