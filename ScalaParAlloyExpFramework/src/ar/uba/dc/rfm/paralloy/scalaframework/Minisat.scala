@@ -17,7 +17,7 @@ class Minisat extends SolverWrapper {
     read(path)
   }
   
-  def solve_restricted(forTime: Double, forConflicts: Int, forPropagations: Int): Char = {
+  def solve_restricted(forTime: Double, forConflicts: Int, forPropagations: Int, learntsLimit : Int, currentRestarts : Int): Char = {
     Console println nClauses()
     set_budget_off() // This resets the budgets
 
@@ -29,6 +29,12 @@ class Minisat extends SolverWrapper {
       set_prop_budget(forPropagations)
     if (forTime >= 0)
       set_time_budget(forTime)
+    if (learntsLimit >= 0)
+      set_max_learnts(learntsLimit)
+    else
+      reset_max_learnts()
+    if (currentRestarts >= 0)
+      set_current_restarts(currentRestarts)
 
     
     // Execute measuring total time
@@ -54,8 +60,8 @@ class Minisat extends SolverWrapper {
     set_assumptions(is)
   }
 
-  def solve_time_restricted(forTime: Double) = solve_restricted(forTime, -1, -1)
-  def solve_unrestricted() = solve_time_restricted(-1)
+  def solve_time_restricted(forTime: Double, learntsLimit : Int, restarts : Int) = solve_restricted(forTime, -1, -1, learntsLimit, restarts)
+  def solve_unrestricted() = solve_time_restricted(-1, -1, -1)
   
   def get_last_execution_time = lastExEndTimeMillis - lastExStartTimeMillis
   

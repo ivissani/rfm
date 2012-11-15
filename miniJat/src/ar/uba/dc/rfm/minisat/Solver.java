@@ -71,6 +71,26 @@ public class Solver {
     return minisatJNI.Solver_getVerbosity(swigCPtr, this);
   }
 
+  public void reset_max_learnts() {
+    minisatJNI.Solver_reset_max_learnts(swigCPtr, this);
+  }
+
+  public void set_max_learnts(int limit) {
+    minisatJNI.Solver_set_max_learnts(swigCPtr, this, limit);
+  }
+
+  public int get_max_learnts() {
+    return minisatJNI.Solver_get_max_learnts(swigCPtr, this);
+  }
+
+  public void set_current_restarts(int restarts) {
+    minisatJNI.Solver_set_current_restarts(swigCPtr, this, restarts);
+  }
+
+  public int get_current_restarts() {
+    return minisatJNI.Solver_get_current_restarts(swigCPtr, this);
+  }
+
   public void add_learnt(intseq v, float act, int lbd) {
     minisatJNI.Solver_add_learnt(swigCPtr, this, intseq.getCPtr(v), v, act, lbd);
   }

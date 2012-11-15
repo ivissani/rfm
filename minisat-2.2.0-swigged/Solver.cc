@@ -870,12 +870,12 @@ lbool Solver::solve_()
     solves++;
 
     // MODIFIED BY NACHO TO KEEP ALL LEARNT CLAUSES
-    if (nLearnts() > (nClauses() * learntsize_factor)) {
-        max_learnts = nLearnts();
-    }
-    else {
-        max_learnts = nClauses() * learntsize_factor;
-    }
+    //if (nLearnts() > (nClauses() * learntsize_factor)) {
+    //    max_learnts = nLearnts();
+    //}
+    //else {
+    //    max_learnts = nClauses() * learntsize_factor;
+    //}
     learntsize_adjust_confl   = learntsize_adjust_start_confl;
     learntsize_adjust_cnt     = (int)learntsize_adjust_confl;
     lbool   status            = l_Undef;

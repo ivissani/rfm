@@ -46,6 +46,11 @@ public class minisatJNI {
   public final static native int Solver_nLearnts(long jarg1, Solver jarg1_);
   public final static native void Solver_setVerbosity(long jarg1, Solver jarg1_, int jarg2);
   public final static native int Solver_getVerbosity(long jarg1, Solver jarg1_);
+  public final static native void Solver_reset_max_learnts(long jarg1, Solver jarg1_);
+  public final static native void Solver_set_max_learnts(long jarg1, Solver jarg1_, int jarg2);
+  public final static native int Solver_get_max_learnts(long jarg1, Solver jarg1_);
+  public final static native void Solver_set_current_restarts(long jarg1, Solver jarg1_, int jarg2);
+  public final static native int Solver_get_current_restarts(long jarg1, Solver jarg1_);
   public final static native void Solver_add_learnt(long jarg1, Solver jarg1_, long jarg2, intseq jarg2_, float jarg3, int jarg4);
   public final static native double Solver_get_var_activity(long jarg1, Solver jarg1_, int jarg2);
   public final static native long Solver_get_assumptions(long jarg1, Solver jarg1_, long jarg2, intseq jarg2_);

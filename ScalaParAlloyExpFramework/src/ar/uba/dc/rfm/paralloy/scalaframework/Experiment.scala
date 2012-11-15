@@ -21,7 +21,18 @@ import ar.uba.dc.rfm.paralloy.scalaframework.dispatcher.IterationFinishedMessage
 
 case class SolvingBudget(propagationsBudget: Int, conflictsBudget: Int, timeBudget: Double)
 case class ExperimentDefinition(itQueueActor: IterationsQueue, problems: List[String], iterations: Int, budget: SolvingBudget, lifter: AbstractLifter, filter: AbstractFilter, logger: ExperimentLogger)
-case class Iteration(definition: ExperimentDefinition, expId: Int, pId: Int, level: Int = 0, its: Int, path: String, withLearnts: List[LearntClause], assumedByParent: List[Int], forMeToAssume: List[Int])
+case class Iteration(
+    definition: ExperimentDefinition, 
+    expId: Int, 
+    pId: Int, 
+    level: Int = 0, 
+    its: Int, 
+    path: String, 
+    withLearnts: List[LearntClause], 
+    assumedByParent: List[Int], 
+    forMeToAssume: List[Int],
+    maxLearnts : Int,
+    currRestarts : Int)
 
 
 case class EnqueProblemsMessage()
@@ -45,7 +56,7 @@ class Experiment(definition: ExperimentDefinition) { //extends Actor {
       definition.lifter.getCannonicalAndParameterizedName,
       definition.filter.getCannonicalAndParameterizedName)
 
-    definition.itQueueActor ! ProduceIterationMessage(Iteration(definition, id, -1, 0, definition.iterations, path, Nil, Nil, Nil))
+    definition.itQueueActor ! ProduceIterationMessage(Iteration(definition, id, -1, 0, definition.iterations, path, Nil, Nil, Nil, -1, -1))
   }
 
 //  def act() {
@@ -106,11 +117,15 @@ class IterationSolverActor extends Actor {
             // Discard budget and solve to infinity and beyond...
             var res = 'I'
             var elapsed = 0d
+            var learnts = iteration.maxLearnts
+            var restarts = iteration.currRestarts
             
             // Solve until finished or until interrupted
             while (res == 'I' && !interrupted) {
-              res = s.solve_time_restricted(30d)
+              res = s.solve_time_restricted(30d, learnts, restarts)
               elapsed += s.get_last_execution_time.toDouble / 1000
+              learnts = s.get_max_learnts()
+              restarts = s.get_current_restarts()
             }
             if (interrupted) Console println "Solving interrupted"
 
@@ -122,7 +137,12 @@ class IterationSolverActor extends Actor {
 
             (res, elapsed)
           } else {
-            val res = s.solve_restricted(t * scala.math.pow(1.5, iteration.level), c, p)
+            val res = s.solve_restricted(
+                t * scala.math.pow(1.5, iteration.level), 
+                c, 
+                p, 
+                iteration.maxLearnts, 
+                iteration.currRestarts)
             Console flush
             val elapsed = s.get_last_execution_time.toDouble / 1000
             if (res == 'I') {
@@ -131,6 +151,9 @@ class IterationSolverActor extends Actor {
               val toLift = iteration.definition.lifter.variablesToLift(iteration.level)(s).sortWith((a: Int, b: Int) ⇒ a.abs < b.abs)
               val learnts = iteration.definition.filter.clausesToKeep()(s)
 
+              var max_learnts = s.get_max_learnts()
+              var restarts = s.get_current_restarts()
+              
               // Best effort to free memory used by Minisat
               // once we don't need it anymore
               s.finalize()
@@ -140,7 +163,20 @@ class IterationSolverActor extends Actor {
               // Try to compute in parallel
               val lifting = signPermutations(toLift)
               lifting.foreach((as: List[Int]) => {
-                iteration.definition.itQueueActor ! ProduceIterationMessage(Iteration(iteration.definition, iteration.expId, id, iteration.level + 1, iteration.its - 1, iteration.path, learnts, assuming, as))
+                iteration.definition.itQueueActor ! ProduceIterationMessage(
+                    Iteration(
+                        iteration.definition, 
+                        iteration.expId, 
+                        id, 
+                        iteration.level + 1, 
+                        iteration.its - 1, 
+                        iteration.path, 
+                        learnts, 
+                        assuming, 
+                        as,
+                        max_learnts,
+                        restarts
+                    ))
               })
 
               // Aggregate results

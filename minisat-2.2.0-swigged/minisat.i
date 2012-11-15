@@ -93,6 +93,27 @@ class Solver
         {
                 // Ojo, me parece que las stats son demasiado static
                 //void print_stats(void) const { $self->printStats(); }
+               
+                void reset_max_learnts() 
+                {
+                        $self->max_learnts = $self->nClauses() * $self->learntsize_factor;
+                }
+ 
+                void set_max_learnts(int limit)
+                {
+                        if(limit >= 0)
+                                $self->max_learnts = limit; 
+                }
+
+                int get_max_learnts() { return $self->max_learnts; }
+
+                void set_current_restarts(int restarts)
+                {
+                        if(restarts >= 0)
+                                $self->curr_restarts = restarts;
+                }
+
+                int get_current_restarts() { return $self->curr_restarts; }
 
                 void add_learnt(const std::vector<int> & v, float act, int lbd)
                 {
