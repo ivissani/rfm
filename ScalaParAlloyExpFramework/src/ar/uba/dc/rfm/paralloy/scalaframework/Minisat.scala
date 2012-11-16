@@ -48,7 +48,12 @@ class Minisat extends SolverWrapper {
     ret
   }
   
-  def prepare_for_solving(what: List[Clause], withLearnts: List[LearntClause], assuming: List[Int]) {
+  def prepare_for_solving(
+      what: List[Clause], 
+      withLearnts: List[LearntClause], 
+      assuming: List[Int],
+      learntFacts : List[Int]) 
+  {
     // Add problem and learned clauses
     // WARNING: Watch performance here, may be a memory black hole on big problems
     what.map(_.toIntseq).foreach(add_clause)
@@ -58,6 +63,11 @@ class Minisat extends SolverWrapper {
     var is = new intseq
     assuming.foreach(is.add)
     set_assumptions(is)
+    
+    // Set facts
+    var iss = new intseq
+    learntFacts.foreach(iss.add)
+    set_learnt_facts(iss)
   }
 
   def solve_time_restricted(forTime: Double, learntsLimit : Int, restarts : Int) = solve_restricted(forTime, -1, -1, learntsLimit, restarts)
@@ -72,6 +82,13 @@ class Minisat extends SolverWrapper {
   def get_clauses : List[Clause] = {
     def f(e : Int) = {Clause(new IntSeq(get_clause(e)).toList)}
     for(i <- List.range(0, nClauses())) yield f(i)
+  }
+  
+  def getLearntFacts : List[Int] = {
+    var is = new intseq
+    get_learnt_facts(is)
+    
+    new IntSeq(is).toList
   }
   
   override def finalize() {

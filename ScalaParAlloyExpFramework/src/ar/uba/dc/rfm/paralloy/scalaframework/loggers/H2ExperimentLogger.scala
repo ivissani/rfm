@@ -17,7 +17,7 @@ import scala.collection.mutable.MutableList
 import scala.collection.parallel.mutable.ParHashSet
 import org.scalaquery.ql.extended.ExtendedColumnOption
 
-object Experiments extends Table[(Int, String, Int, Int, Int, Double, String, String, String, Option[Double], String, Timestamp, Option[Timestamp])]("EXPERIMENTS") {
+object Experiments extends Table[(Int, String, Int, Int, Int, Double, String, String, String, Option[Double], String, Timestamp, Option[Timestamp], Boolean, Boolean, Boolean)]("EXPERIMENTS") {
   def id = column[Int]("id", O AutoInc, O NotNull, O PrimaryKey)
   def cnf = column[String]("cnf", O NotNull, O DBType ("varchar(2048)"))
   def iterations = column[Int]("iterations", O NotNull)
@@ -31,9 +31,12 @@ object Experiments extends Table[(Int, String, Int, Int, Int, Double, String, St
   def host = column[String]("host", O NotNull)
   def start = column[Timestamp]("start", O NotNull)
   def end = column[Option[Timestamp]]("end", O Nullable)
+  def keepLearntsLimit = column[Boolean]("keep_learnts_limit", O NotNull)
+  def keepRestarts = column[Boolean]("keep_restarts", O NotNull)
+  def keepLearntFacts = column[Boolean]("keep_learnt_facts", O NotNull)
 
-  def * = id ~ cnf ~ iterations ~ propagationsBudget ~ conflictsBudget ~ timeBudget ~ lifterClassName ~ filterClassName ~ result ~ totalTime ~ host ~ start ~ end
-  def newExp = cnf ~ iterations ~ propagationsBudget ~ conflictsBudget ~ timeBudget ~ lifterClassName ~ filterClassName ~ host ~ start
+  def * = id ~ cnf ~ iterations ~ propagationsBudget ~ conflictsBudget ~ timeBudget ~ lifterClassName ~ filterClassName ~ result ~ totalTime ~ host ~ start ~ end ~ keepLearntsLimit ~ keepRestarts ~ keepLearntFacts
+  def newExp = cnf ~ iterations ~ propagationsBudget ~ conflictsBudget ~ timeBudget ~ lifterClassName ~ filterClassName ~ host ~ start ~ keepLearntsLimit ~ keepRestarts ~ keepLearntFacts
 }
 
 object Iterations extends Table[(Int, Int, Option[Int], Int, Int, String, Option[Double], Timestamp, Option[Timestamp])]("ITERATIONS") {
@@ -119,7 +122,10 @@ class H2ExperimentLogger(var db : Database) extends ExperimentLogger {
                     conflictsBudget : Int,
                     timeBudget : Double,
                     lifterName : String,
-                    filterName : String) : Int = synchronized {
+                    filterName : String,
+                    keepLearntsLimit : Boolean,
+                    keepRestarts : Boolean,
+                    keepLearntFacts : Boolean) : Int = synchronized {
     db withSession {
       val ts = new Timestamp(System.currentTimeMillis())
       val host = InetAddress.getLocalHost().getHostName
@@ -131,7 +137,10 @@ class H2ExperimentLogger(var db : Database) extends ExperimentLogger {
         lifterName,
         filterName,
         host,
-        ts)
+        ts,
+        keepLearntsLimit,
+        keepRestarts,
+        keepLearntFacts)
 
       // Retrieve auto-generated id
       val q = for (e ← Experiments if e.cnf === path && e.host === host && e.start === ts) yield e.id

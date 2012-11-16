@@ -2,6 +2,9 @@ package ar.uba.dc.rfm.paralloy.scalaframework.lifters
 
 import ar.uba.dc.rfm.paralloy.scalaframework.Minisat
 import scala.util.Random
+import ar.uba.dc.rfm.minisat.intseq
+import scala.collection.mutable.HashSet
+import ar.uba.dc.rfm.paralloy.scalaframework.datatypes.IntSeq
 
 class PseudoRandomLifter(seed : Long, limit : Int) extends AbstractLifter {
   def variablesToLift(level : Int) = { 
@@ -9,7 +12,16 @@ class PseudoRandomLifter(seed : Long, limit : Int) extends AbstractLifter {
       val vars = m.nVars()
       val random = new Random(seed)
       
-      random.shuffle(List.range(1, vars+1)).drop((level-1) * limit).take(limit).toList
+      var is = new intseq
+      m.get_learnt_facts(is)
+      var s = new HashSet[Int]
+      new IntSeq(is).foreach(i => s.add(i.abs))
+      
+      random.
+      	shuffle(List.range(1, vars+1)).
+      		filter(!s.contains(_)).drop((level-1) * limit).
+      			take(limit).
+      				toList
     }
     
     ret

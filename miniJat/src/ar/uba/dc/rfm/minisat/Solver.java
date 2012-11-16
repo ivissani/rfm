@@ -99,6 +99,14 @@ public class Solver {
     return minisatJNI.Solver_get_var_activity(swigCPtr, this, v);
   }
 
+  public intseq get_learnt_facts(intseq to) {
+    return new intseq(minisatJNI.Solver_get_learnt_facts(swigCPtr, this, intseq.getCPtr(to), to), false);
+  }
+
+  public void set_learnt_facts(intseq from) {
+    minisatJNI.Solver_set_learnt_facts(swigCPtr, this, intseq.getCPtr(from), from);
+  }
+
   public intseq get_assumptions(intseq to) {
     return new intseq(minisatJNI.Solver_get_assumptions(swigCPtr, this, intseq.getCPtr(to), to), false);
   }

@@ -36,7 +36,7 @@ class VarActivityLifterSuite extends FunSuite {
 	      
 	      var m = new Minisat
 	      m.read("src/test/data/pamela9.cnf")
-		  m.prepare_for_solving(Nil, Nil, List(factor * v))
+		  m.prepare_for_solving(Nil, Nil, List(factor * v), Nil)
 		  
 		  var is = new intseq
 		  m.get_assumptions(is)
@@ -63,7 +63,7 @@ class VarActivityLifterSuite extends FunSuite {
 	    {
 	      var m = new Minisat
 	      m.read("src/test/data/pamela9.cnf")
-		  m.prepare_for_solving(Nil, Nil, List(factor * v))
+		  m.prepare_for_solving(Nil, Nil, List(factor * v), Nil)
 		  
 		  val ex = m.solve_time_restricted(5d, -1, -1)
 		  object va extends VarActivityLifter(5)

@@ -96,7 +96,14 @@ class Solver
                
                 void reset_max_learnts() 
                 {
-                        $self->max_learnts = $self->nClauses() * $self->learntsize_factor;
+                        if ($self->nLearnts() > ($self->nClauses() * $self->learntsize_factor)) 
+                        {
+                                $self->max_learnts = $self->nLearnts();
+                        }
+                        else 
+                        {
+                                $self->max_learnts = $self->nClauses() * $self->learntsize_factor;
+                        }
                 }
  
                 void set_max_learnts(int limit)
@@ -126,6 +133,29 @@ class Solver
                 double get_var_activity(int v)
                 {
                         return $self->activity[v];
+                }
+
+                std::vector<int> & get_learnt_facts(std::vector<int> & to)
+                {
+                        for(int i = 1; i <= $self->nVars(); i++)
+                        {
+                                if($self->assigns[i] != l_Undef)
+                                {
+                                        if(/*($self->vardata[i].reason == CRef_Undef) &&*/ ($self->vardata[i].level == 0)) // It's a learnt fact!
+                                        {
+                                                to.push_back(($self->assigns[i] == l_True)?i:-1*i);
+                                        }
+                                }
+                        }
+                }
+
+                void set_learnt_facts(const std::vector<int> & from)
+                {
+                        for(unsigned int i = 0; i < from.size(); i++)
+                        {
+                                assert(i <= $self->nVars());
+                                $self->uncheckedEnqueue(mkLit(abs(i), (i>0)?true:false)); 
+                        }
                 }
 
                 std::vector<int> & get_assumptions(std::vector<int> & to)

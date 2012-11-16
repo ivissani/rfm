@@ -31,7 +31,7 @@ class MinisatSuite extends FunSuite {
 	  }
 	  
 	  Console printf ("parserResult.get.clauses.size = %d\n", parserResult.get.clauses.size)
-	  myMinisat.prepare_for_solving(parserResult.get.clauses, Nil, Nil)
+	  myMinisat.prepare_for_solving(parserResult.get.clauses, Nil, Nil, Nil)
 	  myMinisat.simplify()
 	  
 	  var m = new Minisat
@@ -62,7 +62,7 @@ class MinisatSuite extends FunSuite {
 	test("learnt clauses") {
 	  var m = new Minisat
 	  m.read("src/test/data/pamela9.cnf")
-	  m.prepare_for_solving(Nil, Nil, Nil)
+	  m.prepare_for_solving(Nil, Nil, Nil, Nil)
 	  m.solve_time_restricted(15d, -1, -1)
 	  
 	  val learnt = ClauseSeq.getLearntsFromMinisat(m)
@@ -75,7 +75,7 @@ class MinisatSuite extends FunSuite {
 	  m = new Minisat
 	  m.read("src/test/data/pamela9.cnf")
 	  
-	  m.prepare_for_solving(Nil, learnt.toList, Nil)
+	  m.prepare_for_solving(Nil, learnt.toList, Nil, Nil)
 	  val otherLearnt = ClauseSeq.getLearntsFromMinisat(m)
 	  
 	  assert(learnt.map(_.clause.literals.toSet).toSet == otherLearnt.map(_.clause.literals.toSet).toSet)
@@ -87,7 +87,7 @@ class MinisatSuite extends FunSuite {
 	test("double assumption") {
 	  var m = new Minisat("src/test/data/pamela9.cnf")
 	  
-	  m.prepare_for_solving(Nil, Nil, 1 :: -1648 :: 23 :: Nil)
+	  m.prepare_for_solving(Nil, Nil, 1 :: -1648 :: 23 :: Nil, Nil)
 	  if(m.simplify())
 		  m.solve_time_restricted(60d, -1, -1)
 	  

@@ -33,6 +33,7 @@ import ar.uba.dc.rfm.paralloy.scalaframework.lifters.VarsFromLearntClauseLifter
 import ar.uba.dc.rfm.paralloy.scalaframework.filters.LengthFilter
 import ar.uba.dc.rfm.paralloy.scalaframework.filters.LBDFilter
 import ar.uba.dc.rfm.paralloy.scalaframework.filters.NilFilter
+import ar.uba.dc.rfm.paralloy.scalaframework.dispatcher.IterationsConsumer
 
 object Main {
   System.loadLibrary("minisat")
@@ -47,6 +48,14 @@ object Main {
   var waiting = new Queue[Experiment]
   
   def times() = logger.times
+  
+  def setWorkers(amount : Int) {
+    itConsumer = new IterationsConsumer(amount)
+    itQueueActor = new IterationsQueue(itConsumer)
+    
+    itConsumer.start()
+    itQueueActor.start()
+  }
   
   // 10 seeds generated using pseudo random generator
   def seeds = for(s <- List(
@@ -69,9 +78,23 @@ object Main {
       timeBudget : Double, 
       lifter : T, 
       filter : U,
+      keepLearntsLimit : Boolean,
+      keepRestarts : Boolean,
+      keepLearntFacts : Boolean,
       scheduleInmediately : Boolean) {
     assert(iterations > 0)
-    val exp = new Experiment(new ExperimentDefinition(itQueueActor, cnfs, iterations, SolvingBudget(propagationsBudget, conflictsBudget, timeBudget), lifter, filter, logger))
+    val exp = new Experiment(
+        new ExperimentDefinition(
+            itQueueActor, 
+            cnfs, 
+            iterations, 
+            SolvingBudget(propagationsBudget, conflictsBudget, timeBudget), 
+            lifter, 
+            filter, 
+            logger,
+            keepLearntsLimit,
+            keepRestarts,
+            keepLearntFacts))
     
     if(scheduleInmediately)
       exp.run
@@ -89,23 +112,23 @@ object Main {
   def benchmark(cnf : String) {
     for(s <- Main.seeds) {
 	  for(i <- List.range(2, 7)) {
-	    Main.enqueueExperiment(cnf::Nil, 2, -1, -1, 60d, new PseudoRandomLifter(s, 5), new LengthFilter(i), false)
-	    Main.enqueueExperiment(cnf::Nil, 2, -1, -1, 60d, new PseudoRandomLifter(s, 5), new LBDFilter(i), false)
+	    Main.enqueueExperiment(cnf::Nil, 2, -1, -1, 60d, new PseudoRandomLifter(s, 5), new LengthFilter(i), false, false, true, false)
+	    Main.enqueueExperiment(cnf::Nil, 2, -1, -1, 60d, new PseudoRandomLifter(s, 5), new LBDFilter(i), false, false, true, false)
 	  }
 	  for(p <- List(0.05f, 0.1f, 0.15f, 0.2f)) {
 	    for(keep <- List(true, false)) {
 	      for(less <- List(true, false)) {
-	    	  Main.enqueueExperiment(cnf::Nil, 2, -1, -1, 60d, new PseudoRandomLifter(s, 5), new PercentageActivityFilter(p, less, keep), false)
+	    	  Main.enqueueExperiment(cnf::Nil, 2, -1, -1, 60d, new PseudoRandomLifter(s, 5), new PercentageActivityFilter(p, less, keep), false, false, true, false)
 	      }
 	    }
 	  }
-	  Main.enqueueExperiment(cnf::Nil, 2, -1, -1, 60d, new PseudoRandomLifter(s, 5), new PercentageActivityFilter(1f), false)
-	  Main.enqueueExperiment(cnf::Nil, 2, -1, -1, 60d, new PseudoRandomLifter(s, 5), new NilFilter, false)	    
+	  Main.enqueueExperiment(cnf::Nil, 2, -1, -1, 60d, new PseudoRandomLifter(s, 5), new PercentageActivityFilter(1f), false, false, true, false)
+	  Main.enqueueExperiment(cnf::Nil, 2, -1, -1, 60d, new PseudoRandomLifter(s, 5), new NilFilter, false, false, true, false)	    
 	}
   }
   
   def main(args : Array[String]) : Unit = {
-	Main.enqueueExperiment("/home/ivissani/RFM/miscosas/minisat/cnf/sat/sgen1-sat-160-100.cnf" :: Nil, 2, -1, -1, 30d, new VarsFromLearntClauseLifter(5), new PercentageActivityFilter(0.1f), false)
+	Main.enqueueExperiment("/home/ivissani/RFM/miscosas/minisat/cnf/sat/sgen1-sat-160-100.cnf" :: Nil, 2, -1, -1, 30d, new VarsFromLearntClauseLifter(5), new PercentageActivityFilter(0.1f), false, false, true, false)
 	Main.schedule()
   }
 }

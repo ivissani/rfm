@@ -20,7 +20,17 @@ import ar.uba.dc.rfm.paralloy.scalaframework.dispatcher.IterationFinishedMessage
 
 
 case class SolvingBudget(propagationsBudget: Int, conflictsBudget: Int, timeBudget: Double)
-case class ExperimentDefinition(itQueueActor: IterationsQueue, problems: List[String], iterations: Int, budget: SolvingBudget, lifter: AbstractLifter, filter: AbstractFilter, logger: ExperimentLogger)
+case class ExperimentDefinition(
+    itQueueActor: IterationsQueue, 
+    problems: List[String], 
+    iterations: Int, 
+    budget: SolvingBudget, 
+    lifter: AbstractLifter, 
+    filter: AbstractFilter, 
+    logger: ExperimentLogger,
+    keepLearntsLimit : Boolean,
+    keepRestarts : Boolean,
+    keepLearntFacts : Boolean)
 case class Iteration(
     definition: ExperimentDefinition, 
     expId: Int, 
@@ -31,8 +41,12 @@ case class Iteration(
     withLearnts: List[LearntClause], 
     assumedByParent: List[Int], 
     forMeToAssume: List[Int],
+    keepLearntsLimit : Boolean,
     maxLearnts : Int,
-    currRestarts : Int)
+    keepRestarts : Boolean,
+    currRestarts : Int,
+    keepLearntFacts : Boolean,
+    learntFacts : List[Int])
 
 
 case class EnqueProblemsMessage()
@@ -54,9 +68,28 @@ class Experiment(definition: ExperimentDefinition) { //extends Actor {
       definition.budget.conflictsBudget,
       definition.budget.timeBudget,
       definition.lifter.getCannonicalAndParameterizedName,
-      definition.filter.getCannonicalAndParameterizedName)
+      definition.filter.getCannonicalAndParameterizedName,
+      definition.keepLearntsLimit,
+      definition.keepRestarts,
+      definition.keepLearntFacts)
 
-    definition.itQueueActor ! ProduceIterationMessage(Iteration(definition, id, -1, 0, definition.iterations, path, Nil, Nil, Nil, -1, -1))
+    definition.itQueueActor ! ProduceIterationMessage(
+        Iteration(
+            definition, 
+            id, 
+            -1, 
+            0, 
+            definition.iterations, 
+            path, 
+            Nil, 
+            Nil, 
+            Nil,
+            false,
+            -1, 
+            false,
+            -1,
+            false,
+            Nil))
   }
 
 //  def act() {
@@ -99,7 +132,12 @@ class IterationSolverActor extends Actor {
   
     def iterate(): (Char, Double) = {
       val assuming = iteration.assumedByParent ::: iteration.forMeToAssume
-      Console.printf("Iterations: %d, assuming: [%s], with this many learnts: %d\n", iteration.its, assuming.mkString(" "), iteration.withLearnts.size)
+      Console.printf(
+          "Iterations: %d, assuming: [%s], with this many learnts: %d and this many facts: %d\n", 
+          iteration.its, 
+          assuming.mkString(" "), 
+          iteration.withLearnts.size,
+          iteration.learntFacts.size)
       Console.flush
 
       var s = new Minisat(iteration.path)
@@ -108,7 +146,7 @@ class IterationSolverActor extends Actor {
 
       // Save this iteration
       val id = iteration.definition.logger.newIteration(iteration.expId, iteration.pId, iteration.its, iteration.level, iteration.forMeToAssume)
-      s.prepare_for_solving(Nil, iteration.withLearnts, assuming)
+      s.prepare_for_solving(Nil, iteration.withLearnts, assuming, iteration.learntFacts)
 
       val (res, elapsed) =
         if (s.simplify()) {
@@ -151,15 +189,18 @@ class IterationSolverActor extends Actor {
               val toLift = iteration.definition.lifter.variablesToLift(iteration.level)(s).sortWith((a: Int, b: Int) ⇒ a.abs < b.abs)
               val learnts = iteration.definition.filter.clausesToKeep()(s)
 
-              var max_learnts = s.get_max_learnts()
-              var restarts = s.get_current_restarts()
+              val max_learnts = if (iteration.keepLearntsLimit) s.get_max_learnts() else -1
+              val restarts = if (iteration.keepRestarts) s.get_current_restarts() else -1
+              
+              // Compute learnt facts for my children
+              val learntFacts = iteration.learntFacts ++ (if(iteration.keepLearntFacts) s.getLearntFacts else Nil)
               
               // Best effort to free memory used by Minisat
               // once we don't need it anymore
               s.finalize()
               s = null
               System.gc()
-
+              
               // Try to compute in parallel
               val lifting = signPermutations(toLift)
               lifting.foreach((as: List[Int]) => {
@@ -174,8 +215,12 @@ class IterationSolverActor extends Actor {
                         learnts, 
                         assuming, 
                         as,
+                        iteration.keepLearntsLimit,
                         max_learnts,
-                        restarts
+                        iteration.keepRestarts,
+                        restarts,
+                        iteration.keepLearntFacts,
+                        learntFacts
                     ))
               })
 
