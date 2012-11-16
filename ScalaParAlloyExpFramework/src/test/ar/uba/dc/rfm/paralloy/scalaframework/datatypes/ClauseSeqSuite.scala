@@ -16,7 +16,7 @@ class ClauseSeqSuite extends FunSuite {
     var m = new Minisat
     m.read("src/test/data/pamela9.cnf")
     
-    m.solve_time_restricted(5d)
+    m.solve_time_restricted(5d, -1, -1)
     var cs = new clauseseq
     m.get_learnts(cs)
     

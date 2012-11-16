@@ -54,7 +54,7 @@ class MinisatSuite extends FunSuite {
 	  
 	  assert(cl1.map(_.literals.toSet).toSet == cl2.map(_.literals.toSet).toSet)
 	  
-	  val ex = time(myMinisat.solve_time_restricted(solveFor))
+	  val ex = time(myMinisat.solve_time_restricted(solveFor, -1, -1))
 	  
 	  assert((ex.toDouble/1000 - solveFor).abs < (0.1 * solveFor))
 	}
@@ -63,7 +63,7 @@ class MinisatSuite extends FunSuite {
 	  var m = new Minisat
 	  m.read("src/test/data/pamela9.cnf")
 	  m.prepare_for_solving(Nil, Nil, Nil)
-	  m.solve_time_restricted(15d)
+	  m.solve_time_restricted(15d, -1, -1)
 	  
 	  val learnt = ClauseSeq.getLearntsFromMinisat(m)
 	  
@@ -80,7 +80,7 @@ class MinisatSuite extends FunSuite {
 	  
 	  assert(learnt.map(_.clause.literals.toSet).toSet == otherLearnt.map(_.clause.literals.toSet).toSet)
 	  
-	  m.solve_time_restricted(30d)
+	  m.solve_time_restricted(30d, -1, -1)
 	  assert(true)
 	}
 	
@@ -89,7 +89,7 @@ class MinisatSuite extends FunSuite {
 	  
 	  m.prepare_for_solving(Nil, Nil, 1 :: -1648 :: 23 :: Nil)
 	  if(m.simplify())
-		  m.solve_time_restricted(60d)
+		  m.solve_time_restricted(60d, -1, -1)
 	  
 	  assert(true)
 	}

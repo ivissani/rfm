@@ -65,7 +65,7 @@ class VarActivityLifterSuite extends FunSuite {
 	      m.read("src/test/data/pamela9.cnf")
 		  m.prepare_for_solving(Nil, Nil, List(factor * v))
 		  
-		  val ex = m.solve_time_restricted(5d)
+		  val ex = m.solve_time_restricted(5d, -1, -1)
 		  object va extends VarActivityLifter(5)
 		  
 		  def f = va.variablesToLift(1)
