@@ -515,6 +515,9 @@ void Solver::analyzeFinal(Lit p, vec<Lit>& out_conflict)
 
 void Solver::uncheckedEnqueue(Lit p, CRef from)
 {
+    //if((decisionLevel() == 0) && (from == CRef_Undef))
+//	fprintf(stderr, "##################### Enqueued literal %d with decision level %d and from = CRef_Undef\n", (sign(p)?var(p):-1*var(p)), decisionLevel());
+//
     assert(value(p) == l_Undef);
     assigns[var(p)] = lbool(!sign(p));
     vardata[var(p)] = mkVarData(from, decisionLevel());

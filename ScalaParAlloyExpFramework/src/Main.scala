@@ -128,7 +128,8 @@ object Main {
   }
   
   def main(args : Array[String]) : Unit = {
-	Main.enqueueExperiment("/home/ivissani/RFM/miscosas/minisat/cnf/sat/sgen1-sat-160-100.cnf" :: Nil, 2, -1, -1, 30d, new VarsFromLearntClauseLifter(5), new PercentageActivityFilter(0.1f), false, false, true, false)
+	//Main.enqueueExperiment("/home/ivissani/RFM/miscosas/minisat/cnf/sat/sgen1-sat-160-100.cnf" :: Nil, 5, -1, -1, 15d, new VarsFromLearntClauseLifter(2), new PercentageActivityFilter(0.1f), false, false, true, false)
+    Main.enqueueExperiment("/home/ivissani/git/rfm/tesis/benchmark/cnf/k10.cnf" :: Nil, 2, -1, -1, 30d, new VarsFromLearntClauseLifter(5), new PercentageActivityFilter(0.1f), false, false, true, false)
 	Main.schedule()
   }
 }

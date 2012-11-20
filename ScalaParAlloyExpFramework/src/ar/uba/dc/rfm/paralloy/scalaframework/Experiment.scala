@@ -84,11 +84,11 @@ class Experiment(definition: ExperimentDefinition) { //extends Actor {
             Nil, 
             Nil, 
             Nil,
-            false,
+            definition.keepLearntsLimit,
             -1, 
-            false,
+            definition.keepRestarts,
             -1,
-            false,
+            definition.keepLearntFacts,
             Nil))
   }
 
@@ -133,11 +133,11 @@ class IterationSolverActor extends Actor {
     def iterate(): (Char, Double) = {
       val assuming = iteration.assumedByParent ::: iteration.forMeToAssume
       Console.printf(
-          "Iterations: %d, assuming: [%s], with this many learnts: %d and this many facts: %d\n", 
+          "Iterations: %d, assuming: [%s], with this many learnts: %d and this facts: [%s]\n", 
           iteration.its, 
           assuming.mkString(" "), 
           iteration.withLearnts.size,
-          iteration.learntFacts.size)
+          iteration.learntFacts.mkString(" "))
       Console.flush
 
       var s = new Minisat(iteration.path)
@@ -193,13 +193,7 @@ class IterationSolverActor extends Actor {
               val restarts = if (iteration.keepRestarts) s.get_current_restarts() else -1
               
               // Compute learnt facts for my children
-              val learntFacts = iteration.learntFacts ++ (if(iteration.keepLearntFacts) s.getLearntFacts else Nil)
-              
-              // Best effort to free memory used by Minisat
-              // once we don't need it anymore
-              s.finalize()
-              s = null
-              System.gc()
+              val learntFacts = (iteration.learntFacts ++ (if(iteration.keepLearntFacts) s.getLearntFacts else Nil)).distinct
               
               // Try to compute in parallel
               val lifting = signPermutations(toLift)
@@ -224,6 +218,12 @@ class IterationSolverActor extends Actor {
                     ))
               })
 
+              // Best effort to free memory used by Minisat
+              // once we don't need it anymore
+              s.finalize()
+              s = null
+              System.gc()
+              
               // Aggregate results
               // foldLeft should be correct even in parallel collections 
               //            val (rr, tr) = partial_res.foldLeft(('U', 0.0))((a, b) ⇒ {

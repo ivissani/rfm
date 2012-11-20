@@ -137,13 +137,13 @@ class Solver
 
                 std::vector<int> & get_learnt_facts(std::vector<int> & to)
                 {
-                        for(int i = 1; i <= $self->nVars(); i++)
+                        for(int i = 0; i < $self->nVars(); i++)
                         {
                                 if($self->assigns[i] != l_Undef)
                                 {
-                                        if(/*($self->vardata[i].reason == CRef_Undef) &&*/ ($self->vardata[i].level == 0)) // It's a learnt fact!
+                                        if(($self->vardata[i].reason == CRef_Undef) && ($self->vardata[i].level == 0)) // It's a learnt fact!
                                         {
-                                                to.push_back(($self->assigns[i] == l_True)?i:-1*i);
+                                                to.push_back(($self->assigns[i] == l_True)?i+1:-1*(i+1));
                                         }
                                 }
                         }
@@ -153,8 +153,10 @@ class Solver
                 {
                         for(unsigned int i = 0; i < from.size(); i++)
                         {
-                                assert(i <= $self->nVars());
-                                $self->uncheckedEnqueue(mkLit(abs(i), (i>0)?true:false)); 
+                                int var = abs(from[i]);
+                                assert(var <= $self->nVars());
+
+                                $self->uncheckedEnqueue((from[i]>0)?mkLit(var-1):~mkLit(var-1)); 
                         }
                 }
 
