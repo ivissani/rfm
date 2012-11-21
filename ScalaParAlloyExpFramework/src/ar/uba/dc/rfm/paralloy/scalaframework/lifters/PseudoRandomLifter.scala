@@ -12,10 +12,8 @@ class PseudoRandomLifter(seed : Long, limit : Int) extends AbstractLifter {
       val vars = m.nVars()
       val random = new Random(seed)
       
-      var is = new intseq
-      m.get_learnt_facts(is)
       var s = new HashSet[Int]
-      new IntSeq(is).foreach(i => s.add(i.abs))
+      m.getLearntFacts.foreach(i => s.add(i.abs))
       
       random.
       	shuffle(List.range(1, vars+1)).
