@@ -156,7 +156,10 @@ class Solver
                                 int var = abs(from[i]);
                                 assert(var <= $self->nVars());
 
-                                $self->uncheckedEnqueue((from[i]>0)?mkLit(var-1):~mkLit(var-1)); 
+								std::vector<int> unit_clause;
+								unit_clause.push_back(from[i]);
+                                //$self->uncheckedEnqueue((from[i]>0)?mkLit(var-1):~mkLit(var-1)); 
+								add_clause(unit_clause);
                         }
                 }
 
