@@ -109,21 +109,26 @@ object Main {
     }
   }
   
-  def benchmark(cnf : String) {
+  def benchmark(
+      cnf : String, 
+      keepLearntsLimit : Boolean = false, 
+      keepRestarts : Boolean = false, 
+      keepLearntFacts : Boolean = true, 
+      keepLearntFactsAppliesToNullCriteria : Boolean = true) {
     for(s <- Main.seeds) {
 	  for(i <- List.range(2, 7)) {
-	    Main.enqueueExperiment(cnf::Nil, 2, -1, -1, 60d, new PseudoRandomLifter(s, 5), new LengthFilter(i), false, false, true, false)
-	    Main.enqueueExperiment(cnf::Nil, 2, -1, -1, 60d, new PseudoRandomLifter(s, 5), new LBDFilter(i), false, false, true, false)
+	    Main.enqueueExperiment(cnf::Nil, 2, -1, -1, 60d, new PseudoRandomLifter(s, 5), new LengthFilter(i), keepLearntsLimit, keepRestarts, keepLearntFacts, false)
+	    Main.enqueueExperiment(cnf::Nil, 2, -1, -1, 60d, new PseudoRandomLifter(s, 5), new LBDFilter(i), keepLearntsLimit, keepRestarts, keepLearntFacts, false)
 	  }
 	  for(p <- List(0.05f, 0.1f, 0.15f, 0.2f)) {
 	    for(keep <- List(true, false)) {
 	      for(less <- List(true, false)) {
-	    	  Main.enqueueExperiment(cnf::Nil, 2, -1, -1, 60d, new PseudoRandomLifter(s, 5), new PercentageActivityFilter(p, less, keep), false, false, true, false)
+	    	  Main.enqueueExperiment(cnf::Nil, 2, -1, -1, 60d, new PseudoRandomLifter(s, 5), new PercentageActivityFilter(p, less, keep), keepLearntsLimit, keepRestarts, keepLearntFacts, false)
 	      }
 	    }
 	  }
-	  Main.enqueueExperiment(cnf::Nil, 2, -1, -1, 60d, new PseudoRandomLifter(s, 5), new PercentageActivityFilter(1f), false, false, true, false)
-	  Main.enqueueExperiment(cnf::Nil, 2, -1, -1, 60d, new PseudoRandomLifter(s, 5), new NilFilter, false, false, true, false)	    
+	  Main.enqueueExperiment(cnf::Nil, 2, -1, -1, 60d, new PseudoRandomLifter(s, 5), new PercentageActivityFilter(1f), keepLearntsLimit, keepRestarts, keepLearntFacts, false)
+	  Main.enqueueExperiment(cnf::Nil, 2, -1, -1, 60d, new PseudoRandomLifter(s, 5), new NilFilter, keepLearntsLimit, keepRestarts, keepLearntFactsAppliesToNullCriteria && keepLearntFacts, false)	    
 	}
   }
   
