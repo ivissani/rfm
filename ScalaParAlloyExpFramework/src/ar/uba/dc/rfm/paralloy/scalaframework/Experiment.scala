@@ -133,11 +133,13 @@ class IterationSolverActor extends Actor {
     def iterate(): (Char, Double) = {
       val assuming = iteration.assumedByParent ::: iteration.forMeToAssume
       Console.printf(
-          "Iterations: %d, assuming: [%s], with this many learnts: %d and this facts: [%s]\n", 
+          "Iterations: %d, assuming: [%s], with this many learnts: %d and this many facts: %d this amount of restarts: %d and this learnts limit: %d\n", 
           iteration.its, 
           assuming.mkString(" "), 
           iteration.withLearnts.size,
-          iteration.learntFacts.mkString(" "))
+          iteration.learntFacts.size,
+          iteration.currRestarts,
+          iteration.maxLearnts)
       Console.flush
 
       var s = new Minisat(iteration.path)
