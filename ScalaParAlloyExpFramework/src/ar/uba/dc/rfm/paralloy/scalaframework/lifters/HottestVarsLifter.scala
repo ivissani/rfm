@@ -14,10 +14,12 @@ class HottestVarsLifter(limit : Int) extends AbstractLifter {
         }
       }
       var heap = new PriorityQueue[Tuple2[Int, Double]]
-      for(v <- List.range(1, m.nVars+1)) {
-        heap += Tuple2(v, m.get_var_activity(v))
-      }
+      val lf = m.getLearntFacts
       
+      // Ordered enqueue every variable except for the ones that are already assigned 
+      for(v <- List.range(1, m.nVars+1)) if(!lf.contains(v)) heap += Tuple2(v, m.get_var_activity(v))
+      
+      // Take hottest "limit" variables
       val ret = heap.take(limit).toList.map(_._1)
       
       // Try to free some memory

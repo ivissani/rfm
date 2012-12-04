@@ -34,6 +34,7 @@ import ar.uba.dc.rfm.paralloy.scalaframework.filters.LengthFilter
 import ar.uba.dc.rfm.paralloy.scalaframework.filters.LBDFilter
 import ar.uba.dc.rfm.paralloy.scalaframework.filters.NilFilter
 import ar.uba.dc.rfm.paralloy.scalaframework.dispatcher.IterationsConsumer
+import ar.uba.dc.rfm.paralloy.scalaframework.lifters.HottestVarsLifter
 
 object Main {
   System.loadLibrary("minisat")
@@ -132,9 +133,36 @@ object Main {
 	}
   }
   
+   def hottestBenchmark(
+      cnf : String, 
+      keepLearntsLimit : Boolean = false, 
+      keepRestarts : Boolean = false, 
+      keepLearntFacts : Boolean = true, 
+      keepLearntFactsAppliesToNullCriteria : Boolean = true,
+      repetitions : Int = 1) {
+     
+     for(s <- List.range(0, repetitions)) {
+	  for(i <- List.range(2, 7)) {
+	    Main.enqueueExperiment(cnf::Nil, 2, -1, -1, 60d, new HottestVarsLifter(5), new LengthFilter(i), keepLearntsLimit, keepRestarts, keepLearntFacts, false)
+	    Main.enqueueExperiment(cnf::Nil, 2, -1, -1, 60d, new HottestVarsLifter(5), new LBDFilter(i), keepLearntsLimit, keepRestarts, keepLearntFacts, false)
+	  }
+	  for(p <- List(0.05f, 0.1f, 0.15f, 0.2f)) {
+	    for(keep <- List(true, false)) {
+	      for(less <- List(true, false)) {
+	    	  Main.enqueueExperiment(cnf::Nil, 2, -1, -1, 60d, new HottestVarsLifter(5), new PercentageActivityFilter(p, less, keep), keepLearntsLimit, keepRestarts, keepLearntFacts, false)
+	      }
+	    }
+	  }
+	  Main.enqueueExperiment(cnf::Nil, 2, -1, -1, 60d, new HottestVarsLifter(5), new PercentageActivityFilter(1f), keepLearntsLimit, keepRestarts, keepLearntFacts, false)
+	  Main.enqueueExperiment(cnf::Nil, 2, -1, -1, 60d, new HottestVarsLifter(5), new NilFilter, keepLearntsLimit, keepRestarts, keepLearntFactsAppliesToNullCriteria && keepLearntFacts, false)	    
+	}
+   }
+  
   def main(args : Array[String]) : Unit = {
 	//Main.enqueueExperiment("/home/ivissani/RFM/miscosas/minisat/cnf/sat/sgen1-sat-160-100.cnf" :: Nil, 5, -1, -1, 15d, new VarsFromLearntClauseLifter(2), new PercentageActivityFilter(0.1f), false, false, true, false)
     Main.enqueueExperiment("/home/ivissani/git/rfm/tesis/benchmark/cnf/k10.cnf" :: Nil, 2, -1, -1, 30d, new VarsFromLearntClauseLifter(5), new PercentageActivityFilter(0.1f), false, false, true, false)
 	Main.schedule()
+	
+	Main.times.reverse.take(10).fold[Tuple3[Int, Option[Double], Option[Double]]]((0, Some(0), Some(0)))((a, b) => (0, Some(a._2.get+b._2.get), Some(a._3.get+b._3.get)))
   }
 }
