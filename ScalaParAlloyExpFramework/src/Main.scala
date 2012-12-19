@@ -35,6 +35,10 @@ import ar.uba.dc.rfm.paralloy.scalaframework.filters.LBDFilter
 import ar.uba.dc.rfm.paralloy.scalaframework.filters.NilFilter
 import ar.uba.dc.rfm.paralloy.scalaframework.dispatcher.IterationsConsumer
 import ar.uba.dc.rfm.paralloy.scalaframework.lifters.HottestVarsLifter
+import scala.collection.mutable.HashSet
+import ar.uba.dc.rfm.paralloy.scalaframework.loggers.Experiments
+import csv._
+import scala.collection.mutable.HashMap
 
 object Main {
   System.loadLibrary("minisat")
@@ -131,6 +135,60 @@ object Main {
 	  Main.enqueueExperiment(cnf::Nil, 2, -1, -1, 60d, new PseudoRandomLifter(s, 5), new PercentageActivityFilter(1f), keepLearntsLimit, keepRestarts, keepLearntFacts, false)
 	  Main.enqueueExperiment(cnf::Nil, 2, -1, -1, 60d, new PseudoRandomLifter(s, 5), new NilFilter, keepLearntsLimit, keepRestarts, keepLearntFactsAppliesToNullCriteria && keepLearntFacts, false)	    
 	}
+  }
+
+  def getBenchmarkFiltersNames = {
+    var s = new HashSet[String]
+    for (i ← List.range(2, 7)) {
+      s += new LengthFilter(i).getCannonicalAndParameterizedName
+      s += new LBDFilter(i).getCannonicalAndParameterizedName
+    }
+    for (p ← List(0.05f, 0.1f, 0.15f, 0.2f)) {
+      for (keep ← List(true, false)) {
+        for (less ← List(true, false)) {
+          s += new PercentageActivityFilter(p, less, keep).getCannonicalAndParameterizedName
+        }
+      }
+    }
+    s += new PercentageActivityFilter(1f).getCannonicalAndParameterizedName
+    s += new NilFilter().getCannonicalAndParameterizedName
+    s
+  }
+  
+  def getFiltersNamesForExperiment(
+      cnf : String, 
+      lifterName : String, 
+      keepLearntsLimit : Boolean = false, 
+      keepRestarts : Boolean = false, 
+      keepLearntFacts : Boolean = true) = {
+    var s = new HashSet[String]
+    
+    Database.forURL("jdbc:h2:/home/ivissani/Desktop/scalloy.results;AUTO_SERVER=TRUE", "sa", "", driver = "org.h2.Driver") withSession {
+    val q = for(e <- ar.uba.dc.rfm.paralloy.scalaframework.loggers.Experiments 
+        if	e.cnf === cnf && 
+        	e.lifterClassName === lifterName && 
+        	e.keepLearntFacts === keepLearntFacts && 
+        	e.keepLearntsLimit === keepLearntsLimit && 
+        	e.keepRestarts === keepRestarts) yield e.filterClassName
+    for(f <- q) s += f
+    }
+    s
+  }
+  
+  def getExperimentsLiftersFromFile(fileName : String) = {
+    var r : List[String] = Nil
+    val rows = csv.read(fileName, ",", "\"", false)
+    for((id, cnf, its, conf, props, time, lifter, filter, result, algo, host, start, end, keepAlgo, keepOtraCosa, keepAlgoMas) <- rows) {
+      r = lifter.toString :: r
+    }
+    r
+  }
+  
+  def getRemainingFilters(fileName : String) = {
+    var faltan = new HashMap[String, HashSet[String]]
+    val filters = Main.getBenchmarkFiltersNames
+    Main.getExperimentsLiftersFromFile(fileName).foreach(lif => faltan.put(lif, (filters -- Main.getFiltersNamesForExperiment("benchmark/cnf/p9.cnf", lif, false, false, true))))
+    faltan
   }
   
    def hottestBenchmark(
