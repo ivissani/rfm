@@ -1,0 +1,60 @@
+\documentclass[11pt, twoside, a4paper]{article}
+\title{Propuesta de tema de tesis:\\Aprendizaje guiado por conflictos en la implementaci\'on de un sat-solver paralelo y distribuido no clausal}
+\author{Ignacio Vissani (Tesista)\\
+        (ivissani@dc.uba.ar)
+        \and
+        Dr. Carlos Gustavo Lopez Pombo (Director)\\
+        (clpombo@dc.uba.ar)\\
+        \and
+	Lic. Nicol\'as Leandro Rosner (Director)\\
+        (nrosner@dc.uba.ar)
+        }
+\date{\today}
+
+\usepackage[spanish]{babel}
+\usepackage{graphicx}
+\usepackage[latin1]{inputenc}
+\usepackage{paralist}
+
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+
+En el marco general de la verificación de software hemos trabajado en técnicas de \emph{bounded model-checking} que permiten la búsqueda en dominios acotados de contraejemplos de las propiedades que se desean verificar. Esto se lleva a cabo a partir de caracterizar el problema de verificar una propiedad como un problema \emph{sat}. A grandes rasgos, si $\{\alpha_i\}_{i \in \mathcal{I}}$ es un conjunto de fórmulas que describen el comportamiento de una pieza de software y $\alpha$ es una fórmula que describe una propiedad deseable de dicho artefacto, nos gustaría poder demostrar la Ecuación~\ref{prop}.\footnote{El lector debe notar que estamos suponiendo que el lenguaje utilizado posee recursos lógicos, o metalógicos, que puedan brindar la interpretación usual a $\bigvee_{i \in \mathcal{I}}$ y $\Rightarrow$.}
+\begin{equation}
+\label{prop}
+\bigvee_{i \in \mathcal{I}} \alpha_i \Rightarrow \alpha
+\end{equation}
+Una de las formas de llevar a cabo esta tarea es a partir de garantizar que no existe ningún modelo de $\mathcal{M}$ tal que $\mathcal{M} \models \alpha_i$ para todo $i \in \mathcal{I}$ y $\mathcal{M} \not\models \alpha$; o lo que es equivalente, dadas las suposiciones realizadas, que la búsqueda de un modelo $\mathcal{M}$ tal que $\mathcal{M} \models \bigvee_{i \in \mathcal{I}} \alpha_i \land \neg\alpha$ sea infructuosa.
+
+De esta esta forma, si la fórmula mencionada anteriormente fuera codificable en lógica proposicional $\beta$ tal que existe $v$ una valuación proposicional y $\mathcal{M}$, $v \models_{\mathit{Prop}} \beta$ si y sólo si $\mathcal{M} \models \bigvee_{i \in \mathcal{I}} \alpha_i \land \neg\alpha$; sería posible utilizar un sat-solver con el objeto de encontrar dicha valuación $v$ y así hallar un contraejemplo de la propiedad permitiendo concluir que el comportamiento descripto por la fórmula $\alpha$ no se sigue de nuestra especificación $\{\alpha_i\}_{i \in \mathcal{I}}$.
+
+En la enorme mayoría de los casos esta codificación implica la introducción de restricciones al lenguaje que hacen que el resultado de este procedimiento no sea correcto ya que por ejemplo, en el caso de la lógica de primer orden, implica la restricción de los dominios a conjuntos con una carnalidad finita. Así, este procedimiento de búsqueda puede arrojar dos resultados posibles:
+\begin{inparaenum}[\itshape a)\upshape]
+\item en caso de encontrar una valuación $v$ sabemos efectivamente que existe un contraejemplo de la propiedad deseada y por lo tanto debemos refinar nuestra especificación, o
+\item en caso de agotar el espacio de búsqueda sólo sabemos que no existe un contraejemplo dentro de las cotas impuestas a los dominios involucrados.
+\end{inparaenum}
+
+Si bien este método no arroja respuestas definitivas, al menos en el caso de no encontrar contraejemplo, provee una herramienta muy valiosa a la hora de validar una propiedad de una especificación con el objetivo de ganar confianza antes de enfrentar la costosa tarea de demostrarla usando un demostrado semiautomático para la lógica en la que está escrita.
+
+Es conocido que el problema de determinar si una fórmula proposicional es satisfacible es NP-completo \cite{}. La principal heurística con la que cuentan todos los sat-solvers modernos \cite{} es la implementación de mecanismos de aprendizaje a través de detección de conflictos \cite{marques-silva:iccad96}. Durante el proceso de \emph{sat-solving} un conflicto caracteriza una parte del espacio de búsqueda en el que no existen valuaciones que satisfagan la fórmula. Estos conflictos son guardados como ``lecciones aprendidas'' del recorrido del árbol de decisión hasta el estado actual de la búsqueda. Esta información tiene un impacto global en la resolución del problema ya que toda información referida a estos conflictos es deducible del problema original y además permite la realización de \emph{backtracking} no cronológicos \cite{marques-silva:iccad96}.
+
+En vista de la complejidad inherente del problema de determinar la satisfacibilidad de una fórmula proposicional, aun utilizando los \emph{sat-solvers} más avanzados, y considerando la accesibilidad de \emph{clusters} de computadoras que ponen a nuestra disposición la posibilidad de resolver este problema en un ambiente paralelo y distribuido, hemos implementado un \emph{sat-solver} que aprovecha esto realizando una partición de los problema en forma automática cada vez que la tarea parece estar consumiendo mucho tiempo.
+
+Los resultados de la aplicación de este \emph{sat-solver} a la validación de código han sido reportados en \cite{galeotti:apv09, rosner:abz10}. En \cite{galeotti:issta10} presentamos la herramienta TACO cuya tarea es la validación de programas Java. La distribución del procedimiento de decisión a partir de fragmentar un problema en sub-problemas de menor tamaño y potencialmente más simples no cuenta hoy con la implementación de estas técnicas de aprendizaje y consecuentemente dos sub-problemas son analizados independientemente y las decisiones son tomadas en forma local aun cuando estos pueden compartir mucha información común derivada del análisis del problema original.
+
+La tarea del tenista entonces será la de evaluar la viabilidad de implementar una técnica de aprendizaje de este tipo tomando en cuanta las restricciones que impone el trabajo en ambientes paralelos y distribuidos, su comparación empírica con método tal como está hoy, es decir, sin técnicas de aprendizaje y la derivación de conclusiones que orienten acacia evaluar la posibilidad de realizar algún tipo de implementación de \emph{backtracking} no cronológico.
+
+\end{abstract}
+
+\vspace{1in}
+
+Lopez Pombo, Carlos Gustavo \hspace{0.8in} Rosner, Nicolás Leandro
+
+\bibliographystyle{alpha}
+\bibliography{bibdatabase}
+
+\end{document}
