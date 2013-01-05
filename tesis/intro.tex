@@ -2,36 +2,82 @@ En la actualidad el \soft forma parte integral de nuestra vida cotidiana. El
 mismo interviene en todo tipo de tareas. Desde el envío de un mensaje de texto o
 la realización de una llamada telefónica hasta el sistema de control de una
 central nuclear, pasando por el control de un ascensor o el sistema de velocidad
-crucero de un automóvil, utilizan sistemas basados en \hard y \soft
-informático. La variedad, alcance y \textbf{criticidad} de las responsabilidades
-asignadas a las piezas de \soft hacen de las mismas un componente de alto
-impacto en nuestra realidad actual. 
+crucero de un automóvil, utilizan sistemas basados en \hard y \soft informático.
+La variedad, alcance y \textbf{criticidad} de las responsabilidades asignadas a
+las piezas de \soft hacen de las mismas un componente de alto impacto en nuestra
+realidad actual.
 
 Por otra parte, la alta complejidad del \soft hace que la construcción del mismo
 sea una tarea propensa a errores. El impacto de una falla en un componente de
 \soft puede variar desde la imposibilidad de utilizar un artefacto doméstico
 hasta una catástofre de magnitudes como la fundición del núcleo de un reactor
-nuclear. 
+nuclear.
 
 Son estos aspectos los que motivan la necesidad creciente de construir métodos
 (formalismos, metodologías, herramientas, etc.) que permitan garantizar la
 calidad del \soft en un sentido general. La posibilidad de establecer la
 ausencia de errores en un programa radica en la capacidad de establecer
-inequívocamente que ese programa cumple una determinada propiedad que expresa
-el adecuamiento del mismo al comportamiento esperado.
-Por ejemplo si quisiéramos establecer el correcto  funcionamiento del
-mecanismo de seguridad de un horno de microondas podríamos enunciar una
-propiedad como la siguiente: ``No es posible encender el
-microondas si la puerta está abierta''. 
+inequívocamente que ese programa cumple una determinada propiedad que expresa el
+adecuamiento del mismo al comportamiento esperado.
+Por ejemplo si quisiéramos establecer el correcto  funcionamiento del mecanismo
+de seguridad de un horno de microondas podríamos enunciar una propiedad como la
+siguiente: ``No es posible encender el microondas si la puerta está abierta''.
 
 La \textbf{verificación formal} de \soft consiste en demostrar que un
 determinado sistema o algoritmo es correcto respecto a una
 \textbf{especificación formal} del mismo. Los lenguajes naturales son
 intrínsecamente ambiguos y por lo tanto una descripción de un sistema realizada
 en lenguaje natural no puede ser verificada. Una especificación formal es una
-descripción en un lenguaje no ambiguo (formal) de un sistema de \soft.
+descripción en un lenguaje formal de un sistema de \soft. Un lenguaje para ser
+formal debe poseer: \begin{inparaenum}[a)] \item reglas para determinar cuándo
+una sentencia pertenece al lenguaje (sintaxis) \item reglas que permitan
+interpretar las sentencias (bien formadas) de manera precisa y significativa
+(semántica) y \item reglas para inferir información útil a partir de la
+especificación (\emph{proof theory})
+\end{inparaenum}
+
+El enfoque de la verificación formal de software, tal vez uno de los más
+ambiciosos en el campo de la ingeniería de software, enfrenta dos problemas
+fundamentales. En primer lugar está la dificultad de construir una
+especificación formal que exprese de manera correcta el comportamiento esperado
+del sistema (validación) ya que el mismo normalmente proviene de requerimientos
+expresados en lenguaje natural. El segundo problema fundamental es que las
+lógicas subyacentes a la mayoría de los lenguajes formales capaces de expresar
+un conjunto lo suficientemente amplio e interesante de propiedades son
+normalmente indecidibles \todo[inline]{¿Cita?}, es decir que no existe un
+algoritmo capaz de, para toda fórmula del lenguaje, establecer si la misma es
+verdadera o falsa.
+
+El problema de la indecidibilidad se transforma en un escollo fundamental en
+tanto impide la construcción de métodos de verificación formal completamente
+automáticos. Diversos enfoques han sido desarrollados para atacar este problema
+\todo[inline]{¿Citas?}. La mayoría \todo[inline]{¿Todos?} de estos métodos
+consisten en restringir de alguna manera el lenguaje formal utilizado de modo de
+generar un sublenguaje del mismo que sea decidible. Uno de los enfoques
+desarrollados en este sentido es el conocido como \bmc
+(verficación acotada de modelos).
+
+\mc \cite{emerson:scp-2_3} es una técnica desarrollada para la verificación de
+sistemas reactivos. La técnica consiste en la exploración exhaustiva y
+automática del espacio de estados de un sistema modelado como una máquina de
+estados finita. Cuando la cantidad de estados del sistema es relativamente
+grande la exploración exhaustiva del espacio de estados se vuelve inpractible.
+Esto motivó el desarrollo de la técnica conocida como \smc \cite{burch:lics90,
+mcmillan93} que ataca el problema antedicho a partir de evitar construir el
+grafo de estados del sistema utilizando fórmulas proposicionales para
+caracterizar conjuntos y relaciones. En \smc el chequeo de las fórmulas
+proposicionales se realizaba tradicionalmente mediante la manipulación de BDDs
+(\bdds), una forma canónica de representar dichas fórmulas.
 
 \section{Alloy}
 
-Alloy \cite{jackson:acmtosem-11_2} es un lenguaje formal diseñado para expresar
-tanto las propiedades estructurales como operacionales
+Alloy \cite{jackson:acmtosem-11_2} es un lenguaje formal diseñado para expresar 
+las propiedades estructurales de un sistema.
+Posee una sintaxis declarativa lo suficientemente poderosa como para expresar propiedades complejas
+y a la vez plausible de ser analizada de forma completamente automática. 
+
+\missingfigure{Ejemplo especificación Alloy}
+
+\todo{Sarabastaza de Alloy hasta llegar a que se traduce a un problema SAT}
+
+\section{SAT Solving}
