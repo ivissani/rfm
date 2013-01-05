@@ -57,27 +57,108 @@ generar un sublenguaje del mismo que sea decidible. Uno de los enfoques
 desarrollados en este sentido es el conocido como \bmc
 (verficación acotada de modelos).
 
-\mc \cite{emerson:scp-2_3} es una técnica desarrollada para la verificación de
+\mc\cite{emerson:scp-2_3} es una técnica desarrollada para la verificación de
 sistemas reactivos. La técnica consiste en la exploración exhaustiva y
 automática del espacio de estados de un sistema modelado como una máquina de
 estados finita. Cuando la cantidad de estados del sistema es relativamente
 grande la exploración exhaustiva del espacio de estados se vuelve inpractible.
-Esto motivó el desarrollo de la técnica conocida como \smc \cite{burch:lics90,
+Esto motivó el desarrollo de la técnica conocida como \smc\cite{burch:lics90,
 mcmillan93} que ataca el problema antedicho a partir de evitar construir el
 grafo de estados del sistema utilizando fórmulas proposicionales para
 caracterizar conjuntos y relaciones. En \smc el chequeo de las fórmulas
-proposicionales se realizaba tradicionalmente mediante la manipulación de BDDs
-(\bdds), una forma canónica de representar dichas fórmulas.
+proposicionales es realizada típicamente mediante la manipulación de BDDs
+(\bdds), una forma canónica de representar dichas fórmulas. A pesar de que las
+técnicas de \smc basadas en  BDDs son capaces de manejar sistemas con cientos de
+estados, el tamaño de los BDDs generados para sistemas grandes se vuelve
+prohibitivo. 
+
+El problema del espacio requerido por los BDDs motivó la creación de la técnica
+conocida como \bmc\cite{Biere:1999:SMC:646483.691738} que reemplaza la
+utilización de BDDs por la verificación de fórmulas proposicionales a través de
+procedimientos SAT capaces de manejar en la actualidad fórmulas proposicionales
+con varios miles de variables. En particular, la técnica presentada en
+\cite{Biere:1999:SMC:646483.691738} consiste en buscar contraejemplos de una
+longitud acotada $k$ a partir de generar una fórmula proposicional que sea
+verdadera si y sólo si un contraejemplo de dicha longitud existe. Si bien esta
+técnica es completa para sistemas modelados como máquinas de estados finitos ya
+que el espacio de búsqueda, aunque exponencialmente grande, es finito, no es
+cierto que esta metodología aplicada a un lenguaje formal general sea
+completa\todo{Revisar esto}. La perdida de completitud en el caso general
+generada por la introducción de la cota en la longitud del contraejemplo es lo
+que, aplicado a un sistema lógico indecidible, permite obtener un subconjunto
+del lenguaje original que ahora es decidible y, por lo tanto, automáticamente
+verificable \todo{Revisar esto}. Un ejemplo típico de esto se da en lenguajes
+donde la indecidibilidad se da a partir de la existencia de cuantificadores
+universales sobre dominios no acotados. En estos casos la cota en la longitud
+del contraejemplo se traduce en una cota para cada uno de los dominios no
+acotados. De este modo las cuantificaciones universales se convierten en
+cuantificaciones acotadas y por lo tanto el lenguaje se vuelve decidible (y en
+particular codificable como una fórmula proposicional suceptible de ser
+verificada automáticamente).
+
+Debido a la incompletitud generada por la introducción de la cota en la longitud
+del contraejemplo, \bmc no puede ser considerada una técnica de verificación en
+el sentido estricto. Sin embargo la utilización de \bmc permite ganar confianza
+en la propiedad que se quiere verificar antes de embarcarse en la costosa tarea
+de demostrarla formalmente. Además \bmc ha sido aplicada con éxito a otras áreas
+relacionadas como la generación automática de casos de test, etc \todo{Agregar
+citas y sacar el etc.}.
+
 
 \section{Alloy}
 
-Alloy \cite{jackson:acmtosem-11_2} es un lenguaje formal diseñado para expresar 
-las propiedades estructurales de un sistema.
-Posee una sintaxis declarativa lo suficientemente poderosa como para expresar propiedades complejas
-y a la vez plausible de ser analizada de forma completamente automática. 
+Existen una variedad de herramientas formales que utilizan el enfoque de \bmc
+aplicado a la especificación y verificación de \soft. Alloy
+\cite{jackson:acmtosem-11_2} es un lenguaje formal diseñado para expresar las
+propiedades estructurales de un sistema. Posee una sintaxis declarativa lo
+suficientemente poderosa como para expresar propiedades complejas y a la vez
+plausible de ser analizada de forma completamente automática. De hecho, Alloy es
+también una herramienta capaz de analizar automáticamente especificaciones
+escritas en lenguaje Alloy.
 
 \missingfigure{Ejemplo especificación Alloy}
 
-\todo{Sarabastaza de Alloy hasta llegar a que se traduce a un problema SAT}
+\todo{Sarabastaza de Alloy hasta llegar a que se traduce a un problema SAT. Tal
+vez mencionar extensiones como DynAlloy y casos de estudio exitosos}
 
 \section{SAT Solving}
+
+El interés en construir procedimientos sistemáticos y automáticos de
+demostración se remonta al interés que tuvieron diversos matemáticos en
+construir un método de esas características para la lógica de primer orden. Uno
+de los máximos exponentes fue David Hilbert, quien enunció que la búsqueda de un
+algoritmo de decisión para la lógica de primer orden era el problema central de
+la lógica matemática. La demostración de que un procedimiento de estas
+características no era posible elaborada por Church y Turing provocó una pérdida
+de interés en esta clase de problemas. Sin embargo la construcción de
+procedimientos, no ya de decisión, sino de demostración para la lógica de primer
+orden (entre los cuales se destaca el desarrollado por Martin Davis y Hilary
+Putnam \cite{Davis:1960:CPQ:321033.321034}) sumada a los crecientes campos de
+aplicación dentro de las ciencias de la computación de lógicas decidibles o de
+fragmentos decidibles de lógicas no decidibles, dieron un nuevo impulso al
+desarrollo de estos métodos. 
+
+En particular la variedad de aplicaciones que fueron surgiendo para la lógica
+proposicional (\emph{Planning} en inteligencia artificial, demostración
+automática de teoremas, \textbf{\mc}, \textbf{verificación de \soft}, etc.)
+impulsaron fuertemente el desarrollo de técnicas y procedimientos para
+determinar si una fórmula de la lógica proposicional podía ser verdadera. El
+establecimiento de este problema como el primer problema \npc
+\cite{Cook:1971:CTP:800157.805047} no impidió el desarrollo de heurísticas que
+hoy permiten manejar fórmulas de cientos de miles de variables eficientemente.
+
+Si bien existe una variedad de métodos para determinar si una fórmula
+proposicional puede ser verdadera, los más utilizados son aquellos derivados del
+algoritmo desarrollado por Davis, Longemann y Loveland (\dpll) en
+\cite{Davis:1962:MPT:368273.368557} que es un refinamiento del algoritmo
+presentado en \cite{Davis:1960:CPQ:321033.321034}. Este procedimiento es, en
+esencia, un algoritmo de \bt.
+
+Tuvieron que pasar varios años para que Marques y Silva introdujeran en
+\cite{marques-silva:iccad96} la primera optimización radical al algoritmo \dpll
+que dio origen a lo que hoy se conoce como procedimiento \cdcl. A partir de ese
+momento una serie de optimizaciones han sido desarrolladas para cada una de las
+partes del algoritmo desarrollado por Marques y Silva. La mayoría de estas
+optimización \todo[inline]{¿Todas?} son heurísticas para cada uno de los puntos
+de decisión del algoritmo \footnote{Para un relevamiento completo de las
+optimizaciones aplicadas al algoritmo \cdcl ver \cite{manthey:mathesis}}.
