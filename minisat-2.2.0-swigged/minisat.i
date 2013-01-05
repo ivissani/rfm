@@ -94,6 +94,19 @@ class Solver
                 // Ojo, me parece que las stats son demasiado static
                 //void print_stats(void) const { $self->printStats(); }
                
+				bool add_clause(const std::vector<int> &lits)
+                {
+                        int n = lits.size();
+                        vec<Lit> ps(n);
+                        int vmax = -1;
+                        for(int i = 0; i < n; ++i) {
+                                ps[i] = int2Lit(lits[i]);
+                                if(var(ps[i]) > vmax) vmax = var(ps[i]);
+                        }
+                        while($self->nVars() <= vmax) $self->newVar();
+                        return $self->addClause_(ps);
+                }
+			   
                 void reset_max_learnts() 
                 {
                         if ($self->nLearnts() > ($self->nClauses() * $self->learntsize_factor)) 
@@ -156,7 +169,10 @@ class Solver
                                 int var = abs(from[i]);
                                 assert(var <= $self->nVars());
 
-                                $self->uncheckedEnqueue((from[i]>0)?mkLit(var-1):~mkLit(var-1)); 
+								std::vector<int> unit_clause;
+								unit_clause.push_back(from[i]);
+                                //$self->uncheckedEnqueue((from[i]>0)?mkLit(var-1):~mkLit(var-1)); 
+								Solver_add_clause($self, unit_clause);
                         }
                 }
 
@@ -240,19 +256,6 @@ class Solver
                         int v = abs(upto);
                         while($self->nVars() <= v)
                                 $self->newVar();
-                }
-        
-                bool add_clause(const std::vector<int> &lits)
-                {
-                        int n = lits.size();
-                        vec<Lit> ps(n);
-                        int vmax = -1;
-                        for(int i = 0; i < n; ++i) {
-                                ps[i] = int2Lit(lits[i]);
-                                if(var(ps[i]) > vmax) vmax = var(ps[i]);
-                        }
-                        while($self->nVars() <= vmax) $self->newVar();
-                        return $self->addClause_(ps);
                 }
         
                 void set_assumptions(const std::vector<int> & assumps) 
