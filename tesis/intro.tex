@@ -156,14 +156,14 @@ esencia, un algoritmo de \bt.
 
 Tuvieron que pasar varios años para que Marques y Silva introdujeran en
 \cite{marques-silva:iccad96} la primera optimización radical al algoritmo \dpll
-que dio origen a lo que hoy se conoce como procedimiento \cdcl cuya base es el
-aprendizaje de nuevas cláusulas ante cada conflicto. Ésto permite recortar el
+que dio origen a lo que hoy se conoce como procedimiento \cdcl (\CDCL) cuya base
+es el aprendizaje de nuevas cláusulas ante cada conflicto. Ésto permite recortar el
 espacio de búsqueda de manerea dramática. A partir de ese momento una serie de
 optimizaciones han sido desarrolladas para cada una de las partes del algoritmo
 desarrollado por Marques y Silva. La mayoría de estas optimización
 \todo[inline]{¿Todas?} son heurísticas para cada uno de los puntos de decisión
 del algoritmo \footnote{Para un relevamiento completo de las optimizaciones
-aplicadas al algoritmo \cdcl ver \cite{manthey:mathesis}}.
+aplicadas al algoritmo \CDCL ver \cite{manthey:mathesis}}.
 
 A pesar de la mejora que representó la incorporación de aprendizaje propuesta
 por Marques y Silva, con el correr del tiempo se estableció que los \ssolvers
@@ -172,7 +172,7 @@ implicaciones que se siguen de cada una de las decisiones tomadas durante la
 búsqueda. Esta propagación incluye el barrido líneal \todo[inline]{Verificar
 ``lineal''} del conjunto de cláusulas que conforman el problema. Por lo tanto,
 la incorporación de nuevas cláusulas (el \emph{leitmotiv} del procedimiento
-\cdcl) a la vez que proporciona una ventaja al recortar el espacio de búsqueda
+\CDCL) a la vez que proporciona una ventaja al recortar el espacio de búsqueda
 representa una desventaja en tanto que incrementa la cantidad de cláusulas sobre
 las cuales es necesario realizar las propagaciones. Esta situación, sumado al
 hecho de que la incorporación de nuevas cláusulas también representa un problema
@@ -184,4 +184,21 @@ heurísticas con muy buenos resultados, el problema de determinar cuántas y
 cuáles cláusulas descartar (o su equivalente, preservar) sigue siendo un
 problema ampliamente estudiado en el mundo \sat.
 
+\section{SAT Solving paralelo y distribuido}
 
+El establecimiento del problema \sat como un problema \npc hace pensar que no es
+posible obtener un algoritmo polinomial que resuelva dicho problema. Además en
+los últimos años la rapidez en el incremento de la velocidad de las computadoras
+ha ido disminuyendo (esencialmente debido al problema de la disipación del calor
+y el consumo de energía) y en su lugar se ha producido un incremento en la
+cantidad de unidades de procesamiento disponibles así como su abaratamiento.
+Estos hechos han impulsado a la comunidad \sat a explorar la posibilidad de
+construir algortimos paralelos y dsitribuidos de \ssolving de modo de
+\begin{inparaenum}[a)] \item sacar el máximo provecho de la nueva tendencia en
+construcción de computadoras y \item proveer un algoritmo \textbf{escalable} que
+permita aprovechar el abaratamiento del \hard \end{inparaenum}.
+
+La aparición de los primeros \ssolvers paralelos y distribuidos
+\cite{bohm:1996:afast, zhang:jsc-1996} es contemporánea a la aparición del
+algoritmo \CDCL y por lo tanto estos algoritmos no atacaban el problema del
+aprendizaje de nuevas cláusulas en este nuevo contexto.
