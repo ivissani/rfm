@@ -1,0 +1,29 @@
+\begin{thebibliography}{RGLF10}
+
+\bibitem[GRLF09]{galeotti:apv09}
+Juan~{P.} Galeotti, Nicol\'{a}s~Federico Rosner, Carlos~{G.} {Lopez Pombo}, and
+  Marcelo~{F.} Frias.
+\newblock Distributed sat-based analysis of object oriented code.
+\newblock In Albert Meyer, Cristiano Calcagno, and Mart\'{\i}n Nordio, editors,
+  {\em Proceedings of the International Conference on Automatic Program
+  Verification}, R\'{\i}o Cuarto, C\'{o}rdoba, Argentina, February 2009.
+
+\bibitem[GRLF10]{galeotti:issta10}
+Juan~{P.} Galeotti, Nicol\'{a}s~Federico Rosner, Carlos~{G.} {Lopez Pombo}, and
+  Marcelo~{F.} Frias.
+\newblock Analysis of invariants for efficient bounded verification.
+\newblock In Paolo Tonella and Alessandro Orso, editors, {\em Proceedings of
+  the 2010 International Symposium on Software Testing and Analysis}, pages
+  25--35, Trento, Italy, July 2010. {ACM} Press.
+
+\bibitem[RGLF10]{rosner:abz10}
+Nicol\'{a}s~Federico Rosner, Juan~{P.} Galeotti, Carlos~{G.} {Lopez Pombo}, and
+  Marcelo~{F.} Frias.
+\newblock Paralloy: Towards a framework for efficient parallel analysis of
+  alloy models.
+\newblock In Marc Frappier, editor, {\em Proceedings of the 2nd International
+  Conference on Abstract State Machines ({ASM}), Alloy, B and Z}, volume 5977
+  of {\em Lecture Notes in Computer Science}, pages 396--397, Orford, Canada,
+  February 2010. Springer-Verlag.
+
+\end{thebibliography}
