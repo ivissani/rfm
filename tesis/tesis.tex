@@ -14,39 +14,7 @@
 
 \begin{document}
 
-%%%% CARATULA
-\def\autor{Ignacio Vissani}
-\def\titulo{Un \ssolver paralelo y distribuido con herencia de cláusulas aprendidas} 
-\def\runtitulo{Un \ssolver paralelo y distribuido con herencia de cláusulas aprendidas}
-\def\runtitle{A parallel and distributed \ssolver with learned clauses inheritance}
-\def\director{Nicolás Leandro Rosner}
-\def\codirector{Carlos Gustavo López Pombo}
-\def\lugar{Buenos Aires, 2013}
-\input{caratula}
-
-%%%% ABSTRACTS, AGRADECIMIENTOS Y DEDICATORIA
-\frontmatter
-\pagestyle{empty}
-\input{abs_esp.tex}
-
-\cleardoublepage
-\input{abs_en.tex}
-
-\cleardoublepage
-\input{agradecimientos.tex} % OPCIONAL: comentar si no se quiere
-
-\cleardoublepage
-\input{dedicatoria.tex}  % OPCIONAL: comentar si no se quiere
-
-\cleardoublepage
-\tableofcontents
-
-\mainmatter
-\pagestyle{headings}
-
-\theoremstyle{definition}
-\newtheorem{definition}{Definición}[section]
-
+%%% Definiciones de formato
 \newcommand{\mc}{\emph{Model Checking}\xspace}
 \newcommand{\smc}{\emph{Symbolic Model Checking}\xspace}
 \newcommand{\bmc}{\emph{Bounded Model Checking}\xspace}
@@ -72,6 +40,40 @@
 
 \newcommand{\soft}{\emph{software}\xspace}
 \newcommand{\hard}{\emph{hardware}\xspace}
+
+%%%% CARATULA
+\def\autor{Ignacio Vissani}
+\def\titulo{Un \ssolver paralelo y distribuido con herencia de cláusulas aprendidas} 
+\def\runtitulo{Un \ssolver paralelo y distribuido con herencia de cláusulas aprendidas}
+\def\runtitle{A parallel and distributed \ssolver with learned clauses inheritance}
+\def\director{Nicolás Leandro Rosner}
+\def\codirector{Carlos Gustavo López Pombo}
+\def\lugar{Buenos Aires, 2013}
+
+\input{caratula}
+
+%%%% ABSTRACTS, AGRADECIMIENTOS Y DEDICATORIA
+\frontmatter
+\pagestyle{empty}
+\input{abs_esp.tex}
+
+\cleardoublepage
+\input{abs_en.tex}
+
+\cleardoublepage
+\input{agradecimientos.tex} % OPCIONAL: comentar si no se quiere
+
+\cleardoublepage
+\input{dedicatoria.tex}  % OPCIONAL: comentar si no se quiere
+
+\cleardoublepage
+\tableofcontents
+
+\mainmatter
+\pagestyle{headings}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definición}[section]
 
 \newcommand{\defname}[1]{\textbf{\emph{[#1]}}}
 
