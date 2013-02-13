@@ -1,0 +1,17 @@
+digraph G {
+	node [shape=point,height=.15];
+	edge [arrowhead=none];
+	r [regular=true];
+	p [regular = true];
+	notp [regular = true];
+	sub0 [shape = triangle,style=filled,fillcolor=grey];
+	sub1 [shape = triangle,style=filled,fillcolor=grey];
+	sub2 [shape = triangle,style=filled,fillcolor=grey];
+	sub3 [shape = triangle,style=filled,fillcolor=grey];
+	r -> p [label=p];
+	r -> notp [label=¬p];
+	p -> sub0 [label=q];
+	p -> sub1 [label=¬q];
+	notp -> sub2 [label=q];
+	notp -> sub3 [label=¬q];
+}

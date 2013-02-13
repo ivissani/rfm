@@ -1,42 +1,41 @@
 %!TEX root = tesis.tex
 
 En la actualidad el \soft forma parte integral de nuestra vida cotidiana. El
-mismo interviene en todo tipo de tareas. Desde el envío de un mensaje de texto o
-la realización de una llamada telefónica hasta el sistema de control de una
-central nuclear, pasando por el control de un ascensor o el sistema de velocidad
-crucero de un automóvil, utilizan sistemas basados en \hard y \soft informático.
-La variedad, alcance y \textbf{criticidad} de las responsabilidades asignadas a
-las piezas de \soft hacen de las mismas un componente de alto impacto en nuestra
-realidad actual.
+mismo interviene en todo tipo de tareas. Desde el envío de un mensaje de texto
+o la realización de una llamada telefónica hasta el sistema de control de una
+central nuclear, pasando por el control de un ascensor o el sistema de
+velocidad crucero de un automóvil, utilizan sistemas basados en \hard y \soft
+informático. La variedad, alcance y \textbf{criticidad} de las
+responsabilidades asignadas a las piezas de \soft hacen de las mismas un
+componente de alto impacto en nuestra realidad actual.
 
-Por otra parte, la alta complejidad del \soft hace que la construcción del mismo
-sea una tarea propensa a errores. El impacto de una falla en un componente de
-\soft puede variar desde la imposibilidad de utilizar un artefacto doméstico
-hasta una catástofre de magnitudes como la fundición del núcleo de un reactor
-nuclear.
+Por otra parte, la alta complejidad del \soft hace que la construcción del
+mismo sea una tarea propensa a errores. El impacto de una falla en un
+componente de \soft puede variar desde la imposibilidad de utilizar un
+artefacto doméstico hasta una catástofre de magnitudes como la fundición del
+núcleo de un reactor nuclear.
 
 Son estos aspectos los que motivan la necesidad creciente de construir métodos
 (formalismos, metodologías, herramientas, etc.) que permitan garantizar la
 calidad del \soft en un sentido general. La posibilidad de establecer la
 ausencia de errores en un programa radica en la capacidad de establecer
-inequívocamente que ese programa cumple una determinada propiedad que expresa el
-adecuamiento del mismo al comportamiento esperado.
-Por ejemplo si quisiéramos establecer el correcto  funcionamiento del mecanismo
-de seguridad de un horno de microondas podríamos enunciar una propiedad como la
-siguiente: ``No es posible encender el microondas si la puerta está abierta''.
+inequívocamente que ese programa cumple una determinada propiedad que expresa
+el adecuamiento del mismo al comportamiento esperado. Por ejemplo si
+quisiéramos establecer el correcto  funcionamiento del mecanismo de seguridad
+de un horno de microondas podríamos enunciar una propiedad como la siguiente:
+``No es posible encender el microondas si la puerta está abierta''.
 
 La \textbf{verificación formal} de \soft consiste en demostrar que un
 determinado sistema o algoritmo es correcto respecto a una
 \textbf{especificación formal} del mismo. Los lenguajes naturales son
-intrínsecamente ambiguos y por lo tanto una descripción de un sistema realizada
-en lenguaje natural no puede ser verificada. Una especificación formal es una
-descripción en un lenguaje formal de un sistema de \soft. Un lenguaje para ser
-formal debe poseer: \begin{inparaenum}[a)] \item reglas para determinar cuándo
-una sentencia pertenece al lenguaje (sintaxis) \item reglas que permitan
-interpretar las sentencias (bien formadas) de manera precisa y significativa
-(semántica) y \item reglas para inferir información útil a partir de la
-especificación (\emph{proof theory})
-\end{inparaenum}
+intrínsecamente ambiguos y por lo tanto una descripción de un sistema
+realizada en lenguaje natural no puede ser verificada. Una especificación
+formal es una descripción en un lenguaje formal de un sistema de \soft. Un
+lenguaje para ser formal debe poseer: \begin{inparaenum}[a)] \item reglas para
+determinar cuándo una sentencia pertenece al lenguaje (sintaxis) \item reglas
+que permitan interpretar las sentencias (bien formadas) de manera precisa y
+significativa (semántica) y \item reglas para inferir información útil a
+partir de la especificación (\emph{proof theory}) \end{inparaenum}
 
 El enfoque de la verificación formal de software, tal vez uno de los más
 ambiciosos en el campo de la ingeniería de software, enfrenta dos problemas
@@ -53,10 +52,11 @@ no es un teorema.
 El problema de la indecidibilidad se transforma en un escollo fundamental en
 tanto impide la construcción de métodos de verificación formal completamente
 automáticos. Diversos enfoques han sido desarrollados para atacar este
-problema \todo[inline]{Buscar citas. SMT Solving, Bounded MC, etc}. La mayoría de estos métodos consisten en
-restringir de alguna manera el lenguaje formal utilizado de modo de generar un
-sublenguaje del mismo que sea decidible. Uno de los enfoques desarrollados en
-este sentido es el conocido como \bmc (verficación acotada de modelos).
+problema \todo[inline]{Buscar citas. SMT Solving, Bounded MC, etc}. La mayoría
+de estos métodos consisten en restringir de alguna manera el lenguaje formal
+utilizado de modo de generar un sublenguaje del mismo que sea decidible. Uno
+de los enfoques desarrollados en este sentido es el conocido como \bmc
+(verficación acotada de modelos).
 
 \mc\cite{emerson:scp-2_3} es una técnica desarrollada para la verificación de
 sistemas reactivos. La técnica consiste en la exploración exhaustiva y
@@ -69,9 +69,9 @@ grafo de estados del sistema utilizando fórmulas proposicionales para
 caracterizar conjuntos y relaciones. En \smc el chequeo de las fórmulas
 proposicionales es realizada típicamente mediante la manipulación de BDDs
 (\bdds), una forma canónica de representar dichas fórmulas. A pesar de que las
-técnicas de \smc basadas en  BDDs son capaces de manejar sistemas con cientos de
-estados, el tamaño de los BDDs generados para sistemas grandes se vuelve
-prohibitivo. 
+técnicas de \smc basadas en  BDDs son capaces de manejar sistemas con cientos
+de estados, el tamaño de los BDDs generados para sistemas grandes se vuelve
+prohibitivo.
 
 El problema del espacio requerido por los BDDs motivó la creación de la
 técnica conocida como \bmc\cite{Biere:1999:SMC:646483.691738} que reemplaza la
@@ -114,35 +114,35 @@ casos de test, validación de código y especificaciones, etc.
 \section{Alloy}
 
 Existen una variedad de herramientas formales que utilizan el enfoque de \bmc
-aplicado a la especificación y verificación de \soft. Alloy
-\cite{jackson:acmtosem-11_2} es un lenguaje formal diseñado para expresar las
-propiedades estructurales de un sistema. Posee una sintaxis declarativa lo
-suficientemente poderosa como para expresar propiedades complejas y a la vez
-plausible de ser analizada de forma completamente automática. De hecho, Alloy es
-también una herramienta capaz de analizar automáticamente especificaciones
-escritas en lenguaje Alloy.
+aplicado a la especificación y verificación de \soft. Alloy \cite{jackson
+:acmtosem-11_2} es un lenguaje formal diseñado para expresar las propiedades
+estructurales de un sistema. Posee una sintaxis declarativa lo suficientemente
+poderosa como para expresar propiedades complejas y a la vez plausible de ser
+analizada de forma completamente automática. De hecho, Alloy es también una
+herramienta capaz de analizar automáticamente especificaciones escritas en
+lenguaje Alloy.
 
 \missingfigure{Ejemplo especificación Alloy}
 
-\todo{Sarabastaza de Alloy hasta llegar a que se traduce a un problema SAT. Tal
-vez mencionar extensiones como DynAlloy y casos de estudio exitosos}
+\todo{Sarabastaza de Alloy hasta llegar a que se traduce a un problema SAT.
+Tal vez mencionar extensiones como DynAlloy y casos de estudio exitosos}
 
 \section{SAT Solving}
 
 El interés en construir procedimientos sistemáticos y automáticos de
 demostración se remonta al interés que tuvieron diversos matemáticos en
-construir un método de esas características para la lógica de primer orden. Uno
-de los máximos exponentes fue David Hilbert, quien enunció que la búsqueda de un
-algoritmo de decisión para la lógica de primer orden era el problema central de
-la lógica matemática. La demostración de que un procedimiento de estas
-características no era posible elaborada por Church y Turing provocó una pérdida
-de interés en esta clase de problemas. Sin embargo la construcción de
-procedimientos, no ya de decisión, sino de demostración para la lógica de primer
-orden (entre los cuales se destaca el desarrollado por Martin Davis y Hilary
-Putnam \cite{Davis:1960:CPQ:321033.321034}) sumada a los crecientes campos de
-aplicación, dentro de las ciencias de la computación, de lógicas decidibles o de
-fragmentos decidibles de lógicas no decidibles, dieron un nuevo impulso al
-desarrollo de estos métodos. 
+construir un método de esas características para la lógica de primer orden.
+Uno de los máximos exponentes fue David Hilbert, quien enunció que la búsqueda
+de un algoritmo de decisión para la lógica de primer orden era el problema
+central de la lógica matemática. La demostración de que un procedimiento de
+estas características no era posible elaborada por Church y Turing provocó una
+pérdida de interés en esta clase de problemas. Sin embargo la construcción de
+procedimientos, no ya de decisión, sino de demostración para la lógica de
+primer orden (entre los cuales se destaca el desarrollado por Martin Davis y
+Hilary Putnam \cite{Davis:1960:CPQ:321033.321034}) sumada a los crecientes
+campos de aplicación, dentro de las ciencias de la computación, de lógicas
+decidibles o de fragmentos decidibles de lógicas no decidibles, dieron un
+nuevo impulso al desarrollo de estos métodos.
 
 En particular la variedad de aplicaciones que fueron surgiendo para la lógica
 proposicional (\emph{Planning} en inteligencia artificial, demostración
@@ -154,8 +154,8 @@ establecimiento de este problema como el primer problema \npc
 hoy permiten manejar fórmulas de cientos de miles de variables eficientemente.
 
 Si bien existe una variedad de métodos para determinar si una fórmula
-proposicional puede ser verdadera, los más utilizados son aquellos derivados del
-algoritmo desarrollado por Davis, Longemann y Loveland (\dpll) en
+proposicional puede ser verdadera, los más utilizados son aquellos derivados
+del algoritmo desarrollado por Davis, Longemann y Loveland (\dpll) en
 \cite{Davis:1962:MPT:368273.368557} que es un refinamiento del algoritmo
 presentado en \cite{Davis:1960:CPQ:321033.321034}. Este procedimiento es, en
 esencia, un algoritmo de \bt.
@@ -192,19 +192,54 @@ sigue siendo un problema ampliamente estudiado en el mundo \sat.
 
 \section{SAT Solving paralelo y distribuido}
 
-El establecimiento del problema \sat como un problema \npc hace pensar que no es
-posible obtener un algoritmo polinomial que resuelva dicho problema. Además en
-los últimos años la rapidez en el incremento de la velocidad de las computadoras
-ha ido disminuyendo (esencialmente debido al problema de la disipación del calor
-y el consumo de energía) y en su lugar se ha producido un incremento en la
-cantidad de unidades de procesamiento disponibles así como su abaratamiento.
-Estos hechos han impulsado a la comunidad \sat a explorar la posibilidad de
-construir algortimos paralelos y dsitribuidos de \ssolving de modo de
-\begin{inparaenum}[a)] \item sacar el máximo provecho de la nueva tendencia en
-construcción de computadoras y \item proveer un algoritmo \textbf{escalable} que
-permita aprovechar el abaratamiento del \hard \end{inparaenum}.
+El establecimiento del problema \sat como un problema \npc hace pensar que no
+es posible obtener un algoritmo polinomial que resuelva dicho problema. Además
+en los últimos años la rapidez en el incremento de la velocidad de las
+computadoras ha ido disminuyendo (esencialmente debido al problema de la
+disipación del calor y el consumo de energía) y en su lugar se ha producido un
+incremento en la cantidad de unidades de procesamiento disponibles así como su
+abaratamiento. Estos hechos han impulsado a la comunidad \sat a explorar la
+posibilidad de construir algortimos paralelos y distribuidos de \ssolving de
+modo de \begin{inparaenum}[a)] \item sacar el máximo provecho de la nueva
+tendencia en construcción de computadoras y \item proveer un algoritmo
+\textbf{escalable} que permita aprovechar el abaratamiento del \hard
+\end{inparaenum}.
 
 La aparición de los primeros \ssolvers paralelos y distribuidos
 \cite{bohm:1996:afast, zhang:jsc-1996} es contemporánea a la aparición del
-algoritmo \CDCL y por lo tanto estos algoritmos no atacaban el problema del
-aprendizaje de nuevas cláusulas en este nuevo contexto.
+algoritmo \CDCL. Por lo tanto los primeros \ssolvers paralelos fueron
+desarrollados sobre la base del algoritmo \dpll. Es decir que estos \ssolvers
+no incorporaban aprendizaje de nuevas cláusulas.
+
+Una de las razones que llevaron a que existieran implementaciones tempranas de
+algoritmos paralelos para el problema \sat es que este problema presenta una
+forma intuitiva y fácil de ser dividido. La idea consiste en seleccionar un
+subconjunto pequeño de variables del problema y generar las $2^n$ asignaciones
+posibles de valores de verdad a este subconjunto. Cada una de estas
+asignaciones es una asignación parcial del problema original y por lo tanto lo
+que obtenemos son $2^n$ subproblemas \textbf{disjuntos} que pueden ser
+enviados a distintas unidades de procesamiento. Cada unidad de procesamiento
+puede utilizar entonces alguna implementación de un algoritmo de \ssolving
+secuencial para resolver el subproblema que le haya tocado. Esta técnica,
+llamada \gp, introduce una pregunta fundamental: ¿De qué modo determinar un
+\gp efectivo? Esto es, cómo construir un \gp que distribuya equitativamente la
+carga de trabajo entre las distintas unidades de procesamiento.
+
+El enfoque anterior de división de un problema \sat es adecuado para un
+escenario con unidades de procesamiento que se comunican a través de una red,
+como pude ser un \emph{cluster} o en computación \emph{grid}. La proliferación
+de computadoras con múltiples procesadores y múltiples núcleos impulsó la
+investigación sobre formas de paralelización de \ssolvers en un escenario
+donde las múltiples unidades de procesamiento tienen acceso uniforme a una
+memoria común. Este nuevo escenario permitió el desarrollo de una forma
+radicalmente distinta de paralelización de un problema \sat. La misma consiste
+escencialmente en lo que se conoce como \emph{portfolio}. La idea se
+fundamenta en la observación de que distintos \ssolvers secuenciales, o un
+mismo \ssolver con distintos parámetros, pueden resolver un mismo problema en
+tiempos sumamente diferentes. Sobre esta base se desarrollaron \ssolvers
+paralelos que en lugar de dividir el problema a resolver, ejecutan distintos
+\ssolvers sobre el mismo problema (o un mismo \ssolver con distintos
+parámetros) y comparten las cláusulas aprendidas entre las distintas
+instancias. Por supuesto, distintas implementaciones concretas han sido
+desarrolladas sobre esta idea, e incluso implementaciones híbridas que
+combinan las dos formas de paralelización antedichas. \todo{Faltan citas}
