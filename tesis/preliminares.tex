@@ -3,6 +3,91 @@
 \newcommand{\disj}[1]{\ensuremath{[#1]}}
 \newcommand{\conj}[1]{\ensuremath{\{#1\}}}
 
+\section{Lógica proposicional}
+% El origen de la lógica proposcional, o lógica de predicados puede ser rastreado hasta la antigua Grecia. 
+La lógica proposicional es la rama de la lógica de estudia los predicados y sus combinaciones.
+\begin{definition}
+\defname{Predicado} Un predicado es una sentencia que puede ser verdadera o falsa
+\end{definition}
+
+La formalización más utilizada de la lógica proposicional es la desarrollada
+por el matemático inglés George Boole.  La formalización desarrollada por
+Boole es un formalización algebraica
+
+\begin{definition}
+\todo{Revisar esta definición}
+\defname{Álgebra de Boole} Un álgebra de Boole consiste de 
+	\begin{enumerate}
+		\item Un conjunto de variables proposicionales $\{p, q, \ldots\}$ que toman valores del conjunto $\{True, False\}$ ($\{1, 0\}$)
+		\item Dos operadores binarios $\wedge\ (\cdot)$  y $\vee\ (+)$
+		\item Un operador unario $\neg\ (-)$
+	\end{enumerate}
+	Tal que 
+	\begin{itemize}
+		\item Si $p$ es una variable proposicional, entonces $p$ y $-p$ son literales
+		\item Un literal es una fórmula proposicional
+		\item Si $\phi_1$ y $\phi_2$ son fórmulas proposicional entonces $\phi_1 \cdot \phi_2$ es una fórmula, $\phi_1 + \phi_2$ es una fórmula y $-\phi_1$ es una fórmula
+	\end{itemize}
+	y se cumplen las siguientes propiedades
+	\begin{itemize}
+		\item $--p = p$
+		\item $p + q = q + p$ y $p \cdot q = q \cdot p$ (conmutatividad)
+		\item $p + (q + r) = (p + q) + r$ y $p \cdot (q \cdot r) = (p \cdot q) \cdot r$ (asociatividad)
+		\item $p + (q \cdot r) = (p + q) \cdot (p + r)$ y $p \cdot (q + r) = (p \cdot q) + (p \cdot r)$ (distributividad)
+		\item $p + 0 = p$ y $p \cdot 1 = p$ 
+		\item $p + 1 = 1$ y $p \cdot 0 = 0$
+		\item $p + -p = 1$ y $p \cdot -p = 0$
+		\item $p \cdot (p + q) = p$ y $p + (p \cdot q) = p$ (absorción)
+	\end{itemize}
+\end{definition}
+
+\begin{definition}
+\defname{Valuación} Sea $\varphi$ una fórmula de la lógica proposicional con variables $\{p_1, \ldots, p_n\}$, entonces una valuación de la fórmula $\varphi$ es una asignación de los valores $\{0, 1\}$ a cada una de las variables proposicionales de $\varphi$.
+\end{definition}
+
+Por ejemplo, sean $\{v_1, \ldots, v_n\}$ con $v_i \in \{0, 1\}$ y una fórmula proposicional $\varphi$ con variables $\{p_1, \ldots, p_n\}$, entonces $\{p_1 \leftarrow v_1, \ldots, p_n \leftarrow v_n\}$ es una valuación.
+
+\begin{definition}
+\defname{Valuación parcial} Una valuación parcial de una fórmula proposicional $\varphi$ es una valuación sobre un subconjunto propio de las variables proposicionales de $\varphi$
+\end{definition}
+
+\begin{definition}
+\defname{Fórmula satisfacible (\sat)} Una fórmula proposicional $\varphi$ es satisfacible si existe al menos una valuación que haga que la fórmula sea verdadera. Si la fórmula $\varphi$ bajo la valuación $V$ es verdadera, decimos que $V$ satisface a $\varphi$.
+\end{definition}
+
+\begin{definition}
+\defname{Tautología} Una fórmula $\varphi$ es una tautología si y solo si toda valuación $V$ la satisface.
+\end{definition}
+
+\begin{definition}
+\defname{Contradicción} Una fórmula $\varphi$ es una contradicción si y solo si ninguna valuación $V$ la satisface.
+\end{definition}
+
+\begin{definition}
+\defname{Fórmula insatisfacible (\unsat)} Una fórmula $\varphi$ es insatisfacible (o \unsat) si y solo si es una contradicción.
+\end{definition}
+
+
+\subsection{Forma Normal Conjuntiva}
+
+\begin{definition} \defname{Forma Normal Conjuntiva} Una fórmula $\varphi$ de
+la lógica proposicional se encuentra en Forma Normal Conjuntiva (\cnf por sus
+siglas en inglés) si la misma es una conjunción de cláusulas, donde cada
+cláusula es una disyunción de literales. \end{definition}
+
+Por ejemplo, la fórmula $\phi = (p \vee q) \wedge (-p \vee q)$ se encuentra
+en \cnf y posee dos cláusulas $C_1 = p \vee q$ y $C_2 = -p \vee q$. Dado que los
+conectores lógicos están implícitos cuando una fórmula se encuentra en \cnf
+normalmente escribimos $\phi = \conj{\disj{p, q}, \disj{-p, q}}$ de modo equivalente.
+
+\begin{definition}
+\defname{Fórmulas equivalentes} Dos fórmulas proposicionales $\varphi_1$ y $\varphi_2$ son equivalentes si y solo si para toda valuación $V$, $V$ satisface a $\varphi_1$ $\Longleftrightarrow$ $V$ satisface a $\varphi_2$.
+\end{definition}
+
+\begin{theorem}\label{th:cnfequiv}
+Para toda fórmula de la lógica proposicional es posible encontrar una fórmula equivalente que se encuentre en \cnf
+\end{theorem}
+
 \section{El problema de la SATisfactiblidad}
 
 El problema de la satisfactibilidad (\emph{SAT problem}) consiste en determinar
@@ -10,11 +95,14 @@ si existe alguna asignación de valores de verdad (\true|\false) a cada una de
 las variables booleanas que aparecen en una fórmula $\phi$ de la lógica
 proposicional de modo que $\phi$ se haga verdadera. En caso de que dicha
 asignación exista decimos que $\phi$ es satisfacible (o simplemente \sat) y la
-asignación o valuación $\{ v_1 \leftarrow V_1, \ldots, v_n \leftarrow V_n \}$
+asignación o valuación $\{ p_1 \leftarrow v_1, \ldots, p_n \leftarrow v_n \}$
 correspondiente es un \textbf{modelo} de $\phi$. Es importante notar que en caso
 de que una fórmula sea \sat podría existir más de una valuación que haga que la
 fórmula sea verdadera. Si no existe ninguna valuación que haga verdadera a
 $\phi$ decimos que $\phi$ es insatisfacible (o \unsat).
+
+Dado el teorema \ref{th:cnfequiv} el problema \sat se define equivalentemente
+como el problema de determinar si una fórmula en \cnf es satisfacible o no.
 
 El problema de determinar si una fórmula $\phi$ dada es \sat o \unsat pertenece
 a la clase de problemas \npc\cite{Cook:1971:CTP:800157.805047}. Es decir que no
@@ -38,17 +126,7 @@ variaciones del algoritmo general
 DPLL\cite{Davis:1962:MPT:368273.368557} y actúan sobre fórmulas
 proposicionales expresadas en Forma Normal Conjuntiva (\cnf).
 
-\subsection{Forma Normal Conjuntiva}
 
-Decimos que una fórmula de la lógica proposicional se encuentra en Forma Normal
-Conjuntiva (\cnf por sus siglas en inglés) si la misma es una conjunción de
-cláusulas, donde cada cláusula es una disyunción de literales; un literal es una
-variable $v$ o su negación $-v$.
-
-Por ejemplo, la fórmula $\phi = (p \vee q) \wedge (-p \vee q)$ se encuentra
-en \cnf y posee dos cláusulas $C_1 = p \vee q$ y $C_2 = -p \vee q$. Dado que los
-conectores lógicos están implícitos cuando una fórmula se encuentra en \cnf
-normalmente escribimos $\phi = \conj{\disj{p, q}, \disj{-p, q}}$ de modo equivalente.
 
 \begin{definition} 
 \defname{Cláusula unitaria} Una cláusula se llama \textbf{unitaria} si
