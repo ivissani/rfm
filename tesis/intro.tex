@@ -1,4 +1,6 @@
 %!TEX root = tesis.tex
+\chapter{Introducción}
+\label{intro}
 
 En la actualidad el \soft forma parte integral de nuestra vida cotidiana. El
 mismo interviene en todo tipo de tareas. Desde el envío de un mensaje de texto
@@ -12,7 +14,7 @@ componente de alto impacto en nuestra realidad actual.
 Por otra parte, la alta complejidad del \soft hace que la construcción del
 mismo sea una tarea propensa a errores. El impacto de una falla en un
 componente de \soft puede variar desde la imposibilidad de utilizar un
-artefacto doméstico hasta una catástofre de magnitudes como la fundición del
+artefacto doméstico hasta una catástrofe de magnitudes como la fundición del
 núcleo de un reactor nuclear.
 
 Son estos aspectos los que motivan la necesidad creciente de construir métodos
@@ -29,25 +31,25 @@ La \textbf{verificación formal} de \soft consiste en demostrar que un
 determinado sistema o algoritmo es correcto respecto a una
 \textbf{especificación formal} del mismo. Los lenguajes naturales son
 intrínsecamente ambiguos y por lo tanto una descripción de un sistema
-realizada en lenguaje natural no puede ser verificada. Una especificación
-formal es una descripción en un lenguaje formal de un sistema de \soft. Un
-lenguaje para ser formal debe poseer: \begin{inparaenum}[a)] \item reglas para
-determinar cuándo una sentencia pertenece al lenguaje (sintaxis) \item reglas
-que permitan interpretar las sentencias (bien formadas) de manera precisa y
-significativa (semántica) y \item reglas para inferir información útil a
-partir de la especificación (\emph{proof theory}) \end{inparaenum}
+realizada en lenguaje natural resulta muy difícil de verificar. En lo subsiguiente asumiremos que una especificación
+será formal en tanto está descripta en un lenguaje que posee: 
+\begin{inparaenum}[a)] 
+\item reglas para determinar cuándo una sentencia pertenece al lenguaje (sintaxis), 
+\item reglas que permitan interpretar las sentencias (bien formadas) de manera precisa y
+significativa (semántica), y 
+\item reglas para inferir información útil a partir de la especificación (\emph{proof theory}). 
+\end{inparaenum}
 
 El enfoque de la verificación formal de software, tal vez uno de los más
 ambiciosos en el campo de la ingeniería de software, enfrenta dos problemas
 fundamentales. En primer lugar está la dificultad de construir una
 especificación formal que exprese de manera correcta el comportamiento
-esperado del sistema (validación) ya que el mismo normalmente proviene de
+esperado del sistema (a lo que llamaremos validación) ya que el mismo normalmente proviene de
 requerimientos expresados en lenguaje natural. El segundo problema fundamental
 es que las lógicas subyacentes a la mayoría de los lenguajes formales capaces
 de expresar un conjunto lo suficientemente amplio e interesante de propiedades
 son normalmente indecidibles, es decir que no existe un algoritmo capaz de,
-para toda fórmula del lenguaje, establecer si la misma es verdadera, falsa o
-no es un teorema.
+para toda fórmula del lenguaje, establecer si la misma es un teorema o no.
 
 El problema de la indecidibilidad se transforma en un escollo fundamental en
 tanto impide la construcción de métodos de verificación formal completamente
@@ -62,70 +64,40 @@ de los enfoques desarrollados en este sentido es el conocido como \bmc
 sistemas reactivos. La técnica consiste en la exploración exhaustiva y
 automática del espacio de estados de un sistema modelado como una máquina de
 estados finita. Cuando la cantidad de estados del sistema es relativamente
-grande la exploración exhaustiva del espacio de estados se vuelve inpractible.
+grande la exploración exhaustiva del espacio de estados se vuelve inpracticable.
 Esto motivó el desarrollo de la técnica conocida como \smc\cite{burch:lics90,
 mcmillan93} que ataca el problema antedicho a partir de evitar construir el
-grafo de estados del sistema utilizando fórmulas proposicionales para
-caracterizar conjuntos y relaciones. En \smc el chequeo de las fórmulas
-proposicionales es realizada típicamente mediante la manipulación de BDDs
+grafo de estados del sistema utilizando fórmulas lógicas para
+caracterizar conjuntos y relaciones. Cuando se trata de fórmulas proposicionales, en \smc el chequeo de las fórmulas es realizada típicamente mediante el uso de BDDs
 (\bdds), una forma canónica de representar dichas fórmulas. A pesar de que las
 técnicas de \smc basadas en  BDDs son capaces de manejar sistemas con cientos
 de estados, el tamaño de los BDDs generados para sistemas grandes se vuelve
 prohibitivo.
 
 El problema del espacio requerido por los BDDs motivó la creación de la
-técnica conocida como \bmc\cite{Biere:1999:SMC:646483.691738} que reemplaza la
+técnica conocida como \bmc\cite{Biere:1999:SMC:646483.691738}\marginpar{BMC no está vinculado unívocamente a sat-based. BMC aparece, como dijiste antes, para lidiar con los lenguajes indesidibles mientras que sat-based es una manera de hacer tanto MC como BMC aprovechando los avances en ese área en particular. Esto último es el argumento de quienes usan SS off-the-shelf. Yo acá diría testo último.} que reemplaza la
 utilización de BDDs por la verificación de fórmulas proposicionales a través
 de procedimientos SAT capaces de manejar en la actualidad fórmulas
 proposicionales con varios miles de variables. En particular, la técnica
 presentada en \cite{Biere:1999:SMC:646483.691738} consiste en buscar
 contraejemplos de una longitud acotada $k$ a partir de generar una fórmula
 proposicional que sea verdadera si y sólo si un contraejemplo de dicha
-longitud existe. Si bien esta técnica es completa para sistemas modelados como
+longitud existe. Si bien esta técnica es correcta y completa para sistemas modelados como
 máquinas de estados finitos ya que el espacio de búsqueda, aunque
-exponencialmente grande, es finito, no es cierto que esta metodología aplicada
-a un lenguaje formal general sea completa\todo{Revisar esto}. La perdida de
-completitud en el caso general generada por la introducción de la cota en la
-longitud del contraejemplo es lo que, aplicado a un sistema lógico
-indecidible, permite obtener un subconjunto del lenguaje original que ahora es
-decidible y, por lo tanto, automáticamente verificable \todo{Revisar esto}. Un
-ejemplo típico de esto se da en lenguajes donde la indecidibilidad se da a
-partir de la existencia de cuantificadores existenciales sobre dominios no
-acotados. En estos casos la cota en la longitud del contraejemplo se traduce
-en una cota para cada uno de los dominios no acotados. De este modo las
-cuantificaciones existenciales se convierten en disjunciones acotadas y por lo
-tanto el lenguaje se vuelve decidible (y en particular codificable como una
-fórmula proposicional suceptible de ser verificada automáticamente). Por
-ejemplo la fórmula \begin{equation}(\exists x)\ (\alpha(x))\end{equation} a
-partir de la introducción de la cota sobre el dominio de $x$ se transforma en
-la fórmula finita \begin{equation}\left(\exists t \in
-\{t_1,\ldots,t_n\}\right)\ \left(\alpha(t)\right)\end{equation} o lo que es lo
-mismo \begin{equation} \alpha(t_1) \vee \ldots \vee \alpha(t_n)\end{equation}
+usualmente sea exponencialmente grande, es finito, no es cierto que esta metodología aplicada
+a un lenguaje formal cualquiera sea siquiera correcta, tómese por ejemplo cualquier lenguaje lógico que no posea la propiedad de modelo finito. Siempre que un lenguaje no posea la propiedad de modelo finito, existen conjuntos de fórmulas cuyos modelos son necesariamente infinitos, de esta forma, la exploración de un subespacio finito en busca de un modelo no puede nunca garantizar una respuesta negativa. Esta debilidad, en el caso general, generada por la introducción de la cota en el tamaño del contraejemplo es lo que, aplicado a un sistema lógico indecidible, permite obtener un subconjunto del lenguaje original que resulte decidible y, por lo tanto, automáticamente verificable. Aun cuando las respuestas del procedimiento utilizado resulten parciales respecto de la validez de una propiedad determinada en el lenguaje original.
 
-Debido a la incorrectitud generada por la introducción de la cota en la
-longitud del contraejemplo, \bmc no puede ser considerada una técnica de
-verificación en el sentido estricto. Sin embargo la utilización de \bmc
-permite ganar confianza en la propiedad que se quiere verificar antes de
-embarcarse en la costosa tarea de demostrarla formalmente. Además \bmc ha sido
-aplicada con éxito a otras áreas relacionadas como la generación automática de
-casos de test, validación de código y especificaciones, etc.
+Un ejemplo típico de esto se da en lenguajes de primer orden donde la indecidibilidad se da a partir de la existencia de cuantificadores existenciales sobre dominios no acotados. En estos casos la cota en el tamaño del contraejemplo puede ser la resultante de establecer una cota a cada uno de los dominios que aparecen en la signatura. De este modo las cuantificaciones existenciales se convierten en disjunciones y por lo tanto el lenguaje se vuelve decidible (y en particular codificable como una fórmula proposicional suceptible de ser verificada automáticamente). Por ejemplo la fórmula: 
+\begin{equation}(\exists x)\ (\alpha(x))\end{equation} 
+\noindent a partir de la introducción de la cota sobre el dominio del cual toma valores $x$ se transforma en la fórmula finita: 
+\begin{equation}\left(\exists t \in \{t_1,\ldots,t_n\}\right)\ \left(\alpha(t)\right)\end{equation} 
+\noindent o lo que es lo mismo: 
+\begin{equation} \alpha(t_1) \vee \ldots \vee \alpha(t_n)\end{equation}
 
+Cabe mencionar que esta restricción al tamaño de los contraejemplos introducida por forzar que la interpretación de los dominios sea sobre conjuntos finitos hace que el método de análisis no sea correcto ya que la ausencia de contraejemplos a una propiedad determinada dentro de ciertas cotas no garantiza la ausencia de contraejemplos para cotas de mayor tamaño. Por esta razón, \bmc no puede ser considerada una técnica de verificación en el sentido estricto. Sin embargo la utilización de \bmc permite ganar confianza en la propiedad que se quiere verificar antes de embarcarse en la costosa tarea de demostrarla formalmente. Algunas aplicaciones exitosas de \bmc son la generación automática de casos de test, validación de código y especificaciones, etc.\todo{citas}
 
-\section{Alloy}
+Existe una variedad de herramientas formales que utilizan el enfoque de \bmc basado en sat-solving que mencionamos en los párrafos anteriores. Una de las más difundidas es Alloy \cite{jackson:acmtosem-11_2}. Alloy es un lenguaje formal de primer orden diseñado para expresar las propiedades estructurales de un sistema; posee una sintaxis declarativa cercana a los lenguajes orientados a objetos y lo suficientemente poderosa como para expresar propiedades complejas y a la vez plausible de ser analizada de forma completamente automática a partir de una traducción como la que mencionamos en los párrafos precedentes.
 
-Existen una variedad de herramientas formales que utilizan el enfoque de \bmc
-aplicado a la especificación y verificación de \soft. Alloy \cite{jackson
-:acmtosem-11_2} es un lenguaje formal diseñado para expresar las propiedades
-estructurales de un sistema. Posee una sintaxis declarativa lo suficientemente
-poderosa como para expresar propiedades complejas y a la vez plausible de ser
-analizada de forma completamente automática. De hecho, Alloy es también una
-herramienta capaz de analizar automáticamente especificaciones escritas en
-lenguaje Alloy.
-
-\missingfigure{Ejemplo especificación Alloy}
-
-\todo{Sarabastaza de Alloy hasta llegar a que se traduce a un problema SAT.
-Tal vez mencionar extensiones como DynAlloy y casos de estudio exitosos}
 
 \section{SAT Solving}
 
@@ -134,7 +106,7 @@ demostración se remonta al interés que tuvieron diversos matemáticos en
 construir un método de esas características para la lógica de primer orden.
 Uno de los máximos exponentes fue David Hilbert, quien enunció que la búsqueda
 de un algoritmo de decisión para la lógica de primer orden era el problema
-central de la lógica matemática. La demostración de que un procedimiento de
+central de la lógica matemática.\marginpar{Esta aseveración es medio fuerte porque métodos matemáticos en el sentido de algoritmo para resolver cosas hay desde hace mucho y decir que la cosa empezó con Hilbert en el 1900 es un cacho fuerte.} La demostración de que un procedimiento de
 estas características no era posible elaborada por Church y Turing provocó una
 pérdida de interés en esta clase de problemas. Sin embargo la construcción de
 procedimientos, no ya de decisión, sino de demostración para la lógica de
@@ -164,61 +136,60 @@ Tuvieron que pasar varios años para que Marques-Silva introdujera en \cite
 {marques-silva:iccad96} la primera optimización radical al algoritmo \dpll que
 dio origen a lo que hoy se conoce como procedimiento \cdcl (\CDCL) cuya base
 es el aprendizaje de nuevas cláusulas ante cada conflicto. Ésto permite
-recortar el espacio de búsqueda de manerea dramática. A partir de ese momento
-una serie de optimizaciones han sido desarrolladas para cada una de las partes
-del algoritmo desarrollado por Marques-Silva. La mayoría de estas
-optimizaciones \todo[inline]{¿Todas?} son heurísticas para cada uno de los
-puntos de decisión del algoritmo \footnote{Para un relevamiento completo de
-las optimizaciones aplicadas al algoritmo \CDCL ver \cite{manthey:mathesis}}.
+recortar el espacio de búsqueda de manera dramática. A partir de ese momento
+una serie de mejoras han sido desarrolladas para cada una de las partes críticas
+del algoritmo desarrollado por Marques-Silva.
+% La mayoría de estas optimizaciones \todo[inline]{¿Todas?} son heurísticas para cada uno de los puntos de decisión del algoritmo \footnote{Para un relevamiento completo de las optimizaciones aplicadas al algoritmo \CDCL ver \cite{manthey:mathesis}}.
 
-A pesar de la mejora que representó la incorporación de aprendizaje propuesta
+Una de estas mejoras introducidas en forma temprana sobre el algoritmo \dpll es la denominada BCP \cite{???} (por su inglés \emph{Boolean Constraint Propagation}). \todo{Explicar overview.}
+
+A pesar de la enorme mejora que representó la incorporación de aprendizaje propuesta
 por Marques-Silva, con el correr del tiempo se estableció que los \ssolvers
 invierten la mayor parte de su tiempo (cerca del $90\%$) en propagar las
 implicaciones que se siguen de cada una de las decisiones tomadas durante la
-búsqueda. Esta propagación incluye el recorrido líneal \todo[inline]{Verificar
-``lineal''} del conjunto de cláusulas que conforman el problema. Por lo tanto,
-la incorporación de nuevas cláusulas (el \emph{leitmotiv} del procedimiento
+búsqueda. Esta propagación incluye el recorrido del conjunto de cláusulas que conforman el problema cuya complejidad oscila entre lineal y cuadrática. De esta forma, la incorporación de nuevas cláusulas (el \emph{leitmotiv} del procedimiento
 \CDCL) a la vez que proporciona una ventaja al recortar el espacio de búsqueda
 representa una desventaja en tanto que incrementa la cantidad de cláusulas
 sobre las cuales es necesario realizar las propagaciones. Esta situación,
 sumado al hecho de que la incorporación de nuevas cláusulas también representa
 un problema desde el punto de vista de la utilización de la memoria de la
-computadora, han llevado a la comunidada a establecer que, por lo general, es
-mejor tener un política agresiva de recorte de la base de datos de cláusulas
+computadora, han llevado a la comunidad a establecer que, por lo general, es
+mejor tener un política agresiva de purga de la base de datos de cláusulas
 aprendidas \cite{Audemard:2009:PLC:1661445.1661509}. Si bien se han
 desarrollado distintas heurísticas con muy buenos resultados, el problema de
 determinar cuántas y cuáles cláusulas descartar (o su equivalente, preservar)
-sigue siendo un problema ampliamente estudiado en el mundo \sat.
+sigue siendo un problema ampliamente estudiado en la comunidad \sat.
+
 
 \section{SAT Solving paralelo y distribuido}
 
 El establecimiento del problema \sat como un problema \npc hace pensar que no
-es posible obtener un algoritmo polinomial que resuelva dicho problema. Además
-en los últimos años la rapidez en el incremento de la velocidad de las
+es posible obtener un algoritmo polinomial que resuelva dicho problema. Otro fenómeno que se ha dado en años recientes es que la rapidez en el incremento de la velocidad de las
 computadoras ha ido disminuyendo (esencialmente debido al problema de la
-disipación del calor y el consumo de energía) y en su lugar se ha producido un
+disipación del calor y el consumo de energía) \marginpar{Agregar alguna cita o gráfico que sirvan de argumento.} y en su lugar se ha producido un
 incremento en la cantidad de unidades de procesamiento disponibles así como su
 abaratamiento. Estos hechos han impulsado a la comunidad \sat a explorar la
-posibilidad de construir algortimos paralelos y distribuidos de \ssolving de
-modo de \begin{inparaenum}[a)] \item sacar el máximo provecho de la nueva
-tendencia en construcción de computadoras y \item proveer un algoritmo
-\textbf{escalable} que permita aprovechar el abaratamiento del \hard
+posibilidad de construir algortimos paralelos y/o distribuidos de \ssolving de
+modo de: 
+\begin{inparaenum}[a)] 
+\item sacar el máximo provecho de la nueva tendencia en construcción de computadoras y 
+\item proveer un algoritmo \textbf{escalable} que permita aprovechar el abaratamiento del \hard
 \end{inparaenum}.
 
 La aparición de los primeros \ssolvers paralelos y distribuidos
 \cite{bohm:1996:afast, zhang:jsc-1996} es contemporánea a la aparición del
 algoritmo \CDCL. Por lo tanto los primeros \ssolvers paralelos fueron
-desarrollados sobre la base del algoritmo \dpll. Es decir que estos \ssolvers
+desarrollados sobre la base del algoritmo \dpll y es por esta razón que estos \ssolvers
 no incorporaban aprendizaje de nuevas cláusulas.
 
-Una de las razones que llevaron a que existieran implementaciones tempranas de
+Una de las razones que dieron origen a implementaciones tempranas de
 algoritmos paralelos para el problema \sat es que este problema presenta una
 forma intuitiva y fácil de ser dividido. La idea consiste en seleccionar un
-subconjunto pequeño de variables del problema y generar las $2^n$ asignaciones
+subconjunto pequeño de variables del problema, digamos $n$, y generar las $2^n$ asignaciones
 posibles de valores de verdad a este subconjunto. Cada una de estas
-asignaciones es una asignación parcial del problema original y por lo tanto lo
+asignaciones es una valuación parcial del problema original y por lo tanto lo
 que obtenemos son $2^n$ subproblemas \textbf{disjuntos} que pueden ser
-enviados a distintas unidades de procesamiento. Cada unidad de procesamiento
+resueltos por distintas unidades de procesamiento. Cada unidad de procesamiento
 puede utilizar entonces alguna implementación de un algoritmo de \ssolving
 secuencial para resolver el subproblema que le haya tocado. Esta técnica,
 llamada \gp, introduce una pregunta fundamental: ¿De qué modo determinar un
@@ -242,6 +213,17 @@ paralelos que en lugar de dividir el problema a resolver, ejecutan distintos
 parámetros) y comparten las cláusulas aprendidas entre las distintas
 instancias. Por supuesto, distintas implementaciones concretas han sido
 desarrolladas sobre esta idea, e incluso implementaciones híbridas que
-combinan las dos formas de paralelización antedichas\todo{Faltan citas}. 
+combinan las dos formas de paralelización antedichas\todo{Faltan citas}.
 
+Es importante destacar que este nuevo rumbo ha mostrado resultados prometedores en la resolución más eficiente de problemas basados en \sat y los datos de estos avances no sólo están documentados en numerosas publicaciones que lo avalan, sino también en el surgimiento y crecimiento de la comunidad que compromete sus esfuerzos en esta nueva área de investigación \marginpar{citas}. Al mismo tiempo, si bien el desarrollo de este área proporciona enormes beneficios, no da respuesta al hecho de que hoy la tendencia indica que la escalabilidad a gran escala proviene del trabajo cooperativo y distribuido de unidades independientes de cómputo.
 
+La hipótesis de trabajo de esta tesis es la de dar respuesta a la construcción de un \ssolver paralelo y distribuido basado en la técnica \gp que:
+\begin{itemize}
+\item realice una adecuación y balanceo de la carga de procesamiento en \emph{run-time} sobre una cantidad y configuración de equipamiento desconocida,
+\item realice una adecuación y balanceo del uso de memoria primaria y secundaria en \emph{run-time}, también sobre una cantidad y configuración de equipamiento desconocida, y
+\item sea extensible y fácil de parametrizar en todos aquellos aspectos que determinen el comportamiento del procedimiento de resolución del problema.
+\end{itemize}
+
+Al mismo tiempo, someteremos a prueba la implementación de métodos de aprendizaje paralelos y distribuidos con el objetivo de identificar si esta técnica que ha demostrado ser revolucionaria en la optimización de los \ssolvers secuenciales aporta alguna mejora en este nuevo escenario. Esta incorporación se diseñará e implementará sin perjuicio de las características mencionadas anteriormente mencionadas que creemos centrales en el desarrollo de una herramienta que pretende ejecutar en ambientes paralelos y distribuidos que a priori no son conocidos.\\
+
+La presente tesis se divide de la siguiente forma. El Cap.~\ref{preliminares} presenta las definiciones y resultados básicos del área de \sat, en conjunto con algunas valoraciones del autor, con el objeto de fijar notación y establecer un piso de contenidos que permitan el desarrollo de los aspectos novedosos contenidos en esta tesis. El Cap.~\ref{ssolver-pardist} presentaremos la arquitectura y los aspectos relevantes de la implementación de un \ssolver paralelo y distribuido basado en la técnica \gp. El Cap.~\ref{aprendizaje-pardist} exhibe el diseño e implementación de un mecanismo de aprendizaje para el \ssolver presentado en el Cap.~\ref{ssolver-pardist} en conjunto con una prueba de concepto de la técnica, el desarrollo de los experimentos y la sistematización de resultados. Para finalizar, en el Cap.~\ref{conclu}, presentaremos las conclusiones derivadas del desarrollo de la herramienta y los experimentos sobre ella realizados, y las líneas de investigación que se abren a partir de esto.
