@@ -11,9 +11,22 @@ def readstats(filename):
 	stats = []
 	with open(filename, 'r') as f:
 			reader = csv.reader(f)
+			longestrowlen = 0
 			for row in reader:
+				if len(row) > longestrowlen:
+					longestrowlen = len(row)
 				stats.append([row[0]] + map(float, row[1:]))
-	return stats
+	
+	# Complete shorter rows with negative values (i.e. N/A values)
+	retstats = []
+	for row in stats:
+		thisrowlen = len(row)
+		stretchedrow = row
+		if thisrowlen < longestrowlen:
+			stretchedrow = row[:-1] + [-10.0 for i in range(longestrowlen - thisrowlen)] + row[-1:]
+		retstats.append(stretchedrow)
+
+	return retstats
 
 def normalizedstats(stats):
 	nullvalues = [v for v in stats if v[0] == 'nulo'][0]
@@ -31,11 +44,15 @@ def drange(start, stop, step):
 		r += step
 
 def val2rgb(val, levels=16.0):
+	nacolor = (0.5, 0.5, 0.5, 1) # grey color for N/A values
+
 	bluelevel = float(20)/255
 	maxcolor = 255
 	red = maxcolor
 	green = maxcolor
-	if val != 1:
+	if val < 0.0:
+		return (val, nacolor)
+	elif val != 1:
 		colorstep = float(maxcolor)/levels
 		valuestep = 1.0/levels
 		redchannel = reversed(zip(drange(0.0, 1, valuestep), map(lambda v: int(math.ceil(v)), drange(0, maxcolor+1, colorstep))))
@@ -80,13 +97,16 @@ cax=ax.imshow(statscolored, interpolation='none', aspect='auto')
 ax.set_title(title)
 
 # Decorate graphic
-ax.xaxis.set_ticklabels(map(str, range(0, len(normstats[0])-1)) + ['avg'])
+ax.xaxis.set_ticks(range(len(normstats[0])-1))
+ax.xaxis.set_ticklabels(map(str, range(1, len(normstats[0])-1)) + ['avg'])
+#ax.xaxis.grid(True)
 
 ax.yaxis.set_ticks([i for i in range(len(normstats))])
 ax.yaxis.set_ticklabels([v[0] for v in normstats])
 for label in ax.yaxis.get_ticklabels():
 	label.set_visible(True)
 	label.set_size(6)
+#ax.yaxis.grid(True)
 
 ax2 = fig.add_subplot(122)
 scale = list(drange(0.125, 2, float(2)/levels))
