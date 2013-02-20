@@ -123,6 +123,7 @@ consiste en un algoritmo de \bt que podríamos esquematizar como sigue:
 
 \missingfigure{Algoritmo SAT solving backtracking}
 
+
 La mayoría de los \emph{SAT solvers} son
 variaciones del algoritmo general
 DPLL\cite{Davis:1962:MPT:368273.368557} y actúan sobre fórmulas
@@ -144,20 +145,41 @@ lograr que la fórmula completa sea verdadera es asignando el valor de verdad
 
 El algoritmo DPLL es un procedimiento 
 
-\begin{lstlisting}[mathescape,language=Pascal,frame=single,numbers=left,caption={Algoritmo
+\begin{lstlisting}[mathescape,language=Python,frame=single,numbers=left,caption={Algoritmo
 DPLL}] G = F
-while G includes a clause C such that |C| $\leq$ 1 do
-  if C = $\emptyset$ then return G
-  else if C = {v} then G = G|v
-end while
-while there is a monotone literal in G do
+while G includes a clause C such that |C| $\leq$ 1:
+  if C = $\emptyset$:
+    return G
+  elif C = {v}:
+    G = G|v
+
+while there is a monotone literal in G:
   v = any monotone literal
   G = G|v
-end while
+
 return G
 \end{lstlisting}
 
 \subsection{Aprendizaje}
+\begin{lstlisting}[mathescape,language=Python,frame=single,numbers=left,caption={Algoritmo
+CDCL}]
+while True:
+  if not decide(): # if no unassigned vars
+    return satisifiable
+  while not bcp():
+    if not resolve_conflict():
+      return not satisfiable
+
+def resolve_conflict():
+  d = most recent decision not tried both ways
+  if d is None:  # no such d was found
+    return False
+      
+  flip the value of d
+  mark d as tried both ways
+  undo any invalidated implications
+  return True
+\end{lstlisting}
 \subsubsection{First UIP}
 \subsubsection{Recorte de la base de datos}
 \subsubsection{Actividad y LBD}
