@@ -188,32 +188,51 @@ críticas del algoritmo desarrollado por Marques-Silva\footnote{Para un
 relevamiento completo de las optimizaciones aplicadas al algoritmo \CDCL ver
 \cite{manthey:mathesis}}.
 
+Una de las partes fundamentales de los algoritmos de \ssolving es la conocida
+como \bcp (o simplemente propagación). Cuando una fórmula $\varphi$ de la
+lógica proposicional se una conjunción entonces para que $\varphi$ sea
+verdadera, cada una de sus partes deben ser verdaderas. Es por esto que si una
+de sus partes es una fórmula que contiene únicamente un literal, ese literal
+debe necesariamente ser verdadero para que $\varphi$ pueda ser verdadera. Bajo
+esta observación se desarrolló el procedimiento de \BCP que consiste
+precisamente en \emph{propagar} una decisión (asignación de valor de verdad a
+un literal) observando qué partes de la fórmula quedan con un único literal
+libre a partir de esta decisión. Luego esos literales deben ser necesariamente
+asignados al valor de verdad \T convirtiéndose en \emph{implicaciones} de la
+decisión tomada.
+
 A pesar de la enorme mejora que representó la incorporación de aprendizaje
 propuesta por Marques-Silva, con el correr del tiempo se estableció que los
 \ssolvers invierten la mayor parte de su tiempo (cerca del $90\%$) en propagar
 las implicaciones que se siguen de cada una de las decisiones tomadas durante
 la búsqueda. Esta propagación incluye el recorrido del conjunto de cláusulas
-que conforman el problema cuya complejidad oscila entre lineal y cuadrática.
-De esta forma, la incorporación de nuevas cláusulas (el \emph{leitmotiv} del
+que conforman el problema cuya complejidad es, en mejor caso, lineal. De esta
+forma, la incorporación de nuevas cláusulas (el \emph{leitmotiv} del
 procedimiento \CDCL) a la vez que proporciona una ventaja al recortar el
 espacio de búsqueda representa una desventaja en tanto que incrementa la
 cantidad de cláusulas sobre las cuales es necesario realizar las
-propagaciones. 
+propagaciones.
 
-La propagación se desarrolla a partir de la observación de que para que Una de las optimizaciones más importantes desarrolladas para
-atacar este problema es la presentada en \cite{moskewicz:da01} que permite
-reducir drásticamente el tiempo de propagación a partir de mantener una
-referencia a dos literales no asignados de cada cláusula del problema
+Diversas optimizaciones se han desarrollado para reducir el tiempo invertido
+en la propagación. Una de las más importantes es la presentada en
+\cite{moskewicz:da01} que permite reducir drásticamente el tiempo de
+propagación a partir de mantener una referencia a dos literales no asignados
+de cada cláusula del problema. De esta forma, una cláusula se vuelve
+(potencialmente) unitaria únicamente cuando uno de los dos literales
+\emph{observados} es asignado. De otra manera la cláusula posee al menos dos
+literales libres y por lo tanto no se produce una implicación a partir de
+dicha cláusula.
 
-Esta situación, sumado al hecho de que la incorporación de
-nuevas cláusulas también representa un problema desde el punto de vista de la
-utilización de la memoria de la computadora, han llevado a la comunidad a
-establecer que, por lo general, es mejor tener un política agresiva de purga
-de la base de datos de cláusulas aprendidas
-\cite{Audemard:2009:PLC:1661445.1661509}. Si bien se han desarrollado
-distintas heurísticas con muy buenos resultados, el problema de determinar
-cuántas y cuáles cláusulas descartar (o su equivalente, preservar) sigue
-siendo un problema ampliamente estudiado en la comunidad \sat.
+Más allá de las optimizaciones presentadas, el tiempo de propagación sigue
+dominando el tiempo de procesamiento utilizado por los \ssolvers secuenciales.
+Esta situación, sumado al hecho de que la incorporación de nuevas cláusulas
+también representa un problema desde el punto de vista de la utilización de la
+memoria de la computadora, han llevado a la comunidad a establecer que, por lo
+general, es mejor tener un política agresiva de purga de la base de datos de
+cláusulas aprendidas \cite{Audemard:2009:PLC:1661445.1661509}. Si bien se han
+desarrollado distintas heurísticas con muy buenos resultados, el problema de
+determinar cuántas y cuáles cláusulas descartar (o su equivalente, preservar)
+sigue siendo un problema ampliamente estudiado en la comunidad \sat.
 
 
 \section{SAT Solving paralelo y distribuido}
@@ -249,9 +268,9 @@ tanto lo que obtenemos son $2^n$ subproblemas \textbf{disjuntos} que pueden
 ser resueltos por distintas unidades de procesamiento. Cada unidad de
 procesamiento puede utilizar entonces alguna implementación de un algoritmo de
 \ssolving secuencial para resolver el subproblema que le haya tocado. Esta
-técnica, llamada \gp, introduce una pregunta fundamental: ¿De qué modo
-determinar un \gp efectivo? Esto es, cómo construir un \gp que distribuya
-equitativamente la carga de trabajo entre las distintas unidades de
+técnica, llamada \gp\cite{zhang:jsc-1996}, introduce una pregunta fundamental:
+¿De qué modo determinar un \gp efectivo? Esto es, cómo construir un \gp que
+distribuya equitativamente la carga de trabajo entre las distintas unidades de
 procesamiento.
 
 El enfoque anterior de división de un problema \sat es adecuado para un
@@ -268,7 +287,7 @@ mismo \ssolver con distintos parámetros, pueden resolver un mismo problema en
 tiempos sumamente diferentes. Sobre esta base se desarrollaron \ssolvers
 paralelos que en lugar de dividir el problema a resolver, ejecutan distintos
 \ssolvers sobre el mismo problema (o un mismo \ssolver con distintos
-parámetros) y comparten las cláusulas aprendidas entre las distintas
+parámetros\cite{hamadi09}) y comparten las cláusulas aprendidas entre las distintas
 instancias. Por supuesto, distintas implementaciones concretas han sido
 desarrolladas sobre esta idea, e incluso implementaciones híbridas que
 combinan las dos formas de paralelización antedichas\todo{Faltan citas}.
@@ -277,8 +296,8 @@ Es importante destacar que este nuevo rumbo ha mostrado resultados
 prometedores en la resolución más eficiente de problemas basados en \sat y los
 datos de estos avances no sólo están documentados en numerosas publicaciones
 que lo avalan, sino también en el surgimiento y crecimiento de la comunidad
-que compromete sus esfuerzos en esta nueva área de investigación
-\marginpar{citas}. Al mismo tiempo, si bien el desarrollo de este área
+que compromete sus esfuerzos en esta nueva área de investigación.
+\marginpar{citas} Al mismo tiempo, si bien el desarrollo de este área
 proporciona enormes beneficios, no da respuesta al hecho de que hoy la
 tendencia indica que la escalabilidad a gran escala proviene del trabajo
 cooperativo y distribuido de unidades independientes de cómputo.
@@ -298,9 +317,9 @@ aprendizaje paralelos y distribuidos con el objetivo de identificar si esta
 técnica que ha demostrado ser revolucionaria en la optimización de los
 \ssolvers secuenciales aporta alguna mejora en este nuevo escenario. Esta
 incorporación se diseñará e implementará sin perjuicio de las características
-mencionadas anteriormente mencionadas que creemos centrales en el desarrollo
-de una herramienta que pretende ejecutar en ambientes paralelos y distribuidos
-que a priori no son conocidos.\\
+mencionadas anteriormente que creemos centrales en el desarrollo de una
+herramienta que pretende ejecutar en ambientes paralelos y distribuidos que
+\emph{a priori} no son conocidos.\\
 
 La presente tesis se divide de la siguiente forma. El Cap.~\ref{preliminares}
 presenta las definiciones y resultados básicos del área de \sat, en conjunto
