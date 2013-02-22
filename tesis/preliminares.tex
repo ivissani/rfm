@@ -2,193 +2,294 @@
 \chapter{Preliminares}
 \label{preliminares}
 
-\newcommand{\disj}[1]{\ensuremath{[#1]}}
-\newcommand{\conj}[1]{\ensuremath{\{#1\}}}
+En el presente capítulo presentaremos las definiciones y resultados preliminares comprendiendo desde las definiciones lógicas a fin de fijar notación y terminología, hasta el estado del arte en lo que refiere a la resolución del problema \sat .
 
 \section{Lógica proposicional}
-% El origen de la lógica proposcional, o lógica de predicados puede ser rastreado hasta la antigua Grecia. 
-La lógica proposicional es la rama de la lógica de estudia los predicados y sus combinaciones.
-\begin{definition}
-\defname{Predicado} Un predicado es una sentencia que puede ser verdadera o falsa
-\end{definition}
+La lógica proposicional es una formalización matemática que se ocupa del estudio exhaustivo de los valores de verdad y su combinación a partir de los operadores conocidos como booleanos. Estos operadores usualmente son la negación ($\neg$), la conjunción ($\land$), la disyunción ($\lor$), la implicación ($\Rightarrow$), etc. Usualmente se suelen tomar como conjunto minimal capaz de representar a todos los operadores binarios la negación ($\neg$) y la disyunción ($\lor$) puesto que estos son un conjunto apropiado que permite expresar a los restantes, pero por comodidad a la hora de presentar el problema a resolver utilizaremos la negación ($\neg$), la conjunción ($\land$) y la disyunción ($\lor$).
 
-La formalización más utilizada de la lógica proposicional es la desarrollada
-por el matemático inglés George Boole.  La formalización desarrollada por
-Boole es un formalización algebraica
+La formalización más utilizada, desde un punto de vista matemático, de la lógica proposicional es la desarrollada por el matemático inglés George Boole \cite{boole1847} y conocida como álgebra de Boole, pero a efectos de esta presentación y por comodidad nos concentraremos en su presentación lógica.
 
 \begin{definition}
-\todo{Revisar esta definición}
-\defname{Álgebra de Boole} Un álgebra de Boole consiste de 
-	\begin{enumerate}
-		\item Un conjunto de variables proposicionales $\{p, q, \ldots\}$ que toman valores del conjunto $\{True, False\}$ ($\{1, 0\}$)
-		\item Dos operadores binarios $\wedge\ (\cdot)$  y $\vee\ (+)$
-		\item Un operador unario $\neg\ (-)$
-	\end{enumerate}
-	Tal que 
-	\begin{itemize}
-		\item Si $p$ es una variable proposicional, entonces $p$ y $-p$ son literales
-		\item Un literal es una fórmula proposicional
-		\item Si $\phi_1$ y $\phi_2$ son fórmulas proposicional entonces $\phi_1 \cdot \phi_2$ es una fórmula, $\phi_1 + \phi_2$ es una fórmula y $-\phi_1$ es una fórmula
-	\end{itemize}
-	y se cumplen las siguientes propiedades
-	\begin{itemize}
-		\item $--p = p$
-		\item $p + q = q + p$ y $p \cdot q = q \cdot p$ (conmutatividad)
-		\item $p + (q + r) = (p + q) + r$ y $p \cdot (q \cdot r) = (p \cdot q) \cdot r$ (asociatividad)
-		\item $p + (q \cdot r) = (p + q) \cdot (p + r)$ y $p \cdot (q + r) = (p \cdot q) + (p \cdot r)$ (distributividad)
-		\item $p + 0 = p$ y $p \cdot 1 = p$ 
-		\item $p + 1 = 1$ y $p \cdot 0 = 0$
-		\item $p + -p = 1$ y $p \cdot -p = 0$
-		\item $p \cdot (p + q) = p$ y $p + (p \cdot q) = p$ (absorción)
-	\end{itemize}
+\defname{Fórmulas bien formadas} 
+Sea $\mathcal{V}$ un conjunto infinito numerable de variables, entonces $\mathit{Form} (\mathcal{V})$, el conjunto de fórmulas bien formadas sobre $\mathcal{V}$, es el menor conjunto $F$ tal que:
+\begin{itemize}
+\item $\mathcal{V}\cup\{\bot, \top\} \subseteq F$, y 
+\item para todo $f, f' \in F$, $\{\neg f, f \land f', f \lor f'\} \subseteq F$.
+\end{itemize}
 \end{definition}
 
 \begin{definition}
-\defname{Valuación} Sea $\varphi$ una fórmula de la lógica proposicional con variables $\{p_1, \ldots, p_n\}$, entonces una valuación de la fórmula $\varphi$ es una asignación de los valores $\{0, 1\}$ a cada una de las variables proposicionales de $\varphi$.
+\defname{Soporte}
+Sea $\mathcal{V}$ un conjunto infinito numerable de variables, se define $\mathit{sop}: \mathit{Form} (\mathcal{V}) \to 2^\mathcal{V}$, el soporte de una fórmula proposicional de la siguiente forma:
+\begin{itemize}
+\item $\mathit{sop} (\bot) = \emptyset$,
+\item $\mathit{sop} (\top) = \emptyset$,
+\item $\mathit{sop} (p) = \{p\}$,
+\item $\mathit{sop} (\neg \varphi) = \mathit{sop} (\varphi)$,
+\item $\mathit{sop} (\varphi \land \psi) = \mathit{sop} (\varphi) \cup \mathit{sop} (\psi)$, y
+\item $\mathit{sop} (\varphi \lor \psi) = \mathit{sop} (\varphi) \cup \mathit{sop} (\psi)$.
+\end{itemize}
 \end{definition}
 
-Por ejemplo, sean $\{v_1, \ldots, v_n\}$ con $v_i \in \{0, 1\}$ y una fórmula proposicional $\varphi$ con variables $\{p_1, \ldots, p_n\}$, entonces $\{p_1 \leftarrow v_1, \ldots, p_n \leftarrow v_n\}$ es una valuación.
+A continuación, en las siguientes dos definiciones, se presenta la forma en la que la sintaxis presentada anteriormente se interpreta en el conjunto $\{0, 1\}$.
 
 \begin{definition}
-\defname{Valuación parcial} Una valuación parcial de una fórmula proposicional $\varphi$ es una valuación sobre un subconjunto propio de las variables proposicionales de $\varphi$
-\end{definition}
-
-\begin{definition}
-\defname{Fórmula satisfacible (\sat)} Una fórmula proposicional $\varphi$ es satisfacible si existe al menos una valuación que haga que la fórmula sea verdadera. Si la fórmula $\varphi$ bajo la valuación $V$ es verdadera, decimos que $V$ satisface a $\varphi$.
-\end{definition}
-
-\begin{definition}
-\defname{Tautología} Una fórmula $\varphi$ es una tautología si y solo si toda valuación $V$ la satisface.
-\end{definition}
-
-\begin{definition}
-\defname{Contradicción} Una fórmula $\varphi$ es una contradicción si y solo si ninguna valuación $V$ la satisface.
+\defname{Valuación} 
+Sea $\mathcal{V}$ un conjunto infinito numerable de variables, una valuación de las variables proposicionales es una función total $v: \mathcal{V} \to \{0, 1\}$.
 \end{definition}
 
 \begin{definition}
-\defname{Fórmula insatisfacible (\unsat)} Una fórmula $\varphi$ es insatisfacible (o \unsat) si y solo si es una contradicción.
+\defname{Valuación de términos} 
+Sea $\mathcal{V}$ un conjunto infinito numerable de variables y una valuación de las variables $v$, $p \in \mathcal{V}$ y $f, f' \in \mathit{Form}(\mathcal{V})$,  se define $v^*: \mathit{Form}(\mathcal{V}) \to \{0, 1\}$ 
+\begin{itemize}
+\item $v^*(\bot) = 0$,
+\item $v^*(\top) = 1$,
+\item $v^*(p) = v(p)$,
+\item $v^* (\neg f) = \left\{\begin{array}{ll}0 & \mbox{, si $v^*(f)) = 1$}\\ 1 & \mbox{, si $v^*(f)) = 0$}\end{array}\right.$,
+\item $v^* (f \land f') =  \left\{\begin{array}{ll}0 & \mbox{, si $v^*(f) = 0$ ó $v^*(f') = 0$}\\1 & \mbox{, si $v^*(f) = 1$ y $v^*(f') = 1$.}\end{array}\right.$, y
+\item $v^* (f \lor f') =  \left\{\begin{array}{ll}0 & \mbox{, si $v^*(f) = 0$ y $v^*(f') = 0$}\\1 & \mbox{, si $v^*(f) = 1$ ó $v^*(f') = 1$.}\end{array}\right.$.
+\end{itemize}
 \end{definition}
 
+\begin{definition}
+\defname{$\models$} 
+Sea $\mathcal{V}$ un conjunto infinito numerable de variables, $v$ una valuación de las variables proposicionales y $f \in \mathit{Form}(\mathcal{V})$, entonces $v \models_{\mathcal{V}} f$ si y sólo si $v^* (f) = 1$.
+\end{definition}
 
-\subsection{Forma Normal Conjuntiva}
+\begin{definition}
+Sea $\mathcal{V}$ un conjunto infinito numerable de variables y $\varphi \in \mathit{Form}(\mathcal{V})$, $\varphi$ se dice:
+\begin{itemize}
+\item satisfacible si y sólo si existe una valuación $v$ tal que $v \models_{\mathcal{V}} \varphi$,
+\item tautología si y sólo para toda valuación $v$ $v \models_{\mathcal{V}} \varphi$, y
+\item contradicción (o insatisfacible) si y sólo para toda valuación $v$ $v \not\models_{\mathcal{V}} \varphi$.
+\end{itemize}
+\end{definition}
 
-\begin{definition} \defname{Forma Normal Conjuntiva} Una fórmula $\varphi$ de
-la lógica proposicional se encuentra en Forma Normal Conjuntiva (\cnf por sus
-siglas en inglés) si la misma es una conjunción de cláusulas, donde cada
-cláusula es una disyunción de literales. \end{definition}
+%La lógica proposicional es la rama de la lógica de estudia los valores de verdad y su combinación a partir de los operadores conocidos como booleanos. Estos operadores usualmente son la negación ($\neg$), la conjunción ($\land$), la disyunción ($\lor$), la implicación ($\Rightarrow$), etc. Usualmente se suelen tomar como conjunto minimal capaz de representar a todos los operadores binarios la negación ($\neg$) y la disyunción ($\lor$) puesto que estos son un conjunto apropiado que permite expresar a los restantes.
+%
+%La formalización más utilizada, desde un punto de vista matemático, de la lógica proposicional es la desarrollada por el matemático inglés George Boole \cite{boole1847} y conocida como álgebra de boole. En este contexto el objeto de interés serán los términos sintácticos llamados términos booleanos y sus relaciones. La definición siguiente formaliza esta estructura matemática.
+%
+%\begin{definition}
+%\defname{Álgebra de Boole} 
+%Un álgebra de Boole es una estructura $\langle S, 0, \cdot, 1, +, - \rangle$ tal que se satisfacen los siguientes axiomas: 
+%	\begin{itemize}
+%		\item $--p = p$ (involución)
+%		\item $p + q = q + p$ y $p \cdot q = q \cdot p$ (conmutatividad)
+%		\item $p + (q + r) = (p + q) + r$ y $p \cdot (q \cdot r) = (p \cdot q) \cdot r$ (asociatividad)
+%		\item $p + (q \cdot r) = (p + q) \cdot (p + r)$ y $p \cdot (q + r) = (p \cdot q) + (p \cdot r)$ (distributividad)
+%		\item $p + 0 = p$ y $p \cdot 1 = p$ (elemento neutro)
+%		\item $p + 1 = 1$ y $p \cdot 0 = 0$
+%		\item $p + -p = 1$ y $p \cdot -p = 0$ (elemento inverso)
+%		\item $p \cdot (p + q) = p$ y $p + (p \cdot q) = p$ (absorción)
+%	\end{itemize}
+%\end{definition}
+%
+%Las dos definiciones que siguen presentan la forma en la que se obtienen el conjunto de términos booleanos y el de las fórmulas booleanas que serán los objetos sintácticos con los que trabajaremos de aquí en más.
+%
+%\begin{definition}
+%\defname{Términos booleanos} 
+%Sea $\mathcal{V}$ un conjunto infinito numerable de variables, entonces $\mathit{Term} (\mathcal{V})$, el conjunto de términos booleanos sobre $\mathcal{V}$, es el menor conjunto $T$ tal que:
+%\begin{itemize}
+%\item $\mathcal{V}\cup\{0, 1\} \subseteq T$, y 
+%\item para todo $t, t' \in T$, $\{- t, t \cdot t', t + t'\} \subseteq T$.
+%\end{itemize}
+%\end{definition}
+%
+%\begin{definition}
+%\defname{Fórmulas booleanas} 
+%Sea $\mathcal{V}$ un conjunto infinito numerable de variables, entonces $\mathit{Form} (\mathcal{V})$, el conjunto de fórmulas booleanas sobre $\mathcal{V}$, es $F$ tal que:
+%$$
+%F = \{t = t'\ |\ t, t' \in \mathit{Term(\mathcal{V}}\}\ .
+%$$
+%\end{definition}
+%
+%Una vez definida la sintaxis con la que trabajaremos, las siguientes definiciones establecen el mecanismo por el cual los objetos sintácticos descriptos serán interpretados en un álgebra particular.
+%
+%\begin{definition}
+%\defname{Valuación} 
+%Sea $\mathcal{V}$ un conjunto infinito numerable de variables y $\langle S, \underline{0}, \underline{\cdot}, \underline{1}, \underline{+}, \underline{-} \rangle$ un álgebra de boole, una valuación de las variables es una función total $v: \mathcal{V} \to S$.
+%\end{definition}
+%
+%\begin{definition}
+%\defname{Valuación de términos} 
+%Sea $\mathcal{V}$ un conjunto infinito numerable de variables, $\langle S, \underline{0}, \underline{\cdot}, \underline{1}, \underline{+}, \underline{-} \rangle$ un álgebra de boole y una valuación de las variables $v$ 
+%\begin{itemize}
+%\item $v^*(1) = \underline{1}$,
+%\item $v^*(0) = \underline{0}$,
+%\item para toda $p \in \mathcal{V}$, $v^*(p) = v(p)$,
+%\item para todo $t \in \mathit{Term}(\mathcal{V})$, $v^* (- t) = \underline{-} v^*(t)$,
+%\item para todos $t, t' \in \mathit{Term}(\mathcal{V})$, $v^* (t \cdot t') = v^*(t) \underline{\cdot} v^*(t')$ y $v^* (t + t') = v^*(t) \underline{+} v^*(t')$.
+%\end{itemize}
+%\end{definition}
+%
+%\begin{definition}
+%\defname{$\models$} 
+%Sea $\mathcal{V}$ un conjunto infinito numerable de variables, $\langle S, 0, \cdot, 1, +, - \rangle$ un álgebra de boole, una valuación de las variables $v$ y $t, t' \in \mathit{Term}(\mathcal{V})$, entonces $v \models_{\mathcal{V}} t = t'$ si y sólo si $v^* (t) = v^*(t')$.
+%\end{definition}
+%
+%\begin{definition}
+%\defname{Fórmula satisfacible (\sat)} 
+%Sea $\mathcal{V}$ un conjunto infinito numerable de variables, un álgebra de boole $\langle S, \underline{0}, \underline{\cdot}, \underline{1}, \underline{+}, \underline{-} \rangle$ y una fórmula booleana $\varphi$, $\varphi$ se dice:
+%\begin{itemize}
+%\item satisfacible si y sólo si existe una valuación $v$ tal que $v \models_{\mathcal{V}} \varphi$,
+%\item tautología si y sólo para toda valuación $v$ $v \models_{\mathcal{V}} \varphi$, y
+%\item contradicción (o insatisfacible) si y sólo para toda valuación $v$ $v \not\models_{\mathcal{V}} \varphi$.
+%\end{itemize}
+%\end{definition}
+%
+%\begin{remark}
+%La estructura $\langle \{0, 1\}, 0, \land, 1, \lor, \neg \rangle$ con los operadores definidos según las tablas:
+%$$
+%\begin{array}{ccc}
+%\begin{array}{|c||c|}
+%\hline
+%p & \neg p\\
+%\hline\hline
+%0 & 1\\
+%1 & 0\\
+%\hline
+%\end{array}
+%&
+%\begin{array}{|c|c||c|}
+%\hline
+%p & q & p \land q\\
+%\hline\hline
+%0 & 0 & 0\\
+%0 & 1 & 0\\
+%1 & 0 & 0\\
+%1 & 1 & 1\\
+%\hline
+%\end{array}
+%&
+%\begin{array}{|c|c||c|}
+%\hline
+%p & q & p \lor q\\
+%\hline\hline
+%0 & 0 & 0\\
+%0 & 1 & 1\\
+%1 & 0 & 1\\
+%1 & 1 & 1\\
+%\hline
+%\end{array}
+%\end{array}
+%$$
+%\noindent es un álgebra de bool.
+%\end{remark}
 
-Por ejemplo, la fórmula $\phi = (p \vee q) \wedge (-p \vee q)$ se encuentra
-en \cnf y posee dos cláusulas $C_1 = p \vee q$ y $C_2 = -p \vee q$. Dado que los
+\begin{definition}
+\defname{Restricción}
+Sea $\mathcal{V}$ un conjunto infinito numerable de variables, $S \subseteq \mathcal{V}$ y $v$ una valuación, se define la restricción de $v$ a $S$, $v|_S:S \to \{0, 1\}$ de la siguiente forma, para toda $p \in S$, $v|_S (p) = v(p)$.
+\end{definition}
+
+\begin{remark}
+Sea $\mathcal{V}$ un conjunto infinito numerable de variables, $S \subseteq \mathcal{V}$, $\varphi \in \mathit{Form}(\mathcal{V})$ y, $v$ y $v'$ valuaciones, si $\mathit{sop}(\varphi) \subseteq S$ y $v|_S = v'|_S$, entonces $v \models_\mathcal{V} \varphi$ si y sólo si $v' \models_\mathcal{V} \varphi$.
+\end{remark}
+
+A partir de la observación anterior podemos definir la relación de satisfacción $\models^\mathit{fin}_\mathcal{V}$ en función de la ya presentada relación de satisfacción $\models_\mathcal{V}$ de la siguiente forma:
+
+\begin{definition}
+Sea $\mathcal{V}$ un conjunto infinito numerable de variables, $S \subseteq \mathcal{V}$ tal que $\mathit{sop}(\varphi) \subseteq S$, $\varphi \in \mathit{Form}(\mathcal{V})$ y $v$ una valuación, $v|_S \models^\mathit{fin}_\mathcal{V} \varphi$ si y solo si $v \models_\mathcal{V} \varphi$.
+\end{definition}
+
+La definición anterior expone un hecho de importancia mayor ya que en la práctica, para determinar la satisfactibilidad de una fórmula proposicional sólo es necesario generar la porción finita de la valuación cuyo dominio está restringido al soporte de dicha fórmula. En adelante, usaremos la palabra valuación refiriéndonos a esta porción finita de una valuación.
+
+\begin{definition} \defname{Literal} 
+Se denomina literal a una fórmula proposicional que es o bien de la forma $p$ o bien de la forma $\neg p$ con $p$ una variable proposicional.
+\end{definition}
+
+\begin{definition} \defname{Forma Normal Conjuntiva} 
+Una fórmula proposicional $\varphi$ se encuentra en Forma Normal Conjuntiva (\cnf por sus siglas en inglés) si la misma es una conjunción de cláusulas, donde cada cláusula es una disyunción de literales. 
+\end{definition}
+
+Por ejemplo, la fórmula $\phi = (p \vee q) \wedge (\neg p \vee q)$ se encuentra
+en \cnf y posee dos cláusulas $C_1 = p \vee q$ y $C_2 = \neg p \vee q$. Dado que los
 conectores lógicos están implícitos cuando una fórmula se encuentra en \cnf
-normalmente escribimos $\phi = \conj{\disj{p, q}, \disj{-p, q}}$ de modo equivalente.
+normalmente escribimos $\phi = \conj{\disj{p, q}, \disj{\neg p, q}}$ de modo equivalente.
 
 \begin{definition}
-\defname{Fórmulas equivalentes} Dos fórmulas proposicionales $\varphi_1$ y $\varphi_2$ son equivalentes si y solo si para toda valuación $V$, $V$ satisface a $\varphi_1$ $\Longleftrightarrow$ $V$ satisface a $\varphi_2$.
+\defname{Fórmulas equivalentes} 
+Dado $\mathcal{V}$ un conjunto de variables proposicionales y $\varphi_1, \varphi_2 \in \mathit{Form}(\mathcal{V})$, $\varphi_1$ y $\varphi_2$ son equivalentes (denotado como $\varphi_1 \equiv \varphi_2$) si y solo si para toda valuación $v$, $v \models \varphi_1$ si y solo si $v \models \varphi_2$.
 \end{definition}
 
 \begin{theorem}\label{th:cnfequiv}
-Para toda fórmula de la lógica proposicional es posible encontrar una fórmula equivalente que se encuentre en \cnf
+Dado $\mathcal{V}$ un conjunto de variables proposicionales y $\varphi \in \mathit{Form}(\mathcal{V})$, existe $\psi \in \mathit{Form}(\mathcal{V})$ tal que $\varphi \equiv \psi$ y $\psi$ se encuentra en \cnf.
+
+Más aun, existe $F^{\mathit{cnf}}: \mathit{Form}(\mathcal{V}) \to \mathit{Form}(\mathcal{V})$ tal que para toda $\varphi \in \mathit{Form}(\mathcal{V})$, $F^{\mathit{cnf}} (\varphi)$ está en \cnf.
 \end{theorem}
 
-\section{El problema de la SATisfactiblidad}
 
-El problema de la satisfactibilidad (\emph{SAT problem}) consiste en determinar
-si existe alguna asignación de valores de verdad (\true|\false) a cada una de
-las variables booleanas que aparecen en una fórmula $\phi$ de la lógica
-proposicional de modo que $\phi$ se haga verdadera. En caso de que dicha
+
+
+\section{El problema de determinar la satisfactiblidad de una fórmula proposicional}
+
+Como se desprende de lo dicho anteriormente, el problema de determinar la satisfactibilidad de una fórmula proposicional $\varphi$ (también denominado \emph{SAT problem}) consiste en determinar si existe alguna valuación $v$ tal que $v_{\mathit{sop}(\varphi)}^*(\varphi) = 1$. En caso de que dicha
 asignación exista decimos que $\phi$ es satisfacible (o simplemente \sat) y la
-asignación o valuación $\{ p_1 \leftarrow v_1, \ldots, p_n \leftarrow v_n \}$
-correspondiente es un \textbf{modelo} de $\phi$. Es importante notar que en caso
+asignación o valuación (usualmente expresada como $\{ p_1 \mapsto v_1, \ldots, p_n \mapsto v_n \}$ donde 
+correspondiente determina un \textbf{modelo} de $\phi$. Es importante notar que en caso
 de que una fórmula sea \sat podría existir más de una valuación que haga que la
 fórmula sea verdadera. Si no existe ninguna valuación que haga verdadera a
 $\phi$ decimos que $\phi$ es insatisfacible (o \unsat).
 
-Dado el teorema \ref{th:cnfequiv} el problema \sat se define equivalentemente
-como el problema de determinar si una fórmula en \cnf es satisfacible o no.
-
-El problema de determinar si una fórmula $\phi$ dada es \sat o \unsat pertenece
+El problema de determinar si una fórmula proposicional dada es \sat o \unsat pertenece
 a la clase de problemas \npc\cite{Cook:1971:CTP:800157.805047}. Es decir que no
 se conoce un algoritmo cuya complejidad temporal sea polinomial que pueda determinar si una fórmula es \sat
 o \unsat. La importancia que reviste el problema SAT para diversas áreas de las
 ciencias de la computación, como ser el diseño de circuitos o la verificación
 automática, ha impulsado el desarrollo de algoritmos relativamente eficientes
-para una clase amplia de problemas conocidos como \emph{SAT solvers}.
+conocidos comúnmente como \emph{SAT solvers}.
+
+En vista del Teo.~\ref{th:cnfequiv} el problema \sat se define equivalentemente
+como el problema de determinar si una fórmula en \cnf es satisfacible o no.
+
 
 \subsection{\emph{SAT Solving}}
 
 Se conoce con el nombre de \emph{SAT solvers} a los algoritmos que permiten
-determinar si una fórumla $\phi$ de la lógica proposicional tiene alguna
-valuación que la haga verdadera. El algoritmo general de  \emph{SAT solving}
-consiste en un algoritmo de \bt que podríamos esquematizar como sigue:
+determinar si una fórmula $\phi$ de la lógica proposicional tiene alguna
+valuación que la haga verdadera. Esto se lleva a cabo a partir de construir dicha valuación.
+El algoritmo general de  \emph{SAT solving} consiste en un algoritmo de \bt que podríamos esquematizar como sigue:
 
-\missingfigure{Algoritmo SAT solving backtracking}
+\begin{lstlisting}[mathescape,language=Pascal,frame=single,numbers=left,caption={Algoritmo \emph{naïf}},label=naif] 
+G = F
+return G
+\end{lstlisting}
 
-
-La mayoría de los \emph{SAT solvers} son
-variaciones del algoritmo general
-DPLL\cite{Davis:1962:MPT:368273.368557} y actúan sobre fórmulas
-proposicionales expresadas en Forma Normal Conjuntiva (\cnf).
-
-
+La mayoría de los \emph{SAT solvers} son variaciones del algoritmo general DPLL\cite{Davis:1962:MPT:368273.368557} (que a su vez se basa en el presentado por Davis y Putnam en \cite{Davis:1960:CPQ:321033.321034}) que presentaremos a continuación, y actúan sobre fórmulas proposicionales expresadas en Forma Normal Conjuntiva (\cnf). 
 
 \begin{definition} 
 \defname{Cláusula unitaria} Una cláusula se llama \textbf{unitaria} si
 posee un único literal.
 \end{definition}
-Por ejemplo
-en la fórmula $\gamma = \conj{\disj{-p}, \disj{q, r}}$ la clásula $\disj{-p}$ es
+
+Por ejemplo en la fórmula $\gamma = \conj{\disj{-p}, \disj{q, r}}$ la clásula $\disj{-p}$ es
 unitaria. Cuando una fórmula \cnf posee una cláusula unitaria, el único modo de
 lograr que la fórmula completa sea verdadera es asignando el valor de verdad
-\true al único literal dentro de la cláusula unitaria.
+$1$ al único literal dentro de la cláusula unitaria.
 
-\subsection{Algoritmo DPLL}
-
-El algoritmo DPLL es un procedimiento 
-
-\begin{lstlisting}[mathescape,language=Python,frame=single,numbers=left,caption={Algoritmo
-DPLL}] G = F
-while G includes a clause C such that |C| $\leq$ 1:
-  if C = $\emptyset$:
-    return G
-  elif C = {v}:
-    G = G|v
-
-while there is a monotone literal in G:
-  v = any monotone literal
-  G = G|v
-
-return G
+\begin{lstlisting}[mathescape,language=Pascal,frame=single,numbers=left,caption={Algoritmo DPLL},label=DPLL] 
+DPLL (F $\in \mathit{Form}(\mathcal{V})$ in CNF)
+   if F is a consistent set of literals
+       then return true
+   if F contains an empty clause
+       then return false
+   for every unit clause l in F
+       F $\leftarrow$ unit-propagate(l, F)
+   l $\leftarrow$ choose-literal(F);
+   return DPLL(F $\land$ l) or DPLL(F $\land$ $\neg$ l)
 \end{lstlisting}
+
+El algoritmo presentado en List.~\ref{DPLL}, comúnmente conocido como \emph{DPLL}, es un procedimiento que permite implementar un \ssolver cuyo comportamiento resulta radicalmente más eficiente que el presentado en List.~\ref{naif}. Esta modificación en la eficiencia del procedimiento proviene del tratamiento que se hace de las cláusulas unitarias y cómo la asignación de valores a estas repercute sobre la fórmula que se está analizando. 
+
+Los puntos claves del algoritmo son los que aparecen en las filas identificadas como 2, 4, 7, 8 y 9. En el caso de 2 y 4 porque son los puntos en los que se determina si la fórmula es satisfacible o no. En el caso del condicional que aparece en la fila 2 la fórmula se determina como satisfacible por determinar que ya no restan decisiones para ser tomadas, si F es un conjunto consistente de literales, entonces este conforma una valuación de las variables proposicionales que satisface la fórmula puesto que si $p \in F$ entonces la valuación construida asigna 1 a $p$, y si $\neg p \in F$ entonces le asigna 0; en el caso de 4, si una cláusula resulta vacía, esto implica que no habrá forma de asignar ningún valor a ninguna variable proposicional de forma de hacerla verdadera y por lo tanto la fórmula no será satisfacible. Las filas 7 y 8 realizan lo que se denomina \emph{unir propagation} o BCP (por el inglés Boolean Constraint Propagation), lo que realiza este ciclo es propagar en todas las cláusulas las decisiones ya tomadas de forma que si un literal aparece en F, entonces se eliminan todas las cláusulas que lo contengan y se elimina toda aparición del literal negado de toda cláusula en que aparece mencionado. La fila 9 realiza una de las tareas más importantes del procedimiento, determina cuál será la próxima decisión a tomar a partir de escoger un literal; es sabido que el orden en que se eligen las variables modifica dramáticamente el rendimiento de la herramienta puesto que es el punto en que se decide qué fragmento de espacio de búsqueda será explorado primero. Luego, una vez elegido el literal que se utilizará para partir el espacio de búsqueda se aplica el procedimiento reculsivamente sobre los dos espacios disjuntos de soluciones determinados por $l$ y por $\neg l$.
+
+La mayor diferencia entre el algoritmo del List.~\ref{DPLL} y el de List.~\ref{naif} es precisamente la introducción de la técnica de BCP. Esta técnica permite aplicar un conjuntos de decisiones ya tomadas simplificando la fórmula y reduciendo así el espacio de búsqueda a recorrer. Estudios han demostrado que los \ssolver modernos que implementan esta técnica de propagación inviten aproximadamente el 90\% del tiempo realizando esta tarea\cite{???} y es por esta razón que las partes más críticas de la implementación de un \ssolver son aquellas que están involucradas en la resolución de BCP. Ejemplos de esto son técnicas como ...\marginpar{mencionar las cosas relevantes como punteros a cláusulas y two watch literals.}
+
 
 \subsection{Aprendizaje}
-\begin{lstlisting}[mathescape,language=Python,frame=single,numbers=left,caption={Algoritmo
-CDCL}]
-while True:
-  if not decide(): # if no unassigned vars
-    return satisifiable
-  while not bcp():
-    if not resolve_conflict():
-      return not satisfiable
+Uno de los factores más determinantes en la mejora del rendimiento de los \ssolver modernos ha sido la incorporación de técnicas de aprendizaje de cláusulas derivadas de los conflictos que hacen que bajo una cierta cadena de decisiones la fórmula no sea satsfacible. La idea general es identificar contradicciones inherentes a un cierto conjunto de decisiones y agregar a la fórmula cláusulas que obliguen al \ssolver a descartar todo fragmento del espacio de búsqueda que de una u otra forma las implique.
 
-def resolve_conflict():
-  d = most recent decision not tried both ways
-  if d is None:  # no such d was found
-    return False
-      
-  flip the value of d
-  mark d as tried both ways
-  undo any invalidated implications
-  return True
-\end{lstlisting}
 \subsubsection{First UIP}
 \subsubsection{Recorte de la base de datos}
 \subsubsection{Actividad y LBD}
 
-\section{Alloy}
 
-\section{ParAlloy}
-\subsection{BEDs}
-
-\section{\emph{SAT Solving} distribuido}
-
-\subsection{Aprendizaje}

@@ -71,7 +71,7 @@ inpracticable. Esto motivó el desarrollo de la técnica conocida como
 de evitar construir el grafo de estados del sistema utilizando fórmulas
 lógicas para caracterizar conjuntos y relaciones. Cuando se trata de fórmulas
 proposicionales, en \smc el chequeo de las fórmulas es realizada típicamente
-mediante el uso de BDDs (\bdds), una forma canónica de representar dichas
+mediante el uso de BDDs (\bdds)\cite{bryant:ieeetc-8}, una forma canónica de representar dichas
 fórmulas. A pesar de que las técnicas de \smc basadas en  BDDs son capaces de
 manejar sistemas con cientos de estados, el tamaño de los BDDs generados para
 sistemas grandes se vuelve prohibitivo.
@@ -237,18 +237,20 @@ sigue siendo un problema ampliamente estudiado en la comunidad \sat.
 
 \section{SAT Solving paralelo y distribuido}
 
-El establecimiento del problema \sat como un problema \npc hace pensar que no
-es posible obtener un algoritmo polinomial que resuelva dicho problema. Otro
-fenómeno que se ha dado en años recientes es que la rapidez en el incremento
-de la velocidad de las computadoras ha ido disminuyendo (esencialmente debido
-al problema de la disipación del calor y el consumo de energía)
-\marginpar{Agregar alguna cita o gráfico que sirvan de argumento.} y en su
-lugar se ha producido un incremento en la cantidad de unidades de
-procesamiento disponibles así como su abaratamiento. Estos hechos han
-impulsado a la comunidad \sat a explorar la posibilidad de construir
-algortimos paralelos y/o distribuidos de \ssolving de modo de:
-\begin{inparaenum}[a)]  \item sacar el máximo provecho de la nueva tendencia
-en construcción de computadoras y  \item proveer un algoritmo
+El establecimiento del problema \sat como un problema \npc hace pensar que no es
+posible obtener un algoritmo polinomial que resuelva dicho problema. Al mismo
+tiempo, en los últimos años, las mejoras a los algoritmos secuenciales de
+\ssolving han sido de carácter marginal y no parece haber avances que permitan
+esperar un salto en el orden de magnitud de los problemas resueltos por los
+\ssolvers secuenciales. Por otro lado, la rapidez en el incremento de la
+velocidad de las computadoras ha ido disminuyendo (esencialmente debido al
+problema de la disipación del calor y el consumo de energía) \marginpar{Agregar
+alguna cita o gráfico que sirvan de argumento.} y en su lugar se ha producido un
+incremento en la cantidad de unidades de procesamiento disponibles así como su
+abaratamiento. Estos hechos han impulsado a la comunidad \sat a explorar la
+posibilidad de construir algortimos paralelos y/o distribuidos de \ssolving de
+modo de: \begin{inparaenum}[a)]  \item sacar el máximo provecho de la nueva
+tendencia en construcción de computadoras y  \item proveer un algoritmo
 \textbf{escalable} que permita aprovechar el abaratamiento del \hard
 \end{inparaenum}.
 
@@ -273,6 +275,8 @@ técnica, llamada \gp\cite{zhang:jsc-1996}, introduce una pregunta fundamental:
 distribuya equitativamente la carga de trabajo entre las distintas unidades de
 procesamiento.
 
+\newcommand{\pfolio}{\emph{portfolio}\xspace}
+
 El enfoque anterior de división de un problema \sat es adecuado para un
 escenario con unidades de procesamiento que se comunican a través de una red,
 como pude ser un \emph{cluster} o en computación \emph{grid}. La proliferación
@@ -281,45 +285,86 @@ investigación sobre formas de paralelización de \ssolvers en un escenario
 donde las múltiples unidades de procesamiento tienen acceso uniforme a una
 memoria común. Este nuevo escenario permitió el desarrollo de una forma
 radicalmente distinta de paralelización de un problema \sat. La misma consiste
-escencialmente en lo que se conoce como \emph{portfolio}. La idea se
-fundamenta en la observación de que distintos \ssolvers secuenciales, o un
-mismo \ssolver con distintos parámetros, pueden resolver un mismo problema en
-tiempos sumamente diferentes. Sobre esta base se desarrollaron \ssolvers
-paralelos que en lugar de dividir el problema a resolver, ejecutan distintos
-\ssolvers sobre el mismo problema (o un mismo \ssolver con distintos
-parámetros\cite{hamadi09}) y comparten las cláusulas aprendidas entre las distintas
-instancias. Por supuesto, distintas implementaciones concretas han sido
-desarrolladas sobre esta idea, e incluso implementaciones híbridas que
-combinan las dos formas de paralelización antedichas\todo{Faltan citas}.
+escencialmente en lo que se conoce como \pfolio. La idea se fundamenta en la
+observación de que distintos \ssolvers secuenciales, o un mismo \ssolver con
+distintos parámetros, pueden resolver un mismo problema en tiempos sumamente
+diferentes. Sobre esta base se desarrollaron \ssolvers paralelos que en lugar
+de dividir el problema a resolver, ejecutan distintos \ssolvers sobre el mismo
+problema (o un mismo \ssolver con distintos parámetros\cite{hamadi09}) y
+comparten las cláusulas aprendidas entre las distintas instancias. Es
+importante notar que así como en los \ssolvers secuenciales, la incorporación
+de aprendizaje es un factor fundamental en la mejora del rendimiento, en el
+contexto de \ssolving paralelo con el enfoque \pfolio también lo es. Esto se
+debe a que sin aprendizaje compartido entre las distintas instancias el
+resultado del enfoque \pfolio sería, en el mejor caso, tan bueno como el mejor
+de los \ssolvers utilizados. Por el contrario, la incorporación de aprendizaje
+compartido permite potencialmente obtener mejores resultados que el del mejor
+\ssolver utilizado. La información experimental ha confirmado esta hipótesis.
 
-Es importante destacar que este nuevo rumbo ha mostrado resultados
+\newcommand{\mcore}{multi\emph{core}\xspace}
+\newcommand{\solvers}{\emph{solvers}\xspace}
+
+Por supuesto, distintas implementaciones concretas han sido desarrolladas
+sobre esta idea, e incluso implementaciones híbridas que combinan las dos
+formas de paralelización antedichas\todo{Faltan citas}. Sin embargo, a lo
+largo de los años, ha tomado un impulso mucho mayor el enfoque basado en
+memoria compartida. Esto puede verse por un lado en la disponibilidad de
+herramientas. Hoy en día existen por lo menos una decena de \ssolvers
+paralelos para procesadores \mcore que son activamente desarrollados y que
+compiten año a año en las competencias internacionales de \ssolving. Por otro
+lado el sólo hecho de que las competencias internacionales de \ssolving hayan
+incorporado categorías específicas para \solvers paralelos (por lo menos desde
+el año 2008) es también un síntoma de la alta actividad que se viene
+desarrollando en este área. Por el contrario, el interés en los \ssolvers
+distribuidos no ha obtenido la misma atención por parte de la comunidad. De
+hecho, la mayoría de los \ssolvers distribuidos han sido abandonados. Es
+sumamente difícil encontrar herramientes de este campo disponibles para ser
+utilizadas, y las que existen han quedado obsoletas.
+
+Es importante destacar que el enfoque \pfolio ha mostrado resultados
 prometedores en la resolución más eficiente de problemas basados en \sat y los
 datos de estos avances no sólo están documentados en numerosas publicaciones
 que lo avalan, sino también en el surgimiento y crecimiento de la comunidad
 que compromete sus esfuerzos en esta nueva área de investigación.
-\marginpar{citas} Al mismo tiempo, si bien el desarrollo de este área
-proporciona enormes beneficios, no da respuesta al hecho de que hoy la
-tendencia indica que la escalabilidad a gran escala proviene del trabajo
+\marginpar{citas} Es nuestra opinión que este nefoque no da respuesta al hecho
+de que hoy la tendencia indica que la escalabilidad proviene del trabajo
 cooperativo y distribuido de unidades independientes de cómputo.
 
-La hipótesis de trabajo de esta tesis es la de dar respuesta a la construcción
-de un \ssolver paralelo y distribuido basado en la técnica \gp que:
-\begin{itemize} \item realice una adecuación y balanceo de la carga de
-procesamiento en \emph{run-time} sobre una cantidad y configuración de
-equipamiento desconocida, \item realice una adecuación y balanceo del uso de
-memoria primaria y secundaria en \emph{run-time}, también sobre una cantidad y
-configuración de equipamiento desconocida, y \item sea extensible y fácil de
-parametrizar en todos aquellos aspectos que determinen el comportamiento del
-procedimiento de resolución del problema. \end{itemize}
+El objetivo de esta tesis es la de dar respuesta a la construcción de un
+\ssolver paralelo y distribuido basado en la técnica \gp que: \begin{itemize}
+\item realice una adecuación y balanceo de la carga de procesamiento en \emph
+{run-time} sobre una cantidad y configuración de equipamiento desconocida,
+\item realice una adecuación y balanceo del uso de memoria primaria y
+secundaria en \emph{run-time}, también sobre una cantidad y configuración de
+equipamiento desconocida, y \item sea extensible y fácil de parametrizar en
+todos aquellos aspectos que determinen el comportamiento del procedimiento de
+resolución del problema. \end{itemize}
 
-Al mismo tiempo, someteremos a prueba la implementación de métodos de
-aprendizaje paralelos y distribuidos con el objetivo de identificar si esta
-técnica que ha demostrado ser revolucionaria en la optimización de los
-\ssolvers secuenciales aporta alguna mejora en este nuevo escenario. Esta
-incorporación se diseñará e implementará sin perjuicio de las características
-mencionadas anteriormente que creemos centrales en el desarrollo de una
-herramienta que pretende ejecutar en ambientes paralelos y distribuidos que
-\emph{a priori} no son conocidos.\\
+Al mismo tiempo, someteremos a prueba la implementación de un método de
+aprendizaje distribuido utilizando distintos criterios de aprendizaje con el
+objetivo de identificar si esta técnica que ha demostrado ser revolucionaria
+en la optimización de los \ssolvers secuenciales aporta alguna mejora en este
+nuevo escenario. Este segundo objetivo encuentra su motivación en la hipótesis
+de que al distribuir el trabajo entre distintas unidades de cómputo se abre la
+posibilidad de que se produza una enorme cantidad de retrabajo que podría ser
+sustancialmente minimizado mediante la incorporación de cláusulas aprendidas
+por otras instancias. Al mismo tiempo, la comunicación de cláusulas aprendidas
+entre distintas unidades de procesamiento conlleva un \emph{oeverhead}
+intrínseco que podría anular los efectos beneficiosos producidos por la
+disminución del retrabajo. Esto último, sumado al hecho de que el incremento
+en los tamaños de las bases de datos de cláusulas aprendidas de cada instancia
+ralentiza la propagación de implicaciones nos pone en una situación en la que
+es importante encontrar un equilibrio entre la ganancia obtenida por una parte
+y la pérdida producida por el \emph{overhead}. A su vez, la incorporación de
+aprendizaje en un ambiente distribuido presenta desafíos propios del entorno
+como ser: lidiar con la velocidad de acceso a recursos que se encuentran en
+equipos remotos (órdenes de magnitud más lento que el acceso a memoria
+principal), la necesidad de tener en cuenta la contención para evitar la
+saturación de un equipo, etc. Por lo tanto esta incorporación se diseñará e
+implementará sin perjuicio de las características mencionadas anteriormente
+que creemos centrales en el desarrollo de una herramienta que pretende
+ejecutar en ambientes paralelos y distribuidos que \emph{a priori} no son
+conocidos.\\
 
 La presente tesis se divide de la siguiente forma. El Cap.~\ref{preliminares}
 presenta las definiciones y resultados básicos del área de \sat, en conjunto
