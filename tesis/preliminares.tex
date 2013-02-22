@@ -250,8 +250,18 @@ valuación que la haga verdadera. Esto se lleva a cabo a partir de construir dic
 El algoritmo general de  \emph{SAT solving} consiste en un algoritmo de \bt que podríamos esquematizar como sigue:
 
 \begin{lstlisting}[mathescape,language=Pascal,frame=single,numbers=left,caption={Algoritmo \emph{naïf}},label=naif] 
-G = F
-return G
+NAIF-SAT (F $\in \mathit{Form}(\mathcal{V})$ in CNF)
+   if F is a consistent set of literals
+      then return true
+   if F contains an empty clause
+      then return false
+   $v$ $\leftarrow$ unassigned-var-from(F)
+   G $\leftarrow$ assign(v, 1, F)
+   if NAIF-SAT(G)
+      then return true
+   else
+      G $\leftarrow$ assign(v, 0, F)
+      return NAIF-SAT(G)
 \end{lstlisting}
 
 La mayoría de los \emph{SAT solvers} son variaciones del algoritmo general DPLL\cite{Davis:1962:MPT:368273.368557} (que a su vez se basa en el presentado por Davis y Putnam en \cite{Davis:1960:CPQ:321033.321034}) que presentaremos a continuación, y actúan sobre fórmulas proposicionales expresadas en Forma Normal Conjuntiva (\cnf). 
