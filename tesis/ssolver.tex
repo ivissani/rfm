@@ -44,20 +44,20 @@ pendiente. Es evidente que en esta situación no es viable que el \w que está
 esperando una tarea tenga que esperar a que el \w que tiene dicha tarea
 termine de \solvear para que su pedido sea completado.
 
-La necesidad global de escalabilidad también trae aparejada la necesidad de
-que el almacenamiento de problemas pendientes de resolución también se
-encuentre distribuido. Esto se debe a un doble aspecto. Por un lado, la
-cantidad de subproblemas producidos puede ser muy grande. Por lo tanto no es
-viable requerir que la cantidad de espacio necesario para almacenar todos las
-tareas pendientes de resolución se encuentre disponible en una ubicación.
-Menos aún si pretendemos que nuestro sistema puede crecer en cantidad de \ws
-ya que este crecimiento se traduce también en un crecimiento en la cantidad de
-productores y por lo tanto en la cantidad de tareas producidas. Un segundo
-problema que presentaría el almacenamiento centralizado es el de la
-contención. En este aspecto, si pretendemos que el almacenamiento no se vuelva
-un cuello de botella es vital distribuir de la mejor manera posible las tareas
-pendientes de modo que cuando los \ws requieren nuevas tareas para resolver,
-los múltiples pedidos no recaigan en un mismo equipo.
+El objetivo global de escalabilidad también trae aparejado la necesidad de que
+el almacenamiento de problemas pendientes de resolución se encuentre
+distribuido. Esto se debe a un doble aspecto. Por un lado, la cantidad de
+subproblemas producidos puede ser muy grande. Por lo tanto no es viable
+requerir que la cantidad de espacio necesario para almacenar todas las tareas
+pendientes de resolución se encuentre disponible en una ubicación. Menos aún
+si pretendemos que nuestro sistema puede crecer en cantidad de \ws ya que este
+crecimiento se traduce también en un crecimiento en la cantidad de productores
+y por lo tanto en la cantidad de tareas producidas. Un segundo problema que
+presentaría el almacenamiento centralizado es el de la contención. En este
+aspecto, si pretendemos que el almacenamiento no se vuelva un cuello de
+botella es vital distribuir de la mejor manera posible las tareas pendientes
+de modo que cuando los \ws requieren nuevas tareas para resolver, los
+múltiples pedidos no recaigan en un mismo equipo.
 
 \newcommand{\ots}{\emph{off-the-shelf}\xspace}
 
@@ -69,6 +69,15 @@ evolucionar a la par de los \ssolvers secuenciales de manera más simple. Esto
 proporciona la posibilidad de que la herramienta no se vuelva obsoleta ante un
 nuevo avance en \ssolving secuencial.
 
+Generar una estrategia automática que provoque buenos resultados en la
+ejecución de problemas diversos es sumamente difícil. Más aún, no tener la
+posibilidad de modificar la estrategia adoptada durante una corrida que puede
+ser sumamente larga puede tener resultados catastróficos. Esto nos motivó a
+adoptar un enfoque en el que la maquinaria de cómputo distribuido no posee
+inteligencia alguna y por el contrario provee una serie de opearciones
+básicas. La operación del sistema por lo tanto se lleva a cabo desde un
+\textbf{tablero de control} que permite al usuario manipular el sistema de
+cómputo.
 
 
 \begin{itemize}
