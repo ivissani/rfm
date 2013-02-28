@@ -1,11 +1,14 @@
 digraph G {
-	IDLE -> LOADING;
-	GETTING -> IDLE;
-	LOADING -> LOADED;
-	LOADED -> SOLVING;
-	SOLVING -> IDLE;
-	SOLVING -> ABORTING;
-	ABORTING -> ABORTED;
-	ABORTED -> SPLITTING;
-	SPLITTING -> IDLE;
+	falsenode [shape=none, label=""];
+	falsenode -> Idle;
+	Idle -> Getting;
+	Idle -> Loading;
+	Getting -> Idle;
+	Loading -> Loaded;
+	Loaded -> Solving;
+	Solving -> Idle;
+	Solving -> Aborting;
+	Aborting -> Aborted;
+	Aborted -> Splitting;
+	Splitting -> Idle;
 }

@@ -16,7 +16,19 @@
 
 \subsection{El tablero de control}
 
-\missingfigure{Diagrama de estados de los workers y las tareas}
+\begin{figure}
+	\begin{subfigure}[b]{0.5\textwidth}
+		\centering
+		\includegraphics[scale=0.5]{graphs/workerstates}
+		\caption{\emph{Workers}}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.5\textwidth}
+		\centering
+		\includegraphics[scale=0.5]{graphs/taskstates}
+		\caption{Tareas}
+	\end{subfigure}
+	\caption{Diagramas de estado en el tablero de control}
+\end{figure}
 
 \begin{small}
 \begin{lstlisting}[language=Python,caption=Interfaz Strategy]

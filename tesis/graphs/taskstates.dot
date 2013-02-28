@@ -1,12 +1,16 @@
 
 digraph G {
-	PENDING -> LOADING;
-	PENDING -> MOVING;
-	MOVING -> PENDING;
-	LOADING -> LOADED;
-	LOADED -> SOLVING;
-	SOLVING -> SOLVED;
-	SOLVING -> ABORTED;
-	ABORTED -> SPLITTING;
-	SPLITTING -> SPLIT;
+	Solved [peripheries=2];
+	Split  [peripheries=2];
+	Pending -> Loading;
+	Pending -> Moving;
+	Moving -> Pending;
+	Loading -> Loaded;
+	Loaded -> Solving;
+	Solving -> Solved;
+	Solving -> Aborted;
+	Aborted -> Splitting;
+	Splitting -> Split;
+	falsenode [shape=none, label=""];
+	falsenode -> Pending;
 }
