@@ -1,10 +1,5 @@
 %!TEX root = tesis.tex
 
-\newcommand{\w}{\emph{worker}\xspace}
-\newcommand{\ws}{\emph{workers}\xspace}
-
-\newcommand{\solveando}{\emph{solveando}\xspace}
-\newcommand{\solvear}{\emph{solvear}\xspace}
 
 \chapter{Un \ssolver paralelo y distribuido }
 \label{ssolver-pardist}
@@ -59,7 +54,6 @@ botella es vital distribuir de la mejor manera posible las tareas pendientes
 de modo que cuando los \ws requieren nuevas tareas para resolver, los
 múltiples pedidos no recaigan en un mismo equipo.
 
-\newcommand{\ots}{\emph{off-the-shelf}\xspace}
 
 Otro de los objetivos que perseguimos a la hora de diseñar nuestra herramienta
 fue que la misma pudiera utilizar un \ssolver \ots. Esto nos permite
@@ -69,7 +63,7 @@ evolucionar a la par de los \ssolvers secuenciales de manera más simple. Esto
 proporciona la posibilidad de que la herramienta no se vuelva obsoleta ante un
 nuevo avance en \ssolving secuencial.
 
-Generar una estrategia automática que provoque buenos resultados en la
+Generar una estrategia automática que proporcione buenos resultados en la
 ejecución de problemas diversos es sumamente difícil. Más aún, no tener la
 posibilidad de modificar la estrategia adoptada durante una corrida que puede
 ser sumamente larga puede tener resultados catastróficos. Esto nos motivó a
@@ -79,20 +73,68 @@ básicas. La operación del sistema por lo tanto se lleva a cabo desde un
 \textbf{tablero de control} que permite al usuario manipular el sistema de
 cómputo.
 
+\
 
-\begin{itemize}
-	\item Escalable
-	\item Uso de SAT Solver off-the-shelf
-	\item Multiplataforma
-	\item Tablero de control
-\end{itemize}
+\noindent\underline{\textbf{Nota sobre la implementación}}
+
+\
+
+El último objetivo que perseguimos durante el desarrollo de nuestra herrmienta
+fue que la misma presentara facilidad para ser modificada sin que esto
+impacatar negativamente en la \emph{performance}. Este objetivo, entre otras
+cosas, determinó la elección de las tecnologías a utilizar para su desarrollo.
+Por lo tanto se utilizó el lenguaje de programación \Python para el desarrollo
+de toda la herramienta con excepción de la parte de cómputo intensivo. Al
+utilizar un \ssolver \ots el lenguaje utilizado para el mismo fue aquel en el
+que estaba desarrollado. En particular, en la implementación actual de la
+herramienta utilizamos el \ssolver \minisatdosveinte que está desarrollado en
+el lenguaje \cpp. Para ello se desarrolló un \emph{wrapper} que permite
+utilizar \minisat desde un entorno \Python. Para el intercambio de mensajes
+entre los \ws se utilizó el estándar \mpi.
+
+
+% \begin{itemize}
+% 	\item Escalable
+% 	\item Uso de SAT Solver off-the-shelf
+% 	\item Multiplataforma
+% 	\item Tablero de control
+% \end{itemize}
 
 \section{Arquitectura}
+
+\begin{figure}
+\label{fig:arquitectura}
 \missingfigure{Diagrama de arquitectura del solver}
+\end{figure}
 
-\subsection{Lo del \cluster}
 
-\subsection{El tablero de control}
+La figura \ref{fig:arquitectura} muestra la arquitectura de la herramienta. En
+la misma se distinguen claramente dos componentes: el \bend que ejecuta sobre
+un \cluster de computadoras y el \fend que ejecuta en un equipo que sen
+encuentra posiblemente fuera del centro de cómputos.
+
+\subsection{\bend}
+
+\newcommand{\master}{\emph{MasterProxy}\xspace}
+
+En el \bend se puede observar que existen dos clases distintas de elementos.
+Por un lado tenemos un proceso llamado \master que es el encargado de manejar
+la comunicación de órdenes desde el \fend hacia los \ws y de reenviar las
+respuestas correspondientes desde los \ws hacia el \fend.
+
+En segunda instancia encontramos otro de tipo de procesos, los \ws. Los \ws
+son los encargados de relizar el cómputo (\ssolving). Asimismo son quienes
+almacenan las tareas pendientes de ejecución y por lo tanto deben proveer
+acceso a dicho almacenamiento a los demás \ws.
+
+\newcommand{\masterslave}{\texttt{Master-Worker}\xspace}
+
+Es importante destacar que si bien el \bend presenta una arquitectura
+\masterslave, el \master en este caso no toma ninguna decisión sino que
+simplemente actúa como intercambiador de mensajes entre el ambiente externo
+(el \fend) y el ambiente interno.
+
+\subsection{\fend}
 
 \begin{figure}
 	\begin{subfigure}[b]{0.5\textwidth}
