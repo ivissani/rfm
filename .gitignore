@@ -24,3 +24,5 @@ minisat-2.2.0-swigged/minisat_wrap.cxx
 minisat-2.2.0-swigged/pruebas/
 minisat-2.2.0-swigged/solver.learnt
 minisat-2.2.0-swigged/solver.model
+
+.DS_Store
