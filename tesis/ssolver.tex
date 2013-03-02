@@ -172,6 +172,20 @@ class Strategy(object):
 
 \subsubsection{Nuestra estrategia}
 
+\begin{itemize}
+	\item Si idle se parte el más viejo
+	\item La próxima a resolver es:
+		\begin{itemize}
+			\item Si no tengo tareas locales:
+				\begin{itemize}
+					\item Bajo la tarea que corresponde por BFS +
+					\item $\frac{\sharp tasks}{\sharp workers}$ del que más tiene (límite 10)
+				\end{itemize}
+			\item Si tengo: Agarro la que corresponde por BFS
+		\end{itemize}
+	\item Parto cuando la frecuencia de $\sharp UNSATs/_s$
+\end{itemize}
+
 \subsection{Decisiones que vale la pena seguir investigando}
 
 \section{Resultados experimentales}
