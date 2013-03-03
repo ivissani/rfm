@@ -107,7 +107,7 @@ la misma se distinguen claramente dos componentes: el \bend que ejecuta sobre
 un \cluster de computadoras y el \fend que ejecuta en un equipo que se
 encuentra posiblemente fuera del centro de cómputos.
 
-\begin{wrapfigure}{o}{0.6\textwidth}
+\begin{wrapfigure}{R}{0.6\textwidth}
 \label{fig:arquitectura}
 \fbox{\includegraphics[scale=0.4]{graphs/paralloy architecture}}
 \caption{Diagrama de componentes y conectores del \ssolver distribuido}
@@ -133,6 +133,33 @@ Es importante destacar que si bien el \bend presenta una arquitectura
 \masterslave, el \master en este caso no toma ninguna decisión sino que
 simplemente actúa como intercambiador de mensajes entre el ambiente externo
 (el \fend) y el ambiente interno.
+
+La figura \ref{fig:masterproxydetail} detalla la arquitectura del \master. En
+el diagrama se puede observar que el \datapath\todo{Ver si ponerlo en inglés o
+en castellano} de entrada (\fend hacia \bend) y el de salida (\bend hacia
+\fend) son independientes. Esto es una consecuencia directa que se desprende
+de la ausencia de inteligencia en el \master. Esto implica que no es necesario
+mantener el estado del sistema ya que en este componente no se toman
+decisiones. La ausencia de estado hace que el proceso \master consuma un
+mínimo de recursos.
+
+La intervención de dos \threads distintos en el \datapath de entrada
+proporciona un alto nivel de respuesta ya que permite que algunos comandos
+sean implementados internamente mediante comunicación sincrónica a través de
+\mpi sin que esto implique un pausa en el procesamiento del flujo de datos de
+entrada desde el \fend hacia el \bend. La comunicación sincrónica permite
+simplificar algunos comandos como el envío del problema original hacia todos
+los \ws. Al mismo tiempo se mantiene el orden entre los comandos enviados
+desde el \fend lo cual también contribuye a la simplifación del modelo de
+cómputo a pesar de tratarse de un sistema ditribuido.
+
+\begin{wrapfigure}{R}{0.7\textwidth}
+\centering
+\label{fig:masterproxydetail}
+\includegraphics[scale=0.3]{graphs/master proxy detail}
+\caption{Detalle de arquitectura del componente \master}
+\end{wrapfigure}
+
 
 \subsection{\fend}
 
@@ -189,3 +216,24 @@ class Strategy(object):
 \subsection{Decisiones que vale la pena seguir investigando}
 
 \section{Resultados experimentales}
+
+\begin{table}[h]\tiny
+	\begin{tabular}{lrrrrrr}
+		\toprule
+		problem	&	scope	&	sequential runtime	&	parallel walltime	&	parallel overhead	&	speedup	&	efficiency \\
+		\cmidrule(r){1-7}
+		Pamela	&	8	&	308.26	&	60.46	&	3561.23	&	5.10x	&	0.08 \\
+		Pamela	&	9	&	76168.16	&	407.34	&	-50098.63	&	186.99x	&	2.92 \\
+		Pamela	&	10	&		&		&	0.00	&		&	 \\
+		\cmidrule(r){1-7}
+		Closure	&	11	&	749.65	&	291.28	&	17891.95	&	2.57x	&	0.04 \\
+		Closure	&	12	&	3983.36	&	1914.45	&	118541.30	&	2.08x	&	0.03 \\
+		Closure	&	13	&		&		&	0.00	&		&	 \\
+		\cmidrule(r){1-7}
+		MarkGC Soundness2	&	9	&	217.31	&	200.85	&	12637.31	&	1.08x	&	0.02 \\
+		MarkGC Soundness2	&	10	&	2855.3	&	1376.89	&	85265.47	&	2.07x	&	0.03 \\
+		\bottomrule
+	\end{tabular}
+	\caption{Tiempo de ejecución (en segundos) distribuido vs. secuencial}
+	\todo[inline]{Resultados parciales. Completar con todos los experimentos}
+\end{table}
