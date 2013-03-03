@@ -76,12 +76,14 @@ manejar sistemas con cientos de estados, el tamaño de los BDDs generados para
 sistemas grandes se vuelve prohibitivo.
 
 El problema del espacio requerido por los BDDs motivó la creación de la
-técnica conocida como \bmc\cite{Biere:1999:SMC:646483.691738}\marginpar{BMC no
-está vinculado unívocamente a sat-based. BMC aparece, como dijiste antes, para
-lidiar con los lenguajes indesidibles mientras que sat-based es una manera de
-hacer tanto MC como BMC aprovechando los avances en ese área en particular.
-Esto último es el argumento de quienes usan SS off-the-shelf. Yo acá diría
-testo último.} que reemplaza la utilización de BDDs por la verificación de
+técnica conocida como \bmc\cite{Biere:1999:SMC:646483.691738}
+% \marginpar{BMC no
+% está vinculado unívocamente a sat-based. BMC aparece, como dijiste antes, para
+% lidiar con los lenguajes indesidibles mientras que sat-based es una manera de
+% hacer tanto MC como BMC aprovechando los avances en ese área en particular.
+% Esto último es el argumento de quienes usan SS off-the-shelf. Yo acá diría
+% testo último.}
+que reemplaza la utilización de BDDs por la verificación de
 fórmulas proposicionales a través de procedimientos SAT capaces de manejar en
 la actualidad fórmulas proposicionales con varios miles de variables. En
 particular, la técnica presentada en \cite{Biere:1999:SMC:646483.691738}
