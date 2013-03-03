@@ -26,3 +26,4 @@ minisat-2.2.0-swigged/solver.learnt
 minisat-2.2.0-swigged/solver.model
 
 .DS_Store
+._*

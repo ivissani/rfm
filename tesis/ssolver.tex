@@ -102,16 +102,16 @@ entre los \ws se utilizó el estándar \mpi.
 
 \section{Arquitectura}
 
-\begin{figure}
-\label{fig:arquitectura}
-\missingfigure{Diagrama de arquitectura del solver}
-\end{figure}
-
-
 La figura \ref{fig:arquitectura} muestra la arquitectura de la herramienta. En
 la misma se distinguen claramente dos componentes: el \bend que ejecuta sobre
 un \cluster de computadoras y el \fend que ejecuta en un equipo que sen
 encuentra posiblemente fuera del centro de cómputos.
+
+\begin{wrapfigure}{o}{0.6\textwidth}
+\label{fig:arquitectura}
+\fbox{\includegraphics[scale=0.4]{graphs/paralloy architecture}}
+\caption{Diagrama de componentes y conectores del \ssolver distribuido}
+\end{wrapfigure}
 
 \subsection{\bend}
 
