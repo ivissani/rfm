@@ -75,35 +75,37 @@ fórmulas. A pesar de que las técnicas de \smc basadas en  BDDs son capaces de
 manejar sistemas con cientos de estados, el tamaño de los BDDs generados para
 sistemas grandes se vuelve prohibitivo.
 
-El problema del espacio requerido por los BDDs motivó la creación de la
-técnica conocida como \bmc\cite{Biere:1999:SMC:646483.691738}
 % \marginpar{BMC no
 % está vinculado unívocamente a sat-based. BMC aparece, como dijiste antes, para
 % lidiar con los lenguajes indesidibles mientras que sat-based es una manera de
 % hacer tanto MC como BMC aprovechando los avances en ese área en particular.
 % Esto último es el argumento de quienes usan SS off-the-shelf. Yo acá diría
 % testo último.}
-que reemplaza la utilización de BDDs por la verificación de
-fórmulas proposicionales a través de procedimientos SAT capaces de manejar en
-la actualidad fórmulas proposicionales con varios miles de variables. En
-particular, la técnica presentada en \cite{Biere:1999:SMC:646483.691738}
-consiste en buscar contraejemplos de una longitud acotada $k$ a partir de
-generar una fórmula proposicional que sea verdadera si y sólo si un
-contraejemplo de dicha longitud existe. Si bien esta técnica es correcta y
-completa para sistemas modelados como máquinas de estados finitos ya que el
-espacio de búsqueda, aunque usualmente sea exponencialmente grande, es finito,
-no es cierto que esta metodología aplicada a un lenguaje formal cualquiera sea
-siquiera correcta, tómese por ejemplo cualquier lenguaje lógico que no posea
-la propiedad de modelo finito. Siempre que un lenguaje no posea la propiedad
-de modelo finito, existen conjuntos de fórmulas cuyos modelos son
-necesariamente infinitos, de esta forma, la exploración de un subespacio
-finito en busca de un modelo no puede nunca garantizar una respuesta negativa.
-Esta debilidad, en el caso general, generada por la introducción de la cota en
-el tamaño del contraejemplo es lo que, aplicado a un sistema lógico
-indecidible, permite obtener un subconjunto del lenguaje original que resulte
-decidible y, por lo tanto, automáticamente verificable. Aun cuando las
-respuestas del procedimiento utilizado resulten parciales respecto de la
-validez de una propiedad determinada en el lenguaje original.
+
+El problema del espacio requerido por los BDDs motivó la creación de la
+técnica conocida como \bmc\cite{Biere:1999:SMC:646483.691738}. La técnica
+presentada en \cite{Biere:1999:SMC:646483.691738} consiste en buscar
+contraejemplos de una longitud acotada $k$ a partir de generar una fórmula
+proposicional que sea verdadera si y sólo si un contraejemplo de dicha
+longitud existe. Para verificar estas fórmulas los autores reemplazaron la
+utilización de BDDs por la utilización de procedimientos SAT ya que para esa
+época los mismos eran capaces de manejar fórmulas proposicionales con varios
+miles de variables y no sufrían del problema de la explosión en memoria. Si
+bien la técnica mencionada es correcta y completa para sistemas modelados como
+máquinas de estados finitos ya que el espacio de búsqueda, aunque usualmente
+sea exponencialmente grande, es finito, no es cierto que esta metodología
+aplicada a un lenguaje formal cualquiera sea siquiera correcta, tómese por
+ejemplo cualquier lenguaje lógico que no posea la propiedad de modelo finito.
+Siempre que un lenguaje no posea la propiedad de modelo finito, existen
+conjuntos de fórmulas cuyos modelos son necesariamente infinitos, de esta
+forma, la exploración de un subespacio finito en busca de un modelo no puede
+nunca garantizar una respuesta negativa. Esta debilidad, en el caso general,
+generada por la introducción de la cota en el tamaño del contraejemplo es lo
+que, aplicado a un sistema lógico indecidible, permite obtener un subconjunto
+del lenguaje original que resulte decidible y, por lo tanto, automáticamente
+verificable. Aun cuando las respuestas del procedimiento utilizado resulten
+parciales respecto de la validez de una propiedad determinada en el lenguaje
+original.
 
 Un ejemplo típico de esto se da en lenguajes de primer orden donde la
 indecidibilidad se da a partir de la existencia de cuantificadores
