@@ -24,7 +24,7 @@ las funciones necesarias provee la capacidad de distribuir la carga de trabajo
 de la manera más conveniente en cada momento. Esto no podría ser logrado si
 los nodos de trabajo tuvieran funciones específicas ya que se podría dar el
 caso de tener nodos ociosos porque no hay trabajo pendiente de la clase de
-trabajos que esos nodos saben realizar.
+trabajo que esos nodos saben realizar.
 
 En nuestro caso particular esto se traduce en que los \ws deben poseer las
 capacidades de: \solvear \todo{buscar una forma de decir esto que no sea
@@ -39,19 +39,19 @@ pendiente. Es evidente que en esta situación no es viable que el \w que está
 esperando una tarea tenga que esperar a que el \w que tiene dicha tarea
 termine de \solvear para que su pedido sea completado.
 
-El objetivo global de escalabilidad también trae aparejado la necesidad de que
+El objetivo global de escalabilidad también trae aparejada la necesidad de que
 el almacenamiento de problemas pendientes de resolución se encuentre
 distribuido. Esto se debe a un doble aspecto. Por un lado, la cantidad de
 subproblemas producidos puede ser muy grande. Por lo tanto no es viable
 requerir que la cantidad de espacio necesario para almacenar todas las tareas
-pendientes de resolución se encuentre disponible en una ubicación. Menos aún
-si pretendemos que nuestro sistema puede crecer en cantidad de \ws ya que este
+pendientes de resolución se encuentre disponible en una misma ubicación. Menos aún
+si pretendemos que nuestro sistema pueda crecer en cantidad de \ws ya que este
 crecimiento se traduce también en un crecimiento en la cantidad de productores
 y por lo tanto en la cantidad de tareas producidas. Un segundo problema que
 presentaría el almacenamiento centralizado es el de la contención. En este
 aspecto, si pretendemos que el almacenamiento no se vuelva un cuello de
 botella es vital distribuir de la mejor manera posible las tareas pendientes
-de modo que cuando los \ws requieren nuevas tareas para resolver, los
+de modo que cuando los \ws requieran nuevas tareas para resolver, los
 múltiples pedidos no recaigan en un mismo equipo.
 
 
@@ -68,7 +68,7 @@ ejecución de problemas diversos es sumamente difícil. Más aún, no tener la
 posibilidad de modificar la estrategia adoptada durante una corrida que puede
 ser sumamente larga puede tener resultados catastróficos. Esto nos motivó a
 adoptar un enfoque en el que la maquinaria de cómputo distribuido no posee
-inteligencia alguna y por el contrario provee una serie de opearciones
+inteligencia alguna y por el contrario provee una serie de operaciones
 básicas. La operación del sistema por lo tanto se lleva a cabo desde un
 \textbf{tablero de control} que permite al usuario manipular el sistema de
 cómputo.
@@ -104,7 +104,7 @@ entre los \ws se utilizó el estándar \mpi.
 
 La figura \ref{fig:arquitectura} muestra la arquitectura de la herramienta. En
 la misma se distinguen claramente dos componentes: el \bend que ejecuta sobre
-un \cluster de computadoras y el \fend que ejecuta en un equipo que sen
+un \cluster de computadoras y el \fend que ejecuta en un equipo que se
 encuentra posiblemente fuera del centro de cómputos.
 
 \begin{wrapfigure}{o}{0.6\textwidth}
