@@ -292,7 +292,7 @@ El algoritmo presentado en List.~\ref{DPLL}, comúnmente conocido como \emph{DPL
 
 Los puntos claves del algoritmo son los que aparecen en las filas identificadas como 2, 4, 7, 8 y 9. En el caso de 2 y 4 porque son los puntos en los que se determina si la fórmula es satisfacible o no. En el caso del condicional que aparece en la fila 2 la fórmula se determina como satisfacible por determinar que ya no restan decisiones para ser tomadas, si F es un conjunto consistente de literales, entonces este conforma una valuación de las variables proposicionales que satisface la fórmula puesto que si $p \in F$ entonces la valuación construida asigna 1 a $p$, y si $\neg p \in F$ entonces le asigna 0; en el caso de 4, si una cláusula resulta vacía, esto implica que no habrá forma de asignar ningún valor a ninguna variable proposicional de forma de hacerla verdadera y por lo tanto la fórmula no será satisfacible. Las filas 7 y 8 realizan lo que se denomina \emph{unit propagation} o BCP (por el inglés Boolean Constraint Propagation), lo que realiza este ciclo es propagar en todas las cláusulas las decisiones ya tomadas de forma que si un literal aparece en F, entonces se eliminan todas las cláusulas que lo contengan y se elimina toda aparición del literal negado de toda cláusula en que aparece mencionado. La fila 9 realiza una de las tareas más importantes del procedimiento, determina cuál será la próxima decisión a tomar a partir de escoger un literal; es sabido que el orden en que se eligen las variables modifica dramáticamente el rendimiento de la herramienta puesto que es el punto en que se decide qué fragmento de espacio de búsqueda será explorado primero. Luego, una vez elegido el literal que se utilizará para partir el espacio de búsqueda se aplica el procedimiento recursivamente sobre los dos espacios disjuntos de soluciones determinados por $l$ y por $\neg l$.
 
-La mayor diferencia entre el algoritmo del List.~\ref{DPLL} y el de List.~\ref{naif} es precisamente la introducción de la técnica de BCP. Esta técnica permite aplicar un conjuntos de decisiones ya tomadas simplificando la fórmula y reduciendo así el espacio de búsqueda a recorrer. Estudios han demostrado que los \ssolver modernos que implementan esta técnica de propagación invierten aproximadamente el 90\% del tiempo realizando esta tarea\cite{???} y es por esta razón que las partes más críticas de la implementación de un \ssolver son aquellas que están involucradas en la resolución de BCP. Ejemplos de esto son técnicas como ...\marginpar{mencionar las cosas relevantes como punteros a cláusulas y two watch literals.}
+La mayor diferencia entre el algoritmo del List.~\ref{DPLL} y el de List.~\ref{naif} es precisamente la introducción de la técnica de BCP. Esta técnica permite aplicar un conjunto de decisiones ya tomadas simplificando la fórmula y reduciendo así el espacio de búsqueda a recorrer. Es sabido \cite{moskewicz:da01} que los \ssolver modernos que implementan esta técnica de propagación invierten aproximadamente el 90\% del tiempo en la realización de esta tarea, y es por esta razón que las partes más críticas de la implementación de un \ssolver son aquellas que están involucradas en la resolución de BCP. Ejemplos de esto son técnicas como ...\marginpar{mencionar las cosas relevantes como punteros a cláusulas y two watch literals.}
 
 
 \subsection{Aprendizaje}
@@ -304,13 +304,15 @@ Cada vez que la cadena de decisiones tomadas --más las implicaciones obtenidas 
 
 \begin{itemize}
 
-\item Determinar las causas del conflicto hallado y caracterizarlas mediante una o más \emph{cláusulas de conflicto}, que pueda(n) almacenarse para procurar evitar otros conflictos similares en lo sucesivo.
+\item Determinar las causas del conflicto hallado, y caracterizarlas mediante una o más \emph{cláusulas de conflicto} que pueda(n) almacenarse para procurar evitar otros conflictos similares en lo sucesivo.
 
-\item Minimizar estas cláusulas de conflicto hasta lograr que la caracterización antedicha sea lo más ajustada posible, para así maximizar el potencial de poda del espacio de búsqueda que en lo sucesivo pudiere permitir cada cláusula aprendida.
+\item Minimizar esas cláusulas hasta lograr que la caracterización antedicha sea lo más ajustada posible, para así maximizar el potencial de poda del espacio de búsqueda que en lo sucesivo pudiere permitir cada cláusula aprendida. %Esto se conoce como \emph{conflict clause minimization} [cita].
 
-\item  Calcular el punto más alto al que se pueda regresar de modo correcto y completo en la cadena de decisiones tomadas e implicaciones (es decir, en la pila del \emph{backtracking}), evitando  Esto se conoce como \emph{backjumping} o \emph{backtracking no cronológico} [citas].
+\item  Calcular el punto más alto al que se pueda regresar de modo correcto y completo en la cadena de decisiones tomadas e implicaciones (es decir, en la pila del \emph{backtracking}), evitando en lo inmediato tener que inspeccionar ciertas partes del espacio de búsqueda que, a la luz del conflicto hallado, sólo podrían ser infructuosas. Esto se conoce como \emph{backjumping} o \emph{backtracking no cronológico} \cite{marques-silva:iccad96} \cite{moskewicz:da01}.
 
 \end{itemize}
+
+En la actualidad el análisis de conflictos suele basarse en las nociones de \emph{grafo de implicaciones} y \emph{Unit Implication Points} \cite{marques-silva:iccad96}. Desde \ldots
 
 
 \subsubsection{Recorte de la base de datos}
@@ -319,7 +321,7 @@ La acumulación de cláusulas aprendidas en conflictos pasados resulta muy venta
 
 En segundo lugar, la proliferación de cláusulas aprendidas conlleva cierto \emph{overhead} en otros aspectos del proceso de búsqueda (y en particular en el corazón del mismo, ya que realizar BCP sobre un mayor número de cláusulas resulta más costoso). En consecuencia, al acumular más y más cláusulas también se corre el riesgo de alcanzar el punto en el que los beneficios de recortar el espacio de búsqueda ya no compensen la penalidad que supone un costo de propagación mucho mayor.
 
-Estos riesgos motivan la necesidad de contar con políticas de purga: todo sat-solver que mantenga una base de datos de cláusulas aprendidas debe implementar algún criterio de borrado periódico.
+Estos riesgos motivan la necesidad de contar con políticas de purga: todo \ssolver que mantenga una base de datos de cláusulas aprendidas debe implementar algún criterio de borrado periódico.
 
 
 
@@ -327,15 +329,19 @@ Estos riesgos motivan la necesidad de contar con políticas de purga: todo sat-s
 
 Surge así la necesidad de decidir cuáles y cuántas de las cláusulas aprendidas descartar, y cuándo o cada cuánto hacerlo. En este sentido se han estudiado diversos enfoques y criterios.
 
-Un primer factor que naturalmente se tuvo en cuenta es la longitud de las cláusulas aprendidas, en tanto suele ser el caso [cita GRASP] que las más breves tienen mayor poder de recorte del espacio de búsqueda.
+Un primer factor que naturalmente se tuvo en cuenta es la longitud de las cláusulas aprendidas, en tanto suele ser el caso \cite{marques-silva:iccad96} que las más breves tienen mayor poder de recorte del espacio de búsqueda.
 
-Otra propuesta, que por sus buenos resultados fue adoptada por muchas implementaciones posteriores, consiste en medir el grado de \emph{actividad} de las cláusulas aprendidas [cita BerkMin], observando y contabilizando la cantidad de conflictos futuros en los que cada tal cláusula se ve involucrada.
+Otra propuesta, que por sus buenos resultados fue adoptada por muchas implementaciones posteriores, consiste en medir el grado de \emph{actividad} de las cláusulas aprendidas \cite{goldberg:date02}, observando y contabilizando la cantidad de conflictos futuros en los que cada tal cláusula se ve involucrada.
+
 
 	[agregar descripción precisa de cómo lo implementa Minisat]
 
-Más recientemente se ha destacado otra métrica denominada LBD, por \emph{Literals Blocks Distance} [Audemard/Simon], que se basa en medir la cantidad de subconjuntos distintos en que pueden particionarse los literales de cada cláusula aprendida según sus respectivos \emph{decision levels} (la profundidad de \emph{backtracking} en que fue tomada la decisión de cada variable).
+
+Más recientemente se ha destacado otra métrica denominada LBD, por \emph{Literals Blocks Distance} \cite{Audemard:2009:PLC:1661445.1661509}, que se basa en medir la cantidad de subconjuntos distintos en que pueden particionarse los literales de cada cláusula aprendida según sus respectivos \emph{decision levels} (la profundidad de \emph{backtracking} en que fue tomada la decisión de cada variable).
+
 
 	[agregar definición más formal de LBD]
+
 
 
 
