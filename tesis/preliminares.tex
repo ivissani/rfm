@@ -298,9 +298,44 @@ La mayor diferencia entre el algoritmo del List.~\ref{DPLL} y el de List.~\ref{n
 \subsection{Aprendizaje}
 Uno de los factores más determinantes en la mejora del rendimiento de los \ssolver modernos ha sido la incorporación de técnicas de aprendizaje de cláusulas derivadas de los conflictos que hacen que bajo una cierta cadena de decisiones la fórmula no sea satsfacible. La idea general es identificar contradicciones inherentes a un cierto conjunto de decisiones y agregar a la fórmula cláusulas que obliguen al \ssolver a descartar todo fragmento del espacio de búsqueda que de una u otra forma las implique.
 
-\subsubsection{First UIP}
+\subsubsection{Análisis de conflictos, UIPs y backjumping}
+
+Cada vez que la cadena de decisiones tomadas --más las implicaciones obtenidas por medio de BCP tras cada una de ellas-- conducen al \emph{solver} a un conflicto, se lleva a cabo un \emph{análisis de conflicto}, cuyos objetivos incluyen:
+
+\begin{itemize}
+
+\item Determinar las causas del conflicto hallado y caracterizarlas mediante una o más \emph{cláusulas de conflicto}, que pueda(n) almacenarse para procurar evitar otros conflictos similares en lo sucesivo.
+
+\item Minimizar estas cláusulas de conflicto hasta lograr que la caracterización antedicha sea lo más ajustada posible, para así maximizar el potencial de poda del espacio de búsqueda que en lo sucesivo pudiere permitir cada cláusula aprendida.
+
+\item  Calcular el punto más alto al que se pueda regresar de modo correcto y completo en la cadena de decisiones tomadas e implicaciones (es decir, en la pila del \emph{backtracking}), evitando  Esto se conoce como \emph{backjumping} o \emph{backtracking no cronológico} [citas].
+
+\end{itemize}
+
+
 \subsubsection{Recorte de la base de datos}
+
+La acumulación de cláusulas aprendidas en conflictos pasados resulta muy ventajosa, pero no puede más que convertirse en una desventaja si se la implementa de manera irrestricta. En primer lugar, la cantidad de cláusulas aprendidas es proporcional a la de conflictos hallados, que a su vez es --en peor caso-- exponencial en la cantidad de variables. Así, un solver que aprenda pero nunca descarte cláusulas correría el riesgo de agotar la memoria disponible.
+
+En segundo lugar, la proliferación de cláusulas aprendidas conlleva cierto \emph{overhead} en otros aspectos del proceso de búsqueda (y en particular en el corazón del mismo, ya que realizar BCP sobre un mayor número de cláusulas resulta más costoso). En consecuencia, al acumular más y más cláusulas también se corre el riesgo de alcanzar el punto en el que los beneficios de recortar el espacio de búsqueda ya no compensen la penalidad que supone un costo de propagación mucho mayor.
+
+Estos riesgos motivan la necesidad de contar con políticas de purga: todo sat-solver que mantenga una base de datos de cláusulas aprendidas debe implementar algún criterio de borrado periódico.
+
+
+
 \subsubsection{Actividad y LBD}
 
-% Probando
+Surge así la necesidad de decidir cuáles y cuántas de las cláusulas aprendidas descartar, y cuándo o cada cuánto hacerlo. En este sentido se han estudiado diversos enfoques y criterios.
+
+Un primer factor que naturalmente se tuvo en cuenta es la longitud de las cláusulas aprendidas, en tanto suele ser el caso [cita GRASP] que las más breves tienen mayor poder de recorte del espacio de búsqueda.
+
+Otra propuesta, que por sus buenos resultados fue adoptada por muchas implementaciones posteriores, consiste en medir el grado de \emph{actividad} de las cláusulas aprendidas [cita BerkMin], observando y contabilizando la cantidad de conflictos futuros en los que cada tal cláusula se ve involucrada.
+
+	[agregar descripción precisa de cómo lo implementa Minisat]
+
+Más recientemente se ha destacado otra métrica denominada LBD, por \emph{Literals Blocks Distance} [Audemard/Simon], que se basa en medir la cantidad de subconjuntos distintos en que pueden particionarse los literales de cada cláusula aprendida según sus respectivos \emph{decision levels} (la profundidad de \emph{backtracking} en que fue tomada la decisión de cada variable).
+
+	[agregar definición más formal de LBD]
+
+
 
