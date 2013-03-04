@@ -107,7 +107,7 @@ la misma se distinguen claramente dos componentes: el \bend que ejecuta sobre
 un \cluster de computadoras y el \fend que ejecuta en un equipo que se
 encuentra posiblemente fuera del centro de cómputos.
 
-\begin{wrapfigure}{R}{0.6\textwidth}
+\begin{wrapfigure}{R}{0.4\textwidth}
 \label{fig:arquitectura}
 \fbox{\includegraphics[scale=0.4]{graphs/paralloy architecture}}
 \caption{Diagrama de componentes y conectores del \ssolver distribuido}
@@ -134,6 +134,13 @@ Es importante destacar que si bien el \bend presenta una arquitectura
 simplemente actúa como intercambiador de mensajes entre el ambiente externo
 (el \fend) y el ambiente interno.
 
+\begin{wrapfigure}{O}{0.85\textwidth}
+\centering
+\label{fig:masterproxydetail}
+\includegraphics[scale=0.3]{graphs/master proxy detail}
+\caption{Detalle de arquitectura del componente \master}
+\end{wrapfigure}
+
 La figura \ref{fig:masterproxydetail} detalla la arquitectura del \master. En
 el diagrama se puede observar que el \datapath\todo{Ver si ponerlo en inglés o
 en castellano} de entrada (\fend hacia \bend) y el de salida (\bend hacia
@@ -153,15 +160,40 @@ los \ws. Al mismo tiempo se mantiene el orden entre los comandos enviados
 desde el \fend lo cual también contribuye a la simplifación del modelo de
 cómputo a pesar de tratarse de un sistema ditribuido.
 
-\begin{wrapfigure}{R}{0.7\textwidth}
+\begin{wrapfigure}{O}{0.75\textwidth}
 \centering
-\label{fig:masterproxydetail}
-\includegraphics[scale=0.3]{graphs/master proxy detail}
-\caption{Detalle de arquitectura del componente \master}
+\label{fig:workerdetail}
+\includegraphics[scale=0.3]{graphs/worker detail}
+\caption{Detalle de arquitectura del componente \w}
 \end{wrapfigure}
 
+La figura \ref{fig:workerdetail} muestra el detalle de diseño del componente
+\w. Como se puede observar, las funciones de \solving, comunicación y
+transferencia de archivos se implementaron en \threads separados. Dado que la
+función de \solving utiliza principalmente tiempo de \cpu, mientras que el
+resto de las funciones consumen principalmente timepo de \io, la separación de
+éstas en distintos \threads permite la ejecución concurrente de estas
+tareas sin que esta característica impacte negativamente en el desempeño del
+\ssolver. A la vez, esta característica permite satisfacer el objetivo de
+movilidad de las tareas, aún cuando el \w se encuentre ocupado \solveando.
+
+Interesa destacar también que tanto la estrategia de partición de un problema
+como la estrategia de aprendizaje se encuentran implementadas en los \ws. Si
+bien este diseño es contrario a la idea general de \emph{tablero de control}
+consideramos que el nivel de granularidad necesario para poder controlar
+remotamente la realización de estas dos tareas era demasiado alto y atentaba
+contra la usabilidad de la herramienta. Asimismo, la herramienta es capaz de
+poseer diversas estrategias implementadas para estas dos fases de la ejecución
+de modo que el usuario puede seleccionar la estrategia deseada (y sus
+parámetros en caso que corresponda) desde el \fend.
 
 \subsection{\fend}
+
+bal ablablmas
+kiasdoil
+asdk.jasd
+ñljasd
+
 
 \begin{figure}
 	\begin{subfigure}[b]{0.5\textwidth}
@@ -177,7 +209,11 @@ cómputo a pesar de tratarse de un sistema ditribuido.
 	\caption{Diagramas de estado en el tablero de control}
 \end{figure}
 
-\begin{small}
+la interfaz de la estrategia
+
+
+\begin{wrapfigure}{O}{.6\textwidth}
+\begin{tiny}
 \begin{lstlisting}[language=Python,caption=Interfaz Strategy]
 class Strategy(object):
 	def register_globalstate(self, globalstate)
@@ -195,9 +231,10 @@ class Strategy(object):
 	def on_split_finished(self, worker, parenttask, nchildren)
 	def on_shutdown(self)
 \end{lstlisting}
-\end{small}
+\end{tiny}
+\end{wrapfigure}
 
-\subsubsection{Nuestra estrategia}
+\subsection{Nuestra estrategia}
 
 \begin{itemize}
 	\item Si idle se parte el más viejo
@@ -211,6 +248,12 @@ class Strategy(object):
 			\item Si tengo: Agarro la que corresponde por BFS
 		\end{itemize}
 	\item Parto cuando la frecuencia de $\sharp UNSATs/_s$
+	\item Detalles:
+	\begin{itemize}
+		\item Target de UNSATs por esgundo
+		\item Frecuencia de checkeo
+		\item Tamaño ventana
+	\end{itemize}
 \end{itemize}
 
 \subsection{Decisiones que vale la pena seguir investigando}
