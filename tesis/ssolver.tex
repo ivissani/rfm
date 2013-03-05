@@ -4,6 +4,17 @@
 \chapter{Un \ssolver paralelo y distribuido }
 \label{ssolver-pardist}
 
+La implementación de nuestra herramienta como un sistema distribuido persigue
+el objetivo fundamental de mejorar el tiempo de ejecución ya sea decrementando
+el tiempo necesario para resolver un determinado problema o transformando un
+problema previamente irresoluble (en tiempo razonable) en resoluble. Para ello
+el sistema debe ser \textbf{escalable} en tanto que debe tener la capacidad de
+incorporar mayor cantidad de \hard a la resolución del problema. Por otro
+lado, el uso de este \hard debe ser \textbf{eficiente} en el sentido de que la
+utilización de mayor cantidad de \hard debe resultar en un incremento de la
+performance del sistema (en nuestro caso entendida como se describió
+previamente).
+
 El objetivo principal de todo sistema distribuido es que el mismo sea
 \textbf{escalable}. Si bien la escalabilidad puede ser entendidad en
 diferentes sentidos, nos interesa en particular que el sistema haga posible la
