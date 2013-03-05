@@ -390,12 +390,8 @@ Otra propuesta, que por sus buenos resultados fue adoptada por muchas implementa
 
 La mayoría de los \ssolvers CDCL modernos implementan esta métrica mediante alguna variante sencilla del enfoque AIMD (\emph{additive increase, multiplicative decrease}): por lo general se incrementa en alguna constante fija el puntaje de actividad de cada cláusula responsable de un nuevo conflicto, y periódicamente se dividen los puntajes de actividad de todas las cláusulas por una constante fija \cite{een:tast03}.
 
-Más recientemente se ha destacado otra métrica denominada LBD, por \emph{Literals Blocks Distance} \cite{Audemard:2009:PLC:1661445.1661509}, que se basa en medir la cantidad de subconjuntos distintos en que pueden particionarse los literales de cada cláusula aprendida según sus respectivos niveles de decisión:
-
-\begin{definition}
-\defname{LBD}
+Más recientemente se ha destacado otra métrica denominada LBD, por \emph{Literals Blocks Distance} \cite{Audemard:2009:PLC:1661445.1661509}.%, que se basa en medir la cantidad de subconjuntos distintos en que pueden particionarse los literales de cada cláusula aprendida según sus respectivos niveles de decisión.
 Dados una cláusula $c$ y una partición de sus literales en $n$ subconjuntos acorde con la valuación parcial actual, de modo tal que los literales son particionados según sus respectivos niveles de decisión, decimos que el LBD de $c$ es exactamente $n$.
-\end{definition}
 
 
 
