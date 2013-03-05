@@ -355,7 +355,7 @@ Un primer factor que naturalmente se tuvo en cuenta es la longitud de las cláus
 
 Otra propuesta, que por sus buenos resultados fue adoptada por muchas implementaciones desde entonces \cite{goldberg:date02}, consiste en medir el grado o nivel de \emph{actividad} de las cláusulas aprendidas, observando y contabilizando la cantidad de conflictos futuros en los que cada tal cláusula se ve involucrada.
 
-La mayoría de los \ssolvers actuales implementan esta métrica mediante alguna variante sencilla del enfoque AIMD (\emph{additive increase, multiplicative decrease}): por lo general se incrementa en alguna constante fija el puntaje de actividad de cada cláusula responsable de un nuevo conflicto, y periódicamente se dividen los puntajes de actividad de todas las cláusulas por una constante fija \cite{minisat??}.
+La mayoría de los \ssolvers CDCL modernos implementan esta métrica mediante alguna variante sencilla del enfoque AIMD (\emph{additive increase, multiplicative decrease}): por lo general se incrementa en alguna constante fija el puntaje de actividad de cada cláusula responsable de un nuevo conflicto, y periódicamente se dividen los puntajes de actividad de todas las cláusulas por una constante fija \cite{minisat??}.
 
 
 \ldots
