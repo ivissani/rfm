@@ -298,6 +298,28 @@ La mayor diferencia entre el algoritmo del List.~\ref{DPLL} y el de List.~\ref{n
 \subsection{Aprendizaje}
 Uno de los factores más determinantes en la mejora del rendimiento de los \ssolver modernos ha sido la incorporación de técnicas de aprendizaje de cláusulas derivadas de los conflictos que hacen que bajo una cierta cadena de decisiones la fórmula no sea satsfacible. La idea general es identificar contradicciones inherentes a un cierto conjunto de decisiones y agregar a la fórmula cláusulas que obliguen al \ssolver a descartar todo fragmento del espacio de búsqueda que de una u otra forma las implique.
 
+\begin{definition}
+\defname{Cláusulas del problema}
+Por \emph{cláusula del problema} nos referimos a una de las cláusulas que forman parte del problema original, es decir alguna de las contenidas en la fórmula CNF provista por el usuario.
+\end{definition}
+
+\begin{definition}
+\defname{Cláusulas aprendidas}
+Una \emph{cláusula aprendida} es una cláusula que, si bien no forma parte del problema original, se sigue del mismo. En particular, toda cláusula aprendida se obtiene por medio de la aplicación de una cantidad finita de pasos de resolución sobre las cláusulas del problema (y/o sobre otras cláusulas aprendidas anteriormente).
+\end{definition}
+
+\begin{remark}
+%\defname{Cláusulas aprendidas}
+Al adosar una o más cláusulas aprendidas a las del problema no se pierde correctitud ni completitud: el nuevo problema y el anterior son equisatisfacibles. Sin embargo, la presencia de estas cláusulas adicionales sí agrega información en el sentido de orientación de la búsqueda (posiblemente permitiendo detectar futuros conflictos más rapidamente). 
+\end{remark}
+
+\begin{definition}
+\defname{Nivel de decisión}
+Por \emph{nivel de decisión} debe entenderse la cantidad de variables respecto de las cuales se han tomado decisiones arbitrarias (que posiblemente requieran \emph{backtracking}) como parte del proceso de búsqueda. Cada vez que se toma una tal decisión (y se propagan, mediante BCP, todas las implicaciones de la misma y de las anteriores) se está incrementando en 1 el nivel de decisión actual del \ssolver.
+\end{definition}
+
+
+
 \subsubsection{Análisis de conflictos, UIPs y backjumping}
 
 Cada vez que la cadena de decisiones tomadas --más las implicaciones obtenidas por medio de BCP tras cada una de ellas-- conducen al \emph{solver} a un conflicto, se lleva a cabo un \emph{análisis de conflicto}, cuyos objetivos incluyen:
@@ -308,7 +330,7 @@ Cada vez que la cadena de decisiones tomadas --más las implicaciones obtenidas 
 
 \item Minimizar esas cláusulas hasta lograr que la caracterización antedicha sea lo más ajustada posible, para así maximizar el potencial de poda del espacio de búsqueda que en lo sucesivo pudiere permitir cada cláusula aprendida. %Esto se conoce como \emph{conflict clause minimization} [cita].
 
-\item  Calcular el punto más alto al que se pueda regresar de modo correcto y completo en la cadena de decisiones tomadas e implicaciones (es decir, en la pila del \emph{backtracking}), evitando en lo inmediato tener que inspeccionar ciertas partes del espacio de búsqueda que, a la luz del conflicto hallado, sólo podrían ser infructuosas. Esto se conoce como \emph{backjumping} o \emph{backtracking no cronológico} \cite{marques-silva:iccad96} \cite{moskewicz:da01}.
+\item  Calcular el punto más alto al que se pueda regresar de modo correcto y completo en la cadena de decisiones (es decir, cuánto restar al nivel de decisión actual), evitando por completo tener que inspeccionar ciertas partes del espacio de búsqueda que, a la luz del conflicto hallado, sólo podrían ser infructuosas. Esto se conoce como \emph{backjumping} o \emph{backtracking no cronológico} \cite{marques-silva:iccad96} \cite{moskewicz:da01}.
 
 \end{itemize}
 
@@ -325,22 +347,28 @@ Estos riesgos motivan la necesidad de contar con políticas de purga: todo \ssol
 
 
 
-\subsubsection{Actividad y LBD}
+\subsubsection{Longitud, actividad y LBD}
 
-Surge así la necesidad de decidir cuáles y cuántas de las cláusulas aprendidas descartar, y cuándo o cada cuánto hacerlo. En este sentido se han estudiado diversos enfoques y criterios.
+Surge así la necesidad de decidir cuáles y cuántas de las cláusulas aprendidas descartar, y cuándo o cada cuánto hacerlo. En este sentido se han estudiado, en las últimas dos décadas, diversos enfoques y criterios.
 
 Un primer factor que naturalmente se tuvo en cuenta es la longitud de las cláusulas aprendidas, en tanto suele ser el caso \cite{marques-silva:iccad96} que las más breves tienen mayor poder de recorte del espacio de búsqueda.
 
-Otra propuesta, que por sus buenos resultados fue adoptada por muchas implementaciones posteriores, consiste en medir el grado de \emph{actividad} de las cláusulas aprendidas \cite{goldberg:date02}, observando y contabilizando la cantidad de conflictos futuros en los que cada tal cláusula se ve involucrada.
+Otra propuesta, que por sus buenos resultados fue adoptada por muchas implementaciones desde entonces \cite{goldberg:date02}, consiste en medir el grado o nivel de \emph{actividad} de las cláusulas aprendidas, observando y contabilizando la cantidad de conflictos futuros en los que cada tal cláusula se ve involucrada.
+
+La mayoría de los \ssolvers actuales implementan esta métrica mediante alguna variante sencilla del enfoque AIMD (\emph{additive increase, multiplicative decrease}): por lo general se incrementa en alguna constante fija el puntaje de actividad de cada cláusula responsable de un nuevo conflicto, y periódicamente se dividen los puntajes de actividad de todas las cláusulas por una constante fija \cite{minisat??}.
 
 
-	[agregar descripción precisa de cómo lo implementa Minisat]
+\ldots
+
+	%[agregar descripción precisa de cómo lo implementa Minisat]
 
 
-Más recientemente se ha destacado otra métrica denominada LBD, por \emph{Literals Blocks Distance} \cite{Audemard:2009:PLC:1661445.1661509}, que se basa en medir la cantidad de subconjuntos distintos en que pueden particionarse los literales de cada cláusula aprendida según sus respectivos \emph{decision levels} (la profundidad de \emph{backtracking} en que fue tomada la decisión de cada variable).
+Más recientemente se ha destacado otra métrica denominada LBD, por \emph{Literals Blocks Distance} \cite{Audemard:2009:PLC:1661445.1661509}, que se basa en medir la cantidad de subconjuntos distintos en que pueden particionarse los literales de cada cláusula aprendida según sus respectivos niveles de decisión.
 
-
-	[agregar definición más formal de LBD]
+\begin{definition}
+\defname{LBD}
+Bla \ldots
+\end{definition}
 
 
 
