@@ -303,10 +303,37 @@ Uno de los factores más determinantes en la mejora del rendimiento de los \ssol
 Por \emph{cláusula del problema} nos referimos a una de las cláusulas que forman parte del problema original, es decir alguna de las contenidas en la fórmula CNF provista por el usuario.
 \end{definition}
 
+%\begin{definition}
+%\defname{Cláusulas aprendidas}
+%Una \emph{cláusula aprendida} es una cláusula que, si bien no forma parte del problema original, se sigue del mismo. En particular, toda cláusula aprendida se obtiene por medio de la aplicación de una cantidad finita de pasos de resolución sobre las cláusulas del problema (y/o sobre otras cláusulas aprendidas anteriormente).
+%\end{definition}
+
 \begin{definition}
 \defname{Cláusulas aprendidas}
-Una \emph{cláusula aprendida} es una cláusula que, si bien no forma parte del problema original, se sigue del mismo. En particular, toda cláusula aprendida se obtiene por medio de la aplicación de una cantidad finita de pasos de resolución sobre las cláusulas del problema (y/o sobre otras cláusulas aprendidas anteriormente).
+Llamaremos \emph{cláusula aprendida} a una cláusula que pueda obtenerse por medio de la aplicación de una cantidad finita de pasos de resolución \cite{?} sobre las cláusulas del problema, y/o sobre cláusulas aprendidas anteriormente.
 \end{definition}
+
+\begin{proposition}\label{aprendidasesigue}
+Sea $F$ un problema en \cnf y $c$ una cláusula aprendida a partir de $F$. Para toda valuación $v$, $v \models F$ implica $v \models c$.
+\end{proposition}
+\begin{proof}
+Se sigue trivialmente de la definición de resolución para la lógica proposicional.
+\end{proof}
+
+\begin{proposition}\label{aprendidassesiguen}
+Sea $F$ un problema en \cnf, $C$ un conjunto finito de cláusulas aprendidas a partir de $F$. Para toda valuación $v$, $v \models F$ implica $v \models \bigwedge C$.
+\end{proposition}
+\begin{proof}
+Por inducción en el cardinal de $C$ y usando Prop.~\ref{aprendidasesigue}.
+\end{proof}
+
+
+\begin{proposition}
+Sea $F$ un problema en \cnf, $C$ un conjunto finito de cláusulas aprendidas a partir de $F$. Para toda valuación $v$, $v \models F$ si y sólo si $v \models F \land \bigwedge C$.
+\end{proposition}
+\begin{proof}
+La demostración se sigue separando en casos dependiendo de si una valuación dada $v$ satisface o no $F$. Supongamos que $v \models F$, por Prop.~\ref{aprendidassesiguen}, $v \models \bigwedge C$, y consecuentemente, $v \models F \land \bigwedge C$. Si $v \not\models F$, luego $v \not\models F \land \bigwedge C$, por monotonía de la lógica proposicional.
+\end{proof}
 
 \begin{remark}
 %\defname{Cláusulas aprendidas}
@@ -322,6 +349,12 @@ Por \emph{nivel de decisión} debe entenderse la cantidad de variables respecto 
 
 \subsubsection{Análisis de conflictos, UIPs y backjumping}
 
+\begin{definition}
+\defname{Conflicto}
+Llamaremos \emph{conflicto} a toda situación en la que el \ssolver, como consecuencia de las decisiones tomadas, derive tanto un literal como su negación.
+\end{definition}
+
+
 Cada vez que la cadena de decisiones tomadas --más las implicaciones obtenidas por medio de BCP tras cada una de ellas-- conducen al \emph{solver} a un conflicto, se lleva a cabo un \emph{análisis de conflicto}, cuyos objetivos incluyen:
 
 \begin{itemize}
@@ -330,7 +363,7 @@ Cada vez que la cadena de decisiones tomadas --más las implicaciones obtenidas 
 
 \item Minimizar esas cláusulas hasta lograr que la caracterización antedicha sea lo más ajustada posible, para así maximizar el potencial de poda del espacio de búsqueda que en lo sucesivo pudiere permitir cada cláusula aprendida. %Esto se conoce como \emph{conflict clause minimization} [cita].
 
-\item  Calcular el punto más alto al que se pueda regresar de modo correcto y completo en la cadena de decisiones (es decir, cuánto restar al nivel de decisión actual), evitando por completo tener que inspeccionar ciertas partes del espacio de búsqueda que, a la luz del conflicto hallado, sólo podrían ser infructuosas. Esto se conoce como \emph{backjumping} o \emph{backtracking no cronológico} \cite{marques-silva:iccad96} \cite{moskewicz:da01}.
+\item  Calcular el punto más alto al que se pueda regresar de modo correcto y completo en la cadena de decisiones (es decir, cuánto restar al nivel de decisión actual), evitando por completo tener que inspeccionar ciertas partes del espacio de búsqueda que, a la luz del conflicto hallado, sólo podrían ser infructuosas. Esto se conoce como \emph{backjumping} o \emph{backtracking no cronológico} \cite{marques-silva:iccad96,moskewicz:da01}.
 
 \end{itemize}
 
@@ -343,19 +376,19 @@ La acumulación de cláusulas aprendidas en conflictos pasados resulta muy venta
 
 En segundo lugar, la proliferación de cláusulas aprendidas conlleva cierto \emph{overhead} en otros aspectos del proceso de búsqueda (y en particular en el corazón del mismo, ya que realizar BCP sobre un mayor número de cláusulas resulta más costoso). En consecuencia, al acumular más y más cláusulas también se corre el riesgo de alcanzar el punto en el que los beneficios de recortar el espacio de búsqueda ya no compensen la penalidad que supone un costo de propagación mucho mayor.
 
-Estos riesgos motivan la necesidad de contar con políticas de purga: todo \ssolver que mantenga una base de datos de cláusulas aprendidas debe implementar algún criterio de borrado periódico.
+Estos riesgos motivan la necesidad de contar con políticas de purga: todo \ssolver que mantenga una base de datos de cláusulas aprendidas debe implementar algún criterio de borrado parcial periódico.
+
+Surge así la necesidad de decidir cuáles y cuántas de las cláusulas aprendidas descartar, y cuándo o cada cuánto hacerlo. En este sentido se han estudiado, en las últimas dos décadas, diversos enfoques y criterios.
 
 
 
 \subsubsection{Longitud, actividad y LBD}
 
-Surge así la necesidad de decidir cuáles y cuántas de las cláusulas aprendidas descartar, y cuándo o cada cuánto hacerlo. En este sentido se han estudiado, en las últimas dos décadas, diversos enfoques y criterios.
-
 Un primer factor que naturalmente se tuvo en cuenta es la longitud de las cláusulas aprendidas, en tanto suele ser el caso \cite{marques-silva:iccad96} que las más breves tienen mayor poder de recorte del espacio de búsqueda.
 
 Otra propuesta, que por sus buenos resultados fue adoptada por muchas implementaciones desde entonces \cite{goldberg:date02}, consiste en medir el grado o nivel de \emph{actividad} de las cláusulas aprendidas, observando y contabilizando la cantidad de conflictos futuros en los que cada tal cláusula se ve involucrada.
 
-La mayoría de los \ssolvers CDCL modernos implementan esta métrica mediante alguna variante sencilla del enfoque AIMD (\emph{additive increase, multiplicative decrease}): por lo general se incrementa en alguna constante fija el puntaje de actividad de cada cláusula responsable de un nuevo conflicto, y periódicamente se dividen los puntajes de actividad de todas las cláusulas por una constante fija \cite{minisat??}.
+La mayoría de los \ssolvers CDCL modernos implementan esta métrica mediante alguna variante sencilla del enfoque AIMD (\emph{additive increase, multiplicative decrease}): por lo general se incrementa en alguna constante fija el puntaje de actividad de cada cláusula responsable de un nuevo conflicto, y periódicamente se dividen los puntajes de actividad de todas las cláusulas por una constante fija \cite{minisat}.
 
 Más recientemente se ha destacado otra métrica denominada LBD, por \emph{Literals Blocks Distance} \cite{Audemard:2009:PLC:1661445.1661509}, que se basa en medir la cantidad de subconjuntos distintos en que pueden particionarse los literales de cada cláusula aprendida según sus respectivos niveles de decisión:
 
