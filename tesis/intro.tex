@@ -54,7 +54,7 @@ la misma es un teorema o no.
 El problema de la indecidibilidad se transforma en un escollo fundamental en
 tanto impide la construcción de métodos de verificación formal completamente
 automáticos. Diversos enfoques han sido desarrollados para atacar este
-problema \todo[inline]{Buscar citas. SMT Solving, Bounded MC, etc}. La mayoría
+problema \cite{jackson:acmtosem-11_2} \cite{demoura:tacas08}. La mayoría
 de estos métodos consisten en restringir de alguna manera el lenguaje formal
 utilizado de modo de generar un sublenguaje del mismo que sea decidible. Uno
 de los enfoques desarrollados en este sentido es el conocido como \bmc
@@ -94,16 +94,15 @@ miles de variables y no sufrían del problema de la explosión en memoria. Si
 bien la técnica mencionada es correcta y completa para sistemas modelados como
 máquinas de estados finitos ya que el espacio de búsqueda, aunque usualmente
 sea exponencialmente grande, es finito, no es cierto que esta metodología
-aplicada a un lenguaje formal cualquiera sea siquiera correcta, tómese por
-ejemplo cualquier lenguaje lógico que no posea la propiedad de modelo finito.
-Siempre que un lenguaje no posea la propiedad de modelo finito, existen
-conjuntos de fórmulas cuyos modelos son necesariamente infinitos, de esta
-forma, la exploración de un subespacio finito en busca de un modelo no puede
-nunca garantizar una respuesta negativa. Esta debilidad, en el caso general,
+aplicada a un lenguaje formal cualquiera sea siquiera correcta: tómese, por
+ejemplo, cualquier lenguaje lógico que no posea la propiedad de modelo finito.
+En tales casos existen conjuntos de fórmulas cuyos modelos son necesariamente
+infinitos; así, la exploración de un subespacio finito en busca de un modelo
+nunca podría garantizar una respuesta negativa. Esta debilidad, en el caso general,
 generada por la introducción de la cota en el tamaño del contraejemplo es lo
 que, aplicado a un sistema lógico indecidible, permite obtener un subconjunto
 del lenguaje original que resulte decidible y, por lo tanto, automáticamente
-verificable. Aun cuando las respuestas del procedimiento utilizado resulten
+verificable, aun cuando las respuestas del procedimiento utilizado resulten
 parciales respecto de la validez de una propiedad determinada en el lenguaje
 original.
 
@@ -131,8 +130,8 @@ esta razón, \bmc no puede ser considerada una técnica de verificación en el
 sentido estricto. Sin embargo la utilización de \bmc permite ganar confianza
 en la propiedad que se quiere verificar antes de embarcarse en la costosa
 tarea de demostrarla formalmente. Algunas aplicaciones exitosas de \bmc son la
-generación automática de casos de test, validación de código y
-especificaciones, etc.\todo{citas}
+generación automática de casos de test \cite{FAJITA??}, validación de código y
+especificaciones \cite{galeotti:issta10}, etc.
 
 Existen una variedad de herramientas formales que utilizan el enfoque de \bmc
 basado en sat-solving que mencionamos en los párrafos anteriores. Una metodología
@@ -152,10 +151,7 @@ demostración se remonta al interés que tuvieron diversos matemáticos en
 construir un método de esas características para la lógica de primer orden.
 Uno de los máximos exponentes fue David Hilbert, quien enunció que la búsqueda
 de un algoritmo de decisión para la lógica de primer orden era el problema
-central de la lógica matemática.\marginpar{Esta aseveración es medio fuerte
-porque métodos matemáticos en el sentido de algoritmo para resolver cosas hay
-desde hace mucho y decir que la cosa empezó con Hilbert en el 1900 es un cacho
-fuerte.} La demostración de que un procedimiento de estas características no
+central de la lógica matemática. La demostración de que un procedimiento de estas características no
 era posible elaborada por Church y Turing provocó una pérdida de interés en
 esta clase de problemas. Sin embargo la construcción de procedimientos, no ya
 de decisión, sino de demostración para la lógica de primer orden (entre los
@@ -247,8 +243,9 @@ tiempo, en los últimos años, las mejoras a los algoritmos secuenciales de
 esperar un salto en el orden de magnitud de los problemas resueltos por los
 \ssolvers secuenciales. Por otro lado, la rapidez en el incremento de la
 velocidad de las computadoras ha ido disminuyendo (esencialmente debido al
-problema de la disipación del calor y el consumo de energía) \marginpar{Agregar
-alguna cita o gráfico que sirvan de argumento.} y en su lugar se ha producido un
+problema de la disipación del calor y el consumo de energía)
+%\marginpar{Agregar alguna cita o gráfico que sirvan de argumento.}
+y en su lugar se ha producido un
 incremento en la cantidad de unidades de procesamiento disponibles así como su
 abaratamiento. Estos hechos han impulsado a la comunidad \sat a explorar la
 posibilidad de construir algortimos paralelos y/o distribuidos de \ssolving de
@@ -309,7 +306,7 @@ compartido permite potencialmente obtener mejores resultados que el del mejor
 
 Por supuesto, distintas implementaciones concretas han sido desarrolladas
 sobre esta idea, e incluso implementaciones híbridas que combinan las dos
-formas de paralelización antedichas\todo{Faltan citas}. Sin embargo, a lo
+formas de paralelización antedichas \cite{hamadi09} \cite{schubert09}. Sin embargo, a lo
 largo de los años, ha tomado un impulso mucho mayor el enfoque basado en
 memoria compartida. Esto puede verse por un lado en la disponibilidad de
 herramientas. Hoy en día existen por lo menos una decena de \ssolvers

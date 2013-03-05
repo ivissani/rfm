@@ -211,11 +211,11 @@ normalmente escribimos $\phi = \conj{\disj{p, q}, \disj{\neg p, q}}$ de modo equ
 Dado $\mathcal{V}$ un conjunto de variables proposicionales y $\varphi_1, \varphi_2 \in \mathit{Form}(\mathcal{V})$, $\varphi_1$ y $\varphi_2$ son equivalentes (denotado como $\varphi_1 \equiv \varphi_2$) si y solo si para toda valuación $v$, $v \models \varphi_1$ si y solo si $v \models \varphi_2$.
 \end{definition}
 
-\begin{theorem}\label{th:cnfequiv}
+\begin{remark}\label{obs:cnfequiv}
 Dado $\mathcal{V}$ un conjunto de variables proposicionales y $\varphi \in \mathit{Form}(\mathcal{V})$, existe $\psi \in \mathit{Form}(\mathcal{V})$ tal que $\varphi \equiv \psi$ y $\psi$ se encuentra en \cnf.
 
-Más aun, existe $F^{\mathit{cnf}}: \mathit{Form}(\mathcal{V}) \to \mathit{Form}(\mathcal{V})$ tal que para toda $\varphi \in \mathit{Form}(\mathcal{V})$, $F^{\mathit{cnf}} (\varphi)$ está en \cnf.
-\end{theorem}
+Más aun, existe $F^{\mathit{cnf}}: \mathit{Form}(\mathcal{V}) \to \mathit{Form}(\mathcal{V})$ tal que para toda $\varphi \in \mathit{Form}(\mathcal{V})$, $F^{\mathit{cnf}} (\varphi)$ está en \cnf. \cite{tseitin83}
+\end{remark}
 
 
 
@@ -238,7 +238,7 @@ ciencias de la computación, como ser el diseño de circuitos o la verificación
 automática, ha impulsado el desarrollo de algoritmos relativamente eficientes
 conocidos comúnmente como \emph{SAT solvers}.
 
-En vista del Teo.~\ref{th:cnfequiv} el problema \sat se define equivalentemente
+En vista de la Obs.~\ref{obs:cnfequiv} el problema \sat se define equivalentemente
 como el problema de determinar si una fórmula en \cnf es satisfacible o no.
 
 
@@ -296,7 +296,7 @@ La mayor diferencia entre el algoritmo del List.~\ref{DPLL} y el de List.~\ref{n
 
 
 \subsection{Aprendizaje}
-Uno de los factores más determinantes en la mejora del rendimiento de los \ssolver modernos ha sido la incorporación de técnicas de aprendizaje de cláusulas derivadas de los conflictos que hacen que bajo una cierta cadena de decisiones la fórmula no sea satsfacible. La idea general es identificar contradicciones inherentes a un cierto conjunto de decisiones y agregar a la fórmula cláusulas que obliguen al \ssolver a descartar todo fragmento del espacio de búsqueda que de una u otra forma las implique.
+Uno de los factores más determinantes en la mejora del rendimiento de los \ssolver modernos ha sido la incorporación de técnicas de aprendizaje de cláusulas derivadas de los conflictos que hacen que bajo una cierta cadena de decisiones la fórmula no sea satisfacible. La idea general es identificar contradicciones inherentes a un cierto conjunto de decisiones y agregar a la fórmula cláusulas que obliguen al \ssolver a descartar todo fragmento del espacio de búsqueda que de una u otra forma las implique.
 
 \begin{definition}
 \defname{Cláusulas del problema}
@@ -357,17 +357,11 @@ Otra propuesta, que por sus buenos resultados fue adoptada por muchas implementa
 
 La mayoría de los \ssolvers CDCL modernos implementan esta métrica mediante alguna variante sencilla del enfoque AIMD (\emph{additive increase, multiplicative decrease}): por lo general se incrementa en alguna constante fija el puntaje de actividad de cada cláusula responsable de un nuevo conflicto, y periódicamente se dividen los puntajes de actividad de todas las cláusulas por una constante fija \cite{minisat??}.
 
-
-\ldots
-
-	%[agregar descripción precisa de cómo lo implementa Minisat]
-
-
-Más recientemente se ha destacado otra métrica denominada LBD, por \emph{Literals Blocks Distance} \cite{Audemard:2009:PLC:1661445.1661509}, que se basa en medir la cantidad de subconjuntos distintos en que pueden particionarse los literales de cada cláusula aprendida según sus respectivos niveles de decisión.
+Más recientemente se ha destacado otra métrica denominada LBD, por \emph{Literals Blocks Distance} \cite{Audemard:2009:PLC:1661445.1661509}, que se basa en medir la cantidad de subconjuntos distintos en que pueden particionarse los literales de cada cláusula aprendida según sus respectivos niveles de decisión:
 
 \begin{definition}
 \defname{LBD}
-Bla \ldots
+Dados una cláusula $c$ y una partición de sus literales en $n$ subconjuntos acorde con la valuación parcial actual, de modo tal que los literales son particionados según sus respectivos niveles de decisión, decimos que el LBD de $c$ es exactamente $n$.
 \end{definition}
 
 
