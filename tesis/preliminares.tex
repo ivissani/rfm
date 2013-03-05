@@ -388,7 +388,7 @@ Un primer factor que naturalmente se tuvo en cuenta es la longitud de las cláus
 
 Otra propuesta, que por sus buenos resultados fue adoptada por muchas implementaciones desde entonces \cite{goldberg:date02}, consiste en medir el grado o nivel de \emph{actividad} de las cláusulas aprendidas, observando y contabilizando la cantidad de conflictos futuros en los que cada tal cláusula se ve involucrada.
 
-La mayoría de los \ssolvers CDCL modernos implementan esta métrica mediante alguna variante sencilla del enfoque AIMD (\emph{additive increase, multiplicative decrease}): por lo general se incrementa en alguna constante fija el puntaje de actividad de cada cláusula responsable de un nuevo conflicto, y periódicamente se dividen los puntajes de actividad de todas las cláusulas por una constante fija \cite{minisat}.
+La mayoría de los \ssolvers CDCL modernos implementan esta métrica mediante alguna variante sencilla del enfoque AIMD (\emph{additive increase, multiplicative decrease}): por lo general se incrementa en alguna constante fija el puntaje de actividad de cada cláusula responsable de un nuevo conflicto, y periódicamente se dividen los puntajes de actividad de todas las cláusulas por una constante fija \cite{een:tast03}.
 
 Más recientemente se ha destacado otra métrica denominada LBD, por \emph{Literals Blocks Distance} \cite{Audemard:2009:PLC:1661445.1661509}, que se basa en medir la cantidad de subconjuntos distintos en que pueden particionarse los literales de cada cláusula aprendida según sus respectivos niveles de decisión:
 

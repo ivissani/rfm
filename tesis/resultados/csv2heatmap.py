@@ -101,7 +101,7 @@ try:
 	levels = float(int(sys.argv[4]))
 except:
 	levels = 32.0
-maxspeedup = 8.0
+maxspeedup = 5.0
 minspeedup = 0.5
 
 normstats = normalizedstats(readstats(filename))
