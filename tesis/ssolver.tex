@@ -15,33 +15,85 @@ utilización de mayor cantidad de \hard debe resultar en un incremento de la
 performance del sistema (en nuestro caso entendida como se describió
 previamente).
 
-El objetivo principal de todo sistema distribuido es que el mismo sea
-\textbf{escalable}. Si bien la escalabilidad puede ser entendidad en
-diferentes sentidos, nos interesa en particular que el sistema haga posible la
-utilización de mayor cantida de \hard para resolver el problema (en nuestro
-caso un problema \sat) y que esa utilización de mayor poder de cómputo reporte
-ganancias en términos de tiempo (percibido) invertido en resolver un
-determinado problema o bien en términos de empujar la frontera de lo
-resoluble.
+Con estos dos objetivos en mente desarrollamos una \ssolver distribuido basado
+en la idea de \gp y orienteado a \clusters de computadoras. La idea de \gp se
+basa en la observación de que, en el peor caso, todas las posibles valuaciones
+de una fórmula proposicional $\varphi$ deben ser evaluadas de modo de poder
+concluir que la misma es \unsat. Por lo tanto, una forma de dividir el
+problema es tomar una variable $v$ y construir los dos subproblemas
+$\varphi_{v \leftarrow 0}$ y $\varphi_{v \leftarrow 1}$ que se derivan de las
+dos posibles asignaciones de valores de verdad a dicha variable. Una vez hecho
+esto, la resolución del problema original $\varphi$ se reduce a la resolución
+de $\varphi_{v \leftarrow 0}$ y $\varphi_{v \leftarrow 1}$. Ahora, $\varphi_{v
+\leftarrow 0}$ y $\varphi_{v \leftarrow 1}$ pueden ser considerados como dos
+problemas independietes y volver a aplicar la misma idea. Naturalmente este
+proceso puede realizarse seleccionando más de una variable en cada paso. Al
+seleccionar $n$ variables obtendremos entonces $2^n$ subproblemas. Llamaremos
+\emph{levantar variables} al proceso de dividir un problema $\varphi$ en los
+$2^n$ subproblemas que resultan de aplicar todas las posibles valuaciones
+sobre el conjunto de $n$ variables levantadas. Se desprende de esto que una de
+las tareas que debe poder cumplir la herramienta es la de dividir un problema.
+
+\missingfigure{Un dibujito que explique \gp}
+
+% El objetivo principal de todo sistema distribuido es que el mismo sea
+% \textbf{escalable}. Si bien la escalabilidad puede ser entendidad en
+% diferentes sentidos, nos interesa en particular que el sistema haga posible la
+% utilización de mayor cantida de \hard para resolver el problema (en nuestro
+% caso un problema \sat) y que esa utilización de mayor poder de cómputo reporte
+% ganancias en términos de tiempo (percibido) invertido en resolver un
+% determinado problema o bien en términos de empujar la frontera de lo
+% resoluble.
 
 La escalabilidad como gran objetivo rector en el desarrollo de nuestra
 herramienta introduce una serie de desafíos a saber:
+\begin{itemize}
+	\item Almacenamiento distribuido.
+	\item Simetría de capacidades en los nodos de trabajo (\ws).
+	\item Minimización de la utilización de la red de comunicaciones.
+\end{itemize}
 
-La necesidad de que los nodos de trabajo (\ws) sean símetricos en
-tanto que esto permite mayor dinamismo, y por lo tanto mejor utilización del
-\hard disponible. La simetría entendida en su máxima expresión como la
-posibilidad de que todas las unidades de procesamiento puedan realizar todas
-las funciones necesarias provee la capacidad de distribuir la carga de trabajo
-de la manera más conveniente en cada momento. Esto no podría ser logrado si
-los nodos de trabajo tuvieran funciones específicas ya que se podría dar el
-caso de tener nodos ociosos porque no hay trabajo pendiente de la clase de
-trabajo que esos nodos saben realizar.
+La necesidad de que el almacenamiento de problemas pendientes de resolución se
+encuentre distribuido se debe a un doble aspecto. Por un lado, la cantidad de
+subproblemas producidos puede ser muy grande. Por lo tanto no es viable
+requerir que la cantidad de espacio necesario para almacenar todas las tareas
+pendientes de resolución se encuentre disponible en una misma ubicación. Aún
+cuando fuera posible tener la cantidad de espacio necesaria para almacenar
+todos los subproblemas en una ubicación centralizada surge un segundo problema
+que presentaría este enfoque que es el de la contención. En este aspecto, si
+pretendemos que el almacenamiento no se vuelva un cuello de botella es vital
+distribuir de la mejor manera posible las tareas pendientes de modo que cuando
+los \ws requieran nuevas tareas para resolver, los múltiples pedidos no
+recaigan en un mismo equipo.
 
-En nuestro caso particular esto se traduce en que los \ws deben poseer las
-capacidades de: \solvear \todo{buscar una forma de decir esto que no sea
-tan fea o en su defecto definir esto en la parte de preliminares} un
-subproblema (consumir), dividir un subproblema en nuevos subproblemas
-(producir) y almacenar, solicitar y transferir subproblemas (distribuir).
+El requisito de que los nodos de trabajo (\ws) sean símetricos se desprende de
+la necesidad de eliminar los cuellos de botella. La simetría entendida en su
+máxima expresión como la posibilidad de que todas las unidades de
+procesamiento puedan realizar todas las funciones necesarias provee la
+capacidad de distribuir la carga de trabajo de la manera más conveniente en
+cada momento. Esto no podría ser logrado si los nodos de trabajo tuvieran
+funciones específicas ya que se podría dar el caso de tener nodos ociosos
+porque no hay trabajo pendiente de la clase de trabajo que esos nodos saben
+realizar mientras que al mismo timepo tendríamos nodos sobrecargados. Esta
+situación podría empeorar seriamente a medida que la cantidad de nodos
+aumenten.
+
+En nuestro caso particular, el requisito de simetría se traduce en que los \ws
+deben poseer las capacidades de: \begin{inparaenum}[a)] \item \solvear
+\todo{buscar una forma de decir esto que no sea tan fea o en su defecto
+definir esto en la parte de preliminares} un subproblema (consumir), \item
+dividir un subproblema en nuevos subproblemas (producir) y \item almacenar,
+solicitar y transferir subproblemas (distribuir). \end{inparaenum}
+
+Además de los desafíos de escalabilidad, surgen también los desafíos
+relacionados con la eficiencia o la performance de la herramienta. Entre ellos
+los más destacados son:
+
+\begin{itemize}
+	\item Movilidad de tareas.
+	\item Crecimiento a la par de los \ssolvers secuenciales.
+	\item No hacer burradas \todo{Revisar toda esta itemización. No me convence....}
+\end{itemize}
 
 El triple rol de productor, consumidor y distribuidor asignado a los \ws hace
 que la movilidad de tareas se transforme en un desafío en tanto que un \w
@@ -50,39 +102,28 @@ pendiente. Es evidente que en esta situación no es viable que el \w que está
 esperando una tarea tenga que esperar a que el \w que tiene dicha tarea
 termine de \solvear para que su pedido sea completado.
 
-El objetivo global de escalabilidad también trae aparejada la necesidad de que
-el almacenamiento de problemas pendientes de resolución se encuentre
-distribuido. Esto se debe a un doble aspecto. Por un lado, la cantidad de
-subproblemas producidos puede ser muy grande. Por lo tanto no es viable
-requerir que la cantidad de espacio necesario para almacenar todas las tareas
-pendientes de resolución se encuentre disponible en una misma ubicación. Menos aún
-si pretendemos que nuestro sistema pueda crecer en cantidad de \ws ya que este
-crecimiento se traduce también en un crecimiento en la cantidad de productores
-y por lo tanto en la cantidad de tareas producidas. Un segundo problema que
-presentaría el almacenamiento centralizado es el de la contención. En este
-aspecto, si pretendemos que el almacenamiento no se vuelva un cuello de
-botella es vital distribuir de la mejor manera posible las tareas pendientes
-de modo que cuando los \ws requieran nuevas tareas para resolver, los
-múltiples pedidos no recaigan en un mismo equipo.
-
-
 Otro de los objetivos que perseguimos a la hora de diseñar nuestra herramienta
-fue que la misma pudiera utilizar un \ssolver \ots. Esto nos permite
-aprovechar los avances que se han obtenido en el área de \ssolving secuencial
-en los últimos años (que han sido muchos) a la vez que nos permite, a futuro,
-evolucionar a la par de los \ssolvers secuenciales de manera más simple. Esto
-proporciona la posibilidad de que la herramienta no se vuelva obsoleta ante un
-nuevo avance en \ssolving secuencial.
+fue que la misma pudiera utilizar un \ssolver \ots para la resolución local de
+un subproblema. Esto nos permite aprovechar los avances que se han obtenido en
+el área de \ssolving secuencial en los últimos años (que han sido muchos) a la
+vez que nos permite, a futuro, evolucionar a la par de los \ssolvers
+secuenciales de manera más simple. Esto proporciona la posibilidad de que la
+herramienta no se vuelva obsoleta ante un nuevo avance en el campo de
+\ssolving secuencial.
+
+\newcommand{\rt}{\emph{run-time}\xspace}
+\newcommand{\apriori}{\emph{a priori}\xspace}
 
 Generar una estrategia automática que proporcione buenos resultados en la
 ejecución de problemas diversos es sumamente difícil. Más aún, no tener la
-posibilidad de modificar la estrategia adoptada durante una corrida que puede
-ser sumamente larga puede tener resultados catastróficos. Esto nos motivó a
-adoptar un enfoque en el que la maquinaria de cómputo distribuido no posee
-inteligencia alguna y por el contrario provee una serie de operaciones
-básicas. La operación del sistema por lo tanto se lleva a cabo desde un
+posibilidad de modificar la estrategia adoptada durante una corrida (que puede
+ser sumamente larga y con características desconocidas \apiori) puede tener
+resultados catastróficos. Esto nos motivó a adoptar un enfoque en el que la
+maquinaria de cómputo distribuido no posee inteligencia alguna y por el
+contrario provee una serie de funciones básicas que pueden ser invocadas
+remotamente. La operación del sistema por lo tanto se lleva a cabo desde un
 \textbf{tablero de control} que permite al usuario manipular el sistema de
-cómputo.
+cómputo en \rt.
 
 \
 
@@ -90,18 +131,18 @@ cómputo.
 
 \
 
-El último objetivo que perseguimos durante el desarrollo de nuestra herrmienta
-fue que la misma presentara facilidad para ser modificada sin que esto
-impacatar negativamente en la \emph{performance}. Este objetivo, entre otras
-cosas, determinó la elección de las tecnologías a utilizar para su desarrollo.
-Por lo tanto se utilizó el lenguaje de programación \Python para el desarrollo
-de toda la herramienta con excepción de la parte de cómputo intensivo. Al
-utilizar un \ssolver \ots el lenguaje utilizado para el mismo fue aquel en el
-que estaba desarrollado. En particular, en la implementación actual de la
-herramienta utilizamos el \ssolver \minisatdosveinte que está desarrollado en
-el lenguaje \cpp. Para ello se desarrolló un \emph{wrapper} que permite
-utilizar \minisat desde un entorno \Python. Para el intercambio de mensajes
-entre los \ws se utilizó el estándar \mpi.
+El último objetivo que perseguimos durante el desarrollo de nuestra
+herramienta fue que la misma presentara facilidad para ser modificada sin que
+esto impacatar negativamente en la \emph{performance}. Este objetivo, entre
+otras cosas, determinó la elección de las tecnologías a utilizar para su
+desarrollo. Por lo tanto se utilizó el lenguaje de programación \Python para
+el desarrollo de toda la herramienta con excepción de la parte de cómputo
+intensivo. Al utilizar un \ssolver \ots no fue necesario elegir un lenguaje
+para su desarrollo. En la implementación actual de la herramienta utilizamos
+el \ssolver \minisatdosveinte que está desarrollado en el lenguaje \cpp. Para
+ello se desarrolló un \emph{wrapper} que permite utilizar \minisat desde un
+entorno \Python. Para el intercambio de mensajes entre los \ws se utilizó el
+estándar \mpi.
 
 
 % \begin{itemize}
@@ -113,7 +154,9 @@ entre los \ws se utilizó el estándar \mpi.
 
 \section{Arquitectura}
 
-La figura \ref{fig:arquitectura} muestra la arquitectura de la herramienta. En
+\newcommand{\fig}{Fig.-}
+
+La \fig\ref{fig:arquitectura} muestra la arquitectura de la herramienta. En
 la misma se distinguen claramente dos componentes: el \bend que ejecuta sobre
 un \cluster de computadoras y el \fend que ejecuta en un equipo que se
 encuentra posiblemente fuera del centro de cómputos.
@@ -134,9 +177,10 @@ la comunicación de órdenes desde el \fend hacia los \ws y de reenviar las
 respuestas correspondientes desde los \ws hacia el \fend.
 
 En segunda instancia encontramos otro de tipo de procesos, los \ws. Los \ws
-son los encargados de relizar el cómputo (\ssolving). Asimismo son quienes
-almacenan las tareas pendientes de ejecución y por lo tanto deben proveer
-acceso a dicho almacenamiento a los demás \ws.
+son los encargados de relizar el cómputo (\ssolving) y la división de un
+problema en nuevos subproblemas. Asimismo son quienes almacenan las tareas
+pendientes de ejecución y por lo tanto deben proveer acceso a dicho
+almacenamiento a los demás \ws.
 
 \newcommand{\masterslave}{\texttt{Master-Worker}\xspace}
 
@@ -147,24 +191,23 @@ simplemente actúa como intercambiador de mensajes entre el ambiente externo
 
 \begin{wrapfigure}{O}{0.85\textwidth}
 \centering
-\label{fig:masterproxydetail}
 \includegraphics[scale=0.3]{graphs/master proxy detail}
 \caption{Detalle de arquitectura del componente \master}
+\label{fig:masterproxydetail}
 \end{wrapfigure}
 
-La figura \ref{fig:masterproxydetail} detalla la arquitectura del \master. En
-el diagrama se puede observar que el \datapath\todo{Ver si ponerlo en inglés o
-en castellano} de entrada (\fend hacia \bend) y el de salida (\bend hacia
-\fend) son independientes. Esto es una consecuencia directa que se desprende
-de la ausencia de inteligencia en el \master. Esto implica que no es necesario
-mantener el estado del sistema ya que en este componente no se toman
-decisiones. La ausencia de estado hace que el proceso \master consuma un
-mínimo de recursos.
+La \fig\ref{fig:masterproxydetail} detalla la arquitectura del \master. En el
+diagrama se puede observar que el \datapath de entrada (\fend hacia \bend) y
+el de salida (\bend hacia \fend) son independientes. Esto es una consecuencia
+directa que se desprende de la ausencia de inteligencia en el \master. Esto
+implica que no es necesario mantener el estado del sistema ya que en este
+componente no se toman decisiones. La ausencia de estado hace que el proceso
+\master consuma un mínimo de recursos.
 
 La intervención de dos \threads distintos en el \datapath de entrada
 proporciona un alto nivel de respuesta ya que permite que algunos comandos
 sean implementados internamente mediante comunicación sincrónica a través de
-\mpi sin que esto implique un pausa en el procesamiento del flujo de datos de
+\mpi sin que esto implique una pausa en el procesamiento del flujo de datos de
 entrada desde el \fend hacia el \bend. La comunicación sincrónica permite
 simplificar algunos comandos como el envío del problema original hacia todos
 los \ws. Al mismo tiempo se mantiene el orden entre los comandos enviados
@@ -173,12 +216,12 @@ cómputo a pesar de tratarse de un sistema ditribuido.
 
 \begin{wrapfigure}{O}{0.75\textwidth}
 \centering
-\label{fig:workerdetail}
 \includegraphics[scale=0.3]{graphs/worker detail}
 \caption{Detalle de arquitectura del componente \w}
+\label{fig:workerdetail}
 \end{wrapfigure}
 
-La figura \ref{fig:workerdetail} muestra el detalle de diseño del componente
+La \fig\ref{fig:workerdetail} muestra el detalle de diseño del componente
 \w. Como se puede observar, las funciones de \solving, comunicación y
 transferencia de archivos se implementaron en \threads separados. Dado que la
 función de \solving utiliza principalmente tiempo de \cpu, mientras que el
