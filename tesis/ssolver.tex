@@ -256,6 +256,35 @@ poseer diversas estrategias implementadas para estas dos fases de la ejecución
 de modo que el usuario puede seleccionar la estrategia deseada (y sus
 parámetros en caso que corresponda) desde el \fend.
 
+Por último corresponde mencionar a qué nos referimos en concreto cuando
+hablamos de \emph{tarea}. El término \emph{tarea} fue mencionado en varias
+ocasiones a lo largo de la explicación. Si bien conceptualmente una tarea
+podría ser simplemente una fórmula $\varphi$ en \cnf, en la práctica esto
+podría producir un \emph{overhead} en la transferencia demasiado grande ya
+que, por ejemplo al partir un problema levantando $n$ variables podríamos
+generar $2^n$ subproblemas, cada uno de los cuales estaría representado
+esencialmente por la misma fórmula $\varphi$ más las cláusulas unitarias
+propias de cada subproblema. Esta situación se repite innumerables veces a lo
+largo de la ejecución de la herramienta para resolver un problema. Es por esto
+que optamos, como modo de funcionamiento, por enviar la fórmula original a
+todos los \ws al comienzo de una ejecución de la herramienta de modo que luego
+un subproblema esté representado por las cláusulas unitarias necesarias para
+forzar las decisiones correspondientes a ese subproblema. Esto hace que las
+tareas sean mucho más livianas. Además, para poder implementar estrategias de
+aprendizaje, era necesario que como parte de una tarea se pudieran transferir
+también las cláusulas aprendidas que corresponen a esa tarea. Inclusive es
+posible que en un futuro una tarea no represente únicamente un subproblema que
+aún se debe intentar \solvear sino que podría tambien incluir otro tipo de
+actividades, como la partición de un problema. Esto último nos motivó a optar
+por un concepto de tarea genérico donde una tarea no es más que un paquete de
+archivos que el \w sabrá interpretar apropiadamente. En la implementación
+actual las tareas son exclusivamente un subproblema pendiente de ser atacado y
+se representan como un paquete con un archivo que incluye las cláusulas
+unitarias que deben adicionarse al \cnf original para construir el subproblema
+correspondiente más dos archivos que pueden o no contener información. Estos
+últimos transportan la información de cláusulas aprendidas que deben ser
+incorporados al intento de \solving del subproblema en cuestión.
+
 \subsection{\fend}
 
 \begin{figure}[h!]
@@ -263,19 +292,6 @@ parámetros en caso que corresponda) desde el \fend.
 \caption{Detalle de arquitectura del \fend}
 \label{fig:frontend}
 \end{figure}
-
-En la \fig\ref{fig:frontend} se esquematiza el diseño de componentes del
-\fend. En esta figura se puede observar que el tablero de control proporciona
-un modo doble de interacción con el \bend. Por un lado el tablero de control
-es capaz de recibir comandos del usuario en \rt a través de una interfaz de
-tipo consola. Estos comandos representan acciones a ser llevadas a cabo en el
-\bend como ser indicar a un \w ocioso que cargue una nueva tarea, indicar a un
-\w que se encuentra trabajando en un problema que aborte dicha ejecución,
-mover una tarea desde un \w a otro, etc. Por otro lado, el tablero de control
-posee también una \emph{estrategia} (intercambiable) que permite llevar a cabo
-acciones automáticamente frente a determinados eventos. El \fend posee también
-un componente que procesa permanentemente la información que llega desde el
-\bend. 
 
 \begin{wrapfigure}{r}{0.6\textwidth}
 	\vspace{-3em}
@@ -291,8 +307,21 @@ un componente que procesa permanentemente la información que llega desde el
 	\end{subfigure}
 	\caption{Diagramas de estado en el tablero de control}
 	\label{fig:states}
-	\vspace{-9em}
+	\vspace{-1em}
 \end{wrapfigure}
+
+En la \fig\ref{fig:frontend} se esquematiza el diseño de componentes del
+\fend. En esta figura se puede observar que el tablero de control proporciona
+un modo doble de interacción con el \bend. Por un lado el tablero de control
+es capaz de recibir comandos del usuario en \rt a través de una interfaz de
+tipo consola. Estos comandos representan acciones a ser llevadas a cabo en el
+\bend como ser indicar a un \w ocioso que cargue una nueva tarea, indicar a un
+\w que se encuentra trabajando en un problema que aborte dicha ejecución,
+mover una tarea desde un \w a otro, etc. Por otro lado, el tablero de control
+posee también una \emph{estrategia} (intercambiable) que permite llevar a cabo
+acciones automáticamente frente a determinados eventos. El \fend posee también
+un componente que procesa permanentemente la información que llega desde el
+\bend. 
 
 Es importante observar que todos los componentes mencionados comparten un
 estado global. Esto se debe a que, tal como se explicó en \ref{sec:backend},
@@ -305,15 +334,17 @@ del estado en todo momento. Hemos tenido el cuidado necesario para evitar que
 el \emph{locking} atente contra la performance del componente en cuestión.
 
 \begin{wrapfigure}{r}{.6\textwidth}
+\vspace{-2em}
 \begin{footnotesize}
 \begin{lstlisting}[mathescape,language=Pascal,frame=single,label=lst:synchronouscmd,caption=Esquema de comando sincrónico]
 DECIR_A $W$ que obtenga la tarea $T$
-ESPERAR que tarea $T$ esté en $W$
+ESPERAR que tarea $T$ este en $W$
 DECIR_A $W$ que cargue tarea $T$
-ESPERAR que tarea $T$ esté cargada
+ESPERAR que tarea $T$ este cargada
 DECIR_A $W$ que comience a solvear $T$
 \end{lstlisting}
 \end{footnotesize}
+\vspace{-3em}
 \end{wrapfigure}
 
 En la \fig\ref{fig:states} presentamos las máquinas de estado correspondientes
@@ -374,7 +405,9 @@ presentamos en el \lst\ref{lst:strategy}. Esta interfaz modela el conjunto de
 eventos que pueden ocurrir. Una estrategia particular debe implementar dicha
 interfaz de modo de poder responder ante estos eventos.
 
-\subsection{Nuestra estrategia}
+\subsection{La estrategia implementada}
+
+
 
 \begin{itemize}
 	\item Si idle se parte el más viejo
