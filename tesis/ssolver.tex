@@ -24,21 +24,33 @@ previamente).
 Con estos dos objetivos en mente desarrollamos una \ssolver distribuido basado
 en la idea de \gp y orienteado a \clusters de computadoras. La idea de \gp se
 basa en la observación de que, en el peor caso, todas las posibles valuaciones
-de una fórmula proposicional $\varphi$ deben ser evaluadas de modo de poder
-concluir que la misma es \unsat. Por lo tanto, una forma de dividir el
-problema es tomar una variable $v$ y construir los dos subproblemas
-$\varphi_{v \leftarrow 0}$ y $\varphi_{v \leftarrow 1}$ que se derivan de las
-dos posibles asignaciones de valores de verdad a dicha variable. Una vez hecho
-esto, la resolución del problema original $\varphi$ se reduce a la resolución
-de $\varphi_{v \leftarrow 0}$ y $\varphi_{v \leftarrow 1}$. Ahora, $\varphi_{v
-\leftarrow 0}$ y $\varphi_{v \leftarrow 1}$ pueden ser considerados como dos
-problemas independietes y volver a aplicar la misma idea. Naturalmente este
-proceso puede realizarse seleccionando más de una variable en cada paso. Al
-seleccionar $n$ variables obtendremos entonces $2^n$ subproblemas. Llamaremos
-\emph{levantar variables} al proceso de dividir un problema $\varphi$ en los
-$2^n$ subproblemas que resultan de aplicar todas las posibles valuaciones
-sobre el conjunto de $n$ variables levantadas. Se desprende de esto que una de
-las tareas que debe poder cumplir la herramienta es la de dividir un problema.
+de una fórmula proposicional $\varphi$ deben ser evaluadas. Una vez que una
+valuación que satisface a una fórmula es encontrada, el procedimiento de
+\ssolving puede ser abortado\footnote{Existe otra variante en la que, además
+de determinar si una fórmula es \sat o \unsat, interesa enumerar todos los
+posibles modelos de dicha fórmula. En este escenario el procedimiento de
+\ssolving no puede ser detenido una vez que se encuentra una valuación sino
+que el mismo debe continuar hasta agotar todas las posibles valuaciones que
+satisfacen a la fórmula en cuestión.}. Por el contrario, si la fórmula es
+\unsat, la única alternativa para poder asegurarlo es agotar todas las
+posibles valuaciones y determinar que ninguna de ellas satisface a la fórmula
+en cuestión. Por lo tanto, una forma de dividir el problema es tomar una
+variable $v$ y construir los dos subproblemas $\varphi_{v \leftarrow 0}$ y
+$\varphi_{v \leftarrow 1}$ que se derivan de las dos posibles asignaciones de
+valores de verdad a dicha variable. Una vez hecho esto, determinar que el
+problema original $\varphi$ es \unsat se reduce a determinar que tanto
+$\varphi_{v \leftarrow 0}$ como $\varphi_{v \leftarrow 1}$ son \unsat. Por el
+contrario, determinar que el problema es \sat reduciría a establecer que
+$\varphi_{v \leftarrow 0}$ es \sat o bien que $\varphi_{v \leftarrow 1}$ lo
+es. Ahora, $\varphi_{v \leftarrow 0}$ y $\varphi_{v \leftarrow 1}$ pueden ser
+considerados como dos problemas independientes y volver a aplicar la misma
+idea recursivamente. Naturalmente este proceso puede realizarse seleccionando
+más de una variable en cada paso. Al seleccionar $n$ variables obtendremos
+entonces $2^n$ subproblemas. Llamaremos \emph{levantar variables} al proceso
+de dividir un problema $\varphi$ en los $2^n$ subproblemas que resultan de
+aplicar todas las posibles valuaciones sobre el conjunto de $n$ variables
+levantadas. Se desprende de esto que una de las tareas que debe poder cumplir
+la herramienta es la de dividir un problema.
 
 % El objetivo principal de todo sistema distribuido es que el mismo sea
 % \textbf{escalable}. Si bien la escalabilidad puede ser entendidad en
@@ -50,7 +62,7 @@ las tareas que debe poder cumplir la herramienta es la de dividir un problema.
 % resoluble.
 
 La escalabilidad como gran objetivo rector en el desarrollo de nuestra
-herramienta introduce una serie de desafíos a saber:
+herramienta introduce una serie de desafíos, a saber:
 \begin{itemize}
 	\item Almacenamiento distribuido.
 	\item Simetría de capacidades en los nodos de trabajo (\ws).
@@ -193,12 +205,12 @@ Es importante destacar que si bien el \bend presenta una arquitectura
 simplemente actúa como intercambiador de mensajes entre el ambiente externo
 (el \fend) y el ambiente interno.
 
-\begin{wrapfigure}{O}{0.85\textwidth}
+\begin{figure}[h!]
 \centering
-\includegraphics[scale=0.3]{graphs/master proxy detail}
+\includegraphics[scale=0.4]{graphs/master proxy detail}
 \caption{Detalle de arquitectura del componente \master}
 \label{fig:masterproxydetail}
-\end{wrapfigure}
+\end{figure}
 
 La \fig\ref{fig:masterproxydetail} detalla la arquitectura del \master. En el
 diagrama se puede observar que el \datapath de entrada (\fend hacia \bend) y
@@ -218,12 +230,12 @@ los \ws. Al mismo tiempo se mantiene el orden entre los comandos enviados
 desde el \fend lo cual también contribuye a la simplifación del modelo de
 cómputo a pesar de tratarse de un sistema ditribuido.
 
-\begin{wrapfigure}{O}{0.75\textwidth}
+\begin{figure}[h!]
 \centering
-\includegraphics[scale=0.3]{graphs/worker detail}
+\includegraphics[scale=0.4]{graphs/worker detail}
 \caption{Detalle de arquitectura del componente \w}
 \label{fig:workerdetail}
-\end{wrapfigure}
+\end{figure}
 
 La \fig\ref{fig:workerdetail} muestra el detalle de diseño del componente
 \w. Como se puede observar, las funciones de \solving, comunicación y
@@ -247,21 +259,27 @@ parámetros en caso que corresponda) desde el \fend.
 
 \subsection{\fend}
 
-bal ablablmas
-kiasdoil
-asdk.jasd
-ñljasd
+Arquitectura del \fend
+
+\begin{figure}[h!]
+\includegraphics[scale=0.4]{graphs/frontend architecture}
+\label{fig:frontend}
+\caption{Detalle de arquitectura del \fend}
+\end{figure}
+
+Diagrama de estados de las tareas y los \ws
 
 
-\begin{figure}
-	\begin{subfigure}[b]{0.5\textwidth}
+\begin{figure}[h!]
+	\centering
+	\begin{subfigure}[b]{0.35\textwidth}
 		\centering
-		\includegraphics[scale=0.5]{graphs/workerstates}
+		\includegraphics[scale=0.3]{graphs/workerstates}
 		\caption{\emph{Workers}}
 	\end{subfigure}
-	\begin{subfigure}[b]{0.5\textwidth}
+	\begin{subfigure}[b]{0.35\textwidth}
 		\centering
-		\includegraphics[scale=0.5]{graphs/taskstates}
+		\includegraphics[scale=0.3]{graphs/taskstates}
 		\caption{Tareas}
 	\end{subfigure}
 	\caption{Diagramas de estado en el tablero de control}
