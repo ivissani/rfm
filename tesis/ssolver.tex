@@ -423,51 +423,5 @@ presentamos en el \lst\ref{lst:strategy}. Esta interfaz modela el conjunto de
 eventos que pueden ocurrir. Una estrategia particular debe implementar dicha
 interfaz de modo de poder responder ante estos eventos.
 
-\subsection{La estrategia implementada}
 
-
-
-\begin{itemize}
-	\item Si idle se parte el más viejo
-	\item La próxima a resolver es:
-		\begin{itemize}
-			\item Si no tengo tareas locales:
-				\begin{itemize}
-					\item Bajo la tarea que corresponde por BFS +
-					\item $\frac{\sharp tasks}{\sharp workers}$ del que más tiene (límite 10)
-				\end{itemize}
-			\item Si tengo: Agarro la que corresponde por BFS
-		\end{itemize}
-	\item Parto cuando la frecuencia de $\sharp UNSATs/_s$
-	\item Detalles:
-	\begin{itemize}
-		\item Target de UNSATs por esgundo
-		\item Frecuencia de checkeo
-		\item Tamaño ventana
-	\end{itemize}
-\end{itemize}
-
-\subsection{Decisiones que vale la pena seguir investigando}
-
-\section{Resultados experimentales}
-
-\begin{table}[h]\tiny
-	\begin{tabular}{lrrrrrr}
-		\toprule
-		problem	&	scope	&	sequential runtime	&	parallel walltime	&	parallel overhead	&	speedup	&	efficiency \\
-		\cmidrule(r){1-7}
-		Pamela	&	8	&	308.26	&	60.46	&	3561.23	&	5.10x	&	0.08 \\
-		Pamela	&	9	&	76168.16	&	407.34	&	-50098.63	&	186.99x	&	2.92 \\
-		Pamela	&	10	&		&		&	0.00	&		&	 \\
-		\cmidrule(r){1-7}
-		Closure	&	11	&	749.65	&	291.28	&	17891.95	&	2.57x	&	0.04 \\
-		Closure	&	12	&	3983.36	&	1914.45	&	118541.30	&	2.08x	&	0.03 \\
-		Closure	&	13	&		&		&	0.00	&		&	 \\
-		\cmidrule(r){1-7}
-		MarkGC Soundness2	&	9	&	217.31	&	200.85	&	12637.31	&	1.08x	&	0.02 \\
-		MarkGC Soundness2	&	10	&	2855.3	&	1376.89	&	85265.47	&	2.07x	&	0.03 \\
-		\bottomrule
-	\end{tabular}
-	\caption{Tiempo de ejecución (en segundos) distribuido vs. secuencial}
-	\todo[inline]{Resultados parciales. Completar con todos los experimentos}
-\end{table}
+\input{ssolverext}
