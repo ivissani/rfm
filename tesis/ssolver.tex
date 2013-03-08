@@ -61,73 +61,114 @@ la herramienta es la de dividir un problema.
 % determinado problema o bien en términos de empujar la frontera de lo
 % resoluble.
 
-La escalabilidad como gran objetivo rector en el desarrollo de nuestra
-herramienta introduce una serie de desafíos, a saber:
-\begin{itemize}
-	\item Almacenamiento distribuido.
-	\item Simetría de capacidades en los nodos de trabajo (\ws).
-	\item Minimización de la utilización de la red de comunicaciones.
-\end{itemize}
+%La escalabilidad como gran objetivo rector en el desarrollo de nuestra
+%herramienta introduce una serie de desafíos, a saber:
+%\begin{itemize}
+%	\item Almacenamiento distribuido.
+%	\item Simetría de capacidades en los nodos de trabajo (\ws).
+%	\item Minimización de la utilización de la red de comunicaciones.
+%\end{itemize}
+
+
+\section{Objetivos de diseño y desafíos asociados}
+
+\subsection{Aspectos básicos de escalabilidad}
+
+En primer término consideraremos los desafíos asociados con ciertos aspectos
+básicos que, de no ser adecuadamente manejados, podrían atentar de modo flagrante
+contra la escalabilidad de la herramienta.
+
+\subsubsection{Almacenamiento distribuido}
 
 La necesidad de que el almacenamiento de problemas pendientes de resolución se
 encuentre distribuido se debe a un doble aspecto. Por un lado, la cantidad de
 subproblemas producidos puede ser muy grande. Por lo tanto no es viable
 requerir que la cantidad de espacio necesario para almacenar todas las tareas
-pendientes de resolución se encuentre disponible en una misma ubicación. Aún
-cuando fuera posible tener la cantidad de espacio necesaria para almacenar
-todos los subproblemas en una ubicación centralizada surge un segundo problema
-que presentaría este enfoque que es el de la contención. En este aspecto, si
-pretendemos que el almacenamiento no se vuelva un cuello de botella es vital
+pendientes de resolución se encuentre disponible en una misma ubicación.
+
+Aún si fuera posible contar con la cantidad de espacio necesaria para almacenar
+todos los subproblemas en una ubicación centralizada, surge un segundo problema
+que presentaría este enfoque: el de la contención de acceso. Si
+pretendemos que el almacenamiento no se vuelva un cuello de botella, es vital
 distribuir las tareas pendientes de modo que cuando los \ws requieran nuevas
-tareas para resolver, los múltiples pedidos no recaigan en un mismo equipo.
+tareas para resolver, los múltiples pedidos no recaigan siempre sobre un mismo equipo.
 
-El requisito de que los nodos de trabajo (\ws) sean simétricos se desprende de
-la necesidad de eliminar los cuellos de botella. La simetría entendida en su
+
+\subsubsection{Simetría en las capacidades de los \ws}
+
+El requisito de que los nodos de trabajo (\ws) sean simétricos también se desprende
+de la necesidad de eliminar los cuellos de botella. La simetría, entendida en su
 máxima expresión como la posibilidad de que todas las unidades de
-procesamiento puedan realizar todas las funciones necesarias provee la
+procesamiento puedan realizar todas las funciones necesarias, provee la
 capacidad de distribuir la carga de trabajo de la manera más conveniente en
-cada momento. Esto no podría ser logrado si los nodos de trabajo tuvieran
-funciones específicas ya que se podría dar el caso de tener nodos ociosos
-porque no hay trabajo pendiente de la clase de trabajo que esos nodos saben
-realizar mientras que al mismo tiempo tendríamos nodos sobrecargados. Esta
-situación podría empeorar seriamente a medida que la cantidad de nodos
-aumenten.
+cada momento.
 
-En nuestro caso particular, el requisito de simetría se traduce en que los \ws
-deben poseer las capacidades de: \begin{inparaenum}[a)] \item \solvear
-\todo{buscar una forma de decir esto que no sea tan fea o en su defecto
-definir esto en la parte de preliminares} un subproblema (consumir), \item
-dividir un subproblema en nuevos subproblemas (producir) y \item almacenar,
+Esto no podría lograrse si los nodos de trabajo tuvieran
+funciones específicas, ya que podría darse el caso de tener nodos ociosos
+por falta de trabajo pendiente de la clase de trabajo que esos nodos saben
+realizar, a la vez que nodos sobrecargados. Esta situación podría empeorar
+seriamente a medida que la cantidad de nodos aumente.
+
+En nuestro caso particular, el requisito de simetría se traduce en que
+todos los \ws deben poseer las capacidades de: \begin{inparaenum}[a)] \item analizar un
+subproblema hasta lograr obtener un veredicto (consumir), \item
+dividir un subproblema demasiado difícil en nuevos subproblemas (producir) y \item almacenar,
 solicitar y transferir subproblemas (distribuir). \end{inparaenum}
 
-Además de los desafíos de escalabilidad, surgen también los desafíos
-relacionados con la eficiencia o la performance de la herramienta. Entre ellos
-los más destacados son:
 
-\begin{itemize}
-	\item Movilidad de tareas.
-	\item Crecimiento a la par de los \ssolvers secuenciales.
-	\item No hacer burradas \todo{Revisar toda esta itemización. No me convence....}
-\end{itemize}
+\subsubsection{Movilidad de tareas pendientes}
 
-El triple rol de productor, consumidor y distribuidor asignado a los \ws hace
-que la movilidad de tareas se transforme en un desafío en tanto que un \w
-puede estar \solveando al mismo tiempo que otro \w le solicita una tarea
-pendiente. Es evidente que en esta situación no es viable que el \w que está
-esperando una tarea tenga que esperar a que el \w que tiene dicha tarea
-termine de \solvear para que su pedido sea completado.
+El triple rol de productor, consumidor y distribuidor asignado a los \ws
+transforma la migración de tareas en un desafío en tanto que un \w puede
+estar --y generalmente lo estará-- ocupado analizando un
+subproblema cuando otro \w le solicite otro de sus subproblemas
+pendientes.
+
+Es claro que, ante esta situación, no sería aceptable que el \w que está
+esperando una tarea deba verse obligado a esperar a que el \w que generó
+dicha tarea deje de \solvear para poder acceder a la misma; esto da origen
+a un requerimiento de asincronicidad \emph{solving/serving}.
+
+Sin embargo, tampoco sería aceptable que el impacto de servir tareas bajo demanda vaya en
+detrimento del análisis (que es, al fin y al cabo, la tarea principal del \w);
+de aquí surgen un requerimiento de sincronicidad (por ejemplo: encolar los pedidos de
+tareas pendientes y atender sólo una cantidad limitada a la vez) y otro de balanceo
+de carga (por ejemplo: evitar que la capacidad de almacenamiento de un \w llegue a
+saturarse transfiriendo preventivamente tareas a otros \ws).
+
+En resumen, lograr una buena ortogonalidad entre análisis y migración de tareas es
+importante para lograr escalabilidad, y además sienta las bases para mecanismos
+avanzados de balanceo automático de carga.
+
+
+
+\subsection{Otros aspectos de eficacia y eficiencia}
+
+%Además de los as de escalabilidad, surgen también los desafíos
+%relacionados con la eficiencia o la performance de la herramienta. Entre ellos
+%los más destacados son:
+%
+%\begin{itemize}
+%	\item Movilidad de tareas.
+%	\item Crecimiento a la par de los \ssolvers secuenciales.
+%	\item No hacer burradas \todo{Revisar toda esta itemización. No me convence....}
+%\end{itemize}
+
+\subsubsection{Modularidad del componente \ssolver}
 
 Otro de los objetivos que perseguimos a la hora de diseñar nuestra herramienta
 fue que la misma pudiera utilizar un \ssolver \ots para la resolución local de
-un subproblema. Esto nos permite aprovechar los avances que se han obtenido en
-el área de \ssolving secuencial en los últimos años (que han sido muchos) a la
-vez que nos permite, a futuro, evolucionar a la par de los \ssolvers
-secuenciales de manera más simple. Esto proporciona la posibilidad de que la
-herramienta no se vuelva obsoleta ante un nuevo avance en el campo de
-\ssolving secuencial.
+un subproblema. Esto nos permite aprovechar los numerosos avances logrados por
+la comunidad en el área de investigación en \ssolving secuencial en los últimos
+años, y a la vez nos permite, a futuro, evolucionar a la par de los \ssolvers
+secuenciales, capitalizando sus nuevos logros a bajo costo y mitigando el
+riesgo de que la herramienta devenga obsoleta ante un nuevo avance en dicho
+campo de estudio.
 
 \newcommand{\rt}{\emph{run-time}\xspace}
 \newcommand{\apriori}{\emph{a priori}\xspace}
+
+\subsubsection{Automatización versus interactividad}
 
 La automatización de la operatoria es un requerimiento crucial. Desde el punto
 de vista del usuario, es fundamental que la herramienta sea capaz de llevar a
