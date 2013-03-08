@@ -121,25 +121,24 @@ solicitar y transferir subproblemas (distribuir). \end{inparaenum}
 El triple rol de productor, consumidor y distribuidor asignado a los \ws
 transforma la migración de tareas en un desafío en tanto que un \w puede
 estar --y generalmente lo estará-- ocupado analizando un
-subproblema cuando otro \w le solicite otro de sus subproblemas
-pendientes.
+subproblema cuando otro \w le solicite algún subproblema
+pendiente en su poder.
 
 Es claro que, ante esta situación, no sería aceptable que el \w que está
-esperando una tarea deba verse obligado a esperar a que el \w que generó
-dicha tarea deje de \solvear para poder acceder a la misma; esto da origen
-a un requerimiento de asincronicidad \emph{solving/serving}.
+esperando una tarea deba verse obligado a esperar hasta que aquel que la generó
+deje de \solvear para poder acceder a la misma. Esto da origen a un requerimiento
+de asincronicidad entre \emph{solving} y \emph{serving}.
 
 Sin embargo, tampoco sería aceptable que el impacto de servir tareas bajo demanda vaya en
-detrimento del análisis (que es, al fin y al cabo, la tarea principal del \w);
-de aquí surgen un requerimiento de sincronicidad (por ejemplo: encolar los pedidos de
+detrimento del análisis, que es, al fin y al cabo, el verdadero objetivo del \w.
+De aquí surgen un requerimiento de sincronicidad (por ejemplo: encolar los pedidos de
 tareas pendientes y atender sólo una cantidad limitada a la vez) y otro de balanceo
 de carga (por ejemplo: evitar que la capacidad de almacenamiento de un \w llegue a
 saturarse transfiriendo preventivamente tareas a otros \ws).
 
 En resumen, lograr una buena ortogonalidad entre análisis y migración de tareas es
-importante para lograr escalabilidad, y además sienta las bases para mecanismos
+importante para lograr escalabilidad, y sienta las bases para mecanismos
 avanzados de balanceo automático de carga.
-
 
 
 \subsection{Otros aspectos de eficacia y eficiencia}
@@ -201,6 +200,7 @@ diseñar e implementar la estrategia automática propiamente dicha.
 
 \
 
+\todo{Esta parte no es tan distinta del resto como para merecer un ``nota'' subrayado. La podríamos convertir uno o más items adicionales de la sección anterior.}
 \noindent\underline{\textbf{Nota sobre la implementación}}
 
 \
