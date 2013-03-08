@@ -129,16 +129,34 @@ herramienta no se vuelva obsoleta ante un nuevo avance en el campo de
 \newcommand{\rt}{\emph{run-time}\xspace}
 \newcommand{\apriori}{\emph{a priori}\xspace}
 
-Generar una estrategia automática que proporcione buenos resultados en la
-ejecución de problemas diversos es sumamente difícil. Más aún, no tener la
-posibilidad de modificar la estrategia adoptada durante una corrida (que puede
-ser sumamente larga y con características desconocidas \apriori) puede tener
-resultados catastróficos. Esto nos motivó a adoptar un enfoque en el que la
-maquinaria de cómputo distribuido no posee inteligencia alguna y por el
-contrario provee una serie de funciones básicas que pueden ser invocadas
-remotamente. La operación del sistema por lo tanto se lleva a cabo desde un
-\textbf{tablero de control} que permite al usuario manipular el sistema de
-cómputo en \rt.
+La automatización de la operatoria es un requerimiento crucial. Desde el punto
+de vista del usuario, es fundamental que la herramienta sea capaz de llevar a
+cabo su tarea --al menos con razonable efectividad-- sin requerir supervisión alguna.
+Sin embargo, generar una estrategia automática que proporcione buenos resultados
+en la ejecución de un amplio espectro de problemas es sumamente difícil. Desde el
+punto de vista del experto que necesita diseñar, implementar, evaluar, depurar y
+mejorar una estrategia no supervisada, es importante contar con alguna
+interfaz o consola interactiva que permita inyectar comandos arbitrarios y
+así poder modificar comportamientos en tiempo de ejecución.
+
+La necesidad de atender estos requerimientos encontrados motivó la adopción de
+un enfoque en el que la maquinaria de cómputo distribuido no posee inteligencia
+propia, sino que se limita a proveer una serie de funcionalidades básicas que
+pueden ser invocadas remotamente, ofreciendo un alto grado de generalidad. La
+operación del sistema se lleva a cabo desde un tablero de control que permite
+ejecutar manualmente trazas y combinaciones arbitrarias. Sobre esto se monta
+luego la automatización; en primer término la de aspectos reiterativos de rutina,
+y finalmente la que implementa la toma inteligente de decisiones estratégicas.
+
+De lo antedicho surgen tres desafíos concretos. En primer lugar, el de lograr una
+arquitectura adecuada para ser totalmente controlable por un operador remoto humano.
+En segundo lugar, el diseñar las interfaces de modo tal que provean una base adecuada
+para automatizar, tanto parcial como totalmente, dicho control. Y finalmente el de
+diseñar e implementar la estrategia automática propiamente dicha.
+
+
+
+
 
 \
 
