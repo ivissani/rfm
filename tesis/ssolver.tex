@@ -176,14 +176,14 @@ la misma se distinguen claramente dos componentes: el \bend que ejecuta sobre
 un \cluster de computadoras y el \fend que ejecuta en un equipo que se
 encuentra posiblemente fuera del centro de cómputos.
 
-\begin{wrapfigure}{O}{0.45\textwidth}
-\label{fig:arquitectura}
-\fbox{\includegraphics[scale=0.35]{graphs/paralloy architecture}}
+\begin{wrapfigure}{R}{0.45\textwidth}
+\fbox{\includegraphics[scale=0.3]{graphs/paralloy architecture}}
 \caption{Diagrama de componentes y conectores del \ssolver distribuido}
+\label{fig:arquitectura}
 \end{wrapfigure}
 
 \subsection{\bend}
-
+\label{sec:backend}
 \newcommand{\master}{\emph{MasterProxy}\xspace}
 
 En el \bend se puede observar que existen dos clases distintas de elementos.
@@ -258,56 +258,121 @@ parámetros en caso que corresponda) desde el \fend.
 
 \subsection{\fend}
 
-Arquitectura del \fend
-
 \begin{figure}[h!]
 \includegraphics[scale=0.4]{graphs/frontend architecture}
-\label{fig:frontend}
 \caption{Detalle de arquitectura del \fend}
+\label{fig:frontend}
 \end{figure}
 
-Diagrama de estados de las tareas y los \ws
+En la \fig\ref{fig:frontend} se esquematiza el diseño de componentes del
+\fend. En esta figura se puede observar que el tablero de control proporciona
+un modo doble de interacción con el \bend. Por un lado el tablero de control
+es capaz de recibir comandos del usuario en \rt a través de una interfaz de
+tipo consola. Estos comandos representan acciones a ser llevadas a cabo en el
+\bend como ser indicar a un \w ocioso que cargue una nueva tarea, indicar a un
+\w que se encuentra trabajando en un problema que aborte dicha ejecución,
+mover una tarea desde un \w a otro, etc. Por otro lado, el tablero de control
+posee también una \emph{estrategia} (intercambiable) que permite llevar a cabo
+acciones automáticamente frente a determinados eventos. El \fend posee también
+un componente que procesa permanentemente la información que llega desde el
+\bend. 
 
-
-\begin{figure}[h!]
-	\centering
-	\begin{subfigure}[b]{0.35\textwidth}
+\begin{wrapfigure}{r}{0.6\textwidth}
+	\vspace{-3em}
+	\begin{subfigure}{0.27\textwidth}
 		\centering
 		\includegraphics[scale=0.3]{graphs/workerstates}
 		\caption{\emph{Workers}}
 	\end{subfigure}
-	\begin{subfigure}[b]{0.35\textwidth}
+	\begin{subfigure}{0.27\textwidth}
 		\centering
 		\includegraphics[scale=0.3]{graphs/taskstates}
 		\caption{Tareas}
 	\end{subfigure}
 	\caption{Diagramas de estado en el tablero de control}
-\end{figure}
-
-la interfaz de la estrategia
-
-
-\begin{wrapfigure}{O}{.6\textwidth}
-\begin{tiny}
-\begin{lstlisting}[language=Python,caption=Interfaz Strategy]
-class Strategy(object):
-	def register_globalstate(self, globalstate)
-	def register_socket(self, commandsocket)
-	def on_init(self, worker)
-	def on_createroot(self, worker, task)
-	def on_init_finished(self, nworkers)
-	def on_getfile(self, worker, task)
-	def on_file(self, worker, task)
-	def on_load(self, worker, task)
-	def on_unsat(self, worker, task)
-	def on_sat(self, worker, task, modelstr)
-	def on_abort(self, worker, task)
-	def on_split_newtask(self, worker, newtask)
-	def on_split_finished(self, worker, parenttask, nchildren)
-	def on_shutdown(self)
-\end{lstlisting}
-\end{tiny}
+	\label{fig:states}
+	\vspace{-9em}
 \end{wrapfigure}
+
+Es importante observar que todos los componentes mencionados comparten un
+estado global. Esto se debe a que, tal como se explicó en \ref{sec:backend},
+el \bend no almacena el estado del sistema. Por lo tanto esta responsabilidad
+recae en el \fend en la medida que este estado es necesario para poder tomar
+decisiones ante los distintos eventos. El acceso concurrente a este estado
+global nos obliga a introducir un mecanismo de sincronización entre los
+distintos \threads de ejecución (\emph{locking}) que garantice la consistencia
+del estado en todo momento. Hemos tenido el cuidado necesario para evitar que
+el \emph{locking} atente contra la performance del componente en cuestión.
+
+\begin{wrapfigure}{r}{.6\textwidth}
+\begin{footnotesize}
+\begin{lstlisting}[mathescape,language=Pascal,frame=single,label=lst:synchronouscmd,caption=Esquema de comando sincrónico]
+DECIR_A $W$ que obtenga la tarea $T$
+ESPERAR que tarea $T$ esté en $W$
+DECIR_A $W$ que cargue tarea $T$
+ESPERAR que tarea $T$ esté cargada
+DECIR_A $W$ que comience a solvear $T$
+\end{lstlisting}
+\end{footnotesize}
+\end{wrapfigure}
+
+En la \fig\ref{fig:states} presentamos las máquinas de estado correspondientes
+a los \ws y a las tareas. Estos diagramas esquematizan el estado que es
+mantenido en el estado global del \fend. Una estrategia particular podría
+requerir un estado más \emph{complejo} para tomar decisiones. Por ejemplo se
+podría requerir mantener cierta información histórica respecto de la
+ejecución. En tal caso queda bajo exclusiva responsabilidad de la estrategia
+la implementación de las estructuras de datos y algoritmos necesarios para
+dicha tarea.
+
+
+\newcommand{\lst}{List.-}
+
+\begin{wrapfigure}{r}{.6\textwidth}
+\begin{footnotesize}
+\begin{lstlisting}[language=Python,caption=Interfaz Strategy,label=lst:strategy]
+class Strategy(object):
+	def register_globalstate(globalstate)
+	def register_socket(commandsocket)
+	def on_init(worker)
+	def on_createroot(worker, task)
+	def on_init_finished(nworkers)
+	def on_getfile(worker, task)
+	def on_file(worker, task)
+	def on_load(worker, task)
+	def on_unsat(worker, task)
+	def on_sat(worker, task, modelstr)
+	def on_abort(worker, task)
+	def on_split_newtask(worker, newtask)
+	def on_split_finished(worker, 
+	                      parenttask, 
+	                      nchildren)
+	def on_shutdown()
+\end{lstlisting}
+\end{footnotesize}
+\end{wrapfigure}
+
+En cuanto a las estrategias, se siguió un modelo reactivo (\emph{eventos}).
+Esto se debió en primera instancia a la dificultad de ejecutar secuencias de
+comandos de forma sincrónica. Por ejemplo, si quisiéramos implementar la
+obtención automática de una nueva tarea cuando un \w se queda sin tareas
+pendientes y quisiéramos además que el \w comenzara a \solvear dicha tarea en
+el momento en el que la misma esté disponible, deberíamos implementar un
+algoritmo similar al expuesto en \lst\ref{lst:synchronouscmd}. El problema en
+este algoritmo se encuentra en las líneas que comienzan con la palabra clave
+\texttt{ESPERAR} ya que no es aceptable que la consola de comandos o la
+estrategia se bloqueen a la espera de un evento que puede tardar una cantidad
+arbitraria de tiempo en ocurrir. Esto se debe principalmente a que en el
+transcurso de esa cantidad arbitraria de tiempo el \fend recibiría una
+cantidad de información desde el \bend (por ejemplo el hecho de que otro \w
+terminó de \solvear el subproblema en el que estaba trabajando) que podría
+requerir que se tomen acciones con el fin de mantener el sistema funcionando
+eficientemente. Sin embargo estas acciones no podrían ser tomadas porque el
+\fend se encontraría bloqueado esperando a que un evento particular de un \w
+particular ocurra. Ante este escenario optamos por un modelo de eventos que
+presentamos en el \lst\ref{lst:strategy}. Esta interfaz modela el conjunto de
+eventos que pueden ocurrir. Una estrategia particular debe implementar dicha
+interfaz de modo de poder responder ante estos eventos.
 
 \subsection{Nuestra estrategia}
 
