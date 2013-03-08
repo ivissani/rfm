@@ -1,7 +1,128 @@
 %!TEX root = tesis.tex
 
 \subsection{La estrategia implementada}
+% - Noción de problema difícil vs problema fácil
+% - Imposibilidad de determinar o siquiera estimar eso a priori
+% - Enorme varianza entre los subproblemas de un problema
 
+% - Cuándo declarar que un problema es "demasiado difícil" (para
+% atacarlo sin partirlo)?
+% - Cuáles de los solvings en curso abortar? Cuántos? Cuándo?
+
+%         - Imposibilidad de determinar o siquiera estimar a priori (en base a
+%                 criterios estáticos) la dificultad de un (sub)problema.
+
+%         - No sabemos cuánto va a tardar.
+%         - No sabemos si es fácil o difícil.
+
+%         - Partir temprano algo fácil (una rama que con poco más se cerraba)
+%           es un error que se paga caro, sobre todo si se repite recursivamente.
+
+%         - Invertir mucho esfuerzo en algo difícil y encima no lograr cerrarlo
+%           (sólo para terminar partiéndolo igual, y mucho después) es otro
+%           error que se paga caro, sobre todo si se repite recursivamente.
+
+%         - Invertir mucho esfuerzo en algo difícil hasta cerrarlo sin partirlo
+%           no siempre es una buena idea (atenta contra el paralelismo,
+%           sube el camino crítico, etc).
+
+%         - No existe un valor de TO prefijado que sea adecuado para cualquier
+%           problema raíz (y no queremos que el usuario tenga que proveer uno).
+
+%         - Incluso para cierto problema raíz R, no existe un único valor de TO
+%           que sea adecuado durante todo el transcurso de la corrida.
+
+%                 - Cada vez que se parte un subproblema (sup. elección razonable de
+%                   vars) se obtienen hijos más fáciles, pero
+
+%                     - con mucha varianza en su distribución [tablita pamela8?]
+
+%                     - con tan poca predecibilidad como dijimos antes respecto de
+%                       la tasa (hijo_mas_caro/padre)
+
+%                 - O sea que lo único que realmente sabemos es que "se van haciendo
+%                   más fáciles" (pero no a qué velocidad, ni cuánto más rápido a lo
+%                   largo de una rama vs. de otra, etc).
+
+%         => Es necesario algún criterio dinámico / adaptativo / etc.
+
+%         - Podría basarse en
+%                 - aprendizaje sobre el problema (qué pasó hasta ahora otras veces, etc)
+%                 - feedback loop observando métricas del comportamiento/estado del sistema
+
+
+% - Cómo partir un problema demasiado difícil?
+
+%         - Cuáles y cuántas variables levantar
+
+%                 => Gran Temón en sat-solving, recontra determinante para la
+%                   cant/dificultad/distribución de los subproblemas, etc
+%                   VSIDS, etc.
+
+%                 => Nivel de agresividad, fanout, potencial explosión;
+%                         trade-off "muchos" vs "más fáciles" (ojalá!);
+%                         hay que tener cuidado con el fanout recursivo.
+
+%         - Filtrado de subproblemas triviales
+
+%                 - Rara vez se da el peor caso 2^n totalmente denso
+%                 - Muchas veces se puede lograr mucho menos!
+%                 - Hay maneras muy baratas de filtrar los muy triviales
+%                 - Hay maneras (no tan) baratas de filtrar los (no tan) triviales
+%                 => Trade-off:
+%                         - escaso filtrado =>
+%                             overhead innecesario por proliferación de tareas fáciles evitables
+%                         - exceso de esfuerzo en filtrado =>
+%                             excesiva centralización de costo computacional que podría distribuirse
+
+
+% - Ni bien alguien queda ocioso debe asignársele más trabajo.
+
+% - Decisión importante: ¿cuál de todas las tareas pendientes es la "próxima"?
+%   => afecta cómo se recorre el espacio de búsqueda
+%   => termina afectando el scheduling (en presencia de feedback loops etc)
+
+% - Además, minimizar costos de movimientos de tareas innecesarios
+%   => si ese alguien ya tiene trabajo pendiente local, podría ser bueno
+%      que se le asigne lo mejor posible dentro de lo local
+
+Comenzaremos esta sección con un desglose de las principales cuestiones a
+resolver por una estrategia completamente automática para nuestra herramienta.
+Surge así la primer pregunta relevante que cualquier estrategia debe
+responder: ¿Cuándo declarar que un (sub)problema es demasiado difícil para
+atacarlo como tal? Es decir ¿Cuándo se toma la decisión de partir un problema
+en nuevos subproblemas?
+
+\subsubsection{Dificultad de un problema}
+
+En este punto es importante recalcar el hecho de que la partición de un
+problema en nuevos subproblemas se lleva a cabo con el objetivo de distribuir
+las distintas porciones del espacio de búsqueda entre distintas unidades de
+cómputo. Así, invertir demasiado tiempo en intentar obtener un resultado
+secuencialmente para un problema difícil atenta prohibitivamente contra el
+paralelismo. Por lo tanto la decisión de cuándo abortar un \solving en curso
+se vuelve crucial.
+
+Si un problema va a tomar demasiado tiempo no tiene sentido invertir tiempo de
+\solving secuencial en intentar resolverlo y es conveniente partirlo
+\emph{cuanto antes}. Por otra parte, partir un problema en un momento tal que
+si hubiéramos esperado una fracción  pequeña de tiempo más el \w habría
+arribado a un resultado para el problema implica que \emph{todo} el tiempo de
+cómputo previamente invertido es desperdiciado. Estos dos errores se vuelven
+catastróficos cuando se repiten recursivamente\todo{¿Se entiende
+``recursivamente''?}.
+
+Subyace a toda esta cuestión la pregunta fundamental de cómo determinar que un
+problema dado es fácil o difícil. Si tuviéramos algún criterio que nos
+permitiese siquiera aproximar la dificultad de un problema dado, o el
+porcentaje de avance durante una corrida secuencial de un \ssolver, podríamos
+elaborar una estrategia que atienda razonablemente a las inquietudes
+planteadas arriba. Lamentablemente no se conoce ninguna métrica que permita
+establecer \apriori la dificultad de un problema. Si bien la complejidad de
+los algoritmos de \ssolving se expresa en función de la cantidad de variables
+de un problema (y es exponencial), la experiencia indica que existen problemas
+con pocas variables sumamente difíciles y problemas con muchas variables
+razonablemente sencillos.
 
 \begin{itemize}
 	\item Si idle se parte el más viejo
