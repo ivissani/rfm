@@ -78,11 +78,10 @@ cuando fuera posible tener la cantidad de espacio necesaria para almacenar
 todos los subproblemas en una ubicación centralizada surge un segundo problema
 que presentaría este enfoque que es el de la contención. En este aspecto, si
 pretendemos que el almacenamiento no se vuelva un cuello de botella es vital
-distribuir de la mejor manera posible las tareas pendientes de modo que cuando
-los \ws requieran nuevas tareas para resolver, los múltiples pedidos no
-recaigan en un mismo equipo.
+distribuir las tareas pendientes de modo que cuando los \ws requieran nuevas
+tareas para resolver, los múltiples pedidos no recaigan en un mismo equipo.
 
-El requisito de que los nodos de trabajo (\ws) sean símetricos se desprende de
+El requisito de que los nodos de trabajo (\ws) sean simétricos se desprende de
 la necesidad de eliminar los cuellos de botella. La simetría entendida en su
 máxima expresión como la posibilidad de que todas las unidades de
 procesamiento puedan realizar todas las funciones necesarias provee la
@@ -90,7 +89,7 @@ capacidad de distribuir la carga de trabajo de la manera más conveniente en
 cada momento. Esto no podría ser logrado si los nodos de trabajo tuvieran
 funciones específicas ya que se podría dar el caso de tener nodos ociosos
 porque no hay trabajo pendiente de la clase de trabajo que esos nodos saben
-realizar mientras que al mismo timepo tendríamos nodos sobrecargados. Esta
+realizar mientras que al mismo tiempo tendríamos nodos sobrecargados. Esta
 situación podría empeorar seriamente a medida que la cantidad de nodos
 aumenten.
 
@@ -158,7 +157,7 @@ para su desarrollo. En la implementación actual de la herramienta utilizamos
 el \ssolver \minisatdosveinte que está desarrollado en el lenguaje \cpp. Para
 ello se desarrolló un \emph{wrapper} que permite utilizar \minisat desde un
 entorno \Python. Para el intercambio de mensajes entre los \ws se utilizó el
-estándar \mpi.
+estándar \mpi a través de la biblioteca \texttt{mpi4py}\cite{mpi4py}.
 
 
 % \begin{itemize}
@@ -177,7 +176,7 @@ la misma se distinguen claramente dos componentes: el \bend que ejecuta sobre
 un \cluster de computadoras y el \fend que ejecuta en un equipo que se
 encuentra posiblemente fuera del centro de cómputos.
 
-\begin{wrapfigure}{R}{0.45\textwidth}
+\begin{wrapfigure}{O}{0.45\textwidth}
 \label{fig:arquitectura}
 \fbox{\includegraphics[scale=0.35]{graphs/paralloy architecture}}
 \caption{Diagrama de componentes y conectores del \ssolver distribuido}
@@ -227,8 +226,8 @@ sean implementados internamente mediante comunicación sincrónica a través de
 entrada desde el \fend hacia el \bend. La comunicación sincrónica permite
 simplificar algunos comandos como el envío del problema original hacia todos
 los \ws. Al mismo tiempo se mantiene el orden entre los comandos enviados
-desde el \fend lo cual también contribuye a la simplifación del modelo de
-cómputo a pesar de tratarse de un sistema ditribuido.
+desde el \fend lo cual también contribuye a la simplificación del modelo de
+cómputo a pesar de tratarse de un sistema distribuido.
 
 \begin{figure}[h!]
 \centering
@@ -241,7 +240,7 @@ La \fig\ref{fig:workerdetail} muestra el detalle de diseño del componente
 \w. Como se puede observar, las funciones de \solving, comunicación y
 transferencia de archivos se implementaron en \threads separados. Dado que la
 función de \solving utiliza principalmente tiempo de \cpu, mientras que el
-resto de las funciones consumen principalmente timepo de \io, la separación de
+resto de las funciones consumen principalmente tiempo de \io, la separación de
 éstas en distintos \threads permite la ejecución concurrente de estas
 tareas sin que esta característica impacte negativamente en el desempeño del
 \ssolver. A la vez, esta característica permite satisfacer el objetivo de
