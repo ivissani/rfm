@@ -26,7 +26,7 @@ en la idea de \gp y orienteado a \clusters de computadoras. La idea de \gp se
 basa en la observación de que, en el peor caso, todas las posibles valuaciones
 de una fórmula proposicional $\varphi$ deben ser evaluadas. Una vez que una
 valuación que satisface a una fórmula es encontrada, el procedimiento de
-\ssolving puede ser abortado\footnote{Existe otra variante en la que, además
+\ssolving puede darse por finalizado\footnote{Existe otra variante en la que, además
 de determinar si una fórmula es \sat o \unsat, interesa enumerar todos los
 posibles modelos de dicha fórmula. En este escenario el procedimiento de
 \ssolving no puede ser detenido una vez que se encuentra una valuación sino
@@ -141,37 +141,19 @@ importante para lograr escalabilidad, y sienta las bases para mecanismos
 avanzados de balanceo automático de carga.
 
 
-\subsection{Otros aspectos de eficacia y eficiencia}
 
-%Además de los as de escalabilidad, surgen también los desafíos
-%relacionados con la eficiencia o la performance de la herramienta. Entre ellos
-%los más destacados son:
-%
-%\begin{itemize}
-%	\item Movilidad de tareas.
-%	\item Crecimiento a la par de los \ssolvers secuenciales.
-%	\item No hacer burradas \todo{Revisar toda esta itemización. No me convence....}
-%\end{itemize}
-
-\subsubsection{Modularidad del componente \ssolver}
-
-Otro de los objetivos que perseguimos a la hora de diseñar nuestra herramienta
-fue que la misma pudiera utilizar un \ssolver \ots para la resolución local de
-un subproblema. Esto nos permite aprovechar los numerosos avances logrados por
-la comunidad en el área de investigación en \ssolving secuencial en los últimos
-años, y a la vez nos permite, a futuro, evolucionar a la par de los \ssolvers
-secuenciales, capitalizando sus nuevos logros a bajo costo y mitigando el
-riesgo de que la herramienta devenga obsoleta ante un nuevo avance en dicho
-campo de estudio.
 
 \newcommand{\rt}{\emph{run-time}\xspace}
 \newcommand{\apriori}{\emph{a priori}\xspace}
 
-\subsubsection{Automatización versus interactividad}
+\subsection{Aspectos de automatización e interactividad}
 
 La automatización de la operatoria es un requerimiento crucial. Desde el punto
 de vista del usuario, es fundamental que la herramienta sea capaz de llevar a
-cabo su tarea --al menos con razonable efectividad-- sin requerir supervisión alguna.
+cabo su objetivo --demostrar la propiedad o exhibir un contraejemplo-- sin requerir
+supervisión alguna ni depender de complejas parametrizaciones que requieran
+numerosos reintentos para ser halladas.
+
 Sin embargo, generar una estrategia automática que proporcione buenos resultados
 en la ejecución de un amplio espectro de problemas es sumamente difícil. Desde el
 punto de vista del experto que necesita diseñar, implementar, evaluar, depurar y
@@ -190,32 +172,52 @@ y finalmente la que implementa la toma inteligente de decisiones estratégicas.
 
 De lo antedicho surgen tres desafíos concretos. En primer lugar, el de lograr una
 arquitectura adecuada para ser totalmente controlable por un operador remoto humano.
-En segundo lugar, el diseñar las interfaces de modo tal que provean una base adecuada
+En segundo lugar, el de diseñar las interfaces de modo tal que provean una base adecuada
 para automatizar, tanto parcial como totalmente, dicho control. Y finalmente el de
 diseñar e implementar la estrategia automática propiamente dicha.
 
 
+\subsection{Otros aspectos de calidad}
 
+%Además de los as de escalabilidad, surgen también los desafíos
+%relacionados con la eficiencia o la performance de la herramienta. Entre ellos
+%los más destacados son:
+%
+%\begin{itemize}
+%	\item Movilidad de tareas.
+%	\item Crecimiento a la par de los \ssolvers secuenciales.
+%	\item No hacer burradas \todo{Revisar toda esta itemización. No me convence....}
+%\end{itemize}
 
+\subsubsection{Modularidad del componente \ssolver de los \ws}
 
-\
+Otro de los objetivos que perseguimos a la hora de diseñar nuestra herramienta
+fue que la misma pudiera utilizar un \ssolver \ots para la resolución local de
+un subproblema. Esto nos permite aprovechar los numerosos avances logrados por
+la comunidad en el área de investigación en \ssolving secuencial en los últimos
+años, y a la vez nos permite, a futuro, evolucionar a la par de los \ssolvers
+secuenciales, capitalizando sus nuevos logros a bajo costo y mitigando el
+riesgo de que la herramienta devenga obsoleta ante un nuevo avance en dicho
+campo de estudio.
 
-\todo{Esta parte no es tan distinta del resto como para merecer un ``nota'' subrayado. La podríamos convertir uno o más items adicionales de la sección anterior.}
-\noindent\underline{\textbf{Nota sobre la implementación}}
-
-\
+\subsubsection{Mantenibilidad y modificabilidad}
 
 El último objetivo que perseguimos durante el desarrollo de nuestra
 herramienta fue que la misma presentara facilidad para ser modificada sin que
-esto impacatar negativamente en la \emph{performance}. Este objetivo, entre
+esto impactara negativamente en la \emph{performance}. Este objetivo, entre
 otras cosas, determinó la elección de las tecnologías a utilizar para su
 desarrollo. Por lo tanto se utilizó el lenguaje de programación \Python para
 el desarrollo de toda la herramienta con excepción de la parte de cómputo
-intensivo. Al utilizar un \ssolver \ots no fue necesario elegir un lenguaje
+intensivo.
+
+Al utilizar un \ssolver \ots no fue necesario elegir un lenguaje
 para su desarrollo. En la implementación actual de la herramienta utilizamos
 el \ssolver \minisatdosveinte que está desarrollado en el lenguaje \cpp. Para
 ello se desarrolló un \emph{wrapper} que permite utilizar \minisat desde un
-entorno \Python. Para el intercambio de mensajes entre los \ws se utilizó el
+entorno \Python, obteniendo todos los beneficios de un lenguaje de programación
+dinámico sin pérdida de eficiencia en los algoritmos \emph{core}.
+
+Para el intercambio de mensajes entre los \ws se utilizó el
 estándar \mpi a través de la biblioteca \texttt{mpi4py}\cite{mpi4py}.
 
 
