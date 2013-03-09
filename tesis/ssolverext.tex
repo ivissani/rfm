@@ -1,6 +1,13 @@
 %!TEX root = tesis.tex
 
-\subsection{La estrategia implementada}
+\section{Sobre la automatización}
+
+En la presente sección nos proponemos señalar los aspectos importantes a tener
+en cuenta relacionados con la automatización del funcionamiento de nuestra
+herramienta. Además señalaremos las decisiones adoptadas por nosotros en cada
+uno de los puntos relevantes.
+
+\subsection{Consideraciones sobre la estrategia}
 % - Noción de problema difícil vs problema fácil
 % - Imposibilidad de determinar o siquiera estimar eso a priori
 % - Enorme varianza entre los subproblemas de un problema
@@ -204,7 +211,7 @@ proceso de particionado se repite recursivamente, la generación de una
 excesiva cantidad de subproblemas ante cada particionado genera una explosión
 exponencial de problemas. Si este factor no es tenido en cuenta es altamente
 probable que el sistema diverja y no sea capaz de arribar a una solución.
-Sumado a esto, el tiempo insumido en generar la progenie\todo{:)} de un
+Sumado a esto, el tiempo insumido en generar la descendencia\todo{:)} de un
 problema puede volverse excesivamente grande atentando una vez más contra el
 paralelismo y la eficiencia de la herramienta.
 
@@ -249,6 +256,39 @@ del sistema debido al \emph{overhead} invertido en resolver problemas
 demasiado fáciles. Pero también debe tener en cuenta que invertir demasiado
 tiempo de cómputo en el filtrado de los subproblemas tiende a degradar
 significativamente el paralelismo.
+
+\subsubsection{Otros aspectos de interés}
+
+Otro aspecto que influye en la \emph{performance} de la herramienta es la
+forma en que se recorre el espacio de búsqueda. Cuando un \w queda ocioso debe
+tomar una nueva tarea (si hubiera tareas pendientes). Surge entonces el
+problema de determinar cuál de todas las tareas pendientes debe ser atacada.
+Como en los casos anteriores existen dos factores que deben ser balanceados.
+Por un lado, si la estrategia es adaptable mediante métricas dinámicas, el
+orden en el que se recorren las tareas a resolver alterará el resultado.
+\todo{Ver si hacerlo más detallado esto} Por lo tanto nos gustaría poder
+seguir el orden \emph{más adecuado} a las métricas que hayamos utilizado en
+nuestra estrategia. Sin embargo, la tarea \emph{ideal} puede encontrarse
+almacenada en otro \w. Surge así el segundo factor a tener en cuenta. En aras
+de la escalabilidad, el criterio para elegir la próxima tarea a ser atacada no
+debe generar una sobreutilización de la red de comunicaciones.
+
+Un último factor a tener en cuenta es la necesidad de maximizar la utilización
+del \hard disponible. Es decir que, idealmente, si hay \hard ocioso no debería
+haber tareas pendientes.
+
+\subsection{La estrategia implementada}
+
+Teniendo en cuenta los factores mencionados anteriormente nos volcamos al
+desarrollo de una estrategia automática. Nuestro objetivo no estuvo puesto en
+el desarrollo de una estrategia óptima ya que cada uno de los factores
+mencionados con anterioridad podría ser objeto de un extenso estudio, y aún
+así no existen garantías de que existe tal cosa como la estrategia óptima para
+toda clase de problemas. Por lo tanto nuestro esfuerzo estuvo dedicado a no
+incurrir en los errores más flagrantes, de modo que la herramienta funcionase
+razonablemente bien con una serie de problemas y poder empezar a obtener
+resultados que nos permitan resaltar los aspectos fuertes y los aspectos que
+aún necesitan un esfuerzo importante.
 
 \begin{itemize}
 	\item Si idle se parte el más viejo
