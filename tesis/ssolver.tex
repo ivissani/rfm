@@ -142,10 +142,6 @@ avanzados de balanceo automático de carga.
 
 
 
-
-\newcommand{\rt}{\emph{run-time}\xspace}
-\newcommand{\apriori}{\emph{a priori}\xspace}
-
 \subsection{Aspectos de automatización e interactividad}
 
 La automatización de la operatoria es un requerimiento crucial. Desde el punto
@@ -230,8 +226,6 @@ estándar \mpi a través de la biblioteca \texttt{mpi4py}\cite{mpi4py}.
 
 \section{Arquitectura}
 
-\newcommand{\fig}{Fig.-}
-
 La \fig\ref{fig:arquitectura} muestra la arquitectura de la herramienta. En
 la misma se distinguen claramente dos componentes: el \bend que ejecuta sobre
 un \cluster de computadoras y el \fend que ejecuta en un equipo que se
@@ -245,7 +239,6 @@ encuentra posiblemente fuera del centro de cómputos.
 
 \subsection{\bend}
 \label{sec:backend}
-\newcommand{\master}{\emph{MasterProxy}\xspace}
 
 En el \bend se puede observar que existen dos clases distintas de elementos.
 Por un lado tenemos un proceso llamado \master que es el encargado de manejar
@@ -257,8 +250,6 @@ son los encargados de relizar el cómputo (\ssolving) y la división de un
 problema en nuevos subproblemas. Asimismo son quienes almacenan las tareas
 pendientes de ejecución y por lo tanto deben proveer acceso a dicho
 almacenamiento a los demás \ws.
-
-\newcommand{\masterslave}{\texttt{Master-Worker}\xspace}
 
 Es importante destacar que si bien el \bend presenta una arquitectura
 \masterslave, el \master en este caso no toma ninguna decisión sino que
@@ -417,8 +408,6 @@ ejecución. En tal caso queda bajo exclusiva responsabilidad de la estrategia
 la implementación de las estructuras de datos y algoritmos necesarios para
 dicha tarea.
 
-
-\newcommand{\lst}{List.-}
 
 \begin{wrapfigure}{r}{.6\textwidth}
 \begin{footnotesize}

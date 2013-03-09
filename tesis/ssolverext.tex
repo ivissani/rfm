@@ -86,7 +86,7 @@
 %   => si ese alguien ya tiene trabajo pendiente local, podría ser bueno
 %      que se le asigne lo mejor posible dentro de lo local
 
-Comenzaremos esta sección con un desglose de las principales cuestiones a
+Comenzaremos esta sección con un desglosando las principales cuestiones a
 resolver por una estrategia completamente automática para nuestra herramienta.
 Surge así la primer pregunta relevante que cualquier estrategia debe
 responder: ¿Cuándo declarar que un (sub)problema es demasiado difícil para
@@ -123,6 +123,132 @@ los algoritmos de \ssolving se expresa en función de la cantidad de variables
 de un problema (y es exponencial), la experiencia indica que existen problemas
 con pocas variables sumamente difíciles y problemas con muchas variables
 razonablemente sencillos.
+
+Resulta claro entonces que una primera aproximación \emph{naive} a este
+problema como podría ser la elección de un \tout fijo como criterio para
+determinar cuándo un problema debe ser partido, resulta una mala alternativa.
+La disparidad en la dificultad de los distintos problemas hace que sea
+imposible atacar razonablemente todos los problemas con un único valor de \tout.
+Una posibilidad sería entonces que el usuario seleccionara el \tout que quiere
+utilizar para cada problema. Sin embargo esto atenta sustancialmente contra la
+usabilidad de la herramienta ya que requiere asumir un \emph{expertise} por
+parte del usuario y un conocimiento previo del problema a resolver que no son
+razonables. 
+
+Además a medida que partimos recursivamente un problema, los subproblemas
+generados --si la elección de variables a levantar fue apropiada-- son
+\emph{cada vez} más fáciles. Por lo tanto un valor de \tout que resulta
+adecuado en un momento no lo será más adelante. Esto podría llevarnos a
+elaborar un criterio un tanto más refinado que lo anterior. Por ejemplo
+podríamos optar por tener un valor de \tout para cada \emph{nivel} del
+problema. Sin embargo surge nuevamente el mismo problema que mencionábamos
+anteriormente. Cada vez que un problema es partido, los subproblemas generados
+difieren notablemente en su nivel de dificultad. Aún más, las distribuciones
+de dificultad entre los hijos de dos subproblemas distintos de un mismo
+problema (a misma cantidad de variables levantadas) pueden ser muy distintas.
+Por lo tanto, este refinamiento tampoco resulta adecuado.
+
+En general, la ausencia de un criterio estático para determinar la dificultad
+de un problema dado, hace imposible la elección de un criterio de corte que
+sea también estático. Por lo tanto se vuelve necesario que el criterio para
+determinar que un problema debe ser partido sea dinámico. Es decir que el
+mismo se vaya adaptando durante la ejecución. Un criterio de estas
+características tiene dos fuentes de información fundamentales. Por un lado el
+estado general del sistema y su evolución (su historia). Esto puede incluir
+métricas sobra la carga del sistema, cantidad de problemas pendientes, espacio
+de almacenamiento disponible, etc. La segunda fuente de información surge de
+las características del problema que sean observables a lo largo de la
+ejecución. Ejemplos de esto son la cantidad de subproblemas producidos cada
+vez que se partió un problema, estadísticas sobre los tiempos que demoraron
+los subproblemas ya resueltos, etc. 
+
+Cualquier estrategia automática razonable deberá entoces dar respuesta a la
+problemática de decidir cuándo partir un problema teniendo en cuenta las
+observaciones mencionadas. Una vez resuelto este dilema surge la segunda
+pregunta fundamental a responder que es ¿Cómo partir un problema? Que
+esencialmente se traduce en ¿Cuántas y qué variables levantar en cada ocasión?
+
+\subsubsection{Criterio de particionado}
+
+\newcommand{\vsids}{VSIDS\xspace}
+
+La determinación de qué variables levantar en el momento en que se decide
+partir un problema es uno de los grandes temas en el mundo del \ssolving. En
+un sentido, este problema es equivalente al problema que enfrentan los
+\ssolver secuenciales cuando deben tomar una decisión. Cuando un \ssolver
+secuencial agotó las propagaciones de la última decisión tomada, debe tomar
+una nueva decisión. Tomar una decisión implica en primera instancia
+seleccionar una variable y luego seleccionar cuál de los dos posibles valores
+de verdad asignar a esa variable. En nuestro caso, dado que al levantar una
+variable los dos valores de verdad son considerados \emph{simultáneamente}, el
+problema se reduce a elegir cuidadosamente la variable a levantar. Uno de los
+métodos más difundidos para elegir la próxima variable en los \ssolvers
+secuenciales, se basa en un criterio de actividad conocido como \vsids. Del
+mismo modo que para las cláusulas --ver \ref{sec:longactlbd}-- cada vez que
+una variable \emph{participa} de un conflicto su actividad es incrementada.
+Luego, cuando el \ssolver se encuentra en la situación de tener que elegir una
+variable para continuar la búsqueda, elige aquella con mayor actividad.
+
+La elección de las variables a ser levantadas es crucial. Como se ve en
+\ref{tablita???} una buena elección de variables puede generar una
+descendencia muy fácil o muy difícil. En general, no se posible saber cuál es
+la mejor elección de variables a ser levantadas. Sin embargo la heurística
+\vsids a reportado muy buenos resultados en el mundo del \ssolving secuencial.
+
+Además de la determinación de qué variables levantar, es importante también
+tener en cuenta cuántas levantar en cada momento. En primer lugar es
+importante tener en cuenta que la cantidad potencial de subproblemas generados
+es exponencial con respecto a las variables levantadas. Esto afecta en un
+doble sentido. En primera instancia es necesario observar que, dado que el
+proceso de particionado se repite recursivamente, la generación de una
+excesiva cantidad de subproblemas ante cada particionado genera una explosión
+exponencial de problemas. Si este factor no es tenido en cuenta es altamente
+probable que el sistema diverja y no sea capaz de arribar a una solución.
+Sumado a esto, el tiempo insumido en generar la progenie\todo{:)} de un
+problema puede volverse excesivamente grande atentando una vez más contra el
+paralelismo y la eficiencia de la herramienta.
+
+Una vez más debemos recordar que la idea de levantar variables se basa en que,
+ante una elección razonable de cuáles variables levantar, a mayor cantidad de
+variables levantadas, más fáciles serán los subproblemas generados. Es por
+esto que si la cantidad de variables a levantar es demasiado pequeña, es
+probable que los subproblemas generados no sean suficientemente fáciles para
+ser atacados y que, por lo tanto, requieran ser partidos ellos también en el
+futuro haciendo que el tiempo invertido en intentar resolverlo se convierta en
+tiempo desperdiciado. Además, si la cantidad de variables levantadas es muy
+baja, existe la posibilidad de que la cantidad de subproblemas generados no
+sea suficiente para aprovechar al máximo el \hard disponible.
+
+La última observación referida al criterio de particionado tiene que ver con
+qué problemas son dignos de ser distribuidos realmente. Hemos mencionado
+muchas veces que al levantar $n$ variables, la cantidad \textbf{potencial} de
+subproblemas generados es $2^n$. El uso de la palabra potencial tiene que ver
+con el hecho de que varios de los subproblemas generados al levantar $n$
+variables podrían ser resueltos trivialmente ¿A qué nos referimos con
+trivialmente? En primer lugar a aquellos subproblemas en los que alcanza con
+propagar\footnote{El uso del término propagación en este contexto es estricto.
+Es decir que nos referimos exclusivamente a la realización de la clausura de
+\bcp sobre el subproblema. Esta propagación no incluye la toma de nuevas
+decisiones.} las implicaciones de las decisiones tomadas para obtener un
+resultado --\sat o \unsat--. Pero más en general, nos referimos a todos
+aquellos subproblemas en los que el \emph{overhead} de generar la tarea, más
+trasladarla a otro \w, más cargar la tarea en el nuevo \w, más \solvear dicho
+problema hasta arribar a un resultado sea suficientemente grande como para que
+sea conveniente atacarlo directamente hasta arribar a un resultado sin generar
+una nueva tarea.
+
+Se introduce entonces una nueva variable en el criterio de particionado que es
+cuáles de los potenciales $2^n$ subproblemas generar como tareas a ser
+atacadas por otros \ws y cuáles atacar directamente sin generarlos como nuevas
+tareas. Se debe observar que \emph{no generar} un subproblema requier invertir
+un tiempo de cómputo suficiente para determinar el resultado de ese
+subproblema. Una estrategia automática debe entonces decidir qué hacer con
+esta variable teniendo en cuenta que invertir poco o nada de tiempo de cómputo
+en filtrar los subproblemas puede degradar significativamente la eficiencia
+del sistema debido al \emph{overhead} invertido en resolver problemas
+demasiado fáciles. Pero también debe tener en cuenta que invertir demasiado
+tiempo de cómputo en el filtrado de los subproblemas tiende a degradar
+significativamente el paralelismo.
 
 \begin{itemize}
 	\item Si idle se parte el más viejo
