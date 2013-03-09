@@ -290,25 +290,74 @@ razonablemente bien con una serie de problemas y poder empezar a obtener
 resultados que nos permitan resaltar los aspectos fuertes y los aspectos que
 aún necesitan un esfuerzo importante.
 
+En cuanto al criterio de particionado las decisiones tomadas fueron:
+
 \begin{itemize}
-	\item Si idle se parte el más viejo
-	\item La próxima a resolver es:
-		\begin{itemize}
-			\item Si no tengo tareas locales:
-				\begin{itemize}
-					\item Bajo la tarea que corresponde por BFS +
-					\item $\frac{\sharp tasks}{\sharp workers}$ del que más tiene (límite 10)
-				\end{itemize}
-			\item Si tengo: Agarro la que corresponde por BFS
-		\end{itemize}
-	\item Parto cuando la frecuencia de $\sharp UNSATs/_s$
-	\item Detalles:
-	\begin{itemize}
-		\item Target de UNSATs por esgundo
-		\item Frecuencia de checkeo
-		\item Tamaño ventana
-	\end{itemize}
+	\item La cantidad de variables a levantar se fijó en 10. Aunque este valor puede ser alterado por el usuario.
+	\item Las variables a levantar se seleccionan utilizando la heurística \vsids. Es decir que cuando un problema va a ser partido, se consultan las actividades de cada variable y se seleccionan --de acuerdo con el punto anterior-- las 10 variables más activas.
+	\item Cada potencial subproblema es \solveado por 50ms. Si en ese tiempo no se arriba a un resultado, el problema pasa a ser una nueva tarea pendiente.
 \end{itemize}
+
+Respecto al orden en el cual se recorre el espacio de búsqueda:
+
+\begin{itemize}
+	\item Si un \w queda ocioso y no tiene tareas pendientes en su espacio de almacenamiento, obtiene la tarea que corresponda de acuerdo a la estrategia BFS --\emph{breadth-first search}--.
+	\item Si al quedar ocioso el \w cuenta con tareas pendientes locales, se selecciona la que corresponda por BFS de las tareas locales.
+\end{itemize}
+
+Sobre cuándo declarar que un problema es demasiado difícil, adoptamos una
+estrategia basada en el estado del sistema. En concreto nos enfocamos en que
+el sistema mantenga una cierta tasa de progreso. Para ello medimos la cantidad
+de subproblemas resueltos por unidad de tiempo y luego establecimos un umbral
+objetivo. Luego, si la frecuencia actual se encuentra por debajo del umbral
+objetivo, entonces debemos tomar uno de los problemas que actualmente están
+siendo atacados y partirlo. Llamaremos \textbf{frecuencia objetivo} al umbral
+de problemas terminados por segundo por debajo del cual se decide que algún
+problema debe ser partido. Llamaremos \textbf{frecuencia actual} a un valor
+que estima la cantidad de problemas terminados por segundo a partir de
+promediar los problemas que han terminado durante los últimos $t$ segundos.
+Llamaremos \textbf{tamaño de la ventana de muestreo} al mencionado valor $t$.
+Llamaremos \textbf{frecuencia de checkeo} a la frecuencia con la que se revisa
+si la frecuencia actual se encuentra por encima de la frecuencia objetivo.
+
+En concreto los parámetros utilizados fueron:
+
+\begin{itemize}
+	\item Frecuencia objetivo: $0.15$ p/\w
+	\item Tamaño de la ventana de muestreo: $20s$
+	\item Frecuencia de checkeo: $5s$
+\end{itemize}
+
+Que la frecuencia objetivo dependa de la cantidad de \ws permite ajustar la
+cantidad de problemas generados de acuerdo a la capacidad de consumirlos que
+tiene el sistema. Es importante notar que el tamaño de la venta influye en
+cuánto peso se le da a la historia. Una ventana más grande es más estable
+mientras que una ventana más chica se adapta más rápidamente ya que presenta
+mayor volatilidad. La frecuencia de checkeo administra cuánto tiempo de
+tolerancia se tiene ante una frecuencia actual menor a una frecuencia
+objetivo. Si la frecuencia de checko es alta --menor valor-- entonces la
+tolerancia será baja y ante cualquier caída de la frecuencia actual por debajo
+del objetivo el sistema reaccionará. Por otro lado una frecuancia alta --mayor
+valor-- representará una tolerancia mayor dando oportunidad al sistema de
+tener períodos en los que la frecuencia actual no alcanza la frecuencia
+objetivo. La combinación de  estos tres parámetros configura la agresividad
+del sistema a la hora de determinar que un problema es demasiado difícil.
+
+Con respecto al balanceo del almacenamiento se tomó la decisión de que cada
+vez que un \w se queda ocioso y sin tareas pendientes, además de obtener la
+tarea que corresponde por BFS, el \w obtendrá una conjunto de tareas pendietes
+de aquel \w que posea mayor cantidad. Llamemos $w_{idle}$ al \w que quedón sin
+tareas y $w_{overwhelmed}$ al que más tareas pendientes posee, entonces la
+cantidad de tareas transferidas en esta ocasión será \begin{equation}
+\frac{\#tareas\_pendientes(\w_{overwhelmed})}{\# workers}
+\label{eq:share}\end{equation} La idea detrás de esto es que $w_{idle}$
+obtiene \emph{la porción que le corresponde} de las tareas de
+$w_{overwhelmed}$. Para evitar transferencias extremadamente largas, la
+cantidad expresada en Eq.-\ref{eq:share} satura en $10$ tareas. Para evitar
+una mala distribución\todo{¿Vale la pena entrar en detalle sobre qué significa
+mala distribución?}, las tareas que conforman una porción a ser transferida
+son seleccionadas al azar del conjunto de tareas pendientes de
+$w_{overwhelmed}$.
 
 \subsection{Decisiones que vale la pena seguir investigando}
 
