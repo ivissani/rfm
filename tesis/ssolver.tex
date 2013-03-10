@@ -302,17 +302,17 @@ tareas sin que esta característica impacte negativamente en el desempeño del
 \ssolver. A la vez, esta característica permite satisfacer el objetivo de
 movilidad de las tareas, aún cuando el \w se encuentre ocupado \solveando.
 
-Interesa destacar también que tanto la estrategia de partición de un problema
-como la estrategia de aprendizaje se encuentran implementadas en los \ws. Si
-bien este diseño es contrario a la idea general de \emph{tablero de control}
+Interesa destacar también que la estrategia de partición de un problema
+se encuentran implementadas en los \ws. Si
+bien este diseño es contrario a la idea general basado en la existencia de un \emph{tablero de control}
 consideramos que el nivel de granularidad necesario para poder controlar
 remotamente la realización de estas dos tareas era demasiado alto y atentaba
 contra la usabilidad de la herramienta. Asimismo, la herramienta es capaz de
-poseer diversas estrategias implementadas para estas dos fases de la ejecución
-de modo que el usuario puede seleccionar la estrategia deseada (y sus
+poseer diversas estrategias implementadas
+de modo que el usuario puede seleccionar aquella que le resulte más apropiada (y sus
 parámetros en caso que corresponda) desde el \fend.
 
-Por último corresponde mencionar a qué nos referimos en concreto cuando
+Por último, corresponde mencionar a qué nos referimos en concreto cuando
 hablamos de \emph{tarea}. El término \emph{tarea} fue mencionado en varias
 ocasiones a lo largo de la explicación. Si bien conceptualmente una tarea
 podría ser simplemente una fórmula $\varphi$ en \cnf, en la práctica esto
@@ -320,17 +320,19 @@ podría producir un \emph{overhead} en la transferencia demasiado grande ya
 que, por ejemplo al partir un problema levantando $n$ variables podríamos
 generar $2^n$ subproblemas, cada uno de los cuales estaría representado
 esencialmente por la misma fórmula $\varphi$ más las cláusulas unitarias
-propias de cada subproblema. Esta situación se repite innumerables veces a lo
+que determinan el \gp al que cada subproblema corresponde. Esta situación se repite innumerables veces a lo
 largo de la ejecución de la herramienta para resolver un problema. Es por esto
-que optamos, como modo de funcionamiento, por enviar la fórmula original a
+que optamos, como modo de funcionamiento, por enviar la fórmula \cnf del problema original a
 todos los \ws al comienzo de una ejecución de la herramienta de modo que luego
-un subproblema esté representado por las cláusulas unitarias necesarias para
+un subproblema esté representado sólo por el \gp identificado por las cláusulas unitarias necesarias para
 forzar las decisiones correspondientes a ese subproblema. Esto hace que las
-tareas sean mucho más livianas. Además, para poder implementar estrategias de
-aprendizaje, era necesario que como parte de una tarea se pudieran transferir
-también las cláusulas aprendidas que corresponen a esa tarea. Inclusive es
+tareas pendientes de resolución sean mucho más económicas de manipular. 
+
+Incluso pensando a futuro y considerando la posibilidad de implementar estrategias de
+aprendizaje es necesario que, como parte de una tarea, se puedan transferir
+también las cláusulas aprendidas que deban ser consideradas a los efectos de resolver esa tarea. Inclusive es
 posible que en un futuro una tarea no represente únicamente un subproblema que
-aún se debe intentar \solvear sino que podría tambien incluir otro tipo de
+aún se debe intentar \solvear, sino que podría también incluir otro tipo de
 actividades, como la partición de un problema. Esto último nos motivó a optar
 por un concepto de tarea genérico donde una tarea no es más que un paquete de
 archivos que el \w sabrá interpretar apropiadamente. En la implementación
@@ -368,7 +370,7 @@ incorporados al intento de \solving del subproblema en cuestión.
 
 En la \fig\ref{fig:frontend} se esquematiza el diseño de componentes del
 \fend. En esta figura se puede observar que el tablero de control proporciona
-un modo doble de interacción con el \bend. Por un lado el tablero de control
+un modo doble de interacción con el \bend. Por un lado, el tablero de control
 es capaz de recibir comandos del usuario en \rt a través de una interfaz de
 tipo consola. Estos comandos representan acciones a ser llevadas a cabo en el
 \bend como ser indicar a un \w ocioso que cargue una nueva tarea, indicar a un
@@ -380,8 +382,8 @@ un componente que procesa permanentemente la información que llega desde el
 \bend. 
 
 Es importante observar que todos los componentes mencionados comparten un
-estado global. Esto se debe a que, tal como se explicó en \ref{sec:backend},
-el \bend no almacena el estado del sistema. Por lo tanto esta responsabilidad
+estado global. Esto se debe a que, tal como se explicó en la Sec.~\ref{sec:backend},
+el \bend no tiene conocimiento del estado global del sistema. Por lo tanto, esta responsabilidad
 recae en el \fend en la medida que este estado es necesario para poder tomar
 decisiones ante los distintos eventos. El acceso concurrente a este estado
 global nos obliga a introducir un mecanismo de sincronización entre los
@@ -406,7 +408,7 @@ DECIR_A $W$ que comience a solvear $T$
 En la \fig\ref{fig:states} presentamos las máquinas de estado correspondientes
 a los \ws y a las tareas. Estos diagramas esquematizan el estado que es
 mantenido en el estado global del \fend. Una estrategia particular podría
-requerir un estado más \emph{complejo} para tomar decisiones. Por ejemplo se
+requerir un estado más \emph{complejo} para tomar decisiones. Por ejemplo, se
 podría requerir mantener cierta información histórica respecto de la
 ejecución. En tal caso queda bajo exclusiva responsabilidad de la estrategia
 la implementación de las estructuras de datos y algoritmos necesarios para
@@ -449,10 +451,10 @@ este algoritmo se encuentra en las líneas que comienzan con la palabra clave
 estrategia se bloqueen a la espera de un evento que puede tardar una cantidad
 arbitraria de tiempo en ocurrir. Esto se debe principalmente a que en el
 transcurso de esa cantidad arbitraria de tiempo el \fend recibiría una
-cantidad de información desde el \bend (por ejemplo el hecho de que otro \w
+cantidad de información desde el \bend (por ejemplo, el hecho de que otro \w
 terminó de \solvear el subproblema en el que estaba trabajando) que podría
 requerir que se tomen acciones con el fin de mantener el sistema funcionando
-eficientemente. Sin embargo estas acciones no podrían ser tomadas porque el
+eficientemente. Sin embargo, estas acciones no podrían ser tomadas porque el
 \fend se encontraría bloqueado esperando a que un evento particular de un \w
 particular ocurra. Ante este escenario optamos por un modelo de eventos que
 presentamos en el \lst\ref{lst:strategy}. Esta interfaz modela el conjunto de
