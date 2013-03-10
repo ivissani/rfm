@@ -256,22 +256,22 @@ Es decir que nos referimos exclusivamente a la realización de la clausura de
 \bcp sobre el subproblema. Esta propagación no incluye la toma de nuevas
 decisiones.} las implicaciones de las decisiones tomadas para obtener un
 resultado --\sat o \unsat--. Pero más en general, nos referimos a todos
-aquellos subproblemas en los que el \emph{overhead} de generar la tarea, más
-trasladarla a otro \w, más cargar la tarea en el nuevo \w, más \solvear dicho
+aquellos subproblemas en los que el \emph{overhead} de generar la tarea,
+trasladarla a otro \w, cargar la tarea en el nuevo \w, y \solvear dicho
 problema hasta arribar a un resultado sea suficientemente grande como para que
-sea conveniente atacarlo directamente hasta arribar a un resultado sin generar
+sea conveniente resolverlo directamente sin generar
 una nueva tarea.
 
 Se introduce entonces una nueva variable en el criterio de particionado que es
 cuáles de los potenciales $2^n$ subproblemas generar como tareas a ser
-atacadas por otros \ws y cuáles atacar directamente sin generarlos como nuevas
-tareas. Se debe observar que \emph{no generar} un subproblema requier invertir
+resueltas por otros \ws y cuáles resolver directamente sin generarlos como nuevas
+tareas. Se debe observar que \emph{no generar} un subproblema requiere invertir
 un tiempo de cómputo suficiente para determinar el resultado de ese
 subproblema. Una estrategia automática debe entonces decidir qué hacer con
 esta variable teniendo en cuenta que invertir poco o nada de tiempo de cómputo
 en filtrar los subproblemas puede degradar significativamente la eficiencia
-del sistema debido al \emph{overhead} invertido en resolver problemas
-demasiado fáciles. Pero también debe tener en cuenta que invertir demasiado
+del sistema debido a que una cantidad de subproblemas
+demasiado fáciles serán generados como nuevas tareas. Pero también debe tener en cuenta que invertir demasiado
 tiempo de cómputo en el filtrado de los subproblemas tiende a degradar
 significativamente el paralelismo.
 
