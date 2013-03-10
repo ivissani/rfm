@@ -402,17 +402,17 @@ ESPERAR que tarea $T$ este cargada
 DECIR_A $W$ que comience a solvear $T$
 \end{lstlisting}
 \end{footnotesize}
-\vspace{-3em}
+\vspace{-1.5em}
 \end{wrapfigure}
 
 En la \fig\ref{fig:states} presentamos las máquinas de estado correspondientes
-a los \ws y a las tareas. Estos diagramas esquematizan el estado que es
-mantenido en el estado global del \fend. Una estrategia particular podría
-requerir un estado más \emph{complejo} para tomar decisiones. Por ejemplo, se
-podría requerir mantener cierta información histórica respecto de la
-ejecución. En tal caso queda bajo exclusiva responsabilidad de la estrategia
-la implementación de las estructuras de datos y algoritmos necesarios para
-dicha tarea.
+a los \ws y a las tareas. Estos diagramas esquematizan la información básica que
+es mantenida automáticamente en el modelo del estado global del \fend. Una estrategia
+particular podría requerir un estado más rico, que incluya mayores detalles, para
+tomar sus decisiones. Por ejemplo, se podría requerir mantener cierta información
+histórica sobre la ejecución en curso. En tal caso es responsabilidad de dicha
+estrategia la implementación de las estructuras de datos y algoritmos adicionales
+necesarios.
 
 
 \begin{wrapfigure}{r}{.6\textwidth}

@@ -204,7 +204,7 @@ la mejor elección de variables a ser levantadas. Sin embargo la heurística
 \vsids ha reportado muy buenos resultados en el mundo del \ssolving secuencial.
 
 
-\begin{table}\label{distrospamela8}
+\begin{table}
 \begin{footnotesize}
 \begin{tabular}{ccrrrrr}
 \toprule
@@ -222,6 +222,7 @@ G 	& 256 	& 376.70	 	& 86.03 		& 22024.53 	& 81.98 		& 56.98 \\
 \bottomrule
 \end{tabular}
 \end{footnotesize}
+\caption{Ejemplo: siete elecciones de variables distintas para partir un mismo problema. Tiempos secuenciales, en segundos, para los subproblemas resultantes de cada partición.}\label{distrospamela8}
 \end{table}
 
 
@@ -331,7 +332,9 @@ el sistema mantenga una cierta tasa de progreso. Para ello medimos la cantidad
 de subproblemas resueltos por unidad de tiempo y luego establecimos un umbral
 objetivo. De esta forma, si la frecuencia actual se encuentra por debajo del umbral
 objetivo, entonces debemos escojer uno de los problemas que actualmente están
-siendo resueltos y partirlo. Llamaremos \textbf{frecuencia objetivo} al umbral, entendido como 
+siendo resueltos y partirlo.
+
+Llamaremos \textbf{frecuencia objetivo} al umbral, entendido como 
 cantidad de problemas resueltos por \w, por segundo por debajo del cual se decide que algún
 problema debe ser partido. Llamaremos \textbf{frecuencia actual} a un valor
 que estima la cantidad de problemas terminados por \w, por segundo a partir de
@@ -345,25 +348,25 @@ En concreto los parámetros utilizados fueron:
 \begin{itemize}
 	\item Frecuencia objetivo: $0.15$ p/\w p/seg.
 	\item Tamaño de la ventana de muestreo: $20s$
-	\item Frecuencia de checkeo: $5s$
+	\item Frecuencia de observación: cada $5s$
 \end{itemize}
 
 Que la frecuencia objetivo dependa de la cantidad de \ws permite ajustar la
 cantidad de problemas generados de acuerdo a la capacidad de consumirlos que
 tiene el sistema. Es importante notar que el tamaño de la ventana influye en
 cuánto peso se le da a la historia. Tomar una ventana de mayor tamaño exhibirá un comportamiento más estable en el tiempo,
-mientras que una ventana más pequeña se adapta más rápidamente y consecuentemente mostrará mayor variabilidad. La frecuencia de checkeo administra cuánto tiempo de
+mientras que una ventana más pequeña se adapta más rápidamente y consecuentemente mostrará mayor variabilidad. La frecuencia de observación administra cuánto tiempo de
 tolerancia se tiene ante una frecuencia actual menor a una frecuencia
-objetivo. Si la frecuencia de checkeo es alta --menor valor-- entonces la
+objetivo. Si la frecuencia de observación es alta --menor valor-- entonces la
 tolerancia será baja y ante cualquier caída de la frecuencia actual por debajo
-del objetivo el sistema reaccionará. Por otro lado, una frecuencia alta --mayor
-valor-- representará una tolerancia mayor dando oportunidad al sistema de
-tener períodos en los que la frecuencia actual no alcanza la frecuencia
+del objetivo el sistema reaccionará. Por otro lado, una frecuencia baja --mayor
+valor-- representará una tolerancia mayor, dando oportunidad al sistema de
+tener períodos en los que la frecuencia actual no alcance la frecuencia
 objetivo. La combinación de estos tres parámetros configura la agresividad
 del sistema a la hora de determinar que un problema es demasiado difícil.
 
-Además del criterio por frecuencia decidimos que ante la situación en que hay
-\ws sin tareas para realizar y en el sistema no hay más tareas pendientes se
+Además del criterio por frecuencia decidimos que, ante la situación en la que hay
+\ws sin tareas para realizar y en el sistema no hay más tareas pendientes, se
 debe partir un problema en curso. De este modo evitamos que haya recursos
 ociosos. En particular esta decisión es útil al comienzo de la ejecución de un
 problema para distribuir rápidamente el trabajo entre las distintas unidades
@@ -371,19 +374,19 @@ de cómputo.
 
 Falta determinar entonces cuál de los problemas en curso será el seleccionado
 para ser partido. En este punto optamos por aquel en el que se ha
-invertido más tiempo de cómputo. De este modo, evitamos que un \w quede atorado
-intentando resolver un problema que podría ser extremadamente difícil a la vez
-que minimizamos las veces en que un problema es partido demasiado pronto.
+invertido más tiempo de cómputo. De este modo evitamos que un \w quede atorado
+intentando resolver un problema que podría ser extremadamente difícil, a la vez
+que procuramos evitar que un problema sea partido demasiado pronto.
 
 Con respecto al balanceo del almacenamiento se tomó la decisión de que cada
-vez que un \w se queda ocioso y sin tareas pendientes, además de obtener la
+vez que un \w queda ocioso y sin tareas locales pendientes, además de obtener la
 tarea que corresponde por BFS, el \w obtendrá una conjunto de tareas pendientes
 de aquel \w que posea mayor cantidad. Llamemos $w_{idle}$ al \w que quedó sin
 tareas y $w_{overwhelmed}$ al que más tareas pendientes posee, entonces la
-cantidad de tareas transferidas en esta ocasión será;
+cantidad de tareas transferidas en esta ocasión será:
 
  \begin{equation}
-\frac{\#tareas\_pendientes(\w_{overwhelmed})}{\# workers}
+\frac{\#tareas\_pendientes(w_{overwhelmed})}{\# workers}
 \label{eq:share}
 \end{equation} 
 
@@ -393,7 +396,7 @@ $w_{overwhelmed}$. Para evitar transferencias extremadamente largas, la
 cantidad expresada en Eq.-\ref{eq:share} satura en $10$ tareas. Para evitar
 una mala distribución, las tareas que conforman una porción a ser transferida
 son seleccionadas al azar del conjunto de tareas pendientes de
-$w_{overwhelmed}$. Vale la pena notar que si un \w solicitara las $n$ tareas que mejor califican según el criterio de elección, este concentrará un conjunto de tareas de alta prioridad, generando un potencial problema de contención.
+$w_{overwhelmed}$. Vale la pena notar que si un \w solicitara las $n$ tareas que mejor califican según el criterio de elección, éste concentraría un conjunto de tareas de alta prioridad, generando un potencial problema de contención.
 
 
 \subsection{Decisiones que vale la pena seguir investigando}
