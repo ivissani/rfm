@@ -97,7 +97,7 @@ Comenzaremos esta sección desglosando las principales cuestiones a
 resolver por una estrategia completamente automática para nuestra herramienta.
 Surge así la primer pregunta relevante que cualquier estrategia debe
 responder: ¿Cuándo declarar que un (sub)problema es demasiado difícil para
-atacarlo como tal? Es decir ¿Cuándo se toma la decisión de partir un problema
+atacarlo como tal? Es decir: ¿Cuándo se toma la decisión de partir un problema
 en nuevos subproblemas?
 
 \subsubsection{Dificultad de un problema}
@@ -130,32 +130,34 @@ de un problema (y es exponencial), la experiencia indica que existen problemas
 con pocas variables sumamente difíciles y problemas con muchas variables
 razonablemente sencillos.
 
-Resulta claro entonces que una primera aproximación \emph{naive} a este
-problema como podría ser la elección de un \tout fijo como criterio para
-determinar cuándo un problema debe ser partido, resulta una mala alternativa.
-La disparidad en la dificultad de los distintos problemas hace que sea
-imposible atacar razonablemente todos los problemas con un único valor de \tout.
-Una posibilidad sería entonces que el usuario seleccionara el \tout que quiere
-utilizar para cada problema. Sin embargo esto atenta sustancialmente contra la
-usabilidad de la herramienta ya que requiere asumir un \emph{expertise} por
-parte del usuario y un conocimiento previo del problema a resolver que no son
-razonables. 
+\subsubsection{Cuándo partir: criterios estáticos vs. dinámicos}
 
-Además a medida que partimos recursivamente un problema, los subproblemas
+Resulta claro entonces que una primera aproximación \emph{naive} a este
+problema, como por ejemplo la elección de un \tout fijo a modo de criterio para
+determinar cuándo un problema debe ser partido, resulta una mala alternativa.
+La disparidad en la dificultad de los distintos problemas hace imposible
+dar con un único valor prefijado de \tout que resulte adecuado para el
+caso general. Otra posibilidad sería entonces que el usuario seleccionara
+el \tout deseado para cada problema. Sin embargo, esto atenta sustancialmente
+contra la usabilidad de la herramienta, ya que requiere asumir un \emph{expertise} por
+parte del usuario y un conocimiento previo del problema a resolver que no son
+razonables.
+
+Además, a medida que partimos recursivamente un problema, los subproblemas
 generados --si la elección de variables a levantar fue apropiada-- son
-\emph{cada vez} más fáciles. Por lo tanto un valor de \tout que resulta
-adecuado en un momento no lo será más adelante. Esto podría llevarnos a
+\emph{cada vez} más fáciles. Por lo tanto un valor de \tout que resulte
+adecuado en cierto momento ya no lo será más adelante. Esto podría llevarnos a
 elaborar un criterio un tanto más refinado que lo anterior. Por ejemplo,
 podríamos optar por tener un valor de \tout para cada \emph{nivel} del
-problema. Sin embargo surge nuevamente el mismo problema que mencionábamos
-anteriormente. Cada vez que un problema es partido, los subproblemas generados
-difieren notablemente en su nivel de dificultad. Más aún, las distribuciones
-de dificultad entre los hijos de dos subproblemas distintos de un mismo
-problema (a misma cantidad de variables levantadas) pueden ser muy distintas.
-Por lo tanto, este refinamiento tampoco resulta adecuado.
+problema. Sin embargo, surge nuevamente el mismo inconveniente: cada vez
+que un problema es partido, los subproblemas generados difieren notablemente
+en su nivel de dificultad. Más aún, las distribuciones de dificultad entre
+los hijos de dos subproblemas distintos de un mismo problema (a misma cantidad
+de variables levantadas) pueden ser muy distintas. En consecuencia, este
+refinamiento tampoco resulta adecuado.
 
 En general, la ausencia de un criterio estático para determinar la dificultad
-de un problema dado, hace imposible la elección de un criterio de corte que
+de un problema dado hace imposible la elección de un criterio de corte que
 sea también estático. Por lo tanto se vuelve necesario que el criterio para
 determinar que un problema debe ser partido sea dinámico. Es decir, que el
 mismo se vaya adaptando durante la ejecución. Un criterio de estas
@@ -171,10 +173,10 @@ los subproblemas ya resueltos, etc.
 Cualquier estrategia automática razonable deberá entoces dar respuesta a la
 problemática de decidir cuándo partir un problema teniendo en cuenta las
 observaciones mencionadas. Una vez resuelto este dilema surge la segunda
-pregunta fundamental a responder que es ¿Cómo partir un problema? Que
-esencialmente se traduce en ¿Cuántas y qué variables levantar en cada ocasión?
+pregunta fundamental a responder que es: ¿Cómo partir un problema? Que
+esencialmente se traduce en: ¿Cuántas y qué variables levantar en cada ocasión?
 
-\subsubsection{Criterio de particionado}
+\subsubsection{Cómo partir: criterios de selección de variables}
 
 \newcommand{\vsids}{VSIDS\xspace}
 
@@ -196,20 +198,20 @@ Luego, cuando el \ssolver se encuentra en la situación de tener que elegir una
 variable para continuar la búsqueda, elige aquella con mayor actividad.
 
 La elección de las variables a ser levantadas es crucial. Como se ve en
-la Tabla~\ref{tablita} una buena elección de variables puede generar una
-descendencia muy fácil o muy difícil. En general, no se posible saber cuál es
+la Tabla~\ref{distrospamela8}, una buena elección de variables puede generar una
+descendencia muy fácil o muy difícil. En general, no es posible predecir cuál es
 la mejor elección de variables a ser levantadas. Sin embargo la heurística
 \vsids ha reportado muy buenos resultados en el mundo del \ssolving secuencial.
 
 
-\marginpar{Acomodar la tabla y corregir la referencia que aparece antes.}
-
-\begin{tabular}{|c|c|r|r|r|r|r|}
-\hline
-Subconjunto & Cantidad de hijos & & & & & \\
+\begin{table}\label{distrospamela8}
+\begin{footnotesize}
+\begin{tabular}{ccrrrrr}
+\toprule
+Subconjunto & Cant. hijos & & & & & \\
 de variables & no triviales & M\'aximo & Media & Suma total & Desv.
 est. & Mediana \\
-\hline
+\cmidrule(r){1-7}
 A 	& 136 	& 8.09 		& 1.13 		& 154.17	 	& 1.37 		& 0.51 \\
 B 	& 136 	& 18.06 		& 1.28 		& 173.48	 	& 1.95 		& 0.72 \\
 C 	& 192 	& 36.25 		& 8.74 		& 1678.88 	& 7.45 		& 5.78 \\
@@ -217,8 +219,11 @@ D	& 174 	& 63.62 		& 1.25 		& 218.29	 	& 6.27 		& 0.05 \\
 E	& 192 	& 89.41 		& 2.18 		& 418.04	 	& 7.66 		& 0.39 \\
 F 	& 192 	& 288.79	 	& 10.18 		& 1954.07 	& 22.36 		& 2.46 \\
 G 	& 256 	& 376.70	 	& 86.03 		& 22024.53 	& 81.98 		& 56.98 \\
-\hline
+\bottomrule
 \end{tabular}
+\end{footnotesize}
+\end{table}
+
 
 Además de la determinación de qué variables levantar, es importante también
 tener en cuenta cuántas levantar en cada momento. En primer lugar, es
@@ -280,29 +285,26 @@ significativamente el paralelismo.
 Otro aspecto que influye en la \emph{performance} de la herramienta es la
 forma en que se recorre el espacio de búsqueda. Cuando un \w queda ocioso debe
 tomar una nueva tarea (si hubiera tareas pendientes). Surge entonces el
-problema de determinar cuál de todas las tareas pendientes debe ser atacada.
+problema de determinar cuál de todas las tareas pendientes debe ser resuelta.
 Como en los casos anteriores existen dos factores que deben ser balanceados.
-Por un lado, si la estrategia es adaptable mediante métricas dinámicas, el
-orden en el que se recorren las tareas a resolver alterará el resultado.
-\todo{Ver si hacerlo más detallado esto} Por lo tanto nos gustaría poder
-seguir el orden \emph{más adecuado} a las métricas que hayamos utilizado en
-nuestra estrategia. Sin embargo, la tarea \emph{ideal} puede encontrarse
+Por un lado, si la estrategia (i.e. toma automática de decisiones) es adaptable según ciertas métricas sensadas dinámicamente, el
+orden en el que se recorren las tareas a resolver alterará el resultado. Luego, nos gustaría poder
+forzar a la herramienta a seguir el orden \emph{más adecuado} en relación a dichas métricas. En este contexto, la tarea \emph{ideal} puede encontrarse
 almacenada en otro \w. Surge así el segundo factor a tener en cuenta. En aras
-de la escalabilidad, el criterio para elegir la próxima tarea a ser atacada no
+de la escalabilidad, el criterio para elegir la próxima tarea a ser resuelta no
 debe generar una sobreutilización de la red de comunicaciones.
 
 Un último factor a tener en cuenta es la necesidad de maximizar la utilización
 del \hard disponible. Es decir que, idealmente, si hay \hard ocioso no debería
-haber tareas pendientes.
+haber tareas pendientes, aún cuando estas se encuentren almacenadas en otros \w.
 
 \subsection{La estrategia implementada}
 
 Teniendo en cuenta los factores mencionados anteriormente nos volcamos al
 desarrollo de una estrategia automática. Nuestro objetivo no estuvo puesto en
 el desarrollo de una estrategia óptima ya que cada uno de los factores
-mencionados con anterioridad podría ser objeto de un extenso estudio, y aún
-así no existen garantías de que existe tal cosa como la estrategia óptima para
-toda clase de problemas. Por lo tanto nuestro esfuerzo estuvo dedicado a no
+mencionados con anterioridad podría ser objeto de un extenso y minucioso estudio. 
+Más aún, no existen garantías de que tal estrategia óptima exista. Por lo tanto nuestro esfuerzo estuvo dedicado a no
 incurrir en los errores más flagrantes, de modo que la herramienta funcionase
 razonablemente bien con una serie de problemas y poder empezar a obtener
 resultados que nos permitan resaltar los aspectos fuertes y los aspectos que
@@ -312,53 +314,52 @@ En cuanto al criterio de particionado las decisiones tomadas fueron:
 
 \begin{itemize}
 	\item La cantidad de variables a levantar se fijó en 10. Aunque este valor puede ser alterado por el usuario.
-	\item Las variables a levantar se seleccionan utilizando la heurística \vsids. Es decir que cuando un problema va a ser partido, se consultan las actividades de cada variable y se seleccionan --de acuerdo con el punto anterior-- las 10 variables más activas.
-	\item Cada potencial subproblema es \solveado por 50ms. Si en ese tiempo no se arriba a un resultado, el problema pasa a ser una nueva tarea pendiente.
+	\item Las variables a levantar se seleccionan utilizando la heurística \vsids. Es decir que cuando un problema va a ser partido, se consulta la actividad de cada variable y se seleccionan --de acuerdo con el punto anterior-- las diez más activas.
+	\item Cada potencial subproblema es \solveado por 50ms. Si en ese tiempo no se arriba a un resultado, se genera una nueva tarea pendiente.
 \end{itemize}
 
 Respecto al orden en el cual se recorre el espacio de búsqueda:
 
 \begin{itemize}
-	\item Si un \w queda ocioso y no tiene tareas pendientes en su espacio de almacenamiento, obtiene la tarea que corresponda de acuerdo a la estrategia BFS --\emph{breadth-first search}--.
-	\item Si al quedar ocioso el \w cuenta con tareas pendientes locales, se selecciona la que corresponda por BFS de las tareas locales.
+	\item Si un \w queda ocioso y no tiene tareas pendientes en su espacio de almacenamiento, obtiene la tarea que corresponda de acuerdo al recorrido BFS --\emph{breadth-first search}-- del árbol de que representa el espacio de valuaciones aún no explorado.
+	\item Si al quedar ocioso el \w cuenta con tareas pendientes en su espacio de almacenamiento, se selecciona la que corresponda por BFS de las tareas locales.
 \end{itemize}
 
 Sobre cuándo declarar que un problema es demasiado difícil, adoptamos una
 estrategia basada en el estado del sistema. En concreto nos enfocamos en que
 el sistema mantenga una cierta tasa de progreso. Para ello medimos la cantidad
 de subproblemas resueltos por unidad de tiempo y luego establecimos un umbral
-objetivo. Luego, si la frecuencia actual se encuentra por debajo del umbral
-objetivo, entonces debemos tomar uno de los problemas que actualmente están
-siendo atacados y partirlo. Llamaremos \textbf{frecuencia objetivo} al umbral
-de problemas terminados por segundo por debajo del cual se decide que algún
+objetivo. De esta forma, si la frecuencia actual se encuentra por debajo del umbral
+objetivo, entonces debemos escojer uno de los problemas que actualmente están
+siendo resueltos y partirlo. Llamaremos \textbf{frecuencia objetivo} al umbral, entendido como 
+cantidad de problemas resueltos por \w, por segundo por debajo del cual se decide que algún
 problema debe ser partido. Llamaremos \textbf{frecuencia actual} a un valor
-que estima la cantidad de problemas terminados por segundo a partir de
+que estima la cantidad de problemas terminados por \w, por segundo a partir de
 promediar los problemas que han terminado durante los últimos $t$ segundos.
 Llamaremos \textbf{tamaño de la ventana de muestreo} al mencionado valor $t$.
-Llamaremos \textbf{frecuencia de checkeo} a la frecuencia con la que se revisa
+Llamaremos \textbf{frecuencia de observación} a la frecuencia con la que se revisa
 si la frecuencia actual se encuentra por encima de la frecuencia objetivo.
 
 En concreto los parámetros utilizados fueron:
 
 \begin{itemize}
-	\item Frecuencia objetivo: $0.15$ p/\w
+	\item Frecuencia objetivo: $0.15$ p/\w p/seg.
 	\item Tamaño de la ventana de muestreo: $20s$
 	\item Frecuencia de checkeo: $5s$
 \end{itemize}
 
 Que la frecuencia objetivo dependa de la cantidad de \ws permite ajustar la
 cantidad de problemas generados de acuerdo a la capacidad de consumirlos que
-tiene el sistema. Es importante notar que el tamaño de la venta influye en
-cuánto peso se le da a la historia. Una ventana más grande es más estable
-mientras que una ventana más chica se adapta más rápidamente ya que presenta
-mayor volatilidad. La frecuencia de checkeo administra cuánto tiempo de
+tiene el sistema. Es importante notar que el tamaño de la ventana influye en
+cuánto peso se le da a la historia. Tomar una ventana de mayor tamaño exhibirá un comportamiento más estable en el tiempo,
+mientras que una ventana más pequeña se adapta más rápidamente y consecuentemente mostrará mayor variabilidad. La frecuencia de checkeo administra cuánto tiempo de
 tolerancia se tiene ante una frecuencia actual menor a una frecuencia
-objetivo. Si la frecuencia de checko es alta --menor valor-- entonces la
+objetivo. Si la frecuencia de checkeo es alta --menor valor-- entonces la
 tolerancia será baja y ante cualquier caída de la frecuencia actual por debajo
-del objetivo el sistema reaccionará. Por otro lado una frecuancia alta --mayor
+del objetivo el sistema reaccionará. Por otro lado, una frecuencia alta --mayor
 valor-- representará una tolerancia mayor dando oportunidad al sistema de
 tener períodos en los que la frecuencia actual no alcanza la frecuencia
-objetivo. La combinación de  estos tres parámetros configura la agresividad
+objetivo. La combinación de estos tres parámetros configura la agresividad
 del sistema a la hora de determinar que un problema es demasiado difícil.
 
 Además del criterio por frecuencia decidimos que ante la situación en que hay
@@ -369,26 +370,31 @@ problema para distribuir rápidamente el trabajo entre las distintas unidades
 de cómputo.
 
 Falta determinar entonces cuál de los problemas en curso será el seleccionado
-para ser partido. En este punto optamos por que sea aquel en el que se ha
-invertido más tiempo de cómputo. De este modo evitamos que un \w quede atorado
+para ser partido. En este punto optamos por aquel en el que se ha
+invertido más tiempo de cómputo. De este modo, evitamos que un \w quede atorado
 intentando resolver un problema que podría ser extremadamente difícil a la vez
 que minimizamos las veces en que un problema es partido demasiado pronto.
 
 Con respecto al balanceo del almacenamiento se tomó la decisión de que cada
 vez que un \w se queda ocioso y sin tareas pendientes, además de obtener la
-tarea que corresponde por BFS, el \w obtendrá una conjunto de tareas pendietes
-de aquel \w que posea mayor cantidad. Llamemos $w_{idle}$ al \w que quedón sin
+tarea que corresponde por BFS, el \w obtendrá una conjunto de tareas pendientes
+de aquel \w que posea mayor cantidad. Llamemos $w_{idle}$ al \w que quedó sin
 tareas y $w_{overwhelmed}$ al que más tareas pendientes posee, entonces la
-cantidad de tareas transferidas en esta ocasión será \begin{equation}
-\frac{\#tareas\_pendientes(w_{overwhelmed})}{\# workers}
-\label{eq:share}\end{equation} La idea detrás de esto es que $w_{idle}$
+cantidad de tareas transferidas en esta ocasión será;
+
+ \begin{equation}
+\frac{\#tareas\_pendientes(\w_{overwhelmed})}{\# workers}
+\label{eq:share}
+\end{equation} 
+
+La idea detrás de esto es que $w_{idle}$
 obtiene \emph{la porción que le corresponde} de las tareas de
 $w_{overwhelmed}$. Para evitar transferencias extremadamente largas, la
 cantidad expresada en Eq.-\ref{eq:share} satura en $10$ tareas. Para evitar
-una mala distribución\todo{¿Vale la pena entrar en detalle sobre qué significa
-mala distribución?}, las tareas que conforman una porción a ser transferida
+una mala distribución, las tareas que conforman una porción a ser transferida
 son seleccionadas al azar del conjunto de tareas pendientes de
-$w_{overwhelmed}$.
+$w_{overwhelmed}$. Vale la pena notar que si un \w solicitara las $n$ tareas que mejor califican según el criterio de elección, este concentrará un conjunto de tareas de alta prioridad, generando un potencial problema de contención.
+
 
 \subsection{Decisiones que vale la pena seguir investigando}
 
@@ -449,7 +455,7 @@ resolver un problema.
 	\footnotesize
 	\begin{tabular}{lrrrrrr}
 		\toprule
-		problem	&	scope	&	seq. runtime (s)	&	par. walltime (s)	&	speedup	&	efficiency \\
+		problem	&	scope	&	seq. runtime (s)	&	parallel walltime (s)	&	speedup	&	efficiency \\
 		\cmidrule(r){1-6}
 		Pamela	&	8	&	308.26	&	60.46	&	5.10x	&	0.08 \\
 		Pamela	&	9	&	76168.16	&	407.34	&	186.99x	&	2.92 \\
@@ -460,7 +466,7 @@ resolver un problema.
 		Closure	&	13	&	16261.35	&	4362.61	&	3.73x	&	0.06 \\
 		\cmidrule(r){1-6}
 		MarkGC Soundness2	&	9	&	217.31	&	200.85	&	1.08x	&	0.02 \\
-		MarkGC Soundness2	&	10	&	2855.30	&	1376.89	&	2.07x	&	0.03 \\
+		MarkGC Soundness2	&	10	&	2855.3	&	1376.89	&	2.07x	&	0.03 \\
 		\cmidrule(r){1-6}
 		MarkGC Completeness	&	9	&	18643.06	&	1825.60	&	10.21x	&	0.16 \\
 		\bottomrule
