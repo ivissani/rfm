@@ -6,12 +6,13 @@
 
 La implementación de nuestra herramienta como un sistema distribuido persigue
 el objetivo fundamental de mejorar el tiempo de ejecución ya sea decrementando
-el tiempo necesario para resolver un determinado problema o transformando un
+el tiempo necesario para resolver un problema determinado, o transformando un
 problema previamente irresoluble (en tiempo razonable) en resoluble. Para ello
 el sistema debe ser \textbf{escalable} en tanto que debe tener la capacidad de
-incorporar mayor cantidad de \hard a la resolución del problema. Por otro
+sacar provecho de la incorporación una mayor cantidad de \hard a la infraestructura
+utilizada en la resolución del problema. Por otro
 lado, el uso de este \hard debe ser \textbf{eficiente} en el sentido de que la
-utilización de mayor cantidad de \hard debe resultar en un incremento de la
+utilización de mayor cantidad de \hard debe resultar en un mejora de la
 performance del sistema (en nuestro caso entendida como se describió
 previamente).
 
@@ -22,7 +23,7 @@ previamente).
 \end{wrapfigure}
 
 Con estos dos objetivos en mente desarrollamos una \ssolver distribuido basado
-en la idea de \gp y orienteado a \clusters de computadoras. La idea de \gp se
+en la idea de \gp y orientado a que su utilización sea en \clusters de computadoras. La idea de \gp se
 basa en la observación de que, en el peor caso, todas las posibles valuaciones
 de una fórmula proposicional $\varphi$ deben ser evaluadas. Una vez que una
 valuación que satisface a una fórmula es encontrada, el procedimiento de
@@ -49,8 +50,9 @@ más de una variable en cada paso. Al seleccionar $n$ variables obtendremos
 entonces $2^n$ subproblemas. Llamaremos \emph{levantar variables} al proceso
 de dividir un problema $\varphi$ en los $2^n$ subproblemas que resultan de
 aplicar todas las posibles valuaciones sobre el conjunto de $n$ variables
-levantadas. Se desprende de esto que una de las tareas que debe poder cumplir
-la herramienta es la de dividir un problema.
+levantadas. Se desprende de esto que una de las tareas que debe poder realizar
+la herramienta es la de dividir un problema en los subproblemas que derivan de 
+adoptar todos los posible \gp para un conjunto de variables.
 
 % El objetivo principal de todo sistema distribuido es que el mismo sea
 % \textbf{escalable}. Si bien la escalabilidad puede ser entendidad en
@@ -82,14 +84,14 @@ contra la escalabilidad de la herramienta.
 
 La necesidad de que el almacenamiento de problemas pendientes de resolución se
 encuentre distribuido se debe a un doble aspecto. Por un lado, la cantidad de
-subproblemas producidos puede ser muy grande. Por lo tanto no es viable
+subproblemas producidos puede ser muy grande. Por lo tanto no es razonable
 requerir que la cantidad de espacio necesario para almacenar todas las tareas
 pendientes de resolución se encuentre disponible en una misma ubicación.
 
 Aún si fuera posible contar con la cantidad de espacio necesaria para almacenar
 todos los subproblemas en una ubicación centralizada, surge un segundo problema
-que presentaría este enfoque: el de la contención de acceso. Si
-pretendemos que el almacenamiento no se vuelva un cuello de botella, es vital
+que presentaría este enfoque: el de la contención de acceso a la información asociada a un problema. 
+Si pretendemos que el almacenamiento no se vuelva un cuello de botella, es vital
 distribuir las tareas pendientes de modo que cuando los \ws requieran nuevas
 tareas para resolver, los múltiples pedidos no recaigan siempre sobre un mismo equipo.
 
@@ -97,7 +99,7 @@ tareas para resolver, los múltiples pedidos no recaigan siempre sobre un mismo 
 \subsubsection{Simetría en las capacidades de los \ws}
 
 El requisito de que los nodos de trabajo (\ws) sean simétricos también se desprende
-de la necesidad de eliminar los cuellos de botella. La simetría, entendida en su
+de la necesidad de eliminar los potenciales cuellos de botella. La simetría, entendida en su
 máxima expresión como la posibilidad de que todas las unidades de
 procesamiento puedan realizar todas las funciones necesarias, provee la
 capacidad de distribuir la carga de trabajo de la manera más conveniente en
@@ -105,9 +107,9 @@ cada momento.
 
 Esto no podría lograrse si los nodos de trabajo tuvieran
 funciones específicas, ya que podría darse el caso de tener nodos ociosos
-por falta de trabajo pendiente de la clase de trabajo que esos nodos saben
-realizar, a la vez que nodos sobrecargados. Esta situación podría empeorar
-seriamente a medida que la cantidad de nodos aumente.
+por falta de trabajo pendiente de la clase de trabajo que esos nodos realizan, 
+a la vez que otros nodos se encuentran sobrecargados. Esta situación podría empeorar
+seriamente a medida que la cantidad de nodos aumenta.
 
 En nuestro caso particular, el requisito de simetría se traduce en que
 todos los \ws deben poseer las capacidades de: \begin{inparaenum}[a)] \item analizar un
@@ -122,10 +124,10 @@ El triple rol de productor, consumidor y distribuidor asignado a los \ws
 transforma la migración de tareas en un desafío en tanto que un \w puede
 estar --y generalmente lo estará-- ocupado analizando un
 subproblema cuando otro \w le solicite algún subproblema
-pendiente en su poder.
+pendiente que se encuentre en su poder.
 
 Es claro que, ante esta situación, no sería aceptable que el \w que está
-esperando una tarea deba verse obligado a esperar hasta que aquel que la generó
+esperando una tarea se vea obligado a esperar hasta que aquel que la generó
 deje de \solvear para poder acceder a la misma. Esto da origen a un requerimiento
 de asincronicidad entre \emph{solving} y \emph{serving}.
 
@@ -136,8 +138,8 @@ tareas pendientes y atender sólo una cantidad limitada a la vez) y otro de bala
 de carga (por ejemplo: evitar que la capacidad de almacenamiento de un \w llegue a
 saturarse transfiriendo preventivamente tareas a otros \ws).
 
-En resumen, lograr una buena ortogonalidad entre análisis y migración de tareas es
-importante para lograr escalabilidad, y sienta las bases para mecanismos
+En resumen, lograr ortogonalidad entre análisis y migración de tareas es
+importante para lograr escalabilidad, y sienta las bases para el desarrollo de mecanismos
 avanzados de balanceo automático de carga.
 
 
@@ -148,23 +150,23 @@ La automatización de la operatoria es un requerimiento crucial. Desde el punto
 de vista del usuario, es fundamental que la herramienta sea capaz de llevar a
 cabo su objetivo --demostrar la propiedad o exhibir un contraejemplo-- sin requerir
 supervisión alguna ni depender de complejas parametrizaciones que requieran
-numerosos reintentos para ser halladas.
+numerosos experimentos para ser halladas.
 
 Sin embargo, generar una estrategia automática que proporcione buenos resultados
 en la ejecución de un amplio espectro de problemas es sumamente difícil. Desde el
 punto de vista del experto que necesita diseñar, implementar, evaluar, depurar y
 mejorar una estrategia no supervisada, es importante contar con alguna
-interfaz o consola interactiva que permita inyectar comandos arbitrarios y
-así poder modificar comportamientos en tiempo de ejecución.
+interfaz interactiva que posibilite la inyección de comandos arbitrarios que permitan 
+la modificación del comportamiento de la herramienta en tiempo de ejecución.
 
 La necesidad de atender estos requerimientos encontrados motivó la adopción de
-un enfoque en el que la maquinaria de cómputo distribuido no posee inteligencia
+un enfoque en el que la maquinaria de cómputo distribuido (i.e. la comunidad de \ws) no posee inteligencia
 propia, sino que se limita a proveer una serie de funcionalidades básicas que
 pueden ser invocadas remotamente, ofreciendo un alto grado de generalidad. La
 operación del sistema se lleva a cabo desde un tablero de control que permite
-ejecutar manualmente trazas y combinaciones arbitrarias. Sobre esto se monta
-luego la automatización; en primer término la de aspectos reiterativos de rutina,
-y finalmente la que implementa la toma inteligente de decisiones estratégicas.
+explorar manualmente trazas de ejecución arbitrarias. Sobre esto se monta
+luego la automatización; en primer término la de aspectos reiterativos de rutina (i.e. carga de tareas al momento de la liberación de la unidad de cómputo, etc.),
+y finalmente la que implementa la toma inteligente de decisiones estratégicas (i.e. cuándo es conveniente partir un problema en subproblemas, etc.).
 
 De lo antedicho surgen tres desafíos concretos. En primer lugar, el de lograr una
 arquitectura adecuada para ser totalmente controlable por un operador remoto humano.
@@ -189,7 +191,9 @@ diseñar e implementar la estrategia automática propiamente dicha.
 
 Otro de los objetivos que perseguimos a la hora de diseñar nuestra herramienta
 fue que la misma pudiera utilizar un \ssolver \ots para la resolución local de
-un subproblema. Esto nos permite aprovechar los numerosos avances logrados por
+un subproblema concentrando las tareas vinculadas al desarrollo del \ssolver en 
+los aspectos de orquestación del cómputo distribuido. Esto nos permite aprovechar 
+los numerosos avances logrados por
 la comunidad en el área de investigación en \ssolving secuencial en los últimos
 años, y a la vez nos permite, a futuro, evolucionar a la par de los \ssolvers
 secuenciales, capitalizando sus nuevos logros a bajo costo y mitigando el
@@ -202,8 +206,8 @@ El último objetivo que perseguimos durante el desarrollo de nuestra
 herramienta fue que la misma presentara facilidad para ser modificada sin que
 esto impactara negativamente en la \emph{performance}. Este objetivo, entre
 otras cosas, determinó la elección de las tecnologías a utilizar para su
-desarrollo. Por lo tanto se utilizó el lenguaje de programación \Python para
-el desarrollo de toda la herramienta con excepción de la parte de cómputo
+desarrollo. Por lo tanto, se utilizó el lenguaje de programación \Python para
+el desarrollo de toda la herramienta con excepción de las secciones destinadas al cómputo
 intensivo.
 
 Al utilizar un \ssolver \ots no fue necesario elegir un lenguaje
@@ -211,7 +215,7 @@ para su desarrollo. En la implementación actual de la herramienta utilizamos
 el \ssolver \minisatdosveinte que está desarrollado en el lenguaje \cpp. Para
 ello se desarrolló un \emph{wrapper} que permite utilizar \minisat desde un
 entorno \Python, obteniendo todos los beneficios de un lenguaje de programación
-dinámico sin pérdida de eficiencia en los algoritmos \emph{core}.
+dinámico sin pérdida de eficiencia en los algoritmos vinculados al cómputo intensivo.
 
 Para el intercambio de mensajes entre los \ws se utilizó el
 estándar \mpi a través de la biblioteca \texttt{mpi4py}\cite{mpi4py}.
@@ -269,7 +273,7 @@ el de salida (\bend hacia \fend) son independientes. Esto es una consecuencia
 directa que se desprende de la ausencia de inteligencia en el \master. Esto
 implica que no es necesario mantener el estado del sistema ya que en este
 componente no se toman decisiones. La ausencia de estado hace que el proceso
-\master consuma un mínimo de recursos.
+\master consuma un mínimo de recursos, tanto de cómputo como de almacemiento.
 
 La intervención de dos \threads distintos en el \datapath de entrada
 proporciona un alto nivel de respuesta ya que permite que algunos comandos
@@ -298,17 +302,17 @@ tareas sin que esta característica impacte negativamente en el desempeño del
 \ssolver. A la vez, esta característica permite satisfacer el objetivo de
 movilidad de las tareas, aún cuando el \w se encuentre ocupado \solveando.
 
-Interesa destacar también que tanto la estrategia de partición de un problema
-como la estrategia de aprendizaje se encuentran implementadas en los \ws. Si
-bien este diseño es contrario a la idea general de \emph{tablero de control}
+Interesa destacar también que la estrategia de partición de un problema
+se encuentran implementadas en los \ws. Si
+bien este diseño es contrario a la idea general basado en la existencia de un \emph{tablero de control}
 consideramos que el nivel de granularidad necesario para poder controlar
 remotamente la realización de estas dos tareas era demasiado alto y atentaba
 contra la usabilidad de la herramienta. Asimismo, la herramienta es capaz de
-poseer diversas estrategias implementadas para estas dos fases de la ejecución
-de modo que el usuario puede seleccionar la estrategia deseada (y sus
+poseer diversas estrategias implementadas
+de modo que el usuario puede seleccionar aquella que le resulte más apropiada (y sus
 parámetros en caso que corresponda) desde el \fend.
 
-Por último corresponde mencionar a qué nos referimos en concreto cuando
+Por último, corresponde mencionar a qué nos referimos en concreto cuando
 hablamos de \emph{tarea}. El término \emph{tarea} fue mencionado en varias
 ocasiones a lo largo de la explicación. Si bien conceptualmente una tarea
 podría ser simplemente una fórmula $\varphi$ en \cnf, en la práctica esto
@@ -316,17 +320,19 @@ podría producir un \emph{overhead} en la transferencia demasiado grande ya
 que, por ejemplo al partir un problema levantando $n$ variables podríamos
 generar $2^n$ subproblemas, cada uno de los cuales estaría representado
 esencialmente por la misma fórmula $\varphi$ más las cláusulas unitarias
-propias de cada subproblema. Esta situación se repite innumerables veces a lo
+que determinan el \gp al que cada subproblema corresponde. Esta situación se repite innumerables veces a lo
 largo de la ejecución de la herramienta para resolver un problema. Es por esto
-que optamos, como modo de funcionamiento, por enviar la fórmula original a
+que optamos, como modo de funcionamiento, por enviar la fórmula \cnf del problema original a
 todos los \ws al comienzo de una ejecución de la herramienta de modo que luego
-un subproblema esté representado por las cláusulas unitarias necesarias para
+un subproblema esté representado sólo por el \gp identificado por las cláusulas unitarias necesarias para
 forzar las decisiones correspondientes a ese subproblema. Esto hace que las
-tareas sean mucho más livianas. Además, para poder implementar estrategias de
-aprendizaje, era necesario que como parte de una tarea se pudieran transferir
-también las cláusulas aprendidas que corresponen a esa tarea. Inclusive es
+tareas pendientes de resolución sean mucho más económicas de manipular. 
+
+Incluso pensando a futuro y considerando la posibilidad de implementar estrategias de
+aprendizaje es necesario que, como parte de una tarea, se puedan transferir
+también las cláusulas aprendidas que deban ser consideradas a los efectos de resolver esa tarea. Inclusive es
 posible que en un futuro una tarea no represente únicamente un subproblema que
-aún se debe intentar \solvear sino que podría tambien incluir otro tipo de
+aún se debe intentar \solvear, sino que podría también incluir otro tipo de
 actividades, como la partición de un problema. Esto último nos motivó a optar
 por un concepto de tarea genérico donde una tarea no es más que un paquete de
 archivos que el \w sabrá interpretar apropiadamente. En la implementación
@@ -364,7 +370,7 @@ incorporados al intento de \solving del subproblema en cuestión.
 
 En la \fig\ref{fig:frontend} se esquematiza el diseño de componentes del
 \fend. En esta figura se puede observar que el tablero de control proporciona
-un modo doble de interacción con el \bend. Por un lado el tablero de control
+un modo doble de interacción con el \bend. Por un lado, el tablero de control
 es capaz de recibir comandos del usuario en \rt a través de una interfaz de
 tipo consola. Estos comandos representan acciones a ser llevadas a cabo en el
 \bend como ser indicar a un \w ocioso que cargue una nueva tarea, indicar a un
@@ -376,8 +382,8 @@ un componente que procesa permanentemente la información que llega desde el
 \bend. 
 
 Es importante observar que todos los componentes mencionados comparten un
-estado global. Esto se debe a que, tal como se explicó en \ref{sec:backend},
-el \bend no almacena el estado del sistema. Por lo tanto esta responsabilidad
+estado global. Esto se debe a que, tal como se explicó en la Sec.~\ref{sec:backend},
+el \bend no tiene conocimiento del estado global del sistema. Por lo tanto, esta responsabilidad
 recae en el \fend en la medida que este estado es necesario para poder tomar
 decisiones ante los distintos eventos. El acceso concurrente a este estado
 global nos obliga a introducir un mecanismo de sincronización entre los
@@ -402,7 +408,7 @@ DECIR_A $W$ que comience a solvear $T$
 En la \fig\ref{fig:states} presentamos las máquinas de estado correspondientes
 a los \ws y a las tareas. Estos diagramas esquematizan el estado que es
 mantenido en el estado global del \fend. Una estrategia particular podría
-requerir un estado más \emph{complejo} para tomar decisiones. Por ejemplo se
+requerir un estado más \emph{complejo} para tomar decisiones. Por ejemplo, se
 podría requerir mantener cierta información histórica respecto de la
 ejecución. En tal caso queda bajo exclusiva responsabilidad de la estrategia
 la implementación de las estructuras de datos y algoritmos necesarios para
@@ -445,10 +451,10 @@ este algoritmo se encuentra en las líneas que comienzan con la palabra clave
 estrategia se bloqueen a la espera de un evento que puede tardar una cantidad
 arbitraria de tiempo en ocurrir. Esto se debe principalmente a que en el
 transcurso de esa cantidad arbitraria de tiempo el \fend recibiría una
-cantidad de información desde el \bend (por ejemplo el hecho de que otro \w
+cantidad de información desde el \bend (por ejemplo, el hecho de que otro \w
 terminó de \solvear el subproblema en el que estaba trabajando) que podría
 requerir que se tomen acciones con el fin de mantener el sistema funcionando
-eficientemente. Sin embargo estas acciones no podrían ser tomadas porque el
+eficientemente. Sin embargo, estas acciones no podrían ser tomadas porque el
 \fend se encontraría bloqueado esperando a que un evento particular de un \w
 particular ocurra. Ante este escenario optamos por un modelo de eventos que
 presentamos en el \lst\ref{lst:strategy}. Esta interfaz modela el conjunto de

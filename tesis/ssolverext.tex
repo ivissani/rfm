@@ -93,7 +93,7 @@ uno de los puntos relevantes.
 %   => si ese alguien ya tiene trabajo pendiente local, podría ser bueno
 %      que se le asigne lo mejor posible dentro de lo local
 
-Comenzaremos esta sección con un desglosando las principales cuestiones a
+Comenzaremos esta sección desglosando las principales cuestiones a
 resolver por una estrategia completamente automática para nuestra herramienta.
 Surge así la primer pregunta relevante que cualquier estrategia debe
 responder: ¿Cuándo declarar que un (sub)problema es demasiado difícil para
@@ -102,7 +102,7 @@ en nuevos subproblemas?
 
 \subsubsection{Dificultad de un problema}
 
-En este punto es importante recalcar el hecho de que la partición de un
+En este punto es importante destacar el hecho de que la partición de un
 problema en nuevos subproblemas se lleva a cabo con el objetivo de distribuir
 las distintas porciones del espacio de búsqueda entre distintas unidades de
 cómputo. Así, invertir demasiado tiempo en intentar obtener un resultado
@@ -116,8 +116,7 @@ Si un problema va a tomar demasiado tiempo no tiene sentido invertir tiempo de
 si hubiéramos esperado una fracción  pequeña de tiempo más el \w habría
 arribado a un resultado para el problema implica que \emph{todo} el tiempo de
 cómputo previamente invertido es desperdiciado. Estos dos errores se vuelven
-catastróficos cuando se repiten recursivamente\todo{¿Se entiende
-``recursivamente''?}.
+catastróficos cuando se repiten en forma sistemática sobre los subproblemas a los que un problema da origen.
 
 Subyace a toda esta cuestión la pregunta fundamental de cómo determinar que un
 problema dado es fácil o difícil. Si tuviéramos algún criterio que nos
@@ -146,11 +145,11 @@ Además a medida que partimos recursivamente un problema, los subproblemas
 generados --si la elección de variables a levantar fue apropiada-- son
 \emph{cada vez} más fáciles. Por lo tanto un valor de \tout que resulta
 adecuado en un momento no lo será más adelante. Esto podría llevarnos a
-elaborar un criterio un tanto más refinado que lo anterior. Por ejemplo
+elaborar un criterio un tanto más refinado que lo anterior. Por ejemplo,
 podríamos optar por tener un valor de \tout para cada \emph{nivel} del
 problema. Sin embargo surge nuevamente el mismo problema que mencionábamos
 anteriormente. Cada vez que un problema es partido, los subproblemas generados
-difieren notablemente en su nivel de dificultad. Aún más, las distribuciones
+difieren notablemente en su nivel de dificultad. Más aún, las distribuciones
 de dificultad entre los hijos de dos subproblemas distintos de un mismo
 problema (a misma cantidad de variables levantadas) pueden ser muy distintas.
 Por lo tanto, este refinamiento tampoco resulta adecuado.
@@ -158,7 +157,7 @@ Por lo tanto, este refinamiento tampoco resulta adecuado.
 En general, la ausencia de un criterio estático para determinar la dificultad
 de un problema dado, hace imposible la elección de un criterio de corte que
 sea también estático. Por lo tanto se vuelve necesario que el criterio para
-determinar que un problema debe ser partido sea dinámico. Es decir que el
+determinar que un problema debe ser partido sea dinámico. Es decir, que el
 mismo se vaya adaptando durante la ejecución. Un criterio de estas
 características tiene dos fuentes de información fundamentales. Por un lado el
 estado general del sistema y su evolución (su historia). Esto puede incluir
@@ -191,19 +190,38 @@ variable los dos valores de verdad son considerados \emph{simultáneamente}, el
 problema se reduce a elegir cuidadosamente la variable a levantar. Uno de los
 métodos más difundidos para elegir la próxima variable en los \ssolvers
 secuenciales, se basa en un criterio de actividad conocido como \vsids. Del
-mismo modo que para las cláusulas --ver \ref{sec:longactlbd}-- cada vez que
+mismo modo que para las cláusulas --ver Sec.~\ref{sec:longactlbd}-- cada vez que
 una variable \emph{participa} de un conflicto su actividad es incrementada.
 Luego, cuando el \ssolver se encuentra en la situación de tener que elegir una
 variable para continuar la búsqueda, elige aquella con mayor actividad.
 
 La elección de las variables a ser levantadas es crucial. Como se ve en
-\ref{tablita???} una buena elección de variables puede generar una
+la Tabla~\ref{tablita} una buena elección de variables puede generar una
 descendencia muy fácil o muy difícil. En general, no se posible saber cuál es
 la mejor elección de variables a ser levantadas. Sin embargo la heurística
 \vsids a reportado muy buenos resultados en el mundo del \ssolving secuencial.
 
+
+\marginpar{Acomodar la tabla y corregir la referencia que aparece antes.}
+
+\begin{tabular}{|c|c|r|r|r|r|r|}
+\hline
+Subconjunto & Cantidad de hijos & & & & & \\
+de variables & no triviales & M\'aximo & Media & Suma total & Desv.
+est. & Mediana \\
+\hline
+A 	& 136 	& 8.09 		& 1.13 		& 154.17	 	& 1.37 		& 0.51 \\
+B 	& 136 	& 18.06 		& 1.28 		& 173.48	 	& 1.95 		& 0.72 \\
+C 	& 192 	& 36.25 		& 8.74 		& 1678.88 	& 7.45 		& 5.78 \\
+D	& 174 	& 63.62 		& 1.25 		& 218.29	 	& 6.27 		& 0.05 \\
+E	& 192 	& 89.41 		& 2.18 		& 418.04	 	& 7.66 		& 0.39 \\
+F 	& 192 	& 288.79	 	& 10.18 		& 1954.07 	& 22.36 		& 2.46 \\
+G 	& 256 	& 376.70	 	& 86.03 		& 22024.53 	& 81.98 		& 56.98 \\
+\hline
+\end{tabular}
+
 Además de la determinación de qué variables levantar, es importante también
-tener en cuenta cuántas levantar en cada momento. En primer lugar es
+tener en cuenta cuántas levantar en cada momento. En primer lugar, es
 importante tener en cuenta que la cantidad potencial de subproblemas generados
 es exponencial con respecto a las variables levantadas. Esto afecta en un
 doble sentido. En primera instancia es necesario observar que, dado que el
@@ -211,7 +229,7 @@ proceso de particionado se repite recursivamente, la generación de una
 excesiva cantidad de subproblemas ante cada particionado genera una explosión
 exponencial de problemas. Si este factor no es tenido en cuenta es altamente
 probable que el sistema diverja y no sea capaz de arribar a una solución.
-Sumado a esto, el tiempo insumido en generar la descendencia\todo{:)} de un
+Sumado a esto, el tiempo insumido en generar los subproblemas producto de un
 problema puede volverse excesivamente grande atentando una vez más contra el
 paralelismo y la eficiencia de la herramienta.
 
@@ -219,8 +237,8 @@ Una vez más debemos recordar que la idea de levantar variables se basa en que,
 ante una elección razonable de cuáles variables levantar, a mayor cantidad de
 variables levantadas, más fáciles serán los subproblemas generados. Es por
 esto que si la cantidad de variables a levantar es demasiado pequeña, es
-probable que los subproblemas generados no sean suficientemente fáciles para
-ser atacados y que, por lo tanto, requieran ser partidos ellos también en el
+probable que los subproblemas que sean generados no sean suficientemente 
+fáciles como para ser resueltos y que, por lo tanto, sea necesario partirlos también en el
 futuro haciendo que el tiempo invertido en intentar resolverlo se convierta en
 tiempo desperdiciado. Además, si la cantidad de variables levantadas es muy
 baja, existe la posibilidad de que la cantidad de subproblemas generados no
@@ -238,22 +256,22 @@ Es decir que nos referimos exclusivamente a la realización de la clausura de
 \bcp sobre el subproblema. Esta propagación no incluye la toma de nuevas
 decisiones.} las implicaciones de las decisiones tomadas para obtener un
 resultado --\sat o \unsat--. Pero más en general, nos referimos a todos
-aquellos subproblemas en los que el \emph{overhead} de generar la tarea, más
-trasladarla a otro \w, más cargar la tarea en el nuevo \w, más \solvear dicho
+aquellos subproblemas en los que el \emph{overhead} de generar la tarea,
+trasladarla a otro \w, cargar la tarea en el nuevo \w, y \solvear dicho
 problema hasta arribar a un resultado sea suficientemente grande como para que
-sea conveniente atacarlo directamente hasta arribar a un resultado sin generar
+sea conveniente resolverlo directamente sin generar
 una nueva tarea.
 
 Se introduce entonces una nueva variable en el criterio de particionado que es
 cuáles de los potenciales $2^n$ subproblemas generar como tareas a ser
-atacadas por otros \ws y cuáles atacar directamente sin generarlos como nuevas
-tareas. Se debe observar que \emph{no generar} un subproblema requier invertir
+resueltas por otros \ws y cuáles resolver directamente sin generarlos como nuevas
+tareas. Se debe observar que \emph{no generar} un subproblema requiere invertir
 un tiempo de cómputo suficiente para determinar el resultado de ese
 subproblema. Una estrategia automática debe entonces decidir qué hacer con
 esta variable teniendo en cuenta que invertir poco o nada de tiempo de cómputo
 en filtrar los subproblemas puede degradar significativamente la eficiencia
-del sistema debido al \emph{overhead} invertido en resolver problemas
-demasiado fáciles. Pero también debe tener en cuenta que invertir demasiado
+del sistema debido a que una cantidad de subproblemas
+demasiado fáciles serán generados como nuevas tareas. Pero también debe tener en cuenta que invertir demasiado
 tiempo de cómputo en el filtrado de los subproblemas tiende a degradar
 significativamente el paralelismo.
 
