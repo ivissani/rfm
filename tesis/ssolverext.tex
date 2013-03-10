@@ -130,6 +130,8 @@ de un problema (y es exponencial), la experiencia indica que existen problemas
 con pocas variables sumamente difíciles y problemas con muchas variables
 razonablemente sencillos.
 
+\subsubsection{Cuándo partir: criterios estáticos vs. dinámicos}
+
 Resulta claro entonces que una primera aproximación \emph{naive} a este
 problema, como por ejemplo la elección de un \tout fijo a modo de criterio para
 determinar cuándo un problema debe ser partido, resulta una mala alternativa.
@@ -174,7 +176,7 @@ observaciones mencionadas. Una vez resuelto este dilema surge la segunda
 pregunta fundamental a responder que es: ¿Cómo partir un problema? Que
 esencialmente se traduce en: ¿Cuántas y qué variables levantar en cada ocasión?
 
-\subsubsection{Criterio de particionado}
+\subsubsection{Cómo partir: criterios de selección de variables}
 
 \newcommand{\vsids}{VSIDS\xspace}
 
@@ -196,20 +198,20 @@ Luego, cuando el \ssolver se encuentra en la situación de tener que elegir una
 variable para continuar la búsqueda, elige aquella con mayor actividad.
 
 La elección de las variables a ser levantadas es crucial. Como se ve en
-la Tabla~\ref{tablita} una buena elección de variables puede generar una
-descendencia muy fácil o muy difícil. En general, no se posible saber cuál es
+la Tabla~\ref{distrospamela8}, una buena elección de variables puede generar una
+descendencia muy fácil o muy difícil. En general, no es posible predecir cuál es
 la mejor elección de variables a ser levantadas. Sin embargo la heurística
-\vsids a reportado muy buenos resultados en el mundo del \ssolving secuencial.
+\vsids ha reportado muy buenos resultados en el mundo del \ssolving secuencial.
 
 
-\marginpar{Acomodar la tabla y corregir la referencia que aparece antes.}
-
-\begin{tabular}{|c|c|r|r|r|r|r|}
-\hline
-Subconjunto & Cantidad de hijos & & & & & \\
+\begin{table}\label{distrospamela8}
+\begin{footnotesize}
+\begin{tabular}{ccrrrrr}
+\toprule
+Subconjunto & Cant. hijos & & & & & \\
 de variables & no triviales & M\'aximo & Media & Suma total & Desv.
 est. & Mediana \\
-\hline
+\cmidrule(r){1-7}
 A 	& 136 	& 8.09 		& 1.13 		& 154.17	 	& 1.37 		& 0.51 \\
 B 	& 136 	& 18.06 		& 1.28 		& 173.48	 	& 1.95 		& 0.72 \\
 C 	& 192 	& 36.25 		& 8.74 		& 1678.88 	& 7.45 		& 5.78 \\
@@ -217,8 +219,11 @@ D	& 174 	& 63.62 		& 1.25 		& 218.29	 	& 6.27 		& 0.05 \\
 E	& 192 	& 89.41 		& 2.18 		& 418.04	 	& 7.66 		& 0.39 \\
 F 	& 192 	& 288.79	 	& 10.18 		& 1954.07 	& 22.36 		& 2.46 \\
 G 	& 256 	& 376.70	 	& 86.03 		& 22024.53 	& 81.98 		& 56.98 \\
-\hline
+\bottomrule
 \end{tabular}
+\end{footnotesize}
+\end{table}
+
 
 Además de la determinación de qué variables levantar, es importante también
 tener en cuenta cuántas levantar en cada momento. En primer lugar, es
