@@ -97,7 +97,7 @@ Comenzaremos esta sección desglosando las principales cuestiones a
 resolver por una estrategia completamente automática para nuestra herramienta.
 Surge así la primer pregunta relevante que cualquier estrategia debe
 responder: ¿Cuándo declarar que un (sub)problema es demasiado difícil para
-atacarlo como tal? Es decir ¿Cuándo se toma la decisión de partir un problema
+atacarlo como tal? Es decir: ¿Cuándo se toma la decisión de partir un problema
 en nuevos subproblemas?
 
 \subsubsection{Dificultad de un problema}
@@ -134,31 +134,31 @@ intentar predecir la dificultad de un problema arbitrario hace agua en la
 práctica.
 
 Resulta claro entonces que una primera aproximación \emph{naive} a este
-problema como podría ser la elección de un \tout fijo como criterio para
+problema, como por ejemplo la elección de un \tout fijo a modo de criterio para
 determinar cuándo un problema debe ser partido, resulta una mala alternativa.
-La disparidad en la dificultad de los distintos problemas hace que sea
-imposible atacar razonablemente todos los problemas con un único valor de \tout.
-Una posibilidad sería entonces que el usuario seleccionara el \tout que quiere
-utilizar para cada problema. Sin embargo esto atenta sustancialmente contra la
-usabilidad de la herramienta ya que requiere asumir un \emph{expertise} por
+La disparidad en la dificultad de los distintos problemas hace imposible
+dar con un único valor prefijado de \tout que resulte adecuado para el
+caso general. Otra posibilidad sería entonces que el usuario seleccionara
+el \tout deseado para cada problema. Sin embargo, esto atenta sustancialmente
+contra la usabilidad de la herramienta, ya que requiere asumir un \emph{expertise} por
 parte del usuario y un conocimiento previo del problema a resolver que no son
-razonables. 
+razonables.
 
-Además a medida que partimos recursivamente un problema, los subproblemas
+Además, a medida que partimos recursivamente un problema, los subproblemas
 generados --si la elección de variables a levantar fue apropiada-- son
-\emph{cada vez} más fáciles. Por lo tanto un valor de \tout que resulta
-adecuado en un momento no lo será más adelante. Esto podría llevarnos a
+\emph{cada vez} más fáciles. Por lo tanto un valor de \tout que resulte
+adecuado en cierto momento ya no lo será más adelante. Esto podría llevarnos a
 elaborar un criterio un tanto más refinado que lo anterior. Por ejemplo,
 podríamos optar por tener un valor de \tout para cada \emph{nivel} del
-problema. Sin embargo surge nuevamente el mismo problema que mencionábamos
-anteriormente. Cada vez que un problema es partido, los subproblemas generados
-difieren notablemente en su nivel de dificultad. Más aún, las distribuciones
-de dificultad entre los hijos de dos subproblemas distintos de un mismo
-problema (a misma cantidad de variables levantadas) pueden ser muy distintas.
-Por lo tanto, este refinamiento tampoco resulta adecuado.
+problema. Sin embargo, surge nuevamente el mismo inconveniente: cada vez
+que un problema es partido, los subproblemas generados difieren notablemente
+en su nivel de dificultad. Más aún, las distribuciones de dificultad entre
+los hijos de dos subproblemas distintos de un mismo problema (a misma cantidad
+de variables levantadas) pueden ser muy distintas. En consecuencia, este
+refinamiento tampoco resulta adecuado.
 
 En general, la ausencia de un criterio estático para determinar la dificultad
-de un problema dado, hace imposible la elección de un criterio de corte que
+de un problema dado hace imposible la elección de un criterio de corte que
 sea también estático. Por lo tanto se vuelve necesario que el criterio para
 determinar que un problema debe ser partido sea dinámico. Es decir, que el
 mismo se vaya adaptando durante la ejecución. Un criterio de estas
@@ -174,8 +174,8 @@ los subproblemas ya resueltos, etc.
 Cualquier estrategia automática razonable deberá entoces dar respuesta a la
 problemática de decidir cuándo partir un problema teniendo en cuenta las
 observaciones mencionadas. Una vez resuelto este dilema surge la segunda
-pregunta fundamental a responder que es ¿Cómo partir un problema? Que
-esencialmente se traduce en ¿Cuántas y qué variables levantar en cada ocasión?
+pregunta fundamental a responder que es: ¿Cómo partir un problema? Que
+esencialmente se traduce en: ¿Cuántas y qué variables levantar en cada ocasión?
 
 \subsubsection{Criterio de particionado}
 
