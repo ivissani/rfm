@@ -343,6 +343,19 @@ tener períodos en los que la frecuencia actual no alcanza la frecuencia
 objetivo. La combinación de  estos tres parámetros configura la agresividad
 del sistema a la hora de determinar que un problema es demasiado difícil.
 
+Además del criterio por frecuencia decidimos que ante la situación en que hay
+\ws sin tareas para realizar y en el sistema no hay más tareas pendientes se
+debe partir un problema en curso. De este modo evitamos que haya recursos
+ociosos. En particular esta decisión es útil al comienzo de la ejecución de un
+problema para distribuir rápidamente el trabajo entre las distintas unidades
+de cómputo.
+
+Falta determinar entonces cuál de los problemas en curso será el seleccionado
+para ser partido. En este punto optamos por que sea aquel en el que se ha
+invertido más tiempo de cómputo. De este modo evitamos que un \w quede atorado
+intentando resolver un problema que podría ser extremadamente difícil a la vez
+que minimizamos las veces en que un problema es partido demasiado pronto.
+
 Con respecto al balanceo del almacenamiento se tomó la decisión de que cada
 vez que un \w se queda ocioso y sin tareas pendientes, además de obtener la
 tarea que corresponde por BFS, el \w obtendrá una conjunto de tareas pendietes
