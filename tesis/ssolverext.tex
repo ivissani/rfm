@@ -126,12 +126,9 @@ elaborar una estrategia que atienda razonablemente a las inquietudes
 planteadas arriba. Lamentablemente no se conoce ninguna métrica que permita
 establecer \apriori la dificultad de un problema. Si bien la complejidad de
 los algoritmos de \ssolving se expresa en función de la cantidad de variables
-de un problema (y es exponencial), la experiencia muestra que es común
-hallar problemas sumamente difíciles con pocas variables, así como problemas
-que resulten sencillos a pesar de involucrar grandes
-cantidades de variables. En general, cualquier estimador estático para
-intentar predecir la dificultad de un problema arbitrario hace agua en la
-práctica.
+de un problema (y es exponencial), la experiencia indica que existen problemas
+con pocas variables sumamente difíciles y problemas con muchas variables
+razonablemente sencillos.
 
 Resulta claro entonces que una primera aproximación \emph{naive} a este
 problema como podría ser la elección de un \tout fijo como criterio para
@@ -202,7 +199,7 @@ La elección de las variables a ser levantadas es crucial. Como se ve en
 la Tabla~\ref{tablita} una buena elección de variables puede generar una
 descendencia muy fácil o muy difícil. En general, no se posible saber cuál es
 la mejor elección de variables a ser levantadas. Sin embargo la heurística
-\vsids ha reportado muy buenos resultados en el mundo del \ssolving secuencial.
+\vsids a reportado muy buenos resultados en el mundo del \ssolving secuencial.
 
 
 \marginpar{Acomodar la tabla y corregir la referencia que aparece antes.}
@@ -236,9 +233,9 @@ Sumado a esto, el tiempo insumido en generar los subproblemas producto de un
 problema puede volverse excesivamente grande atentando una vez más contra el
 paralelismo y la eficiencia de la herramienta.
 
-Una vez más debemos recordar que la idea de levantar variables se basa en que
---suponiendo una elección razonable de cuáles levantar-- cuanto mayor sea la
-cantidad levantada, más fáciles serán los subproblemas generados. Es por
+Una vez más debemos recordar que la idea de levantar variables se basa en que,
+ante una elección razonable de cuáles variables levantar, a mayor cantidad de
+variables levantadas, más fáciles serán los subproblemas generados. Es por
 esto que si la cantidad de variables a levantar es demasiado pequeña, es
 probable que los subproblemas que sean generados no sean suficientemente 
 fáciles como para ser resueltos y que, por lo tanto, sea necesario partirlos también en el
@@ -252,7 +249,7 @@ qué problemas son dignos de ser distribuidos realmente. Hemos mencionado
 muchas veces que al levantar $n$ variables, la cantidad \textbf{potencial} de
 subproblemas generados es $2^n$. El uso de la palabra potencial tiene que ver
 con el hecho de que varios de los subproblemas generados al levantar $n$
-variables podrían ser resueltos trivialmente. ¿A qué nos referimos con
+variables podrían ser resueltos trivialmente ¿A qué nos referimos con
 trivialmente? En primer lugar a aquellos subproblemas en los que alcanza con
 propagar\footnote{El uso del término propagación en este contexto es estricto.
 Es decir que nos referimos exclusivamente a la realización de la clausura de
@@ -327,21 +324,21 @@ Sobre cuándo declarar que un problema es demasiado difícil, adoptamos una
 estrategia basada en el estado del sistema. En concreto nos enfocamos en que
 el sistema mantenga una cierta tasa de progreso. Para ello medimos la cantidad
 de subproblemas resueltos por unidad de tiempo y luego establecimos un umbral
-objetivo. Luego, si la frecuencia actual se encuentra por debajo del umbral
-objetivo, entonces debemos tomar uno de los problemas que actualmente están
-siendo atacados y partirlo. Llamaremos \textbf{frecuencia objetivo} al umbral
-de problemas terminados por segundo por debajo del cual se decide que algún
+objetivo. De esta forma, si la frecuencia actual se encuentra por debajo del umbral
+objetivo, entonces debemos escojer uno de los problemas que actualmente están
+siendo resueltos y partirlo. Llamaremos \textbf{frecuencia objetivo} al umbral, entendido como 
+cantidad de problemas resueltos por \w, por segundo por debajo del cual se decide que algún
 problema debe ser partido. Llamaremos \textbf{frecuencia actual} a un valor
-que estima la cantidad de problemas terminados por segundo a partir de
+que estima la cantidad de problemas terminados por \w, por segundo a partir de
 promediar los problemas que han terminado durante los últimos $t$ segundos.
 Llamaremos \textbf{tamaño de la ventana de muestreo} al mencionado valor $t$.
-Llamaremos \textbf{frecuencia de checkeo} a la frecuencia con la que se revisa
+Llamaremos \textbf{frecuencia de observación} a la frecuencia con la que se revisa
 si la frecuencia actual se encuentra por encima de la frecuencia objetivo.
 
 En concreto los parámetros utilizados fueron:
 
 \begin{itemize}
-	\item Frecuencia objetivo: $0.15$ p/\w
+	\item Frecuencia objetivo: $0.15$ p/\w p/seg.
 	\item Tamaño de la ventana de muestreo: $20s$
 	\item Frecuencia de checkeo: $5s$
 \end{itemize}
@@ -353,7 +350,7 @@ cuánto peso se le da a la historia. Una ventana más grande es más estable
 mientras que una ventana más chica se adapta más rápidamente ya que presenta
 mayor volatilidad. La frecuencia de checkeo administra cuánto tiempo de
 tolerancia se tiene ante una frecuencia actual menor a una frecuencia
-objetivo. Si la frecuencia de checkeo es alta --menor valor-- entonces la
+objetivo. Si la frecuencia de checko es alta --menor valor-- entonces la
 tolerancia será baja y ante cualquier caída de la frecuencia actual por debajo
 del objetivo el sistema reaccionará. Por otro lado una frecuancia alta --mayor
 valor-- representará una tolerancia mayor dando oportunidad al sistema de
@@ -380,7 +377,7 @@ tarea que corresponde por BFS, el \w obtendrá una conjunto de tareas pendietes
 de aquel \w que posea mayor cantidad. Llamemos $w_{idle}$ al \w que quedón sin
 tareas y $w_{overwhelmed}$ al que más tareas pendientes posee, entonces la
 cantidad de tareas transferidas en esta ocasión será \begin{equation}
-\frac{\#tareas\_pendientes(w_{overwhelmed})}{\# workers}
+\frac{\#tareas\_pendientes(\w_{overwhelmed})}{\# workers}
 \label{eq:share}\end{equation} La idea detrás de esto es que $w_{idle}$
 obtiene \emph{la porción que le corresponde} de las tareas de
 $w_{overwhelmed}$. Para evitar transferencias extremadamente largas, la
@@ -399,18 +396,18 @@ $w_{overwhelmed}$.
 	\small
 	\begin{tabular}{lrrrrrr}
 		\toprule
-		problem	&	scope	&	seq. runtime (s)	&	par. walltime (s)	&	speedup	&	efficiency \\
+		problem	&	scope	&	seq. runtime (s)	&	parallel walltime (s)	&	speedup	&	efficiency \\
 		\cmidrule(r){1-6}
 		Pamela	&	8	&	308.26	&	60.46	&	5.10x	&	0.08 \\
 		Pamela	&	9	&	76168.16	&	407.34	&	186.99x	&	2.92 \\
-		Pamela\footnote{Se ejecutó por 14 días sin que el \ssolver secuencial consiga un resultado}	&	10	&	$>$1209600.00	&	5046.84	&	$>$239.67x	&	$>$3.74 \\
+		Pamela	&	10	&	$>$1209600\footnote{Se ejecutó por 14 días sin que el \ssolver consiga un resultado}	&	5046.84	&	$>$239.67x	&	$>$3.74 \\
 		\cmidrule(r){1-6}
 		Closure	&	11	&	749.65	&	291.28	&	2.57x	&	0.04 \\
 		Closure	&	12	&	3983.36	&	1914.45	&	2.08x	&	0.03 \\
 		Closure	&	13	&	16261.35	&	4362.61	&	3.73x	&	0.06 \\
 		\cmidrule(r){1-6}
 		MarkGC Soundness2	&	9	&	217.31	&	200.85	&	1.08x	&	0.02 \\
-		MarkGC Soundness2	&	10	&	2855.30	&	1376.89	&	2.07x	&	0.03 \\
+		MarkGC Soundness2	&	10	&	2855.3	&	1376.89	&	2.07x	&	0.03 \\
 		\cmidrule(r){1-6}
 		MarkGC Completeness	&	9	&	18643.06	&	1825.60	&	10.21x	&	0.16 \\
 		\bottomrule
