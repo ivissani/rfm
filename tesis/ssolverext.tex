@@ -399,18 +399,18 @@ $w_{overwhelmed}$.
 	\small
 	\begin{tabular}{lrrrrrr}
 		\toprule
-		problem	&	scope	&	seq. runtime (s)	&	parallel walltime (s)	&	speedup	&	efficiency \\
+		problem	&	scope	&	seq. runtime (s)	&	par. walltime (s)	&	speedup	&	efficiency \\
 		\cmidrule(r){1-6}
 		Pamela	&	8	&	308.26	&	60.46	&	5.10x	&	0.08 \\
 		Pamela	&	9	&	76168.16	&	407.34	&	186.99x	&	2.92 \\
-		Pamela	&	10	&	$>$1209600\footnote{Se ejecutó por 14 días sin que el \ssolver consiga un resultado}	&	5046.84	&	$>$239.67x	&	$>$3.74 \\
+		Pamela\footnote{Se ejecutó por 14 días sin que el \ssolver secuencial consiga un resultado}	&	10	&	$>$1209600.00	&	5046.84	&	$>$239.67x	&	$>$3.74 \\
 		\cmidrule(r){1-6}
 		Closure	&	11	&	749.65	&	291.28	&	2.57x	&	0.04 \\
 		Closure	&	12	&	3983.36	&	1914.45	&	2.08x	&	0.03 \\
 		Closure	&	13	&	16261.35	&	4362.61	&	3.73x	&	0.06 \\
 		\cmidrule(r){1-6}
 		MarkGC Soundness2	&	9	&	217.31	&	200.85	&	1.08x	&	0.02 \\
-		MarkGC Soundness2	&	10	&	2855.3	&	1376.89	&	2.07x	&	0.03 \\
+		MarkGC Soundness2	&	10	&	2855.30	&	1376.89	&	2.07x	&	0.03 \\
 		\cmidrule(r){1-6}
 		MarkGC Completeness	&	9	&	18643.06	&	1825.60	&	10.21x	&	0.16 \\
 		\bottomrule
