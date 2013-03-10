@@ -350,17 +350,16 @@ En concreto los parámetros utilizados fueron:
 
 Que la frecuencia objetivo dependa de la cantidad de \ws permite ajustar la
 cantidad de problemas generados de acuerdo a la capacidad de consumirlos que
-tiene el sistema. Es importante notar que el tamaño de la venta influye en
-cuánto peso se le da a la historia. Una ventana más grande es más estable
-mientras que una ventana más chica se adapta más rápidamente ya que presenta
-mayor volatilidad. La frecuencia de checkeo administra cuánto tiempo de
+tiene el sistema. Es importante notar que el tamaño de la ventana influye en
+cuánto peso se le da a la historia. Tomar una ventana de mayor tamaño exhibirá un comportamiento más estable en el tiempo,
+mientras que una ventana más pequeña se adapta más rápidamente y consecuentemente mostrará mayor variabilidad. La frecuencia de checkeo administra cuánto tiempo de
 tolerancia se tiene ante una frecuencia actual menor a una frecuencia
-objetivo. Si la frecuencia de checko es alta --menor valor-- entonces la
+objetivo. Si la frecuencia de checkeo es alta --menor valor-- entonces la
 tolerancia será baja y ante cualquier caída de la frecuencia actual por debajo
-del objetivo el sistema reaccionará. Por otro lado una frecuancia alta --mayor
+del objetivo el sistema reaccionará. Por otro lado, una frecuencia alta --mayor
 valor-- representará una tolerancia mayor dando oportunidad al sistema de
 tener períodos en los que la frecuencia actual no alcanza la frecuencia
-objetivo. La combinación de  estos tres parámetros configura la agresividad
+objetivo. La combinación de estos tres parámetros configura la agresividad
 del sistema a la hora de determinar que un problema es demasiado difícil.
 
 Además del criterio por frecuencia decidimos que ante la situación en que hay
@@ -371,26 +370,31 @@ problema para distribuir rápidamente el trabajo entre las distintas unidades
 de cómputo.
 
 Falta determinar entonces cuál de los problemas en curso será el seleccionado
-para ser partido. En este punto optamos por que sea aquel en el que se ha
-invertido más tiempo de cómputo. De este modo evitamos que un \w quede atorado
+para ser partido. En este punto optamos por aquel en el que se ha
+invertido más tiempo de cómputo. De este modo, evitamos que un \w quede atorado
 intentando resolver un problema que podría ser extremadamente difícil a la vez
 que minimizamos las veces en que un problema es partido demasiado pronto.
 
 Con respecto al balanceo del almacenamiento se tomó la decisión de que cada
 vez que un \w se queda ocioso y sin tareas pendientes, además de obtener la
-tarea que corresponde por BFS, el \w obtendrá una conjunto de tareas pendietes
-de aquel \w que posea mayor cantidad. Llamemos $w_{idle}$ al \w que quedón sin
+tarea que corresponde por BFS, el \w obtendrá una conjunto de tareas pendientes
+de aquel \w que posea mayor cantidad. Llamemos $w_{idle}$ al \w que quedó sin
 tareas y $w_{overwhelmed}$ al que más tareas pendientes posee, entonces la
-cantidad de tareas transferidas en esta ocasión será \begin{equation}
+cantidad de tareas transferidas en esta ocasión será;
+
+ \begin{equation}
 \frac{\#tareas\_pendientes(\w_{overwhelmed})}{\# workers}
-\label{eq:share}\end{equation} La idea detrás de esto es que $w_{idle}$
+\label{eq:share}
+\end{equation} 
+
+La idea detrás de esto es que $w_{idle}$
 obtiene \emph{la porción que le corresponde} de las tareas de
 $w_{overwhelmed}$. Para evitar transferencias extremadamente largas, la
 cantidad expresada en Eq.-\ref{eq:share} satura en $10$ tareas. Para evitar
-una mala distribución\todo{¿Vale la pena entrar en detalle sobre qué significa
-mala distribución?}, las tareas que conforman una porción a ser transferida
+una mala distribución, las tareas que conforman una porción a ser transferida
 son seleccionadas al azar del conjunto de tareas pendientes de
-$w_{overwhelmed}$.
+$w_{overwhelmed}$. Vale la pena notar que si un \w solicitara las $n$ tareas que mejor califican según el criterio de elección, este concentrará un conjunto de tareas de alta prioridad, generando un potencial problema de contención.
+
 
 \subsection{Decisiones que vale la pena seguir investigando}
 
