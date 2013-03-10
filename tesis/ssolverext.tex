@@ -283,29 +283,26 @@ significativamente el paralelismo.
 Otro aspecto que influye en la \emph{performance} de la herramienta es la
 forma en que se recorre el espacio de búsqueda. Cuando un \w queda ocioso debe
 tomar una nueva tarea (si hubiera tareas pendientes). Surge entonces el
-problema de determinar cuál de todas las tareas pendientes debe ser atacada.
+problema de determinar cuál de todas las tareas pendientes debe ser resuelta.
 Como en los casos anteriores existen dos factores que deben ser balanceados.
-Por un lado, si la estrategia es adaptable mediante métricas dinámicas, el
-orden en el que se recorren las tareas a resolver alterará el resultado.
-\todo{Ver si hacerlo más detallado esto} Por lo tanto nos gustaría poder
-seguir el orden \emph{más adecuado} a las métricas que hayamos utilizado en
-nuestra estrategia. Sin embargo, la tarea \emph{ideal} puede encontrarse
+Por un lado, si la estrategia (i.e. toma automática de decisiones) es adaptable según ciertas métricas sensadas dinámicamente, el
+orden en el que se recorren las tareas a resolver alterará el resultado. Luego, nos gustaría poder
+forzar a la herramienta a seguir el orden \emph{más adecuado} en relación a dichas métricas. En este contexto, la tarea \emph{ideal} puede encontrarse
 almacenada en otro \w. Surge así el segundo factor a tener en cuenta. En aras
-de la escalabilidad, el criterio para elegir la próxima tarea a ser atacada no
+de la escalabilidad, el criterio para elegir la próxima tarea a ser resuelta no
 debe generar una sobreutilización de la red de comunicaciones.
 
 Un último factor a tener en cuenta es la necesidad de maximizar la utilización
 del \hard disponible. Es decir que, idealmente, si hay \hard ocioso no debería
-haber tareas pendientes.
+haber tareas pendientes, aún cuando estas se encuentren almacenadas en otros \w.
 
 \subsection{La estrategia implementada}
 
 Teniendo en cuenta los factores mencionados anteriormente nos volcamos al
 desarrollo de una estrategia automática. Nuestro objetivo no estuvo puesto en
 el desarrollo de una estrategia óptima ya que cada uno de los factores
-mencionados con anterioridad podría ser objeto de un extenso estudio, y aún
-así no existen garantías de que existe tal cosa como la estrategia óptima para
-toda clase de problemas. Por lo tanto nuestro esfuerzo estuvo dedicado a no
+mencionados con anterioridad podría ser objeto de un extenso y minucioso estudio. 
+Más aún, no existen garantías de que tal estrategia óptima exista. Por lo tanto nuestro esfuerzo estuvo dedicado a no
 incurrir en los errores más flagrantes, de modo que la herramienta funcionase
 razonablemente bien con una serie de problemas y poder empezar a obtener
 resultados que nos permitan resaltar los aspectos fuertes y los aspectos que
@@ -315,15 +312,15 @@ En cuanto al criterio de particionado las decisiones tomadas fueron:
 
 \begin{itemize}
 	\item La cantidad de variables a levantar se fijó en 10. Aunque este valor puede ser alterado por el usuario.
-	\item Las variables a levantar se seleccionan utilizando la heurística \vsids. Es decir que cuando un problema va a ser partido, se consultan las actividades de cada variable y se seleccionan --de acuerdo con el punto anterior-- las 10 variables más activas.
-	\item Cada potencial subproblema es \solveado por 50ms. Si en ese tiempo no se arriba a un resultado, el problema pasa a ser una nueva tarea pendiente.
+	\item Las variables a levantar se seleccionan utilizando la heurística \vsids. Es decir que cuando un problema va a ser partido, se consulta la actividad de cada variable y se seleccionan --de acuerdo con el punto anterior-- las diez más activas.
+	\item Cada potencial subproblema es \solveado por 50ms. Si en ese tiempo no se arriba a un resultado, se genera una nueva tarea pendiente.
 \end{itemize}
 
 Respecto al orden en el cual se recorre el espacio de búsqueda:
 
 \begin{itemize}
-	\item Si un \w queda ocioso y no tiene tareas pendientes en su espacio de almacenamiento, obtiene la tarea que corresponda de acuerdo a la estrategia BFS --\emph{breadth-first search}--.
-	\item Si al quedar ocioso el \w cuenta con tareas pendientes locales, se selecciona la que corresponda por BFS de las tareas locales.
+	\item Si un \w queda ocioso y no tiene tareas pendientes en su espacio de almacenamiento, obtiene la tarea que corresponda de acuerdo al recorrido BFS --\emph{breadth-first search}-- del árbol de que representa el espacio de valuaciones aún no explorado.
+	\item Si al quedar ocioso el \w cuenta con tareas pendientes en su espacio de almacenamiento, se selecciona la que corresponda por BFS de las tareas locales.
 \end{itemize}
 
 Sobre cuándo declarar que un problema es demasiado difícil, adoptamos una
