@@ -403,16 +403,66 @@ $w_{overwhelmed}$. Vale la pena notar que si un \w solicitara las $n$ tareas que
 
 \section{Resultados experimentales}
 
+En esta sección presentamos los experimentos realizados con el fin de evaluar
+el desempeño de nuestra herramienta.  Los experimentos se ejecutaron en el
+\cluster CeCAR\footnote{http://cecar.fcen.uba.ar/}. Se utilizaron 17 equipos,
+cada uno de los cuales cuenta con dos procesador \texttt{Intel Dual Core Xeon
+5030 2.67 Ghz}, \texttt{2 GB} de memoria RAM y un disco rígido \texttt{Western
+Digital WD800JD 80Gb SATA 7200RPM}. Uno de los equipos fue utilizado para
+ejecutar el tablero de control y el \master, mientras que se ejecutaron 4 \ws
+en cada uno de los restantes 16 equipos totalizando 64 \ws.
+
+Los problemas utilizados para evaluar la herramienta fueron:
+\begin{itemize}
+	\item Nico ¿Hacés tu magia acá?
+\end{itemize}
+
+La Tab.-\ref{tab:resultados} muestra la comparación entre el tiempo de
+ejecución requerido por el \ssolver secuencial y el tiempo percibido requerido
+por nuestra herramienta. Los tiempos reportados para el caso distribuido se
+calcularon tomando el promedio de varias corridas. La tabla
+\ref{tab:repeticiones} enumera la cantidad de repeticiones realizadas para
+cada experimento. 
+
+\begin{table}
+	\footnotesize
+	\begin{tabular}{lrr}
+		\toprule
+		problem	&	scope	&	repeats	\\
+		\cmidrule(r){1-3}
+		Pamela	&	8	&	7	\\
+		Pamela	&	9	&	6 \\
+		Pamela	&	$^*$10	&	5 \\
+		\cmidrule(r){1-3}
+		Closure	&	11	&	14	\\
+		Closure	&	12	&	5	\\
+		Closure	&	13	&	5 \\
+		\cmidrule(r){1-3}
+		MarkGC Soundness2	&	9	&	10	\\
+		MarkGC Soundness2	&	10	&	7	\\
+		\cmidrule(r){1-3}
+		MarkGC Completeness	&	9	&	5 \\
+		\bottomrule
+	\end{tabular}
+	\caption{Cantidad de repeticiones realizadas por problema}
+	\label{tab:repeticiones}
+\end{table}
+
+
+El primer punto a destacar es que en todos \todo{qué hacer con iolus? mencionarlo o no? cómo?}los casos
+nuestra herramienta consiguió una disminución en el tiempo requerido para
+resolver un problema. 
+
 \hspace{-5em}
-\begin{minipage}{\textwidth}
-	\small
+\begin{table}
+	\footnotesize
 	\begin{tabular}{lrrrrrr}
 		\toprule
 		problem	&	scope	&	seq. runtime (s)	&	parallel walltime (s)	&	speedup	&	efficiency \\
 		\cmidrule(r){1-6}
 		Pamela	&	8	&	308.26	&	60.46	&	5.10x	&	0.08 \\
 		Pamela	&	9	&	76168.16	&	407.34	&	186.99x	&	2.92 \\
-		Pamela	&	10	&	$>$1209600\footnote{Se ejecutó por 14 días sin que el \ssolver consiga un resultado}	&	5046.84	&	$>$239.67x	&	$>$3.74 \\
+		Pamela	&	$^*$10	&	$>$1209600.00	&	5046.84	&	$>$239.67x	&	$>$3.74 \\
 		\cmidrule(r){1-6}
 		Closure	&	11	&	749.65	&	291.28	&	2.57x	&	0.04 \\
 		Closure	&	12	&	3983.36	&	1914.45	&	2.08x	&	0.03 \\
@@ -423,6 +473,9 @@ $w_{overwhelmed}$. Vale la pena notar que si un \w solicitara las $n$ tareas que
 		\cmidrule(r){1-6}
 		MarkGC Completeness	&	9	&	18643.06	&	1825.60	&	10.21x	&	0.16 \\
 		\bottomrule
+		\\
+		\multicolumn{6}{l}{\begin{tiny}$^*$: Se ejecutó por 14 días sin que el \ssolver secuencial consiga un resultado\end{tiny}}
 	\end{tabular}
-	%\caption{Tiempo de ejecución (en segundos) distribuido vs. secuencial}
-\end{minipage}
+	\caption{Tiempo de ejecución (en segundos) distribuido vs. secuencial}
+	\label{tab:resultados}
+\end{table}
