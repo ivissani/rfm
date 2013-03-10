@@ -380,7 +380,7 @@ tarea que corresponde por BFS, el \w obtendrá una conjunto de tareas pendietes
 de aquel \w que posea mayor cantidad. Llamemos $w_{idle}$ al \w que quedón sin
 tareas y $w_{overwhelmed}$ al que más tareas pendientes posee, entonces la
 cantidad de tareas transferidas en esta ocasión será \begin{equation}
-\frac{\#tareas\_pendientes(\w_{overwhelmed})}{\# workers}
+\frac{\#tareas\_pendientes(w_{overwhelmed})}{\# workers}
 \label{eq:share}\end{equation} La idea detrás de esto es que $w_{idle}$
 obtiene \emph{la porción que le corresponde} de las tareas de
 $w_{overwhelmed}$. Para evitar transferencias extremadamente largas, la
