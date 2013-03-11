@@ -459,19 +459,31 @@ utilizadas sin que las componentes en cuestión se conviertan en un factor limit
 	\label{tab:incremental}
 \end{table}
 
-\subsection{Conclusiones}
+\subsection{Discusión y conclusiones}
 
-En términos generales la herramienta consiguió disminuir el tiempo necesario
-para resolver un problema pero en casi todos los casos lejos del ideal
-esperado en proporción a la cantidad de nodos agregados. Respecto de esto
-nuestra conjetura es que la partición de un problema en subproblemas
-independiza dos partes de su problema ``padre'' y las considera como nuevas
-tareas. Si aceptamos la hipótesis de que las cláusulas aprendidas guían al
-\ssolver en el recorrido del espacio de valuaciones para intentar evitar
-aquellas que no producirán un resultado, todas aquellas cláusulas que el
-\ssolver aprendió a lo largo del proceso de \solving del padre debieran jugar
-un rol en la posibilidad resolver los subproblemas que de él derivan.
 
-Así, en el capítulo siguiente afrontaremos la tarea de evaluar la viabilidad
-de implementar técnicas de aprendizaje de cláusulas guiado por conflictos como
-parte de la herramienta que hemos desarrollado
+En términos generales, la herramienta consiguió disminuir el tiempo necesario para resolver problemas difíciles. Resulta particularmente interesante el haber podido comprobar la existencia de problemas del mundo real, provenientes de aplicaciones industriales, para los cuales el enfoque logra \emph{speedups} fuertemente supralineales.
+
+En el resto de los casos estudiados se obtuvieron \emph{speedups} que, si bien son significativos y sin duda pueden resultar útiles en la práctica, distan mucho de ser lineales.
+
+Nuestra conjetura es que esto está relacionado con el hecho de que, al partir un problema en subproblemas, suele obtenerse una considerable reducción en el máximo (es decir, en el camino crítico a la hora de reducir el tiempo total percibido por el usuario), pero a la vez un incremento potencialmente muy fuerte en la suma total del esfuerzo requerido para resolver el colectivo de subproblemas resultantes. 
+
+Asociamos el fenómeno antedicho con un importante factor de \emph{retrabajo} que bien podría deberse a la ausencia de aprendizaje en nuestro enfoque distribuido de \ssolving. Es sabido que la incorporación y el correcto manejo de cláusulas aprendidas son un aspecto clave del enfoque CDCL. Sin embargo, en nuestra herramienta distribuida, cuando un análisis en curso es abortado con el objeto de partir el problema (identificado como difícil) en subproblemas, todo el conocimiento adicional hasta entonces aprendido por ese \ssolver secuencial es descartado.
+
+Nuestra hipótesis es que es necesario aprovechar las cláusulas aprendidas para reducir el impacto del mencionado factor de retrabajo en el tiempo total de cómputo. En el capítulo siguiente presentaremos y evaluaremos distintas alternativas, basadas en herencia recursiva de padres a hijos, para la reutilización de este conocimiento.
+
+
+%En términos generales la herramienta consiguió disminuir el tiempo necesario
+%para resolver un problema pero en casi todos los casos lejos del ideal
+%esperado en proporción a la cantidad de nodos agregados. Respecto de esto
+%nuestra conjetura es que la partición de un problema en subproblemas
+%independiza dos partes de su problema ``padre'' y las considera como nuevas
+%tareas. Si aceptamos la hipótesis de que las cláusulas aprendidas guían al
+%\ssolver en el recorrido del espacio de valuaciones para intentar evitar
+%aquellas que no producirán un resultado, todas aquellas cláusulas que el
+%\ssolver aprendió a lo largo del proceso de \solving del padre debieran jugar
+%un rol en la posibilidad resolver los subproblemas que de él derivan.
+%
+%Así, en el capítulo siguiente afrontaremos la tarea de evaluar la viabilidad
+%de implementar técnicas de aprendizaje de cláusulas guiado por conflictos como
+%parte de la herramienta que hemos desarrollado
