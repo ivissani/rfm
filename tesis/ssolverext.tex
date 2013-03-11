@@ -402,17 +402,30 @@ $w_{overwhelmed}$. Vale la pena notar que si un \w solicitara las $n$ tareas que
 
 En esta sección presentamos los experimentos realizados con el fin de evaluar
 el desempeño de nuestra herramienta.  Los experimentos se ejecutaron en el
-\cluster CeCAR\footnote{http://cecar.fcen.uba.ar/}. Se utilizaron 17 equipos,
-cada uno de los cuales cuenta con dos procesadores \texttt{Intel Dual Core Xeon
+\cluster CeCAR \cite{cecar??}. Se utilizaron 17 equipos,
+cada uno de los cuales cuenta con dos procesador \texttt{Intel Dual Core Xeon
 5030 2.67 Ghz}, \texttt{2 GB} de memoria RAM y un disco rígido \texttt{Western
 Digital WD800JD 80Gb SATA 7200RPM}. Uno de los equipos fue utilizado para
 ejecutar el tablero de control y el \master, mientras que se ejecutaron 4 \ws
 en cada uno de los restantes 16 equipos totalizando 64 \ws.
 
-Los problemas utilizados para evaluar la herramienta fueron:
-\begin{itemize}
-	\item Nico ¿Hacés tu magia acá?
-\end{itemize}
+\subsection{Casos de estudio}
+
+\subsubsection{Ruteo en redes heterogéneas}
+
+Este caso proviene de un modelo formal de ruteo en redes heterogéneas, desarrollado en AT\&T, que involucra agentes móviles, identificadores, rutas y múltiples dominios de red. El modelo en cuestión incluye diversas propiedades, de las cuales la última, \texttt{StructureSufficientForPairReturnability}, resulta particularmente costosa de demostrar. Para más detalles referimos al lector al artículo ``Compositional Binding in Network Domains'' \cite{paperPamela??}.
+
+\subsubsection{\emph{Garbage collection} usando Mark \& Sweep}
+
+Entre los casos de estudio provistos con el programa Alloy Analyzer se incluye un modelo formal de una implementación de \emph{garbage collection} basada en el algoritmo conocido como ``mark and sweep''. El modelo incluye una representación del \emph{heap} del sistema, dominios de datos \texttt{HeapState} y \texttt{Node}, una especificación del algoritmo y propiedades \emph{Soundness} y \emph{Completeness} que aseveran la correctitud y completitud del algoritmo.
+
+\subsubsection{Clausura relacional reflexo-transitiva}
+
+Se trata de un modelo sencillo que involucra un dominio de datos $A$ y una relación $R \subseteq A \times A$, a la que (sólo) se le exige que sea reflexiva y transitiva. La propiedad a demostrar afirma que la $R^{*} = R$, esto es, que la clausura reflexo-transitiva de una relación reflexiva y transitiva es exactamente esa relación. Esta es una propiedad válida, cosa que puede probarse fácilmente por fuera del modelo. El interés radica en que se trata de un modelo breve y sencillo cuya traducción engendra problemas con cantidades muy pequeñas de variables proposicionales, pero que a pesar de ello resultan de considerable dificultad para los \ssolvers y exhiben una curva exponencial (tiempo de \solving para $|A|$ creciente) relativamente pronunciada.
+
+
+\subsection{Resultados obtenidos}
+
 
 La Tab.~\ref{tab:resultados} muestra la comparación entre el tiempo de
 ejecución requerido por el \ssolver secuencial (columna ``seq.~walltime~(s)'')
