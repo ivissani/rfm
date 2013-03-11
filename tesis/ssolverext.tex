@@ -402,7 +402,7 @@ $w_{overwhelmed}$. Vale la pena notar que si un \w solicitara las $n$ tareas que
 
 En esta sección presentamos los experimentos realizados con el fin de evaluar
 el desempeño de nuestra herramienta.  Los experimentos se ejecutaron en el
-\cluster CeCAR \cite{cecar??}. Se utilizaron 17 equipos,
+\cluster CeCAR \cite{cecar}. Se utilizaron 17 equipos,
 cada uno de los cuales cuenta con dos procesadores \texttt{Intel Dual Core Xeon
 5030 2.67 Ghz}, \texttt{2 GB} de memoria RAM y un disco rígido \texttt{Western
 Digital WD800JD 80Gb SATA 7200RPM}. Uno de los equipos fue utilizado para
@@ -425,12 +425,12 @@ Entre los casos de estudio provistos con el programa Alloy Analyzer se incluye u
 
 La propiedad de \texttt{Soundness} afirma que, tras haber ejecutado el algoritmo de \emph{garbage collection}, no hay intersección entre el conjunto de nodos alcanzables en el \emph{heap} y la lista de nodos libres. La propiedad de \texttt{Completeness} afirma que, tras haber ejecutado el algoritmo, todo nodo inalcanzable en el \emph{heap} efectivamente aparece en la lista de nodos libres.
 
-Hemos incluido ambos problemas en el \emph{benchmark} para la evaluación de la herramienta. Ambos son problemas difíciles que requieren exponencialmente más tiempo de análisis conforme crece la cantidad de \texttt{Node}s en el \emph{scope}. Sin embargo, el segundo problema (el de demostrar \texttt{Completeness}) exhibe una curva de dificultad aún mucho más pronunciada que el primero.
+Hemos incluido ambos problemas en el \emph{benchmark} para la evaluación de la herramienta. Ambos son problemas difíciles que requieren exponencialmente más tiempo de análisis conforme crece la cantidad de \texttt{Node}s en el \emph{scope}. Sin embargo, el segundo problema (el de demostrar \texttt{Completeness}) exhibe una curva de dificultad aún más pronunciada que el primero.
 
 
 \subsubsection{Ruteo en redes heterogéneas}
 
-Este caso proviene de un modelo formal de ruteo en redes heterogéneas, desarrollado en AT\&T, que involucra agentes móviles, identificadores, rutas y múltiples dominios de red. El modelo en cuestión incluye diversas propiedades, de las cuales la última, \texttt{StructureSufficientForPairReturnability}, resulta particularmente costosa de demostrar. Para más detalles referimos al lector al artículo ``Compositional Binding in Network Domains'' \cite{paperPamela??}.
+Este caso proviene de un modelo formal de ruteo en redes heterogéneas, desarrollado en AT\&T, que involucra agentes móviles, identificadores, rutas y múltiples dominios de red. El modelo en cuestión incluye diversas propiedades, de las cuales la última, \texttt{StructureSufficientForPairReturnability}, resulta particularmente costosa de demostrar. Para más detalles referimos al lector al artículo ``Compositional Binding in Network Domains'' \cite{zave:fm06}.
 
 
 \subsubsection{Clausura relacional reflexo-transitiva}
