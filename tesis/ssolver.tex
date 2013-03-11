@@ -235,11 +235,12 @@ la misma se distinguen claramente dos componentes: el \bend que ejecuta sobre
 un \cluster de computadoras y el \fend que ejecuta en un equipo que se
 encuentra posiblemente fuera del centro de cómputos.
 
-\begin{wrapfigure}{R}{0.45\textwidth}
+\begin{figure}%{R}{0.45\textwidth}
+\centering
 \fbox{\includegraphics[scale=0.3]{graphs/paralloy architecture}}
 \caption{Diagrama de componentes y conectores del \ssolver distribuido}
 \label{fig:arquitectura}
-\end{wrapfigure}
+\end{figure}
 
 \subsection{\bend}
 \label{sec:backend}
@@ -437,6 +438,7 @@ class Strategy(object):
 	def on_shutdown()
 \end{lstlisting}
 \end{footnotesize}
+\vspace{-3em}
 \end{wrapfigure}
 
 En cuanto a las estrategias, se siguió un modelo reactivo (\emph{eventos}).
