@@ -437,7 +437,7 @@ indica la cantidad de repeticiones realizadas para cada problema. La columna
 $$\frac{\text{seq.~walltime~(s)}}{\text{avg.~par.~walltime~(s)}}$$ Este valor
 denota la mejora relativa obtenida mediante la utilización de nuestra
 herramienta. La columna ``efficiency'' es el resultado de la siguiente división:
-$$\frac{\text{``speedup''}}{\text{\#\ws}}$$
+$$\frac{\text{speedup}}{\text{\#\ws}}$$
 Esta medida indica la ganancia neta de \emph{speedup} por \w utilizado.
 
 \begin{table}
@@ -456,7 +456,7 @@ Esta medida indica la ganancia neta de \emph{speedup} por \w utilizado.
 		Closure	&	13	&	16261.35	& 5 &	4362.61	&	3.73x	&	0.06 \\
 		\cmidrule(r){1-7}
 		MarkGC Soundness2	&	9	&	217.31	&	10 & 200.85	&	1.08x	&	0.02 \\
-		MarkGC Soundness2	&	10	&	 2855.3	&	7 &1376.89	&	2.07x	&	0.03 \\
+		MarkGC Soundness2	&	10	&	 2855.30	&	7 &1376.89	&	2.07x	&	0.03 \\
 		\cmidrule(r){1-7}
 		MarkGC Completeness	&	9	&	18643.06	&	5 & 1825.60	&	10.21x	&	0.16 \\
 		\bottomrule
@@ -473,6 +473,14 @@ realizar la mayor cantidad de repeticiones posibles para cada problema. Por lo
 tanto, la cantidad de repeticiones para los problemas más grandes fue menor
 que la de los problemas más pequeños.
 
-El primer punto a destacar es que en todos \todo{qué hacer con iolus? mencionarlo o no? cómo?}los casos
-nuestra herramienta consiguió una disminución en el tiempo requerido para
-resolver un problema. 
+\begin{itemize}
+	\item si partimos de la base de que tenemos \hard disponible 
+	\item Los speedups conseguidos para cada problema a medida que crece el scope son crecientes en todos los casos.
+	\item Esto impacta en mayor eficiencia con el scope
+	\item Baja eficiencia en general
+\end{itemize}
+
+En cuanto a los resultados obtenidos se observa que en general la herramienta
+consiguió disminuir el tiempo necesario para resolver un problema, aunque las
+proporciones en que logró hacerlo son sumamente diversas. Las mismas varían
+desde prácticamente nada
