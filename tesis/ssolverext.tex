@@ -403,21 +403,35 @@ $w_{overwhelmed}$. Vale la pena notar que si un \w solicitara las $n$ tareas que
 En esta sección presentamos los experimentos realizados con el fin de evaluar
 el desempeño de nuestra herramienta.  Los experimentos se ejecutaron en el
 \cluster CeCAR \cite{cecar??}. Se utilizaron 17 equipos,
-cada uno de los cuales cuenta con dos procesador \texttt{Intel Dual Core Xeon
+cada uno de los cuales cuenta con dos procesadores \texttt{Intel Dual Core Xeon
 5030 2.67 Ghz}, \texttt{2 GB} de memoria RAM y un disco rígido \texttt{Western
 Digital WD800JD 80Gb SATA 7200RPM}. Uno de los equipos fue utilizado para
 ejecutar el tablero de control y el \master, mientras que se ejecutaron 4 \ws
 en cada uno de los restantes 16 equipos totalizando 64 \ws.
 
+
 \subsection{Casos de estudio}
+
+Debido a la orientación del grupo de investigación, nos interesa evaluar la herramienta principalmente en lo que respecta a su uso para la verificación formal de software. En la práctica, nos interesa hacerlo sobre todo para problemas resultantes de la traducción de especificaciones de sistemas y propiedades en el lenguaje Alloy; esto es, de modo de evaluar la viabilidad de usar la herramienta para capitalizar la disponibilidad de \emph{hardware} ocioso y reemplazar el uso de la herramienta secuencial Alloy Analyzer en aquellos casos en que esta última demora demasiado en demostrar una propiedad (o en que sus capacidades directamente se ven excedidas, de modo que el problema no resulta tratable en secuencial).
+
+Otro aspecto de los problemas difíciles provenientes de especificaciones Alloy que resulta interesante para conformar un \emph{benchmark} es que pueden ser generados en distintos grados de dificultad a medida que se elevan las cotas para los dominios de datos atómicos sobre los que predican. Como se mencionó en el Cap.~\ref{introduccion}, para que el análisis resulte decidible se procede a acotar dichos dominios (así, las propiedades se demuestran automáticamente pero, por ejemplo, ``\ldots para hasta 12 trenes, 8 semáforos y 8 pasos a nivel''). En el caso de Alloy, estas cotas suelen denominarse \emph{scopes}. En otras palabras, el problema de verificar cierta propiedad sobre cierto modelo da origen a una sucesión o familia de problemas (para \emph{scopes} cada vez mayores) que son estructuralmente similares pero ostentan cantidades de variables, cláusulas y tiempos de \emph{solving} secuencial exponencialmente crecientes.
+
+Otra potencial fuente de problemas que resulta natural considerar son los \emph{benchmarks} de las competencias anuales de \ssolving. Sin embargo, la forma en que tradicionalmente se evalúan las herramientas en dichos eventos consiste en medir, para cada \ssolver $S$ y para cada cantidad de tiempo $t$, la \emph{cantidad} de problemas que $S$ logra resolver en $t$ segundos. (Esto se debe a que algunos problemas fáciles para un \emph{solver} son difíciles para otros y viceversa.) En consecuencia, los \emph{benchmarks} de las competencias suelen incluir gran cantidad de problemas muy pequeños, pequeños y medianos cuyo tratamiento optimizado escapa al alcance de nuestra herramienta.
+
+
+\subsubsection{\emph{Garbage collection} usando Mark \& Sweep}
+
+Entre los casos de estudio provistos con el programa Alloy Analyzer se incluye un modelo formal de una implementación de \emph{garbage collection} basada en el algoritmo conocido como ``mark and sweep''. El modelo incluye una representación del \emph{heap} del sistema, dominios de datos \texttt{HeapState} y \texttt{Node}, una especificación del algoritmo y propiedades \texttt{Soundness} y \texttt{Completeness}.
+
+La propiedad de \texttt{Soundness} afirma que, tras haber ejecutado el algoritmo de \emph{garbage collection}, no hay intersección entre el conjunto de nodos alcanzables en el \emph{heap} y la lista de nodos libres. La propiedad de \texttt{Completeness} afirma que, tras haber ejecutado el algoritmo, todo nodo inalcanzable en el \emph{heap} efectivamente aparece en la lista de nodos libres.
+
+Hemos incluido ambos problemas en el \emph{benchmark} para la evaluación de la herramienta. Ambos son problemas difíciles que requieren exponencialmente más tiempo de análisis conforme crece la cantidad de \texttt{Node}s en el \emph{scope}. Sin embargo, el segundo problema (el de demostrar \texttt{Completeness}) exhibe una curva de dificultad aún mucho más pronunciada que el primero.
+
 
 \subsubsection{Ruteo en redes heterogéneas}
 
 Este caso proviene de un modelo formal de ruteo en redes heterogéneas, desarrollado en AT\&T, que involucra agentes móviles, identificadores, rutas y múltiples dominios de red. El modelo en cuestión incluye diversas propiedades, de las cuales la última, \texttt{StructureSufficientForPairReturnability}, resulta particularmente costosa de demostrar. Para más detalles referimos al lector al artículo ``Compositional Binding in Network Domains'' \cite{paperPamela??}.
 
-\subsubsection{\emph{Garbage collection} usando Mark \& Sweep}
-
-Entre los casos de estudio provistos con el programa Alloy Analyzer se incluye un modelo formal de una implementación de \emph{garbage collection} basada en el algoritmo conocido como ``mark and sweep''. El modelo incluye una representación del \emph{heap} del sistema, dominios de datos \texttt{HeapState} y \texttt{Node}, una especificación del algoritmo y propiedades \emph{Soundness} y \emph{Completeness} que aseveran la correctitud y completitud del algoritmo.
 
 \subsubsection{Clausura relacional reflexo-transitiva}
 
@@ -479,6 +493,7 @@ Respecto a los resultados obtenidos, el speedup que se exhibe en la tabla, pero 
 \begin{itemize}
 \item en general el speedup es creciente respecto del tamaño de los problemas que conforman el \emph{benchmark} indicando esto que el enfoque resulta apropiado para resolver problemas de gran tamaño que no son tratables en el contexto de \ssolving secuencial,
 \item salvo los casos extremadamente positivos correspondientes al caso de estudio Pamela, y el caso MarkGC Soundness2 para scope 9, en que no se percibe mejoría, el rendimiento del enfoque de resolución reporta una ganancia mínima de $2.07x$, un promedio de $4.35x$ y una ganancia máxima de $10,21x$.
+\item 
 \end{itemize}
 
 La Tabla~\ref{tab:incremental} muestra el impacto que tiene el agregado de nuevas unidades de cómputo sobre el desempeño del nodo que opera de Master en el sistema. Cabe mencionar que este nodo, y las tareas que realiza, son el único potencial cuello de botella que presenta la herramienta. De los datos consignados se puede observar no sólo una utilización objetivamente muy baja de los recursos disponibles en dicho nodo, sino que el agregado de nuevos \w de cómputo no exhibe un crecimiento que ponga en riesgo la escalabilidad de la herramienta.
