@@ -409,15 +409,20 @@ Digital WD800JD 80Gb SATA 7200RPM}. Uno de los equipos fue utilizado para
 ejecutar el tablero de control y el \master, mientras que se ejecutaron 4 \ws
 en cada uno de los restantes 16 equipos totalizando 64 \ws.
 
+
 \subsection{Casos de estudio}
+
+\subsubsection{\emph{Garbage collection} usando Mark \& Sweep}
+
+Entre los casos de estudio provistos con el programa Alloy Analyzer se incluye un modelo formal de una implementación de \emph{garbage collection} basada en el algoritmo conocido como ``mark and sweep''. El modelo incluye una representación del \emph{heap} del sistema, dominios de datos \texttt{HeapState} y \texttt{Node}, una especificación del algoritmo y propiedades \texttt{Soundness} y \texttt{Completeness}.
+
+La propiedad de \texttt{Soundness} afirma que, tras haber ejecutado el algoritmo de \emph{garbage collection}, no hay intersección entre el conjunto de nodos alcanzables en el \emph{heap} y la lista de nodos libres. La propiedad de \texttt{Completeness} afirma que, tras haber ejecutado el algoritmo, todo nodo inalcanzable en el \emph{heap} efectivamente aparece en la lista de nodos libres.
+
 
 \subsubsection{Ruteo en redes heterogéneas}
 
 Este caso proviene de un modelo formal de ruteo en redes heterogéneas, desarrollado en AT\&T, que involucra agentes móviles, identificadores, rutas y múltiples dominios de red. El modelo en cuestión incluye diversas propiedades, de las cuales la última, \texttt{StructureSufficientForPairReturnability}, resulta particularmente costosa de demostrar. Para más detalles referimos al lector al artículo ``Compositional Binding in Network Domains'' \cite{paperPamela??}.
 
-\subsubsection{\emph{Garbage collection} usando Mark \& Sweep}
-
-Entre los casos de estudio provistos con el programa Alloy Analyzer se incluye un modelo formal de una implementación de \emph{garbage collection} basada en el algoritmo conocido como ``mark and sweep''. El modelo incluye una representación del \emph{heap} del sistema, dominios de datos \texttt{HeapState} y \texttt{Node}, una especificación del algoritmo y propiedades \emph{Soundness} y \emph{Completeness} que aseveran la correctitud y completitud del algoritmo.
 
 \subsubsection{Clausura relacional reflexo-transitiva}
 
