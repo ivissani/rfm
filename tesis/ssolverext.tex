@@ -487,14 +487,30 @@ realizar la mayor cantidad de repeticiones posibles para cada problema. Por lo
 tanto, la cantidad de repeticiones para los problemas más grandes fue menor
 que la de los problemas más pequeños.
 
+Una de las hipótesis de trabajo es la disponibilidad de \hard y, en particular, la de clusters de cómputo intensivo que pueden ser usado para validar y/o verificar software. 
+
+Respecto a los resultados obtenidos, el speedup que se exhibe en la tabla, pero sobre todo en relación a los datos consignados en la columna \emph{efficiency}, no sólo no muestra una mejora importante si se considera que es la resultante de utilizar 17 unidades de cómputo; pero debe destacarse que:
 \begin{itemize}
-	\item si partimos de la base de que tenemos \hard disponible 
-	\item Los speedups conseguidos para cada problema a medida que crece el scope son crecientes en todos los casos.
-	\item Esto impacta en mayor eficiencia con el scope
-	\item Baja eficiencia en general
+\item en general el speedup es creciente respecto del tamaño de los problemas que conforman el \emph{benchmark} indicando esto que el enfoque resulta apropiado para resolver problemas de gran tamaño que no son tratables en el contexto de \ssolving secuencial,
+\item salvo los casos extremadamente positivos correspondientes al caso de estudio Pamela, y el caso MarkGC Soundness2 para scope 9, en que no se percibe mejoría, el rendimiento del enfoque de resolución reporta una ganancia mínima de $2.07x$, un promedio de $4.35x$ y una ganancia máxima de $10,21x$.
+\item 
 \end{itemize}
 
-En cuanto a los resultados obtenidos se observa que en general la herramienta
-consiguió disminuir el tiempo necesario para resolver un problema, aunque las
-proporciones en que logró hacerlo son sumamente diversas. Las mismas varían
-desde prácticamente nada
+La Tabla~\ref{tab:incremental} muestra el impacto que tiene el agregado de nuevas unidades de cómputo sobre el desempeño del nodo que opera de Master en el sistema. Cabe mencionar que este nodo, y las tareas que realiza, son el único potencial cuello de botella que presenta la herramienta. De los datos consignados se puede observar no sólo una utilización objetivamente muy baja de los recursos disponibles en dicho nodo, sino que el agregado de nuevos \w de cómputo no exhibe un crecimiento que ponga en riesgo la escalabilidad de la herramienta.
+
+\begin{table}
+	\footnotesize
+	\begin{tabular}{lrrrrrr}
+		\toprule
+		problem	&	scope	&	seq. walltime (s)	&	reps. & avg. par.	&	speedup	&	efficiency \\
+			&		&	&	 & walltime (s)	&		&	 \\
+		\cmidrule(r){1-7}
+		\bottomrule
+	\end{tabular}
+	\caption{Rendimiento del nodo Master a medida que se agregan \w}
+	\label{tab:incremental}
+\end{table}
+
+En términos generales la herramienta consiguió disminuir el tiempo necesario para resolver un problema pero en casi todos los casos lejos del ideal esperado en proporción a la cantidad de nodos agregados. Respecto de esto nuestra conjetura es que la partición de un problema en subproblemas independiza dos partes de su problema ``padre'' y las considera como nuevas tareas que no sólo son independientes entre sí, sino que por la forma en la que se resuelve el problema se las considera con independencia del proceso de \solving del problema ``padre''. Si aceptamos la hipótesis de que las cláusulas aprendidas guían al \ssolver en el recorrido del espacio de valuaciones para intentar evitar aquellas que no producirán un resultado, todas aquellas cláusulas que el \\solver aprendió a lo largo del proceso de \solving del padre debieran jugar un rol en la posibilidad resolver los subproblemas que de él derivan.
+
+Así, en el capítulo siguiente afrontaremos pa tarea de evaluar la viabilidad de implementar técnicas de aprendizaje de cláusulas guiada por conflictos como parte de la herramienta que hemos desarrollado
