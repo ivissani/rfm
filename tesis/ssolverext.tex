@@ -8,90 +8,6 @@ herramienta. Además señalaremos las decisiones adoptadas por nosotros en cada
 uno de los puntos relevantes.
 
 \subsection{Consideraciones sobre la estrategia}
-% - Noción de problema difícil vs problema fácil
-% - Imposibilidad de determinar o siquiera estimar eso a priori
-% - Enorme varianza entre los subproblemas de un problema
-
-% - Cuándo declarar que un problema es "demasiado difícil" (para
-% atacarlo sin partirlo)?
-% - Cuáles de los solvings en curso abortar? Cuántos? Cuándo?
-
-%         - Imposibilidad de determinar o siquiera estimar a priori (en base a
-%                 criterios estáticos) la dificultad de un (sub)problema.
-
-%         - No sabemos cuánto va a tardar.
-%         - No sabemos si es fácil o difícil.
-
-%         - Partir temprano algo fácil (una rama que con poco más se cerraba)
-%           es un error que se paga caro, sobre todo si se repite recursivamente.
-
-%         - Invertir mucho esfuerzo en algo difícil y encima no lograr cerrarlo
-%           (sólo para terminar partiéndolo igual, y mucho después) es otro
-%           error que se paga caro, sobre todo si se repite recursivamente.
-
-%         - Invertir mucho esfuerzo en algo difícil hasta cerrarlo sin partirlo
-%           no siempre es una buena idea (atenta contra el paralelismo,
-%           sube el camino crítico, etc).
-
-%         - No existe un valor de TO prefijado que sea adecuado para cualquier
-%           problema raíz (y no queremos que el usuario tenga que proveer uno).
-
-%         - Incluso para cierto problema raíz R, no existe un único valor de TO
-%           que sea adecuado durante todo el transcurso de la corrida.
-
-%                 - Cada vez que se parte un subproblema (sup. elección razonable de
-%                   vars) se obtienen hijos más fáciles, pero
-
-%                     - con mucha varianza en su distribución [tablita pamela8?]
-
-%                     - con tan poca predecibilidad como dijimos antes respecto de
-%                       la tasa (hijo_mas_caro/padre)
-
-%                 - O sea que lo único que realmente sabemos es que "se van haciendo
-%                   más fáciles" (pero no a qué velocidad, ni cuánto más rápido a lo
-%                   largo de una rama vs. de otra, etc).
-
-%         => Es necesario algún criterio dinámico / adaptativo / etc.
-
-%         - Podría basarse en
-%                 - aprendizaje sobre el problema (qué pasó hasta ahora otras veces, etc)
-%                 - feedback loop observando métricas del comportamiento/estado del sistema
-
-
-% - Cómo partir un problema demasiado difícil?
-
-%         - Cuáles y cuántas variables levantar
-
-%                 => Gran Temón en sat-solving, recontra determinante para la
-%                   cant/dificultad/distribución de los subproblemas, etc
-%                   VSIDS, etc.
-
-%                 => Nivel de agresividad, fanout, potencial explosión;
-%                         trade-off "muchos" vs "más fáciles" (ojalá!);
-%                         hay que tener cuidado con el fanout recursivo.
-
-%         - Filtrado de subproblemas triviales
-
-%                 - Rara vez se da el peor caso 2^n totalmente denso
-%                 - Muchas veces se puede lograr mucho menos!
-%                 - Hay maneras muy baratas de filtrar los muy triviales
-%                 - Hay maneras (no tan) baratas de filtrar los (no tan) triviales
-%                 => Trade-off:
-%                         - escaso filtrado =>
-%                             overhead innecesario por proliferación de tareas fáciles evitables
-%                         - exceso de esfuerzo en filtrado =>
-%                             excesiva centralización de costo computacional que podría distribuirse
-
-
-% - Ni bien alguien queda ocioso debe asignársele más trabajo.
-
-% - Decisión importante: ¿cuál de todas las tareas pendientes es la "próxima"?
-%   => afecta cómo se recorre el espacio de búsqueda
-%   => termina afectando el scheduling (en presencia de feedback loops etc)
-
-% - Además, minimizar costos de movimientos de tareas innecesarios
-%   => si ese alguien ya tiene trabajo pendiente local, podría ser bueno
-%      que se le asigne lo mejor posible dentro de lo local
 
 Comenzaremos esta sección desglosando las principales cuestiones a
 resolver por una estrategia completamente automática para nuestra herramienta.
@@ -393,7 +309,7 @@ cantidad de tareas transferidas en esta ocasión será:
 La idea detrás de esto es que $w_{idle}$
 obtiene \emph{la porción que le corresponde} de las tareas de
 $w_{overwhelmed}$. Para evitar transferencias extremadamente largas, la
-cantidad expresada en Eq.-\ref{eq:share} satura en $10$ tareas. Para evitar
+cantidad expresada en Eq.~\ref{eq:share} satura en $10$ tareas. Para evitar
 una mala distribución, las tareas que conforman una porción a ser transferida
 son seleccionadas al azar del conjunto de tareas pendientes de
 $w_{overwhelmed}$. Vale la pena notar que si un \w solicitara las $n$ tareas que mejor califican según el criterio de elección, éste concentraría un conjunto de tareas de alta prioridad, generando un potencial problema de contención.
@@ -461,19 +377,19 @@ Esta medida indica la ganancia neta de \emph{speedup} por \w utilizado.
 		problem	&	scope	&	seq. walltime (s)	&	reps. & avg. par.	&	speedup	&	efficiency \\
 			&		&	&	 & walltime (s)	&		&	 \\
 		\cmidrule(r){1-7}
-		Pamela	&	8	&	308.26	&		7 & 60.46	& 5.10x	&	0.08 \\
-		Pamela	&	9	&	76168.16	&	6& 407.34	& 	186.99x	&	2.92 \\
-		Pamela	&	$^*$10	&	$>$1209600.00	&	5 & 5046.84	&	$>$239.67x	&	$>$3.74 \\
+		Routing	&	8	&	308.26	&		7 & 60.46	& 5.10x	&	0.08 \\
+		Routing	&	9	&	76168.16	&	6& 407.34	& 	186.99x	&	2.92 \\
+		Routing	&	$^*$10	&	$>$1209600.00	&	5 & 5046.84	&	$>$239.67x	&	$>$3.74 \\
 		\cmidrule(r){1-7}
 		Closure	&	11	&	749.65	&	14 & 291.28	&	2.57x	&	0.04 \\
 		Closure	&	12	&	3983.36	&	5 & 1914.45	&	2.08x	&	0.03 \\
 		Closure	&	13	&	16261.35	& 5 &	4362.61	&	3.73x	&	0.06 \\
 		\cmidrule(r){1-7}
-		MarkGC Soundness2	&	9	&	217.31	&	10 & 200.85	&	1.08x	&	0.02 \\
-		MarkGC Soundness2	&	10	&	 2855.30	&	7 &1376.89	&	2.07x	&	0.03 \\
+		GC Soundness2	&	9	&	217.31	&	10 & 200.85	&	1.08x	&	0.02 \\
+		GC Soundness2	&	10	&	 2855.30	&	7 &1376.89	&	2.07x	&	0.03 \\
 		\cmidrule(r){1-7}
-		MarkGC Completeness	&	8	&	180.25	&	7 & 61.50	&	2.93x	&	0.05 \\
-		MarkGC Completeness	&	9	&	18643.06	&	5 & 1825.60	&	10.21x	&	0.16 \\
+		GC Completeness	&	8	&	180.25	&	7 & 61.50	&	2.93x	&	0.05 \\
+		GC Completeness	&	9	&	18643.06	&	5 & 1825.60	&	10.21x	&	0.16 \\
 		\bottomrule
 		\\
 		\multicolumn{7}{l}{\begin{tiny}$^*$: Se ejecutó por 14 días sin que el \ssolver secuencial consiga un resultado\end{tiny}}
@@ -488,22 +404,44 @@ realizar la mayor cantidad de repeticiones posibles para cada problema. Por lo
 tanto, la cantidad de repeticiones para los problemas más grandes fue menor
 que la de los problemas más pequeños.
 
-Una de las hipótesis de trabajo es la disponibilidad de \hard y, en particular, la de clusters de cómputo intensivo que pueden ser usado para validar y/o verificar software. 
+Una de las hipótesis de trabajo es la disponibilidad de \hard y, en
+particular, la de \emph{clusters} de cómputo intensivo que pueden ser usados
+para validar y/o verificar software.
 
-Respecto a los resultados obtenidos, el \emph{speedup} que se exhibe en la tabla, pero sobre todo en relación a los datos consignados en la columna \emph{efficiency}, no sólo no muestra una mejora importante si se considera que es la resultante de utilizar 17 unidades de cómputo; pero debe destacarse que:
+Respecto a los resultados obtenidos, el \emph{speedup} que se exhibe en la
+tabla, tal como lo evidencian los datos consignados en la columna
+\emph{efficiency}, a menudo dista considerablemente del ideal si se considera
+que es resultante de utilizar 17 unidades de cómputo. Sin embargo debe
+destacarse que:
+
 \begin{itemize}
-\item en general el \emph{speedup} es creciente respecto del tamaño de los problemas que conforman el \emph{benchmark} indicando esto que el enfoque resulta apropiado para resolver problemas de gran tamaño que no son tratables en el contexto de \ssolving secuencial,
-\item salvo los casos extremadamente positivos correspondientes al caso de estudio Pamela, y el caso MarkGC Soundness2 para scope 9, en que no se percibe mejoría, el rendimiento del enfoque de resolución reporta una ganancia mínima de $2.07x$, un promedio de $4.35x$ y una ganancia máxima de $10,21x$.
+\item en general el \emph{speedup} es creciente respecto del tamaño de los problemas que conforman el \emph{benchmark}, indicando esto que el enfoque resulta apropiado para resolver problemas de gran tamaño que no son tratables en el contexto de \ssolving secuencial,
+\item si exceptuamos los casos extremadamente positivos --Routing--, y el caso GC Soundness2 para scope 9 en el que la mejoría percibida es muy baja, el rendimiento del enfoque reporta una ganancia mínima de $2.07x$, promedio de $4.35x$ y una ganancia máxima de $10,21x$.
 \end{itemize}
+
+\subsubsection{Uso de recursos en componentes centralizadas}
+
+En la Sec.~\ref{sec:arquitectura} presentamos la arquitectura de la
+herramienta. En ella puede observarse que existen dos puntos centralizados de
+carga: el \master y el Tablero de control. Cabe entonces preguntarse si
+estos puntos centralizados no representan una amenaza a la capacidad del
+sistema de incorporar más unidades de cómputo en el futuro.
 
 La Tabla~\ref{tab:incremental} muestra el impacto que tiene el agregado de
 nuevas unidades de cómputo sobre el desempeño del nodo en el que fueron
-ejecutados tanto el \master como el Tablero de control. Cabe mencionar que
-este nodo, y las tareas que realiza, son el único potencial cuello de botella
-que presenta la herramienta. De los datos consignados se puede observar no
-sólo una utilización objetivamente muy baja de los recursos disponibles en
-dicho nodo, sino que el agregado de nuevos \w de cómputo no exhibe un
-crecimiento que ponga en riesgo la escalabilidad de la herramienta.
+ejecutados tanto el \master como el Tablero de control. En los datos consignados se
+puede observar que el impacto de estas componentes en la carga y en el uso de
+memoria del sistema son (y se mantienen) extremadamente bajos. Si bien lamentablemente
+no pudimos contar con grandes cantidades de nodos adicionales para garantizar
+que estos resultados se mantengan a gran escala, la tendencia parece confirmar
+que es posible incrementar considerablemente la cantidad de unidades de cómputo
+utilizadas sin que las componentes en cuestión se conviertan en un factor limitante.
+
+%Cabe mencionar que este nodo, y las tareas que realiza, son los únicos potenciales cuellos de botella
+%que presenta la herramienta. De los datos consignados se puede observar no
+%sólo una utilización objetivamente muy baja de los recursos disponibles en
+%dicho nodo, sino que el agregado de nuevos \w de cómputo no exhibe un
+%crecimiento que ponga en riesgo la escalabilidad de la herramienta.
 
 \begin{table}
 	\centering
@@ -513,13 +451,15 @@ crecimiento que ponga en riesgo la escalabilidad de la herramienta.
 		\toprule	
 			max. memory(1) (KB)	&	11344	&	11328	&	12152	&	10844 \\
 			max. memory(2) (KB)	&	12784	&	12696	&	12728 	&	13104 \\
-			system load	(\%)	&	$<1$	&	$<1$	&	$<1$ 	&	$<1$ \\
+			avg. system load	&	$<1\%$	&	$<1\%$	&	$<1\%$ 	&	$<1\%$ \\
 		\bottomrule \\
 		\multicolumn{5}{l}{\begin{tiny}(1): Tablero de control. (2) \master \end{tiny}}
 	\end{tabular}
 	\caption{Utilización de recursos del Tablero de control y del \master para cantidad de \ws crecientes}
 	\label{tab:incremental}
 \end{table}
+
+\subsection{Conclusiones}
 
 En términos generales la herramienta consiguió disminuir el tiempo necesario
 para resolver un problema pero en casi todos los casos lejos del ideal
