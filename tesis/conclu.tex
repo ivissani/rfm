@@ -1,3 +1,43 @@
 %!TEX root = tesis.tex
 \chapter{Conclusiones y trabajo futuro}
 \label{conclu}
+
+\section{Trabajo futuro}
+
+[Va punteo!]
+
+\begin{itemize}
+
+\item Seguir refinando la estrategia automática de toma de decisiones.
+\item Estudiar cómo convertir cada numerito tipo 0.15 en un parámetro autoajustable.
+
+	\begin{itemize}
+		\item Autodetección de etapas: ramp-up, meseta, ramp-down, etc.
+		\item Mejorar la detección (y posiblemente la definición) de ``progreso'' observando el estado de las colas y la etapa actual de la corrida.
+		\item Estimar el nivel de agresividad de cada split (cant. de variables, cant. de subproblemas generados), también teniendo en cuenta el estado de las colas y la etapa actual de la corrida.
+		\item Autodecidir no sólo cuándo partir un problema sino cuántos partir (actualmente hay a lo sumo 1 split cada $n$ segundos).
+		\item Intentar predecir cuáles podría convenir splitear temprano (por ejemplo porque son los últimos de su camada, etc)
+	\end{itemize}
+
+\item Evaluar la herramienta en clusters más grandes.
+
+	\begin{itemize}
+	\item Medir cómo escala el rendimiento al agregar más y más hardware.
+	\item Forzar la llegada al punto en que los componentes centralizados sí se vuelvan un factor limitante; ver cuándo (¿cientos? ¿miles?).
+	\item Ver si surgen otros factores limitantes que no hayamos imaginado.
+	\end{itemize}
+
+\item Profundizar en el diseño de criterios de learning.
+
+	\begin{itemize}
+	\item Correr más experimentos, sobre mayor diversidad de casos de estudio y para scopes más grandes.
+	\item Descartar los criterios que ya confirmamos que no sirven.
+	\item Pensar nuevos en base a los que dieron mejores resultados. 
+	\end{itemize}
+
+\item Pensar cómo hacer algo equivalente al conflict analysis pero en modo distribuido, de modo que permita hacer algo análogo a backjumping (que en distribuido podría traducirse en la eliminación de subproblemas de las colas y/o cuyo análisis esté en curso).
+
+\item Considerar desacoplar el abort (decidir que algo es demasiado difícil y no vale la pena) del split (crear los subproblemas). Esto es complicado, pero podría valer la pena\ldots? [La verdad, no sé. Sin learning, quizá, pero con learning no parece tener mucho sentido, ¿no?]
+
+\end{itemize}
+
