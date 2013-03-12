@@ -40,6 +40,18 @@ Debido a lo antedicho, no es evidente que una cláusula aprendida durante el an�
 Como consecuencia de los factores anteriormente expuestos, vemos que resulta natural considerar la \emph{herencia} de cláusulas aprendidas del problema padre a sus subproblemas hijos como metodología para compartir conocimiento de manera controlada \ldots ojalá acumulable \ldots etc \ldots
 
 
+\subsubsection{¿Y cuántas/cuáles heredamos\ldots?}
+
+Que cada hijo herede TODAS las cláusulas aprendidas por su padre probablemente sea demasiado / contraproducente:
+\begin{itemize}
+\item Por algo los solvers secuenciales van purgando: es sabido que zarparse no es bueno.
+\item OK, el padre sí llegó a todo eso, pero por algo los solvers secuenciales van subiendo de a poco el máximo de aprendidas: es sabido que zarparse desde el primer momento no es buena idea. Y estamos suponiendo que los subproblemas serán más chicos/fáciles que su problema padre.
+\item Y además, la herencia no es inmediata sino mediata. Jugarse a heredar todo implica jugarse a pagar el precio de bajar todo eso a disco, guardar todo eso en storage/pending, leer todo eso de disco, etc. Bocha overhead.
+\end{itemize}
+
+Por lo tanto vamos a necesitar criterios de selección, subconjunto, etc.
+
+
 \section{Prueba de concepto}
 
 \subsubsection{Objetivos y metodología}
