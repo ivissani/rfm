@@ -58,7 +58,7 @@ $v\cup\{u\leftarrow1\} \models \varphi \bigwedge C$ de lo que se deduce que $v
 
 Más aún, lo antedicho vale también para cualquier subconjunto de $C$. Esto
 induce una manera \emph{natural} de reutilización de las cláusulas aprendidas
-que llamaremos \emph{herencia}. Este mecanismo consiste en que al generar
+que llamaremos \emph{herencia}. Este mecanismo consiste en que, al generar
 nuevos subproblemas a partir de un problema padre \nonemptytask, los
 subproblemas hijos son generados con un subconjunto de $C$ como conjunto de
 cláusulas aprendidas. Llamaremos \emph{criterio} a cada forma distinta de
@@ -67,11 +67,12 @@ obtener un subconjunto a partir de un conjunto de cláusulas $C$.
 
 \subsubsection{Consideraciones de escalabilidad}
 
-Además de la naturalidad inducidad por el esquema de particionado, nos
-interesa también evitar cualquier enfoque que introduzca nuevos cuellos de
-botella en la arquitectura. Por ejemplo, no sería aceptable la incorporación
-de una gran base de datos centralizada en la que todos los \ws almacenen las
-cláusulas que van aprendiendo y que todos los \ws deban consultar.
+Más allá de la naturalidad del enfoque inducido por el esquema de
+particionado, nos interesa también evitar cualquier método que introduzca
+nuevos cuellos de botella en la arquitectura. Por ejemplo, no sería aceptable
+la incorporación de una gran base de datos centralizada en la que todos los
+\ws almacenen las cláusulas que van aprendiendo y que todos los \ws deban
+consultar.
 
 Tampoco sería aceptable un grafo completo de comunicación permanente para
 lograr ese mismo fin, es decir, hacer que cada \w le comunique (o consulte) a
@@ -143,7 +144,7 @@ heredar la totalidad de las cláusulas aprendidas del problema padre en cada
 uno de los subproblemas hijos, nos obligaría a pagar un alto costo debido a la
 escritura y posterior lectura --hacia y desde memoria secundaria-- de cada
 unos de estos conjuntos (potencialmente muy grandes) más el costo de la
-posible transmición por medio de la red. Esto atentaría directamente contra el
+posible transmisión por medio de la red. Esto atentaría directamente contra el
 desempeño de nuestra herramienta, incrementando en demasía los costos
 \emph{fijos} asociados al enfoque.
 
@@ -177,6 +178,31 @@ tiempo del camino crítico (determinado por el subproblema que más tiempo tomó
 
 \subsubsection{Resultados obtenidos}
 
+A continuación presentamos los resultados obtenidos en la realización de la
+prueba de concepto. Las Fig.~\ref{perchap8}~a~\ref{perchasound8}  se organizan
+de la siguiente manera. Cada figura corresponde a la ejecución de distintos
+criterios de selección de cláusulas para un problema particular. Cada par de
+columnas denotadas con un número decimal corresponde a los resultados
+obtenidos con uno de los órdenes pseudoaleatorios. La columna de la izquierda
+de cada par de columnas indica el tiempo en segundos requerido para resolver
+el camino crítico. Mientras tanto la columna de la derecha indica la sumatoria
+del total de tiempos requerido para resolver todos los subproblemas. A su vez,
+el último par de columnas de cada figura, denotado con la leyenda ``AVERAGE''
+contiene los promedios de los tiempos obtenidos.
+
+No nos interesaba en esta etapa evaluar cuál o cuáles de los criterios eran
+mejores. Por lo tanto obviamos la denominación de los mismos en esta
+presentación. Sin embargo es importante aclarar que la última fila contiene
+los tiempos obtenidos para el criterio nulo, es decir aquel criterio que
+devuelve siempre el conjunto vacío.
+
+El coloreo de las tablas se realizó utilizando una escala desde el color
+amarillo hacia el rojo para aquellos criterios que requirieron más tiempo que
+el criterio nulo, mientras que se usó una escala del amarillo hacia el verde
+para los que requirieron menos tiempo. La escala hacia el color rojo se saturo
+en dos veces el tiempo requerido por el criterio nulo mientras que la escala
+hacia el verde se saturó $0.5$ veces el tiempo requerido por el criterio nulo.
+
 \begin{figure}
 	\includegraphics[width=\textwidth]{resultados/p8_percha.png}
 	\caption{Routing \emph{scope} 8}
@@ -204,12 +230,17 @@ tiempo del camino crítico (determinado por el subproblema que más tiempo tomó
 	\label{perchasound8}
 \end{figure}
 
-\subsubsection{Discusión y conclusiones}
+Como se puede observar en las figuras, los resultados obtenidos varían de
+acuerdo a cada uno de los problemas. Sin embargo es de notar que en la mayoría
+de los problemas podemos encontrar uno o varios criterios que reportan
+resultados positivos.
 
-Acá discutimos los resultados y concluimos que vale la pena probar implementar
-la herencia de cláusulas aprendidas en modo paralelo y distribuido, y
-evaluarla en un cluster posta.
-
+Estos resultados no son concluyentes. Esto se debe a que fueron obtenidos en
+experimentos en los que el problema fue partido una única vez. En cambio
+nuestro enfoque incluye la partición recursiva de un problema. Sin embargo,
+entendemos que se los puede considerar como evidencia suficientemente
+alentadora como para embarcarnos en la implementación real de esta técnica en
+el marco de nuestra herramienta.
 
 \section{Resultados experimentales}
 
