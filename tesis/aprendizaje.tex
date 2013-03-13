@@ -159,12 +159,21 @@ desempeño de nuestra herramienta, incrementando en demasía los costos
 
 \section{Prueba de concepto}
 
-\subsubsection{Objetivos y metodología}
+Con el objetivo de evaluar la pertinencia y viabilidad del enfoque propuesto
+para el aprendizaje, llevamos a cabo una prueba de concepto. 
 
-Acá explicamos para qué y de qué modo se llevaron a cabo estos experimentos
-preliminares. Que son una aproximación de orden cero a lo que podría obtenerse
-en un cluster posta haciendo todo recursivamente, que permiten evaluar a
-grosso modo la factibilidad de la idea, etc, etc.
+
+Esta prueba de concepto consistió en la ejecución de distintos problemas
+realizando una única partición y aplicando distintos criterios de selección de
+cláusulas aprendidas y comparando los tiempos obtenidos. Para ello cada
+problema fue ejecutado durante 60 segundos y luego partido levantando 5
+variables para obtener 32 subproblemas. Cada uno de los subproblemas fue
+ejecutado hasta su finalización. Para evitar la invalidez de los resultados
+cada criterio fue testeado utilizando 10 órdenes pseudoaletorios distintos que
+determinaron las variables levantadas en cada caso. Luego, se compararon tanto
+los tiempos totales de cómputo invertidos en resolver el problema, como el
+tiempo del camino crítico (determinado por el subproblema que más tiempo tomó).
+
 
 \subsubsection{Resultados obtenidos}
 
