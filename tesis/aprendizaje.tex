@@ -246,12 +246,25 @@ el marco de nuestra herramienta.
 
 \section{Resultados experimentales}
 
-En esta sección vamos a presentar los resultados posta de los experimentos
-ejecutados en distribuido.
+En esta sección mostraremos los resultados experimentales obtenidos a partir
+de la implementación de la herencia de cláusulas aprendidas.
+
+Comenzaremos por definir los criterios de selección de cláusulas utilizados.
+Cabe aclarar que de aquí en más se considerará que una cláusula aprendida
+contiene al menos $2$ literales. Llamaremos \emph{hechos} a las cláusulas de
+tamaño $1$.
 
 \subsection{Criterios de selección de cláusulas}
 
-Descripción de los distintos criterios \ldots
+Se probaron tres tipos de criterios:
+
+\begin{itemize}
+	\item Por tamaño: Este criterio refiere a la cantidad de literales intervinientes en una cláusula. La motivación de este criterio surge de la observación de que, cuanto más pequeña sea una cláusula, mayor será la porción del árbol de búsqueda que recorte. Recordemos que, en el contexto de nuestro problema, las cláusulas son disyuciones. Por lo tanto una cláusula que contiene $n$ literales nos evita recorrer una $\frac{1}{2^n}$ parte del espacio de búsqueda. Esto se debe a que, de las $2^n$ valuaciones posibles restringidas a los $n$ literales intervinientes, hay una de ellas --en particular aquella que hace que dicha cláusula sea falsa-- que es descartada gracias a la existencia de esta cláusula aprendida. Por lo tanto ninguna valuación que contenga dicha valuación restringida será viable. Por ende, a menor tamaño de cláusula, mayor será el espacio de búsqueda recortado.
+
+	\item Por actividad: En \ref{sec:longactlbd} se explicó a qué nos referimos por actividad de una cláusula. De ello se desprende que la actividad de una cláusula es un indicador de cuántas veces esa cláusula fue (parcialmente) responsable de que ocurra un conflicto. Es de esperar entonces que las cláusulas con mayor actividad sean más relevantes para evitar recorrer ciertas porciones del espacio de de búsqueda.
+
+	\item Por \emph{LBD}: También en \ref{sec:longactlbd} introdujimos la noción de \emph{Literals Block Distance}. Elegimos utilizar esta medida porque se han reportado muy buenos resultados en \ssolvers secuenciales utilizando criterios basados en esta medida.
+\end{itemize}
 
 \subsection{Resultados obtenidos}
 
