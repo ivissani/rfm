@@ -4,40 +4,48 @@
 
 \section{Trabajo futuro}
 
-[Va punteo!]
+
+\subsubsection{Mejoras en la estrategia automatizada de toma de decisiones}
+
+Uno de los aspectos más importantes a seguir refinando es la estrategia automática de toma de decisiones que hace posible la operación no supervisada del sistema. La versión actual logra evitar la mayor parte de los errores más evidentes, y así resulta capaz de llevar a buen puerto verificaciones breves, medianas y muy largas de propiedades muy diversas. Sin embargo, hay diversas capacidades que podrían ser mejoradas en futuras versiones.
+
+Ante todo, los parámetros numéricos fijos restantes que se describieron en la sección~\ref{estrategia:implementada} deberían ser reemplazados por mecanismos autoajustables. También podrían refinarse los algoritmos y las métricas utilizadas para los mecanismos que ya son autoajustables. En particular:
 
 \begin{itemize}
-
-\item Seguir refinando la estrategia automática de toma de decisiones.
-\item Estudiar cómo convertir cada numerito tipo 0.15 en un parámetro autoajustable.
-
-	\begin{itemize}
-		\item Autodetección de etapas: ramp-up, meseta, ramp-down, etc.
-		\item Mejorar la detección (y posiblemente la definición) de ``progreso'' observando el estado de las colas y la etapa actual de la corrida.
-		\item Estimar el nivel de agresividad de cada split (cant. de variables, cant. de subproblemas generados), también teniendo en cuenta el estado de las colas y la etapa actual de la corrida.
-		\item Autodecidir no sólo cuándo partir un problema sino cuántos partir (actualmente hay a lo sumo 1 split cada $n$ segundos).
-		\item Intentar predecir cuáles podría convenir splitear temprano (por ejemplo porque son los últimos de su camada, etc)
+	\item Además de métricas directas (como la cantidad de problemas producidos y consumidos) y sus derivadas de primer orden (tasas de producción y consumo sobre tiempo), considerar también las de segundo orden (velocidad de estas últimas, i.e. aceleración de las primeras).
+	\item Interpretar dichas métricas para determinar automáticamente la fase o etapa de la corrida en la que el sistema se encuentra (\emph{ramp-up}, meseta, \emph{ramp-down}, etc.), puesto que son varios los comportamientos que podrían beneficiarse variando en función de este conocimiento.
+	\item Mejorar la estimación --y posiblemente la definición-- de ``progreso'', observando con mayor cuidado las métricas extendidas antedichas.
+	\item El nivel de agresividad al partir --cuántas variables levantar, cuántos subproblemas generar como máximo en cada momento dado-- debería ser un parámetro dinámico que se autoajuste por retroalimentación en base al estado de las colas, la etapa actual de la corrida, etc.
+	\item Utilizar información histórica para lograr algún grado de predecibilidad respecto de qué subproblemas tienen mayor probabilidad de ser los más difíciles de su camada, para así partirlos más temprano.
 	\end{itemize}
 
-\item Evaluar la herramienta en clusters más grandes.
 
-	\begin{itemize}
-	\item Medir cómo escala el rendimiento al agregar más y más hardware.
-	\item Forzar la llegada al punto en que los componentes centralizados sí se vuelvan un factor limitante; ver cuándo (¿cientos? ¿miles?).
-	\item Ver si surgen otros factores limitantes que no hayamos imaginado.
-	\end{itemize}
+\subsubsection{Evaluar la herramienta en \emph{clusters} más grandes}
 
-\item Profundizar en el diseño de criterios de learning.
+Sería importante obtener acceso a (y cantidad suficiente de tiempo de cómputo en) grandes cantidades de \emph{hardware}. En primer lugar, para medir cómo escala el rendimiento conforme se agregan más y más \ws.
 
-	\begin{itemize}
-	\item Correr más experimentos, sobre mayor diversidad de casos de estudio y para scopes más grandes.
-	\item Descartar los criterios que ya confirmamos que no sirven.
-	\item Pensar nuevos en base a los que dieron mejores resultados. 
-	\end{itemize}
+También sería interesante forzar la llegada al punto en que los componentes centralizados sí se conviertan en un factor limitante, para poder determinar si eso ocurre, por ejemplo, para cientos o para miles de \ws, y para observar si surgen otros factores limitantes que no hayamos imaginado.
 
-\item Pensar cómo hacer algo equivalente al conflict analysis pero en modo distribuido, de modo que permita hacer algo análogo a backjumping (que en distribuido podría traducirse en la eliminación de subproblemas de las colas y/o cuyo análisis esté en curso).
 
-\item Considerar desacoplar el abort (decidir que algo es demasiado difícil y no vale la pena) del split (crear los subproblemas). Esto es complicado, pero podría valer la pena\ldots? [La verdad, no sé. Sin learning, quizá, pero con learning no parece tener mucho sentido, ¿no?]
+\subsubsection{Diseñar y evaluar nuevos criterios de aprendizaje}
 
-\end{itemize}
+Ante todo sería necesario correr más experimentos, sobre una mayor diversidad de casos de estudio y para \emph{scopes} más grandes; esto último requiere abundante tiempo de cómputo.
+
+Una ventaja en este sentido es el haber confirmado que ciertos criterios de aprendizaje no resultan beneficiosos. Dado que esos criterios solán ser los que más demoraban, su eliminación permitirá ahorrar tiempo de cómputo que podrá invertirse en la evaluación de nuevos criterios, diseñados en base a los que dieron mejores resultados.
+
+
+\subsubsection{Análisis de conflictos, \emph{backjumping} y eliminación de subproblemas}
+
+Sería importante pensar cómo llevar a cabo, a nivel distribuido, algo equivalente al análisis de conflictos que realizan las herramientas secuenciales (véase sección~\ref{backjumping}) de modo que permita lograr podas análogas a las que en secuencial se logran por medio del \emph{backtracking} no cronológico.
+
+En la implementación distribuida, esto podría complementar el enfoque CDCL al permitirnos demostrar, durante o tras el análisis de un subproblema, que cierta cantidad de \emph{otros} subproblemas (como ser hermanos, primos o incluso ancestros) son necesariamente insatisfacibles, y así poder eliminarlos de las colas de pendientes y/o abortar sus análisis en curso, de haberlos.
+
+
+\subsubsection{Interfaz más práctica para la toma de decisiones manual}
+
+El mecanismo actual, basado en una consola interactiva, resulta de suma utilidad para intervenciones esporádicas en momentos clave de una corrida por lo demás automática. También permite controlar una corrida en forma totalmente manual, aunque esto no resulta del todo práctico debido a la gran cantidad de comandos involucrados y su extensión.
+
+Sería mucho más amigable contar con algún tipo de interfaz gráfica en la que las tareas puedan arrastrarse entre \ws, partirse con un \emph{clic} sin necesidad de tipear largos identificadores de subproblema, etc.
+
+
 
