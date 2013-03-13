@@ -266,6 +266,39 @@ Se probaron tres tipos de criterios:
 	\item Por \emph{LBD}: También en \ref{sec:longactlbd} introdujimos la noción de \emph{Literals Block Distance}. Elegimos utilizar esta medida porque se han reportado muy buenos resultados en \ssolvers secuenciales utilizando criterios basados en esta medida.
 \end{itemize}
 
+\subsubsection{Parámetros}
+
+En el caso de los criterios por tamaño, los mismos se generaron a partir de un
+parámetro que indica el máximo tamaño que puede terner una cláusula para ser
+admitida en la herencia. En este caso, todas las cláusulas cuyo tamaño sea
+menor o igual que el indicado por el parámetro pasarán a formar parte de la
+herencia.
+
+Los criterios por \emph{LBD} funcionan de la misma manera que los basados en
+tamaño. En este caso las cláusulas admitidas en la herencia serán aquellas
+cuyo \emph{LBD} sea menor o igual al correspondiente parámetro.
+
+Los criterios por actividad se generan a partir de tres parámetros. En primer
+lugar un parámetro binario que indica si se desean conservar las cláusulas más
+activas o las menos activas. En segundo lugar un parámetro que indica qué
+porcentaje de las cláusulas aprendidas del padre se desea conservar y por
+último un parámetro binario que indica si, además, se deben conservar todas
+aquellas cláusulas aprendidas cuyo tamaño sea 2 (cláusulas binarias).
+
+La incorporación de las cláusulas binarias en los criterios por actividad
+surge del hecho de que, el \ssolver secuencial utilizado recorta su base de
+datos de claúsulas aprendidas de acuerdo a la actividad pero nunca descarta
+las cláusulas binarias.
+
+Además de los tipos de criterios mencionados también se implementó la
+posibilidad de heredar los \emph{hechos} aprendidos (o \emph{facts}). La
+herencia de los \emph{facts} se implementó de manera tal que pudiera tanto ser
+combinada con los distintos tipos de criterios como también utilizada de forma
+exclusiva como criterio de herencia.
+
+
+
+
 \subsection{Resultados obtenidos}
 
 \subsubsection{Garping del mejor criterio para cada problema}
@@ -294,7 +327,7 @@ Se probaron tres tipos de criterios:
 \\
 		GC Sound.&	10	&	 2855.30			&	7 		& 1376.89		&	2.07x	&	0.03 		& 592.54		& 4.82x		& 0.08			& 2.32
 \\
-		\cmidrule(r){1-11}x
+		\cmidrule(r){1-11}
 		GC Compl.	& 8	&	180.25				&	7 		& 61.50			&	2.93x	&	0.05 		& 36.43			& 4.95x		& 0.08			& 1.69
 \\
 		GC Compl.	& 9	&	18643.06			&	5 		& 1825.60		&	10.21x	&	0.16 		& 390.48		& 47.74x	& 0.75			& 4.68
