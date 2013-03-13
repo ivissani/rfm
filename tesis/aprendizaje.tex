@@ -34,7 +34,7 @@ aprendidas.
 
 \newcommand{\roottask}{\ensuremath{<\varphi_R, \emptyset>}\xspace}
 \newcommand{\task}{\ensuremath{<\varphi, \emptyset>}\xspace}
-\newcommand{\nonemptytask}{\ensuremath{<\varphi, \emptyset>}\xspace}
+\newcommand{\nonemptytask}{\ensuremath{<\varphi, C>}\xspace}
 
 Consideremos ahora que un problema no es ya únicamente una fórmula $\varphi$
 sino una tupla $<\varphi, C>$ donde $C$ es un conjunto de cláusulas tales que
@@ -56,45 +56,22 @@ entonces $v\cup\{u\leftarrow1\} \models \varphi$ y por lo tanto
 $v\cup\{u\leftarrow1\} \models \varphi \bigwedge C$ de lo que se deduce que $v
 \models \varphi_u \bigwedge C_u$. Lo mismo vale para el caso $\varphi_{-u}$.
 
-Recordemos que cada subproblema es identificable con un camino
-único de literales (las variables levantadas, con cierta combinación
-particular de valores de verdad asignados). De hecho, si esperamos que los
-análisis de subproblemas sean cada vez más fáciles en comparación con los de
-sus padres es justamente debido a que una mayor cantidad de variables
-proposicionales han dejado de ser variables para convertirse en constantes.
+Más aún, lo antedicho vale también para cualquier subconjunto de $C$. Esto
+induce una manera \emph{natural} de reutilización de las cláusulas aprendidas
+que llamaremos \emph{herencia}. Este mecanismo consiste en que al generar
+nuevos subproblemas a partir de un problema padre \nonemptytask, los
+subproblemas hijos son generados con un subconjunto de $C$ como conjunto de
+cláusulas aprendidas. Llamaremos \emph{criterio} a cada forma distinta de
+obtener un subconjunto a partir de un conjunto de cláusulas $C$.
 
-Debido a lo antedicho, no es evidente que una cláusula aprendida durante el
-análisis de cierto subproblema deba necesariamente ser una cláusula aprendida
-válida a la hora del análisis de otros subproblemas arbitrarios (que no sean
-parte de su descendencia, es decir, que no tengan el camino de literales del
-subproblema donde se aprendió originalmente la cláusula como prefijo del suyo
-propio).
-
-A la hora de implementar un mecanismo para el aprovechamiento de las cláusulas
-aprendidas en un \ssolver distribuido existen una serie de cuestiones que
-deben ser consideradas:
-
-% Hemos observado que la partición de un problema en subproblemas a menudo
-% conlleva una dosis considerable de retrabajo, y hemos conjeturado que el
-% aprovechamiento de las cláusulas aprendidas durante el análisis parcial de un
-% problema difícil es importante para eliminar (o al menos mitigar el impacto
-% negativo de) dicho retrabajo. Para llevar a la práctica una serie de
-% experimentos que permitan poner a prueba esta hipótesis es necesario tomar
-% ciertas decisiones importantes acerca de:
-
-\begin{itemize}
-\item cómo deberían compartirse las cláusulas aprendidas
-\item con quién(es) y/o entre quién(es)
-\item cuándo y/o cada cuánto
-\item cuántas y/o cuáles
-\end{itemize}
 
 \subsubsection{Consideraciones de escalabilidad}
 
-Queremos evitar cualquier enfoque que introduzca nuevos cuellos de botella en
-la arquitectura. Por ejemplo, no sería aceptable la incorporación de una gran
-base de datos centralizada en la que todos los \ws almacenen las cláusulas que
-van aprendiendo y que todos los \ws deban consultar.
+Además de la naturalidad inducidad por el esquema de particionado, nos
+interesa también evitar cualquier enfoque que introduzca nuevos cuellos de
+botella en la arquitectura. Por ejemplo, no sería aceptable la incorporación
+de una gran base de datos centralizada en la que todos los \ws almacenen las
+cláusulas que van aprendiendo y que todos los \ws deban consultar.
 
 Tampoco sería aceptable un grafo completo de comunicación permanente para
 lograr ese mismo fin, es decir, hacer que cada \w le comunique (o consulte) a
@@ -103,13 +80,13 @@ todos los demás las cláusulas que va(n) aprendiendo.
 
 \subsubsection{Independencia del \ssolver particular utilizado}
 
-Como ya hemos señalado en el Cap.~\ref{ssolver-pardist}, nos interesa que el \ssolver
-secuencial que utiliza cada uno de los \ws sea fácil de actualizar y/o de
-reemplazar por otro componente \ots similar. Si bien suelen ser necesarios
-algunos cambios para lograr que un \ssolver permita la inyección
-\emph{inicial} de cláusulas aprendidas (en lugar de comenzar sin ninguna), por
-lo general tales cambios se reducen a cuestiones de interfaz y no revisten
-mayor dificultad.
+Por otro lado, como ya hemos señalado en el Cap.~\ref{ssolver-pardist}, nos
+interesa que el \ssolver secuencial que utiliza cada uno de los \ws sea fácil
+de actualizar y/o de reemplazar por otro componente \ots similar. Si bien
+suelen ser necesarios algunos cambios para lograr que un \ssolver permita la
+inyección \emph{inicial} de cláusulas aprendidas (en lugar de comenzar sin
+ninguna), por lo general tales cambios se reducen a cuestiones de interfaz y
+no revisten mayor dificultad.
 
 Es más ambicioso, en cambio, pretender poder inyectar nuevas cláusulas
 aprendidas en cualquier momento \emph{durante} el proceso de búsqueda. Para
@@ -117,25 +94,67 @@ ello habría que introducir modificaciones mucho más fuertemente acopladas a la
 versión particular de \ssolver en uso, sus algoritmos, estructuras de datos e
 invariantes particulares.
 
+\
 
-\subsubsection{Entonces \ldots}
+Es por estos factores que optamos por implementar un esquema de reutilización
+de cláusulas aprendidas basado en herencia. En esencia el esquema funciona de
+acuerdo a lo detallado al comienzo de esta sección. En particular, a la hora
+de partir un problema en nuevos subproblemas un \emph{criterio} es aplicado al
+conjunto de cláusulas aprendidas que el problema padre poseía al momento de
+ser abortado. De esta manera se generan los subconjuntos de cláusulas
+aprendidas que los subproblemas hijos deberán incorporar antes de comenzar el
+análisis. Cabe destacar que si bien la herramienta permite seleccionar un
+nuevo criterio de aprendizaje cada vez que un problema es partido, en la
+evaluación realizada no se utilizó esta característica sino que se mantuvo un
+mismo criterio para toda la corrida.
 
-Como consecuencia de los factores anteriormente expuestos, vemos que resulta
-natural considerar la \emph{herencia} de cláusulas aprendidas del problema
-padre a sus subproblemas hijos como metodología para compartir conocimiento de
-manera controlada \ldots ojalá acumulable \ldots etc \ldots
 
+\subsubsection{Sobre los criterios}
 
-\subsubsection{¿Y cuántas/cuáles heredamos\ldots?}
+En principio podríamos preguntarnos de dónde surge la necesidad de tener
+criterios para la herencia de cláusulas aprendidas. O lo que es lo mismo, por
+qué no heredar todas las cláusulas aprendidas del padre. Existen varias
+razones que motivan la necesidad de introducir criterios de selección de
+cláusulas.
 
-Que cada hijo herede TODAS las cláusulas aprendidas por su padre probablemente sea demasiado / contraproducente:
-\begin{itemize}
-\item Por algo los solvers secuenciales van purgando: es sabido que zarparse no es bueno.
-\item OK, el padre sí llegó a todo eso, pero por algo los solvers secuenciales van subiendo de a poco el máximo de aprendidas: es sabido que zarparse desde el primer momento no es buena idea. Y estamos suponiendo que los subproblemas serán más chicos/fáciles que su problema padre.
-\item Y además, la herencia no es inmediata sino mediata. Jugarse a heredar todo implica jugarse a pagar el precio de bajar todo eso a disco, guardar todo eso en storage/pending, leer todo eso de disco, etc. Bocha overhead.
-\end{itemize}
+En primer lugar la incorporación de cláusulas aprendidas a un problema
+incrementa la cantidad de cláusulas sobre las que es necesario propagar las
+decisiones. Esto provoca una ralentización del proceso de propagación que
+puede resultar en una disminución del rendimiento del \ssolver secuencial. La
+información experimental presentada en diversos artículos muestra que,
+incrementar en demasía la base de datos de cláusulas aprendidas en un \ssolver
+secuencial, se torna contraproducente. Es por esto que los \ssolvers
+secuenciales cuentan con políticas de recorte de dicha base de datos y que,
+por lo general, estas políticas son bastante agresivas.
 
-Por lo tanto vamos a necesitar criterios de selección, subconjunto, etc.
+Otro factor que aboga en contra de mantener la totalidad de las cláusulas
+aprendidas por el padre es el hecho de que los subproblemas generados suelen
+ser más chicos que el padre. Incluso es bastante común que una buena
+proporción de los subproblemas generados al partir un problema padre sean
+considerablemente más chicos. En todos estos casos la incorporación de una
+conjunto de cláusulas aprendidas extremadamente grande, resultará
+inmediatamente contraproducente debido a lo expuesto en el párrafo anterior.
+
+El último motivo para la introducción de criterios de selección es que el
+conjunto de cláusulas aprendidas de un problema es potencialmente muy grande.
+Por otro lado, los subproblemas generados no son resueltos inmediatamente sino
+que pasan a formar parte de la cola de tareas pendientes. Es decir que,
+heredar la totalidad de las cláusulas aprendidas del problema padre en cada
+uno de los subproblemas hijos, nos obligaría a pagar un alto costo debido a la
+escritura y posterior lectura --hacia y desde memoria secundaria-- de cada
+unos de estos conjuntos (potencialmente muy grandes) más el costo de la
+posible transmición por medio de la red. Esto atentaría directamente contra el
+desempeño de nuestra herramienta, incrementando en demasía los costos
+\emph{fijos} asociados al enfoque.
+
+% Que cada hijo herede TODAS las cláusulas aprendidas por su padre probablemente sea demasiado / contraproducente:
+% \begin{itemize}
+% \item Por algo los solvers secuenciales van purgando: es sabido que zarparse no es bueno.
+% \item OK, el padre sí llegó a todo eso, pero por algo los solvers secuenciales van subiendo de a poco el máximo de aprendidas: es sabido que zarparse desde el primer momento no es buena idea. Y estamos suponiendo que los subproblemas serán más chicos/fáciles que su problema padre.
+% \item Y además, la herencia no es inmediata sino mediata. Jugarse a heredar todo implica jugarse a pagar el precio de bajar todo eso a disco, guardar todo eso en storage/pending, leer todo eso de disco, etc. Bocha overhead.
+% \end{itemize}
+
+% Por lo tanto vamos a necesitar criterios de selección, subconjunto, etc.
 
 
 \section{Prueba de concepto}
