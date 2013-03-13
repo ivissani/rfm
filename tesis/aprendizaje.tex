@@ -2,10 +2,42 @@
 \chapter{Aprendizaje en un \ssolver paralelo y distribuido}
 \label{aprendizaje-pardist}
 
+En el Cap.~\ref{ssolver-pardist} vimos que el enfoque de distribución aplicado
+consigue disminuir el tiempo necesario para resolver una serie de problemas de
+tamaño considerable. Al mismo tiempo observamos que existen casos en los que
+la eficiencia --entendida como cuánto ganamos por cada unidad de \hard
+agregada al cómputo de un problema-- resulta pobre. Planteamos como hipótesis
+que esta situación se debe, en gran medida, a una importante cantidad de
+retrabajo que se produce como consecuencia del particionado de un problema en
+diversos subproblemas. 
+
+La existencia de retrabajo se evidencia en que si bien al partir un problema
+en subproblemas, el subproblema más grande suele ser más chico que el padre,
+la suma del tiempo requerido para resolver todos los subproblemas hijos es
+considerablemente mayor que el tiempo requerido para resolver el problema
+padre. Debido al esquema de particionado recursivo, este incremento en el
+tiempo total de cómputo requerido para resolver un problema se vuelve
+sustancial.
+
+En el presente capítulo desarrollaremos un mecanismo de reutilización del
+conocimiento adquirido durante la ejecución de cada subproblema. Este
+mecanismo persigue dos objetivos principales: verificar la hipótesis planteada
+y, de ser posible,  disminuir los tiempos requeridos para resolver un problema
+aumentando la eficiencia de la herramienta.
 
 \section{¿Cómo compartir cláusulas aprendidas?}
 
-Hemos observado que la partición de un problema en subproblemas a menudo conlleva una dosis considerable de retrabajo, y hemos conjeturado que el aprovechamiento de las cláusulas aprendidas durante el análisis parcial de un problema difícil es importante para eliminar (o al menos mitigar el impacto negativo de) dicho retrabajo. Para llevar a la práctica una serie de experimentos que permitan poner a prueba esta hipótesis es necesario tomar ciertas decisiones importantes acerca de:
+A la hora de implementar un mecanismo para el aprovechamiento de las cláusulas
+aprendidas en un \ssolver distribuido existen una serie de cuestiones que
+deben ser consideradas:
+
+% Hemos observado que la partición de un problema en subproblemas a menudo
+% conlleva una dosis considerable de retrabajo, y hemos conjeturado que el
+% aprovechamiento de las cláusulas aprendidas durante el análisis parcial de un
+% problema difícil es importante para eliminar (o al menos mitigar el impacto
+% negativo de) dicho retrabajo. Para llevar a la práctica una serie de
+% experimentos que permitan poner a prueba esta hipótesis es necesario tomar
+% ciertas decisiones importantes acerca de:
 
 \begin{itemize}
 \item cómo deberían compartirse las cláusulas aprendidas
@@ -16,28 +48,59 @@ Hemos observado que la partición de un problema en subproblemas a menudo conlle
 
 \subsubsection{Consideraciones de escalabilidad}
 
-Queremos evitar cualquier enfoque que introduzca nuevos cuellos de botella en la arquitectura. Por ejemplo, no sería aceptable la incorporación de una gran base de datos centralizada en la que todos los \ws almacenen las cláusulas que van aprendiendo y que todos los \ws deban consultar.
+Queremos evitar cualquier enfoque que introduzca nuevos cuellos de botella en
+la arquitectura. Por ejemplo, no sería aceptable la incorporación de una gran
+base de datos centralizada en la que todos los \ws almacenen las cláusulas que
+van aprendiendo y que todos los \ws deban consultar.
 
-Tampoco sería aceptable un grafo completo de comunicación permanente para lograr ese mismo fin, es decir, hacer que cada \w le comunique (o consulte) a todos los demás las cláusulas que va(n) aprendiendo.
+Tampoco sería aceptable un grafo completo de comunicación permanente para
+lograr ese mismo fin, es decir, hacer que cada \w le comunique (o consulte) a
+todos los demás las cláusulas que va(n) aprendiendo.
 
 
 \subsubsection{Independencia del \ssolver particular utilizado}
 
-Como ya hemos recalcado en el Cap.~\ref{}, nos interesa que el \ssolver que utiliza cada uno de los \ws sea fácil de actualizar y/o de reemplazar por otro componente \ots similar. Si bien suelen ser necesarios algunos cambios para lograr que un \ssolver permita la inyección \emph{inicial} de cláusulas aprendidas (en lugar de comenzar sin ninguna), por lo general tales cambios se reducen a cuestiones de interfaz y no revisten mayor dificultad.
+Como ya hemos señalado en el Cap.~\ref{ssolver-pardist}, nos interesa que el \ssolver
+secuencial que utiliza cada uno de los \ws sea fácil de actualizar y/o de
+reemplazar por otro componente \ots similar. Si bien suelen ser necesarios
+algunos cambios para lograr que un \ssolver permita la inyección
+\emph{inicial} de cláusulas aprendidas (en lugar de comenzar sin ninguna), por
+lo general tales cambios se reducen a cuestiones de interfaz y no revisten
+mayor dificultad.
 
-Es más ambicioso, en cambio, pretender poder inyectar nuevas cláusulas aprendidas en cualquier momento \emph{durante} el proceso de búsqueda. Para ello habría que introducir modificaciones mucho más fuertemente acopladas a la versión particular de \ssolver en uso, sus algoritmos, estructuras de datos e invariantes particulares.
+Es más ambicioso, en cambio, pretender poder inyectar nuevas cláusulas
+aprendidas en cualquier momento \emph{durante} el proceso de búsqueda. Para
+ello habría que introducir modificaciones mucho más fuertemente acopladas a la
+versión particular de \ssolver en uso, sus algoritmos, estructuras de datos e
+invariantes particulares.
 
 
 \subsubsection{Influencia del esquema de particionamiento}
 
-El enfoque de particionamiento recursivo, basado en \emph{guiding paths}, que hemos adoptado para la construcción de la herramienta también influye en la elección de un mecanismo adecuado para compartir información de cláusulas aprendidas. Recordemos que cada subproblema es identificable con un camino único de literales (las variables levantadas, con cierta combinación particular de valores de verdad asignados). De hecho, si esperamos que los análisis de subproblemas sean cada vez más fáciles en comparación con los de sus padres es justamente debido a que una mayor cantidad de variables proposicionales han dejado de ser variables para convertirse en constantes.
+El enfoque de particionamiento recursivo, basado en \emph{guiding paths}, que
+hemos adoptado para la construcción de la herramienta también influye en la
+elección de un mecanismo adecuado para compartir información de cláusulas
+aprendidas. Recordemos que cada subproblema es identificable con un camino
+único de literales (las variables levantadas, con cierta combinación
+particular de valores de verdad asignados). De hecho, si esperamos que los
+análisis de subproblemas sean cada vez más fáciles en comparación con los de
+sus padres es justamente debido a que una mayor cantidad de variables
+proposicionales han dejado de ser variables para convertirse en constantes.
 
-Debido a lo antedicho, no es evidente que una cláusula aprendida durante el análisis de cierto subproblema deba necesariamente ser una cláusula aprendida válida a la hora del análisis de otros subproblemas arbitrarios (que no sean parte de su descendencia, es decir, que no tengan el camino de literales del subproblema donde se aprendió originalmente la cláusula como prefijo del suyo propio).
+Debido a lo antedicho, no es evidente que una cláusula aprendida durante el
+análisis de cierto subproblema deba necesariamente ser una cláusula aprendida
+válida a la hora del análisis de otros subproblemas arbitrarios (que no sean
+parte de su descendencia, es decir, que no tengan el camino de literales del
+subproblema donde se aprendió originalmente la cláusula como prefijo del suyo
+propio).
 
 
 \subsubsection{Entonces \ldots}
 
-Como consecuencia de los factores anteriormente expuestos, vemos que resulta natural considerar la \emph{herencia} de cláusulas aprendidas del problema padre a sus subproblemas hijos como metodología para compartir conocimiento de manera controlada \ldots ojalá acumulable \ldots etc \ldots
+Como consecuencia de los factores anteriormente expuestos, vemos que resulta
+natural considerar la \emph{herencia} de cláusulas aprendidas del problema
+padre a sus subproblemas hijos como metodología para compartir conocimiento de
+manera controlada \ldots ojalá acumulable \ldots etc \ldots
 
 
 \subsubsection{¿Y cuántas/cuáles heredamos\ldots?}
@@ -56,7 +119,10 @@ Por lo tanto vamos a necesitar criterios de selección, subconjunto, etc.
 
 \subsubsection{Objetivos y metodología}
 
-Acá explicamos para qué y de qué modo se llevaron a cabo estos experimentos preliminares. Que son una aproximación de orden cero a lo que podría obtenerse en un cluster posta haciendo todo recursivamente, que permiten evaluar a grosso modo la factibilidad de la idea, etc, etc.
+Acá explicamos para qué y de qué modo se llevaron a cabo estos experimentos
+preliminares. Que son una aproximación de orden cero a lo que podría obtenerse
+en un cluster posta haciendo todo recursivamente, que permiten evaluar a
+grosso modo la factibilidad de la idea, etc, etc.
 
 \subsubsection{Resultados obtenidos}
 
@@ -64,12 +130,15 @@ Acá van los resultados de las perchitas.
 
 \subsubsection{Discusión y conclusiones}
 
-Acá discutimos los resultados y concluimos que vale la pena probar implementar la herencia de cláusulas aprendidas en modo paralelo y distribuido, y evaluarla en un cluster posta.
+Acá discutimos los resultados y concluimos que vale la pena probar implementar
+la herencia de cláusulas aprendidas en modo paralelo y distribuido, y
+evaluarla en un cluster posta.
 
 
 \section{Resultados experimentales}
 
-En esta sección vamos a presentar los resultados posta de los experimentos ejecutados en distribuido.
+En esta sección vamos a presentar los resultados posta de los experimentos
+ejecutados en distribuido.
 
 \subsection{Criterios de selección de cláusulas}
 
