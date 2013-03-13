@@ -169,11 +169,13 @@ realizando una única partición y aplicando distintos criterios de selección d
 cláusulas aprendidas y comparando los tiempos obtenidos. Para ello cada
 problema fue ejecutado durante 60 segundos y luego partido levantando 5
 variables para obtener 32 subproblemas. Cada uno de los subproblemas fue
-ejecutado hasta su finalización. Para evitar la invalidez de los resultados
-cada criterio fue testeado utilizando 10 órdenes pseudoaletorios distintos que
-determinaron las variables levantadas en cada caso. Luego, se compararon tanto
-los tiempos totales de cómputo invertidos en resolver el problema, como el
-tiempo del camino crítico (determinado por el subproblema que más tiempo tomó).
+ejecutado hasta su finalización. Dado que, como ya mencionamos, la elección de
+variables a levantar influye fuertemente en la distribución de dificultades de
+los subproblemas resultantes, cada criterio fue testeado utilizando 10
+secuencias de variables distintas generadas pseudoaleatoriamente. Luego se
+compararon tanto los tiempos totales de cómputo invertidos en resolver el
+problema, como el tiempo del camino crítico (determinado por el subproblema
+que más tiempo tomó).
 
 
 \subsubsection{Resultados obtenidos}
@@ -255,30 +257,44 @@ Descripción de los distintos criterios \ldots
 
 \subsubsection{Garping del mejor criterio para cada problema}
 
+
+\begin{sidewaystable}
+	\small
+	\begin{tabular}{lrrrrrrrrrr}
+		\toprule
+		problem	&			&	seq. 				&	reps.	& avg. par.		&	speedup	&	effic.		& best. par.	& best 		& best			& efficiency \\
+				&			&		walltime (s)	&	 		& walltime	&			&	 			& walltime		& speedup 	& effic.	& multiplier \\
+		\cmidrule(r){1-11}
+		Routing	&	8		&	308.26				&		7 	& 60.46			& 5.10x		&	0.08 		& 60.46			&	5.10x	& 0.08			& 1.00
+\\
+		Routing	&	9		&	76168.16			&	6 		& 407.34		& 	186.99x	&	2.92 		& 387.44		& 196.60x	& 3.07			& 1.05
+\\
+		Routing	&	$^*$10	&	$>$1209600.00		&	5 		& 5046.84		&$>$239.67x	&	$>$3.74 	& 3213.59		& $>$376.40x	& $>$5.88			& $>$1.57
+\\
+		\cmidrule(r){1-11}
+		Closure	&	11		&	749.65				&	14 		& 291.28		&	2.57x	&	0.04 		& 150.30		&  4.99x	& 0.08			& 1.94
+\\		Closure	&	12		&	3983.36				&	5 		& 1914.45		&	2.08x	&	0.03 		& 266.68		& 14.94x	& 0.23			& 7.35
+\\		Closure	&	13		&	16261.35			& 5 		&	4362.61		&	3.73x	&	0.06 		& 645.44		& 25.19x	& 0.39			& 6.76
+\\
+		\cmidrule(r){1-11}
+		GC Sound.&	9	&	217.31				&	10 		& 200.85		&	1.08x	&	0.02 		& 168.04		& 1.29x		& 0.02			& 1.20
+\\
+		GC Sound.&	10	&	 2855.30			&	7 		& 1376.89		&	2.07x	&	0.03 		& 592.54		& 4.82x		& 0.08			& 2.32
+\\
+		\cmidrule(r){1-11}x
+		GC Compl.	& 8	&	180.25				&	7 		& 61.50			&	2.93x	&	0.05 		& 36.43			& 4.95x		& 0.08			& 1.69
+\\
+		GC Compl.	& 9	&	18643.06			&	5 		& 1825.60		&	10.21x	&	0.16 		& 390.48		& 47.74x	& 0.75			& 4.68
+\\
+		\bottomrule
+		\\
+		\multicolumn{10}{l}{\begin{tiny}$^*$: Se ejecutó por 14 días sin que el \ssolver secuencial consiga un resultado\end{tiny}}
+	\end{tabular}
+	\caption{Tiempo de ejecución (en segundos) distribuido vs. secuencial}
+	\label{tab:mejorlearning}
+\end{sidewaystable}
+
 \subsubsection{Promedios por cada criterio}
-
-\subsubsection{Heatmaps para scopes crecientes}
-
-
-\subsection{Discusión y conclusiones}
-
-
-\newpage
-% \begin{figure}
-% 	\centering
-% 	\includegraphics[scale=0.5]{resultados/k11_heat}
-% 	%\caption{\emph{Workers}}
-% \end{figure}
-% \begin{figure}
-% 	\centering
-% 	\includegraphics[scale=0.6]{resultados/k12_heat}
-% 	%\caption{\emph{Workers}}
-% \end{figure}
-% \begin{figure}
-% 	\centering
-% 	\includegraphics[scale=0.6]{resultados/k13_heat}
-% 	%\caption{\emph{Workers}}
-% \end{figure}
 
 \hspace{-5em}
 \begin{minipage}{\textwidth}
@@ -324,5 +340,7 @@ Descripción de los distintos criterios \ldots
 	%\caption{Tiempo de ejecución (en segundos) distribuido vs. secuencial}
 \end{minipage}
 
+\subsubsection{Heatmaps para scopes crecientes}
 
 
+\subsection{Discusión y conclusiones}
