@@ -25,7 +25,50 @@ mecanismo persigue dos objetivos principales: verificar la hipótesis planteada
 y, de ser posible,  disminuir los tiempos requeridos para resolver un problema
 aumentando la eficiencia de la herramienta.
 
-\section{¿Cómo compartir cláusulas aprendidas?}
+\section{Justificación del enfoque}
+
+El enfoque de particionamiento recursivo, basado en \emph{guiding paths}, que
+hemos adoptado para la construcción de la herramienta también influye en la
+elección de un mecanismo adecuado para compartir información de cláusulas
+aprendidas. 
+
+\newcommand{\roottask}{\ensuremath{<\varphi_R, \emptyset>}\xspace}
+\newcommand{\task}{\ensuremath{<\varphi, \emptyset>}\xspace}
+\newcommand{\nonemptytask}{\ensuremath{<\varphi, \emptyset>}\xspace}
+
+Consideremos ahora que un problema no es ya únicamente una fórmula $\varphi$
+sino una tupla $<\varphi, C>$ donde $C$ es un conjunto de cláusulas tales que
+$(\forall v) (v \models \varphi \Longleftrightarrow v \models \varphi
+\bigwedge C)$ llamado conjunto de cláusulas aprendidas. En este contexto el
+problema original es la tupla \roottask donde $\varphi_R$ denota la fórmula
+original que se desea verificar. En este modelo, al partir un problema \task
+levantando (por ejemplo) la variable $u$ obtenemos dos nuevos subproblemas
+$<\varphi_u, \emptyset>$ y $<\varphi_{-u}, \emptyset>$. 
+
+Notemos entonces que dado un problema \nonemptytask podemos generar los
+subproblemas que resultan de levantar la variable $u$ como sigue:
+$t_u=<\varphi_u, C_u>$ y $t_{-u}=<\varphi_{-u}, C_{-u}>$ (donde $C_u$ es el
+conjunto de cláusulas que resulta de reemplazar las apariciones de la variable
+$u$ por el valor $1$ en el conjunto $C$ y $C_{-u}$ es el resultado de
+reemplazar las apariciones de la variable $u$ por el valor $0$) sin alterar la
+corrección de la herramienta. Esto se debe a que si $v \models \varphi_u$
+entonces $v\cup\{u\leftarrow1\} \models \varphi$ y por lo tanto
+$v\cup\{u\leftarrow1\} \models \varphi \bigwedge C$ de lo que se deduce que $v
+\models \varphi_u \bigwedge C_u$. Lo mismo vale para el caso $\varphi_{-u}$.
+
+Recordemos que cada subproblema es identificable con un camino
+único de literales (las variables levantadas, con cierta combinación
+particular de valores de verdad asignados). De hecho, si esperamos que los
+análisis de subproblemas sean cada vez más fáciles en comparación con los de
+sus padres es justamente debido a que una mayor cantidad de variables
+proposicionales han dejado de ser variables para convertirse en constantes.
+
+Debido a lo antedicho, no es evidente que una cláusula aprendida durante el
+análisis de cierto subproblema deba necesariamente ser una cláusula aprendida
+válida a la hora del análisis de otros subproblemas arbitrarios (que no sean
+parte de su descendencia, es decir, que no tengan el camino de literales del
+subproblema donde se aprendió originalmente la cláusula como prefijo del suyo
+propio).
 
 A la hora de implementar un mecanismo para el aprovechamiento de las cláusulas
 aprendidas en un \ssolver distribuido existen una serie de cuestiones que
@@ -73,26 +116,6 @@ aprendidas en cualquier momento \emph{durante} el proceso de búsqueda. Para
 ello habría que introducir modificaciones mucho más fuertemente acopladas a la
 versión particular de \ssolver en uso, sus algoritmos, estructuras de datos e
 invariantes particulares.
-
-
-\subsubsection{Influencia del esquema de particionamiento}
-
-El enfoque de particionamiento recursivo, basado en \emph{guiding paths}, que
-hemos adoptado para la construcción de la herramienta también influye en la
-elección de un mecanismo adecuado para compartir información de cláusulas
-aprendidas. Recordemos que cada subproblema es identificable con un camino
-único de literales (las variables levantadas, con cierta combinación
-particular de valores de verdad asignados). De hecho, si esperamos que los
-análisis de subproblemas sean cada vez más fáciles en comparación con los de
-sus padres es justamente debido a que una mayor cantidad de variables
-proposicionales han dejado de ser variables para convertirse en constantes.
-
-Debido a lo antedicho, no es evidente que una cláusula aprendida durante el
-análisis de cierto subproblema deba necesariamente ser una cláusula aprendida
-válida a la hora del análisis de otros subproblemas arbitrarios (que no sean
-parte de su descendencia, es decir, que no tengan el camino de literales del
-subproblema donde se aprendió originalmente la cláusula como prefijo del suyo
-propio).
 
 
 \subsubsection{Entonces \ldots}
