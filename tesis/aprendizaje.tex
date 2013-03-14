@@ -305,7 +305,7 @@ exclusiva como criterio de herencia.
 A continuación presentamos los resultados obtenidos. Los mismos se dividen en
 tres aspectos diferentes. 
 
-\subsubsection{Validación de la hipótesis de trabajo}
+\subsubsection{Mejora de la eficiencia por problema}
 
 En la Tabla~\ref{tab:mejorlearning} se presenta la comparación entre los
 resultados obtenidos con el \ssolver secuencial, los resultados obtenidos por
@@ -339,7 +339,7 @@ crit.}}{\text{efficiency without inheritance}}$$
 		Routing	&	$^*$10	&	5 		& $>$1209600.00	&  5046.84		&$>$239.67x	&	$>$3.74 	& 3213.59		&$>$376.40x	& $>$5.88	& 1.57 \\
 		\cmidrule(r){1-11}
 		Closure	&	11		&	14 		& 749.65		&  291.28		&	2.57x	&	0.04 		& 150.30		&  4.99x	& 0.08		& 1.94 \\
-		Closure	&	12		&	5 		& 3983.36		&  1914.45		&	2.08x	&	0.03 		& 266.68		& 14.94x	& 0.23		& 7.35 \\
+		Closure	&	12		&	5 		& 3983.36		&  1914.45		&	2.08x	&	0.03 		& 266.68		& 14.94x	& 0.23		& 7.18 \\
 		Closure	&	13		&  5 		& 16261.35		& 	4362.61		&	3.73x	&	0.06 		& 645.44		& 25.19x	& 0.39		& 6.76 \\
 		\cmidrule(r){1-11}
 		GC Sound.&	9		&	10 		& 217.31		&  200.85		&	1.08x	&	0.02 		& 168.04		& 1.29x		& 0.02		& 1.20 \\
@@ -365,28 +365,27 @@ Se observa también una tendencia a que la mejora obtenida por la incorporación
 de herencia de cláusulas crezca considerablemente a medida que crece el tamaño
 del problema.
 
-\subsubsection{Promedios por cada criterio}
+\subsubsection{Multiplicadores de \emph{speedup} por cada criterio}
 
 En la Tabla~\ref{tab:rescriterios} mostramos los resultados obtenidos para
-cada criterio. La columna ``worst speedup (x)'' consigna el peor desempeño
-promedio obtenido por el criterio correspondiente para un problema. La columna
-``best speedup (x)'' consigna el mejor desempeño promedio obtenido para un
-problema.
+cada criterio. Llamaremos \emph{speedup multiplier} a la razón que existe
+entre el \emph{speedup} obtenido aplicando herencia de cláusulas aprendidas y
+el \emph{speedup} obtenido sin herencia.
 
-Por último, la columna ``avg speedup (x)'' consigna el desempeño promedio
-obtenido por los criterios considerando todos los problemas. Este valor se
-calculó comparando la suma de los tiempos promedio de todos los problemas
---sin herencia de cláusulas aprendidas-- contra la suma de los tiempos
-promedio de todos los problemas utilizando el criterio correspondiente. Hay
-que tener en cuenta entonces que las mejoras obtenidas en problemas más
-grandes pesarán más que las mejoras obtenidas en problemas más chicos.
+La columna ``worst speedup multiplier'' consigna el multiplicador obtenido por
+el criterio correspondiente para aquel problema en el que obtuvo el peor
+multiplicador. La columna ``best speedup multiplier'' consigna el
+multiplicador obtenido por el criterio para aquel problema en el que obtuvo el
+mejor multiplicador.
 
-Es importante señalar que en esta tabla no aparecen absolutamente todos los
-criterios. El motivo de esto es que no todos los criterios pudieron ser
-probados con todos los problemas. Como se verá más adelante, algunos criterios
-resultaron claramente perjudiciales. Por lo tanto, dichos criterios no fueron
-probados con los problemas más grandes --Routing \emph{scope} 10, Closure
-\emph{scope} 13, etc--.
+Por último, la columna ``avg speedup multiplier'' consigna el multiplicador
+promedio obtenido por el criterio sobre la ejecución de la totalidad de los
+problemas. Este valor se calculó comparando la suma de los tiempos promedio de
+todos los problemas --sin herencia de cláusulas aprendidas-- contra la suma de
+los tiempos promedio de todos los problemas utilizando el criterio
+correspondiente. Hay que tener en cuenta entonces que las mejoras obtenidas en
+problemas más grandes pesarán más que las mejoras obtenidas en problemas más
+chicos.
 
 En cada columna se señalaron con color verde los mejores resultados obtenidos
 en dicha columna y con color rojo los peores resultados obtenidos.
@@ -396,7 +395,8 @@ en dicha columna y con color rojo los peores resultados obtenidos.
 	\begin{tabular}{lrrr}
 		\toprule
 					&	worst 		&	best		&	avg \\
-		criteria	&	speedup (x)	&	speedup (x)	&	speedup (x) \\
+					&	 \phantom{(x)} speedup		&	\phantom{(x)} speedup		&	\phantom{(x)} speedup \\
+		criterion	&	multiplier	&	multiplier	&	multiplier \\
 		\cmidrule(r){1-4}
 		lbdle2.+facts	&	0.68	&	4.91	&	1.97 \\
 		lbdle2.-facts	&	0.71	&	3.84	&	1.24 \\
@@ -432,7 +432,7 @@ en dicha columna y con color rojo los peores resultados obtenidos.
 		sizele6.-facts	&	0.79	&	5.69	&	\cellcolor{green}2.61 \\
 		\bottomrule
 	\end{tabular}
-	\caption{Peor \emph{speedup} para un problema, mejor \emph{speedup} para un problema y \emph{speedup} promedio obtenido por cada uno de los criterios probados}
+	\caption{Mejoras obtenidas mediante la implementación de herencia de cláusulas aprendidas. Resultados por criterio.}
 	\label{tab:rescriterios}
 \end{table}
 
@@ -453,6 +453,30 @@ Por último observamos que existen criterios que presentan mucha varianza. Por
 ejemplo, el criterio que obtuvo el mejor \emph{speedup} ($7.18x$) para algún
 problema obtuvo como peor \emph{speedup} un valor de $0.58x$ muy cercano al
 peor de todos.
+
+\subsubsection{Sobre la validez de los datos}
+
+Es importante señalar que en la Tabla~\ref{tab:rescriterios} no aparecen
+absolutamente todos los criterios. El motivo de esto es que no todos los
+criterios pudieron ser probados con todos los problemas. Como se verá más
+adelante, algunos criterios resultaron claramente perjudiciales. Para el
+momento en que lanzamos las ejecuciones de algunos problemas --Completeness
+\emph{scope} 8 y Completeness \emph{scope} 9-- ya estaba claro que
+determinados criterios no iban a reportar mejoras y que su ejecución insumiría
+una importante cantidad de tiempo. Por estos motivos optamos por obviar estas
+combinaciones de problema/criterio.
+
+Además, los datos presentados aquí no incluyen los resultados obtenidos
+para los \emph{scopes} más grandes de los problemas Routing y Closure --10 y
+13 respectivamente--. En estos \emph{scopes} dichos problemas insumen tanto
+tiempo que sólo nos fue posible probar un subconjunto mínimo de criterios
+formado por aquellos que reportaron mejores resultados en los \emph{scopes}
+anteriores. 
+
+La inclusión en la Tabla~\ref{tab:rescriterios} de casos que sólo
+hayan sido probados con algunos criterios podría resultar injusta para con los
+demás criterios. Más aún si se trata de \emph{scopes} que insumen mayor
+cantidad de tiempo.
 
 \subsubsection{Comportamiento de la herencia para \emph{scopes} crecientes}
 
