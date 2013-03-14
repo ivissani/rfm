@@ -459,26 +459,68 @@ ejemplo, el criterio que obtuvo el mejor \emph{speedup} ($7.18x$) para algún
 problema obtuvo como peor \emph{speedup} un valor de $0.58x$ muy cercano al
 peor de todos.
 
-\subsubsection{Heatmaps para scopes crecientes}
+\subsubsection{Comportamiento de la herencia para \emph{scopes} crecientes}
+
+A continuación presentamos la comparación de los resultados obtenidos por los
+distintos criterios para diferentes \emph{scopes} de un mismo problema. Las
+Figuras~\ref{res:learnscopespamela}~a~\ref{res:learnscopescompleteness}
+presentan los resultados de la siguiente manera. 
+
+La primer fila (coloreada siempre de amarillo) representa el resultado
+obtenido por el criterio nulo. Las filas subsiguientes representan los
+resultados obtenidos por el criterio indicado a la izquierda. El color que
+posee cada celda representa la comparación entre el resultado obtenido por ese
+criterio y el resultado obtenido por el criterio nulo para el correspondiente
+\emph{scope} de acuerdo a la escala indicada a la derecha de la figura. Así el
+coloreo hacia el verde indica una mejora respecto del criterio nulo mientras
+que el coloreo hacia el rojo representa una peor desempeño con respecto al
+mismo criterio.
+
+En el eje horizontal se ubican los distintos \emph{scopes} probados de manera
+creciente. Vale aclarar que el color gris indica la ausencia de resultados
+para dicha combinación de \emph{scope} y criterio.
+
+Corresponde aclarar también que, tal como se observa, no todos los criterios
+fueron probados para el problema ``GC Completeness''. \todo{Aclarar por qué? ¿Cómo?}
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{resultados/losp_heat.png}
 	\caption{Comparación de criterios de herencia para distintos \emph{scopes} para el problema Routing}
+	\label{res:learnscopespamela}
 \end{figure}
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{resultados/losk_heat.png}
 	\caption{Comparación de criterios de herencia para distintos \emph{scopes} para el problema Closure}
+	\label{res:learnscopesclosure}
 \end{figure}
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{resultados/lossound_heat.png}
 	\caption{Comparación de criterios de herencia para distintos \emph{scopes} para el problema GC Soundness2}
+	\label{res:learnscopessoundness}
 \end{figure}
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{resultados/loscomp_heat.png}
 	\caption{Comparación de criterios de herencia para distintos \emph{scopes} para el problema GC Completeness}
+	\label{res:learnscopescompleteness}
 \end{figure}
+
+Nos interesa destacar dos observaciones de estos resultados. En primer lugar
+parece existir una tendencia a que, a medida que aumenta el tamaño de un
+problema, la herencia de cláusulas obtiene mejores resultados. Esto se observa
+tanto en criterios que en \emph{scopes} chicos provocaron malos resultados,
+como en criterios que provocaron buenos resultados.
+
+También se observa cómo los resultados obtenidos por la herencia de cláusulas
+varían considerablemente de problema en problema sin que exista una relación
+evidente entre los problemas en los que esta metodología obtuvo buenos
+resultados y problemas en los que no.
+
+Por último se ve también que existe un subconjunto de los criterios probados
+que resulta consistentemente negativo. Nos referimos a los criterios por
+actividad que conservan el 10\% (o más) de las cláusulas aprendidas por el
+padre.
 
 \subsection{Discusión y conclusiones}
