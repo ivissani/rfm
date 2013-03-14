@@ -372,12 +372,36 @@ del problema.
 
 \subsubsection{Promedios por cada criterio}
 
-\hspace{-5em}
-\begin{minipage}{\textwidth}
+En la Tabla~\ref{tab:rescriterios} mostramos los resultados obtenidos para
+cada criterio. La columna ``worst speedup (x)'' consigna el peor desempeño
+promedio obtenido por el criterio correspondiente para un problema. La columna
+``best speedup (x)'' consigna el mejor desempeño promedio obtenido para un
+problema.
+
+Por último, la columna ``avg speedup (x)'' consigna el desempeño promedio
+obtenido por los criterios considerando todos los problemas. Este valor se
+calculó comparando la suma de los tiempos promedio de todos los problemas
+--sin herencia de cláusulas aprendidas-- contra la suma de los tiempos
+promedio de todos los problemas utilizando el criterio correspondiente. Hay
+que tener en cuenta entonces que las mejoras obtenidas en problemas más
+grandes pesarán más que las mejoras obtenidas en problemas más chicos.
+
+Es importante señalar que en esta tabla no aparecen absolutamente todos los
+criterios. El motivo de esto es que no todos los criterios pudieron ser
+probados con todos los problemas. Como se verá más adelante, algunos criterios
+resultaron claramente perjudiciales. Por lo tanto, dichos criterios no fueron
+probados con los problemas más grandes --Routing \emph{scope} 10, Closure
+\emph{scope} 13, etc--.
+
+En cada columna se señalaron con color verde los mejores resultados obtenidos
+en dicha columna y con color rojo los peores resultados obtenidos.
+
+\begin{table}
 	\small
 	\begin{tabular}{lrrr}
 		\toprule
-		criteria	&	worst speedup (x)	&	best speedup (x)	&	avg speedup (x) \\
+					&	worst 		&	best		&	avg \\
+		criteria	&	speedup (x)	&	speedup (x)	&	speedup (x) \\
 		\cmidrule(r){1-4}
 		lbdle2.+facts	&	0.68	&	4.91	&	1.97 \\
 		lbdle2.-facts	&	0.71	&	3.84	&	1.24 \\
@@ -413,10 +437,48 @@ del problema.
 		sizele6.-facts	&	0.79	&	5.69	&	\cellcolor{green}2.61 \\
 		\bottomrule
 	\end{tabular}
-	%\caption{Tiempo de ejecución (en segundos) distribuido vs. secuencial}
-\end{minipage}
+	\caption{Peor \emph{speedup} para un problema, mejor \emph{speedup} para un problema y \emph{speedup} promedio obtenido por cada uno de los criterios probados}
+	\label{tab:rescriterios}
+\end{table}
+
+En estos resultados se observa que no hubo ningún criterio que sea siempre
+mejor o igual que el criterio nulo. A su vez, el criterio que consiste en
+heredar únicamente los hechos aprendidos --cláusulas de tamaño 1-- resultó ser
+el que mejor ``worst speedup'' obtuvo. Es decir que este criterio resultó ser
+el más seguro en tanto que en el peor caso producirá un resultado un 19\% peor
+que si no hubiéramos utilizado ningún tipo de herencia.
+
+También se puede ver que hay más de un criterio que presenta una mejora
+promedio (es decir sobre todos los problemas) superior a $2x$ siendo el máximo
+obtenido $2.61x$. Es decir que de haber utilizado dicho criterio habríamos
+tenido que invertir el 38\% del tiempo que tomó resolver los mismos problemas
+sin herencia de cláusulas.
+
+Por último observamos que existen criterios que presentan mucha varianza. Por
+ejemplo, el criterio que obtuvo el mejor \emph{speedup} ($7.18x$) para algún
+problema obtuvo como peor \emph{speedup} un valor de $0.58x$ muy cercano al
+peor de todos.
 
 \subsubsection{Heatmaps para scopes crecientes}
 
+\begin{figure}
+	\includegraphics[width=\textwidth]{resultados/losp_heat.png}
+	\caption{Comparación de criterios de herencia para distintos \emph{scopes} para el problema Routing}
+\end{figure}
+
+\begin{figure}
+	\includegraphics[width=\textwidth]{resultados/losk_heat.png}
+	\caption{Comparación de criterios de herencia para distintos \emph{scopes} para el problema Closure}
+\end{figure}
+
+\begin{figure}
+	\includegraphics[width=\textwidth]{resultados/lossound_heat.png}
+	\caption{Comparación de criterios de herencia para distintos \emph{scopes} para el problema GC Soundness2}
+\end{figure}
+
+\begin{figure}
+	\includegraphics[width=\textwidth]{resultados/loscomp_heat.png}
+	\caption{Comparación de criterios de herencia para distintos \emph{scopes} para el problema GC Completeness}
+\end{figure}
 
 \subsection{Discusión y conclusiones}
