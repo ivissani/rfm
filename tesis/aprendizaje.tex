@@ -230,17 +230,19 @@ hacia el verde se saturó en $0.5$ veces el tiempo requerido por el criterio nul
 	\label{perchasound8}
 \end{figure}
 
-Como se puede observar en las figuras, los resultados obtenidos varían de
-acuerdo a cada uno de los problemas. Sin embargo es de notar que en la mayoría
-de los problemas podemos encontrar uno o varios criterios que reportan
-resultados positivos.
+Como puede observarse en las figuras, los resultados obtenidos varían
+fuertemente de uno a otro problema y en función de cada elección particular de
+variables. Además, los resultados no podrían ser del todo concluyentes en
+tanto constituyen una aproximación de orden 1 al enfoque \emph{divide-and-
+conquer}: en esta prueba de concepto, el problema no se parte recursivamente
+sino una única vez en subproblemas.
 
-Estos resultados no son concluyentes. Esto se debe a que fueron obtenidos en
-experimentos en los que el problema fue partido una única vez. En cambio
-nuestro enfoque incluye la partición recursiva de un problema. Sin embargo,
-entendemos que se los puede considerar como evidencia suficientemente
-alentadora como para embarcarnos en la implementación real de esta técnica en
-el marco de nuestra herramienta.
+Más allá de estas limitaciones, cabe observar que en algunos casos varios de
+los criterios reportan ganancias considerables. Aún más importante es el hecho
+de que para la mayoría de los problemas hay al menos un criterio que reporta
+resultados positivos. Interpretamos esto como evidencia suficientemente
+alentadora como para embarcarnos en una evaluación más realista de la técnica
+en el marco de nuestra herramienta distribuida.
 
 \section{Resultados experimentales}
 
@@ -261,7 +263,7 @@ Se probaron tres tipos de criterios:
 
 	\item Por actividad: En \ref{sec:longactlbd} se explicó a qué nos referimos por actividad de una cláusula. De ello se desprende que la actividad de una cláusula es un indicador de cuántas veces esa cláusula fue (parcialmente) responsable de que ocurra un conflicto. Es de esperar entonces que las cláusulas con mayor actividad sean más relevantes para evitar recorrer ciertas porciones del espacio de de búsqueda.
 
-	\item Por \emph{LBD}: También en \ref{sec:longactlbd} introdujimos la noción de \emph{Literals Block Distance}. Elegimos utilizar esta medida porque se han reportado muy buenos resultados en \ssolvers secuenciales utilizando criterios basados en esta medida.
+	\item Por \emph{LBD}: También en \ref{sec:longactlbd} introdujimos la noción de \emph{Literals Block Distance}. Elegimos utilizar esta medida porque se han reportado muy buenos resultados en \ssolvers secuenciales \cite{satchallenge12,satcomp11,satcomp09} utilizando criterios basados en esta medida.
 \end{itemize}
 
 \subsubsection{Parámetros}
@@ -302,14 +304,14 @@ exclusiva como criterio de herencia.
 A continuación presentamos los resultados obtenidos. Los mismos se dividen en
 tres aspectos diferentes. 
 
-\subsubsection{Validación de las hipótesis de trabajo}
+\subsubsection{Validación de la hipótesis de trabajo}
 
 En la Tabla~\ref{tab:mejorlearning} se presenta la comparación entre los
 resultados obtenidos con el \ssolver secuencial, los resultados obtenidos por
 nuestra herramienta sin herencia de cláusulas aprendidas y los resultados
 obtenidos por nuestra herramienta con herencia de cláusulas aprendidas.
 
-Las primeras siete columnas poseen el exacto mismo significado que en la
+Las primeras seis columnas poseen el exacto mismo significado que en la
 Tabla~\ref{tab:resultados}. En la columna ``best. par. walltime'' consignamos
 el mejor tiempo obtenido por nuestra herramienta con algún criterio de
 selección de cláusulas aprendidas --incluyendo el criterio nulo--.
@@ -322,41 +324,51 @@ speedup}}{\text{\#\ws}}$$ La columna ``efficiency multiplier'' es el resultado
 de la división $$\frac{\text{effic.}}{\text{best effic.}}$$
 
 
-\begin{sidewaystable}
-	\small
-	\begin{tabular}{lrrrrrrrrrr}
+\begin{table}
+	\scriptsize
+	\begin{tabular}{lrrrrrrrrr}
 		\toprule
-		problem	&			&	seq. 				&	reps.	& avg. par.		&	speedup	&	effic.		& best par.	& best 		& best			& efficiency \\
-				&			&		walltime (s)	&	 		& walltime	&			&	 			& walltime		& speedup 	& effic.	& multiplier \\
-		\cmidrule(r){1-11}
-		Routing	&	8		&	308.26				&		7 	& 60.46			& 5.10x		&	0.08 		& 60.46			&	5.10x	& 0.08			& 1.00
+		problem	&			&	reps.	& avg. par.		&	speedup	&	effic.		& best par.	& best 		& best			& efficiency \\
+				&			&	 		& walltime	&			&	 			& walltime		& speedup 	& effic.	& multiplier \\
+		\cmidrule(r){1-10}
+		Routing	&	8		&		7 	& 60.46			& 5.10x		&	0.08 		& 60.46			&	5.10x	& 0.08			& 1.00
 \\
-		Routing	&	9		&	76168.16			&	6 		& 407.34		& 	186.99x	&	2.92 		& 387.44		& 196.60x	& 3.07			& 1.05
+		Routing	&	9		&	6 		& 407.34		& 	186.99x	&	2.92 		& 387.44		& 196.60x	& 3.07			& 1.05
 \\
-		Routing	&	$^*$10	&	$>$1209600.00		&	5 		& 5046.84		&$>$239.67x	&	$>$3.74 	& 3213.59		& $>$376.40x	& $>$5.88			& $>$1.57
+		Routing	&	$^*$10	&	5 		& 5046.84		&$>$239.67x	&	$>$3.74 	& 3213.59		& $>$376.40x	& $>$5.88			& $>$1.57
 \\
-		\cmidrule(r){1-11}
-		Closure	&	11		&	749.65				&	14 		& 291.28		&	2.57x	&	0.04 		& 150.30		&  4.99x	& 0.08			& 1.94
-\\		Closure	&	12		&	3983.36				&	5 		& 1914.45		&	2.08x	&	0.03 		& 266.68		& 14.94x	& 0.23			& 7.35
-\\		Closure	&	13		&	16261.35			& 5 		&	4362.61		&	3.73x	&	0.06 		& 645.44		& 25.19x	& 0.39			& 6.76
+		\cmidrule(r){1-10}
+		Closure	&	11		&	14 		& 291.28		&	2.57x	&	0.04 		& 150.30		&  4.99x	& 0.08			& 1.94
+\\		Closure	&	12		&	5 		& 1914.45		&	2.08x	&	0.03 		& 266.68		& 14.94x	& 0.23			& 7.35
+\\		Closure	&	13		& 5 		&	4362.61		&	3.73x	&	0.06 		& 645.44		& 25.19x	& 0.39			& 6.76
 \\
-		\cmidrule(r){1-11}
-		GC Sound.&	9	&	217.31				&	10 		& 200.85		&	1.08x	&	0.02 		& 168.04		& 1.29x		& 0.02			& 1.20
+		\cmidrule(r){1-10}
+		GC Sound.&	9	&	10 		& 200.85		&	1.08x	&	0.02 		& 168.04		& 1.29x		& 0.02			& 1.20
 \\
-		GC Sound.&	10	&	 2855.30			&	7 		& 1376.89		&	2.07x	&	0.03 		& 592.54		& 4.82x		& 0.08			& 2.32
+		GC Sound.&	10	&	7 		& 1376.89		&	2.07x	&	0.03 		& 592.54		& 4.82x		& 0.08			& 2.32
 \\
-		\cmidrule(r){1-11}
-		GC Compl.	& 8	&	180.25				&	7 		& 61.50			&	2.93x	&	0.05 		& 36.43			& 4.95x		& 0.08			& 1.69
+		\cmidrule(r){1-10}
+		GC Compl.	& 8	&	7 		& 61.50			&	2.93x	&	0.05 		& 36.43			& 4.95x		& 0.08			& 1.69
 \\
-		GC Compl.	& 9	&	18643.06			&	5 		& 1825.60		&	10.21x	&	0.16 		& 390.48		& 47.74x	& 0.75			& 4.68
+		GC Compl.	& 9	&	5 		& 1825.60		&	10.21x	&	0.16 		& 390.48		& 47.74x	& 0.75			& 4.68
 \\
 		\bottomrule
 		\\
 		\multicolumn{10}{l}{\begin{tiny}$^*$: Se ejecutó por 14 días sin que el \ssolver secuencial consiga un resultado\end{tiny}}
 	\end{tabular}
-	\caption{Tiempo de ejecución (en segundos) distribuido vs. secuencial}
+	\caption{Tiempo de ejecución (en segundos) distribuido sin herencia vs. distribuido con herencia de cláusulas aprendidas}
 	\label{tab:mejorlearning}
-\end{sidewaystable}
+\end{table}
+
+En casi todos los casos se obtuvo una disminución en los tiempos de cómputo
+con respecto a la versión sin herencia de cláusulas aprendidas. Se observa una
+única excepción, el problema Routing con \emph{scope} 8. En este caso el mejor
+tiempo fue el obtenido por el criterio nulo. Es decir por la herramienta sin
+herencia de cláusulas.
+
+Se observa también una tendencia a que la mejora obtenida por la incorporación
+de herencia de cláusulas crezca considerablemente a medida que crece el tamaño
+del problema.
 
 \subsubsection{Promedios por cada criterio}
 
