@@ -372,6 +372,7 @@ En la actualidad, para aprovechar la estructura del grafo de implicaciones (la c
 
 
 \subsubsection{Recorte de la base de datos}
+\label{sec:pruning}
 
 La acumulación de cláusulas aprendidas en conflictos pasados resulta muy ventajosa, pero no puede más que convertirse en una desventaja si se la implementa de manera irrestricta. En primer lugar, la cantidad de cláusulas aprendidas es proporcional a la de conflictos hallados, que a su vez es --en peor caso-- exponencial en la cantidad de variables. Así, un solver que aprenda pero nunca descarte cláusulas correría el riesgo de agotar la memoria disponible.
 

@@ -64,7 +64,7 @@ que llamaremos \emph{herencia}. Este mecanismo consiste en que, al generar
 nuevos subproblemas a partir de un problema padre \nonemptytask, los
 subproblemas hijos son generados con un subconjunto de $C$ como conjunto de
 cláusulas aprendidas. Llamaremos \emph{criterio} a cada forma distinta de
-obtener un subconjunto a partir de un conjunto de cláusulas $C$.
+obtener un subconjunto de un conjunto de cláusulas $C$.
 
 
 \subsubsection{Consideraciones de escalabilidad}
@@ -123,32 +123,31 @@ cláusulas.
 En primer lugar la incorporación de cláusulas aprendidas a un problema
 incrementa la cantidad de cláusulas sobre las que es necesario propagar las
 decisiones. Esto provoca una ralentización del proceso de propagación que
-puede resultar en una disminución del rendimiento del \ssolver secuencial. La
-información experimental presentada en diversos artículos muestra que,
-incrementar en demasía la base de datos de cláusulas aprendidas en un \ssolver
-secuencial, se torna contraproducente. Es por esto que los \ssolvers
-secuenciales cuentan con políticas de recorte de dicha base de datos y que,
-por lo general, estas políticas son bastante agresivas.
+puede resultar en una disminución del rendimiento del \ssolver secuencial.
+Como ya se mencionó en \ref{sec:pruning}, es sabido que incrementar en demasía
+la base de datos de cláusulas aprendidas en un \ssolver secuencial se torna
+contraproducente. Es por esto que todos los \ssolvers \CDCL secuenciales
+cuentan con políticas de recorte de dicha base de datos y que, por lo general,
+estas políticas son bastante agresivas.
 
 Otro factor que aboga en contra de mantener la totalidad de las cláusulas
 aprendidas por el padre es el hecho de que los subproblemas generados suelen
 ser más chicos que el padre. Incluso es bastante común que una buena
 proporción de los subproblemas generados al partir un problema padre sean
-considerablemente más chicos. En todos estos casos la incorporación de una
+considerablemente más chicos. En todos estos casos la incorporación de un
 conjunto de cláusulas aprendidas extremadamente grande, resultará
 inmediatamente contraproducente debido a lo expuesto en el párrafo anterior.
 
-El último motivo para la introducción de criterios de selección es que el
-conjunto de cláusulas aprendidas de un problema es potencialmente muy grande.
-Por otro lado, los subproblemas generados no son resueltos inmediatamente sino
-que pasan a formar parte de la cola de tareas pendientes. Es decir que,
-heredar la totalidad de las cláusulas aprendidas del problema padre en cada
-uno de los subproblemas hijos, nos obligaría a pagar un alto costo debido a la
-escritura y posterior lectura --hacia y desde memoria secundaria-- de cada
-unos de estos conjuntos (potencialmente muy grandes) más el costo de la
-posible transmisión por medio de la red. Esto atentaría directamente contra el
-desempeño de nuestra herramienta, incrementando en demasía los costos
-\emph{fijos} asociados al enfoque.
+El último motivo para la introducción de criterios de selección es que los
+subproblemas generados no son resueltos inmediatamente sino que pasan a formar
+parte de la cola de tareas pendientes. Dado que el conjunto de cláusulas
+aprendidas de un problema es potencialmente muy grande, heredar la totalidad
+de las mismas en cada uno de los subproblemas hijos nos obligaría a pagar un
+alto costo debido a la escritura y posterior lectura --hacia y desde memoria
+secundaria-- de cada uno de estos conjuntos (potencialmente muy grandes) más
+el costo de la posible transmisión por medio de la red. Esto atentaría
+directamente contra el desempeño de nuestra herramienta, incrementando en
+demasía los costos \emph{fijos} asociados al enfoque.
 
 % Que cada hijo herede TODAS las cláusulas aprendidas por su padre probablemente sea demasiado / contraproducente:
 % \begin{itemize}
@@ -173,7 +172,7 @@ finalización. Dado que, como ya mencionamos, la elección de variables a
 levantar influye fuertemente en la distribución de dificultades de los
 subproblemas resultantes, cada criterio fue testeado utilizando 10 secuencias
 de variables distintas generadas pseudoaleatoriamente. Luego se compararon
-tanto los tiempos totales de cómputo invertidos en resolver el problema, como
+tanto los tiempos totales de cómputo invertidos en resolver el problema como
 el tiempo del camino crítico (determinado por el subproblema que más tiempo
 tomó).
 
@@ -189,7 +188,7 @@ obtenidos con uno de los órdenes pseudoaleatorios. La columna de la izquierda
 de cada par de columnas indica el tiempo en segundos requerido para resolver
 el camino crítico. Mientras tanto la columna de la derecha indica la sumatoria
 del total de tiempos requerido para resolver todos los subproblemas. A su vez,
-el último par de columnas de cada figura, denotado con la leyenda ``AVERAGE''
+el último par de columnas de cada figura, denotado con la leyenda ``AVERAGE'',
 contiene los promedios de los tiempos obtenidos.
 
 No nos interesaba en esta etapa evaluar cuál o cuáles de los criterios eran
@@ -288,14 +287,14 @@ porcentaje de las cláusulas aprendidas del padre se desea conservar y por
 aquellas cláusulas aprendidas cuyo tamaño sea 2 (cláusulas binarias).
 
 La incorporación de las cláusulas binarias en los criterios por actividad
-surge del hecho de que, el \ssolver secuencial utilizado recorta su base de
-datos de claúsulas aprendidas de acuerdo a la actividad pero nunca descarta
-las cláusulas binarias.
+surge del hecho de que el \ssolver secuencial utilizado las maneja de manera
+particular. Si bien recorta su base de datos de claúsulas aprendidas de
+acuerdo a la actividad, nunca descarta las cláusulas binarias.
 
 Además de los tipos de criterios mencionados también se implementó la
 posibilidad de heredar los \emph{hechos} aprendidos (o \emph{facts}). La
 herencia de los \emph{facts} se implementó de manera tal que pudiera tanto ser
-combinada con los distintos tipos de criterios como también utilizada de forma
+combinada con los distintos tipos de criterios como utilizada de forma
 exclusiva como criterio de herencia.
 
 
