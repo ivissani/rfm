@@ -113,6 +113,7 @@ mismo criterio para toda la corrida.
 
 
 \subsubsection{Sobre los criterios}
+\label{sec:aboutcriteria}
 
 En principio podríamos preguntarnos de dónde surge la necesidad de tener
 criterios para la herencia de cláusulas aprendidas. O lo que es lo mismo, por
@@ -242,7 +243,7 @@ Más allá de estas limitaciones, cabe observar que en algunos casos varios de
 los criterios reportan ganancias considerables. Aún más importante es el hecho
 de que para la mayoría de los problemas hay al menos un criterio que reporta
 resultados positivos. Interpretamos esto como evidencia suficientemente
-alentadora como para embarcarnos en una evaluación más realista de la técnica
+alentadora para embarcarnos en una evaluación más realista de la técnica
 en el marco de nuestra herramienta distribuida.
 
 \section{Resultados experimentales}
@@ -260,11 +261,11 @@ tamaño $1$.
 Se probaron tres tipos de criterios:
 
 \begin{itemize}
-	\item Por tamaño: Este criterio refiere a la cantidad de literales intervinientes en una cláusula. La motivación de este criterio surge de la observación de que, cuanto más pequeña sea una cláusula, mayor será la porción del árbol de búsqueda que recorte. Recordemos que, en el contexto de nuestro problema, las cláusulas son disyuciones. Por lo tanto una cláusula que contiene $n$ literales nos evita recorrer una $\frac{1}{2^n}$ parte del espacio de búsqueda. Esto se debe a que, de las $2^n$ valuaciones posibles restringidas a los $n$ literales intervinientes, hay una de ellas --en particular aquella que hace que dicha cláusula sea falsa-- que es descartada gracias a la existencia de esta cláusula aprendida. Por lo tanto ninguna valuación que contenga dicha valuación restringida será viable. Por ende, a menor tamaño de cláusula, mayor será el espacio de búsqueda recortado.
+	\item Por tamaño: Este criterio refiere a la cantidad de literales intervinientes en una cláusula. La motivación de este criterio surge de la observación de que, cuanto más pequeña sea una cláusula, mayor será la porción del árbol de búsqueda que recorte. Recordemos que, en el contexto de nuestro problema, las cláusulas son disyunciones. Por lo tanto una cláusula que contiene $n$ literales nos evita recorrer una $\frac{1}{2^n}$ parte del espacio de búsqueda. Esto se debe a que, de las $2^n$ valuaciones posibles restringidas a los $n$ literales intervinientes, hay una de ellas --en particular aquella que hace que dicha cláusula sea falsa-- que es descartada gracias a la existencia de esta cláusula aprendida. Por lo tanto ninguna valuación que contenga dicha valuación restringida será viable. Por ende, a menor tamaño de cláusula, mayor será el espacio de búsqueda recortado.
 
 	\item Por actividad: En \ref{sec:longactlbd} se explicó a qué nos referimos por actividad de una cláusula. De ello se desprende que la actividad de una cláusula es un indicador de cuántas veces esa cláusula fue (parcialmente) responsable de que ocurra un conflicto. Es de esperar entonces que las cláusulas con mayor actividad sean más relevantes para evitar recorrer ciertas porciones del espacio de de búsqueda.
 
-	\item Por \emph{LBD}: También en \ref{sec:longactlbd} introdujimos la noción de \emph{Literals Block Distance}. Elegimos utilizar esta medida porque se han reportado muy buenos resultados en \ssolvers secuenciales \cite{satchallenge12,satcomp11,satcomp09} utilizando criterios basados en esta medida.
+	\item Por \emph{LBD}: También en \ref{sec:longactlbd} introdujimos la noción de \emph{Literals Block Distance}. Elegimos utilizar esta medida porque se han reportado muy buenos resultados en \ssolvers secuenciales \cite{satchallenge12,satcomp11,satcomp09} utilizando criterios basados en ella.
 \end{itemize}
 
 \subsubsection{Parámetros}
@@ -365,6 +366,18 @@ Se observa también una tendencia a que la mejora obtenida por la incorporación
 de herencia de cláusulas crezca considerablemente a medida que crece el tamaño
 del problema.
 
+Los resultados aquí expuestos permiten verificar la hipotésis de la cual
+partimos: efectivamente la incorporación de herencia de cláusulas aprendidas
+permitió mitigar los efectos negativos del retrabajo incrementando la
+eficiencia en el uso del \hard disponible.
+
+Sin embargo, en ausencia de un oráculo que permita determinar \emph{a priori}
+cuál de los criterios es más conveniente en cada ocasión, la implementación de
+herencia de cláusulas aprendidas en una herramienta usable en la práctica
+depende de nuestra capacidad para determinar cuál de los criterios es el que
+mejor se comporta en el caso promedio. Este problema se ataca en las
+siguientes secciones.
+
 \subsubsection{Multiplicadores de \emph{speedup} por cada criterio}
 
 En la Tabla~\ref{tab:rescriterios} mostramos los resultados obtenidos para
@@ -439,19 +452,32 @@ en dicha columna y con color rojo los peores resultados obtenidos.
 En estos resultados se observa que no hubo ningún criterio que sea siempre
 mejor o igual que el criterio nulo. A su vez, el criterio que consiste en
 heredar únicamente los hechos aprendidos --cláusulas de tamaño 1-- resultó ser
-el que mejor ``worst speedup'' obtuvo. Es decir que este criterio resultó ser
-el más seguro en tanto que en el peor caso producirá un resultado un 19\% peor
-que si no hubiéramos utilizado ningún tipo de herencia.
+el que mejor ``worst speedup multiplier'' obtuvo. Es decir que este criterio
+resultó ser el más seguro en tanto que en el peor caso producirá un resultado
+un 19\% peor que si no hubiéramos utilizado ningún tipo de herencia.
 
 También se puede ver que hay más de un criterio que presenta una mejora
-promedio (es decir sobre todos los problemas) superior a $2x$ siendo el máximo
+promedio (es decir sobre todos los problemas) superior a $2x$, siendo el máximo
 obtenido $2.61x$. Es decir que de haber utilizado dicho criterio habríamos
 tenido que invertir el 38\% del tiempo que tomó resolver los mismos problemas
 sin herencia de cláusulas.
 
+En los criterios por tamaño se observa que el ``avg. speedup multiplier''
+crece estrictamente a medida que crece la cantidad de literales permitida.
+Esto ocurre tanto en el caso en el que se incluyen los \emph{facts} como en el
+que no. En casi todos estos casos, los criterios que incluyen los \emph{facts}
+reportan mejores resultados para esta columna que los que no, aunque esta
+tendencia se revierte para el caso de tamaño 6.
+
+En los criterios por actividad se observa que aquellos que conservan las
+cláusulas binarias presentan un mejor ``avg. speedup multiplier'' que sus
+contrapartes que no lo hacen. Curiosamente no hay evidencia que permita
+concluir que es mejor conservar las cláusulas más activas en lugar de las
+menos activas.
+
 Por último observamos que existen criterios que presentan mucha varianza. Por
 ejemplo, el criterio que obtuvo el mejor \emph{speedup} ($7.18x$) para algún
-problema obtuvo como peor \emph{speedup} un valor de $0.58x$ muy cercano al
+problema obtuvo como peor \emph{speedup} un valor de $0.58x$, muy cercano al
 peor de todos.
 
 \subsubsection{Sobre la validez de los datos}
@@ -485,22 +511,22 @@ distintos criterios para diferentes \emph{scopes} de un mismo problema. Las
 Figuras~\ref{res:learnscopespamela}~a~\ref{res:learnscopescompleteness}
 presentan los resultados de la siguiente manera. 
 
-La primer fila (coloreada siempre de amarillo) representa el resultado
+La primera fila (coloreada siempre de amarillo) representa el resultado
 obtenido por el criterio nulo. Las filas subsiguientes representan los
-resultados obtenidos por el criterio indicado a la izquierda. El color que
-posee cada celda representa la comparación entre el resultado obtenido por ese
-criterio y el resultado obtenido por el criterio nulo para el correspondiente
-\emph{scope} de acuerdo a la escala indicada a la derecha de la figura. Así el
+resultados obtenidos por el criterio indicado a la izquierda. El color de cada
+celda representa la comparación entre el resultado obtenido por ese criterio y
+el resultado obtenido por el criterio nulo para el correspondiente
+\emph{scope}, de acuerdo a la escala indicada a la derecha de la figura. Así, el
 coloreo hacia el verde indica una mejora respecto del criterio nulo mientras
-que el coloreo hacia el rojo representa una peor desempeño con respecto al
-mismo criterio.
+que el coloreo hacia el rojo representa un peor desempeño.
 
-En el eje horizontal se ubican los distintos \emph{scopes} probados de manera
-creciente. Vale aclarar que el color gris indica la ausencia de resultados
-para dicha combinación de \emph{scope} y criterio.
-
-Corresponde aclarar también que, tal como se observa, no todos los criterios
-fueron probados para el problema ``GC Completeness''. \todo{Aclarar por qué? ¿Cómo?}
+En el eje horizontal se ubican de manera creciente los distintos \emph{scopes}
+probados. El color gris indica la ausencia de resultados para dicha
+combinación de \emph{scope} y criterio. Como ya se aclaró, en el mayor
+\emph{scope} de los problemas Routing y Closure nos limitamos a probar los
+criterios que habían reportado mejores resultados en los \emph{scopes}
+anteriores, y en el caso del problema ``GC Completeness'' no se ejecutaron las
+peores alternativas.
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{resultados/losp_heat.png}
@@ -526,20 +552,48 @@ fueron probados para el problema ``GC Completeness''. \todo{Aclarar por qué? ¿
 	\label{res:learnscopescompleteness}
 \end{figure}
 
-Nos interesa destacar dos observaciones de estos resultados. En primer lugar
-parece existir una tendencia a que, a medida que aumenta el tamaño de un
-problema, la herencia de cláusulas obtiene mejores resultados. Esto se observa
-tanto en criterios que en \emph{scopes} chicos provocaron malos resultados,
-como en criterios que provocaron buenos resultados.
+En primer lugar observamos que existe una tendencia a que, a medida que
+aumenta el tamaño de un problema, la herencia de cláusulas obtiene mejores
+resultados. Por un lado se ve que, criterios que en un \emph{scope}
+presentaron resultados positivos, en el \emph{scope} siguiente presentan
+resultados aún mejores. Del mismo modo los resultados negativos presentados
+por algunos criterios se suavizan a medida que crece el \emph{scope} del
+problema.
 
-También se observa cómo los resultados obtenidos por la herencia de cláusulas
-varían considerablemente de problema en problema sin que exista una relación
-evidente entre los problemas en los que esta metodología obtuvo buenos
-resultados y problemas en los que no.
+Consideramos que esto se debe a dos motivos. Por un lado existe un incremento
+en los costos asociados a la generación, transmisión y carga de las tareas
+cuando las mismas incluyen cláusulas aprendidas. Estos costos no crecen tan
+rápidamente como el costo de análisis a medida que crece el \emph{scope}. Por
+lo tanto el \emph{overhead} mencionado se va diluyendo a medida que el
+problema requiere mayor tiempo de cómputo. Además, como ya hemos comentado en
+la Sección~\ref{sec:pruning}, el uso de cláusulas aprendidas poda el espacio
+de búsqueda al costo de ir en detrimento de la velocidad de propagación (BCP).
+Así, su uso resulta particularmente necesario para resolver eficientemente
+ciertos problemas grandes (donde el espacio de búsqueda se vuelve inmenso, y
+cada poda es crucial para lograr agotarlo), pero a menudo es pernicioso para
+los más chicos (donde el costo extra en cada propagación se vuelve
+determinante).
 
-Por último se ve también que existe un subconjunto de los criterios probados
-que resulta consistentemente negativo. Nos referimos a los criterios por
-actividad que conservan el 10\% (o más) de las cláusulas aprendidas por el
-padre.
+También se observa que los resultados obtenidos por la herencia de cláusulas
+varían considerablemente de problema en problema, pero a la vez se mantienen
+coherentes a lo largo de los distintos \emph{scopes} de cada problema
+particular. Como ejemplos paradigmáticos podemos destacar el problema Routing,
+en el que la técnica tiende a no conseguir mejoras sustanciales aún en los
+mejores casos, y el problema Closure, en el cual tiende a conseguir buenos
+\emph{speedups} con la mayoría de los criterios. Esto sugiere la existencia de
+cualidades intrínsecas a cada uno de los problemas que los hacen
+inherentemente más (o menos) propensos a beneficiarse del enfoque propuesto.
+Los experimentos realizados no son suficientes para aspirar a una extracción
+de patrones comunes que permita aislar dichas cualidades.
 
-\subsection{Discusión y conclusiones}
+
+Por último cabe destacar que, tal como intuíamos, el criterio que conserva la
+totalidad de las cláusulas aprendidas por el padre resulta consistentemente
+malo, tanto en términos absolutos (es siempre peor que no aprender nada) como
+relativos (es siempre la peor alternativa). Además, observamos que existe un
+subconjunto de los criterios probados que resulta consistentemente negativo.
+Nos referimos a aquellos en los que se conserva el 10\% (o más) de las
+cláusulas aprendidas por el padre. Es altamente probable que el mal desempeño
+de estas alternativas se deba a las razones expuestas en la
+Sección~\ref{sec:aboutcriteria}.
+
