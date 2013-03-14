@@ -311,54 +311,48 @@ resultados obtenidos con el \ssolver secuencial, los resultados obtenidos por
 nuestra herramienta sin herencia de cláusulas aprendidas y los resultados
 obtenidos por nuestra herramienta con herencia de cláusulas aprendidas.
 
-Las primeras seis columnas poseen el exacto mismo significado que en la
-Tabla~\ref{tab:resultados}. En la columna ``best. par. walltime'' consignamos
+Las primeras siete columnas poseen el exacto mismo significado que en la
+Tabla~\ref{tab:resultados}. En la columna ``par. walltime w. inher. best crit.'' consignamos
 el mejor tiempo obtenido por nuestra herramienta con algún criterio de
 selección de cláusulas aprendidas --incluyendo el criterio nulo--.
 
-La columna ``best speedup'' representa la mejoría en el tiempo percibido
-obtenida por el mejor criterio. La misma es el resultado de la divisón
-$$\frac{\text{seq. walltime}}{\text{best par. walltime}}$$ La columna ``best
-effic.'' es el resultado de la división $$\frac{\text{best
-speedup}}{\text{\#\ws}}$$ La columna ``efficiency multiplier'' es el resultado
-de la división $$\frac{\text{effic.}}{\text{best effic.}}$$
+La columna ``speedup w. inher. best crit.'' representa la mejoría en el tiempo
+percibido obtenida por el mejor criterio. La misma es el resultado de la
+divisón $$\frac{\text{seq. walltime}}{\text{par. walltime w. inher. best
+crit.}}$$ La columna ``efficiency w. inher. best crit.'' es el resultado de la
+división $$\frac{\text{speedup w. inher. best crit.}}{\text{\#\ws}}$$ La
+columna ``effic. mult.'' es el resultado de la división
+$$\frac{\text{efficiency without inheritance}}{\text{efficiency w. inher. best
+crit.}}$$
 
-
-\begin{table}
-	\scriptsize
-	\begin{tabular}{lrrrrrrrrr}
+\begin{sidewaystable}
+	\small
+	\begin{tabular}{lrrrrrrrrrr}
 		\toprule
-		problem	&			&	reps.	& avg. par.		&	speedup	&	effic.		& best par.	& best 		& best			& efficiency \\
-				&			&	 		& walltime	&			&	 			& walltime		& speedup 	& effic.	& multiplier \\
-		\cmidrule(r){1-10}
-		Routing	&	8		&		7 	& 60.46			& 5.10x		&	0.08 		& 60.46			&	5.10x	& 0.08			& 1.00
-\\
-		Routing	&	9		&	6 		& 407.34		& 	186.99x	&	2.92 		& 387.44		& 196.60x	& 3.07			& 1.05
-\\
-		Routing	&	$^*$10	&	5 		& 5046.84		&$>$239.67x	&	$>$3.74 	& 3213.59		& $>$376.40x	& $>$5.88			& $>$1.57
-\\
-		\cmidrule(r){1-10}
-		Closure	&	11		&	14 		& 291.28		&	2.57x	&	0.04 		& 150.30		&  4.99x	& 0.08			& 1.94
-\\		Closure	&	12		&	5 		& 1914.45		&	2.08x	&	0.03 		& 266.68		& 14.94x	& 0.23			& 7.35
-\\		Closure	&	13		& 5 		&	4362.61		&	3.73x	&	0.06 		& 645.44		& 25.19x	& 0.39			& 6.76
-\\
-		\cmidrule(r){1-10}
-		GC Sound.&	9	&	10 		& 200.85		&	1.08x	&	0.02 		& 168.04		& 1.29x		& 0.02			& 1.20
-\\
-		GC Sound.&	10	&	7 		& 1376.89		&	2.07x	&	0.03 		& 592.54		& 4.82x		& 0.08			& 2.32
-\\
-		\cmidrule(r){1-10}
-		GC Compl.	& 8	&	7 		& 61.50			&	2.93x	&	0.05 		& 36.43			& 4.95x		& 0.08			& 1.69
-\\
-		GC Compl.	& 9	&	5 		& 1825.60		&	10.21x	&	0.16 		& 390.48		& 47.74x	& 0.75			& 4.68
-\\
+		problem	&			&	reps.	& 	seq.		&  par. walltime	&	speedup				&	efficiency			& par.	walltime				& speedup 							& efficiency			& eff. \\
+				&			&	 		& walltime		&  without 			&	without				&	without				& w. inher.	& w. inher. 	& w. inher.	& mult. \\
+				&			&	 		& 				& inheritance 		&	 inheritance		&	 inheritance	 	& best crit.	& best crit. 	& best crit.	&  \\
+		\cmidrule(r){1-11}
+		Routing	&	8		&		7 	& 308.26		&  60.46		& 5.10x		&	0.08 		& 60.46			&	5.10x	& 0.08		& 1.00 \\
+		Routing	&	9		&	6 		& 76168.16		&  407.34		& 	186.99x	&	2.92 		& 387.44		& 196.60x	& 3.07		& 1.05 \\
+		Routing	&	$^*$10	&	5 		& $>$1209600.00	&  5046.84		&$>$239.67x	&	$>$3.74 	& 3213.59		&$>$376.40x	& $>$5.88	& 1.57 \\
+		\cmidrule(r){1-11}
+		Closure	&	11		&	14 		& 749.65		&  291.28		&	2.57x	&	0.04 		& 150.30		&  4.99x	& 0.08		& 1.94 \\
+		Closure	&	12		&	5 		& 3983.36		&  1914.45		&	2.08x	&	0.03 		& 266.68		& 14.94x	& 0.23		& 7.35 \\
+		Closure	&	13		&  5 		& 16261.35		& 	4362.61		&	3.73x	&	0.06 		& 645.44		& 25.19x	& 0.39		& 6.76 \\
+		\cmidrule(r){1-11}
+		GC Sound.&	9		&	10 		& 217.31		&  200.85		&	1.08x	&	0.02 		& 168.04		& 1.29x		& 0.02		& 1.20 \\
+		GC Sound.&	10		&	7 		&  2855.30		&  1376.89		&	2.07x	&	0.03 		& 592.54		& 4.82x		& 0.08		& 2.32 \\
+		\cmidrule(r){1-11}
+		GC Compl.	& 8		&	7 		& 180.25		&  61.50		&	2.93x	&	0.05 		& 36.43			& 4.95x		& 0.08		& 1.69 \\
+		GC Compl.	& 9	&	5 		& 18643.06		&  1825.60		&	10.21x	&	0.16 		& 390.48		& 47.74x	& 0.75		& 4.68 \\
 		\bottomrule
 		\\
 		\multicolumn{10}{l}{\begin{tiny}$^*$: Se ejecutó por 14 días sin que el \ssolver secuencial consiga un resultado\end{tiny}}
 	\end{tabular}
 	\caption{Tiempo de ejecución (en segundos) distribuido sin herencia vs. distribuido con herencia de cláusulas aprendidas}
 	\label{tab:mejorlearning}
-\end{table}
+\end{sidewaystable}
 
 En casi todos los casos se obtuvo una disminución en los tiempos de cómputo
 con respecto a la versión sin herencia de cláusulas aprendidas. Se observa una

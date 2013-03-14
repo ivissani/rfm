@@ -379,19 +379,19 @@ Esta medida indica la ganancia neta de \emph{speedup} por \w utilizado.
 		problem	&	scope	&	seq. walltime (s)	&	reps. & avg. par.	&	speedup	&	efficiency \\
 			&		&	&	 & walltime (s)	&		&	 \\
 		\cmidrule(r){1-7}
-		Routing	&	8	&	308.26	&		7 & 60.46	& 5.10x	&	0.08 \\
-		Routing	&	9	&	76168.16	&	6& 407.34	& 	186.99x	&	2.92 \\
-		Routing	&	$^*$10	&	$>$1209600.00	&	5 & 5046.84	&	$>$239.67x	&	$>$3.74 \\
+		Routing	&	8			&	308.26			&		7 & 60.46	& 5.10x	&	0.08 \\
+		Routing	&	9			&	76168.16		&	6& 407.34	& 	186.99x	&	2.92 \\
+		Routing	&	$^*$10		&	$>$1209600.00	&	5 & 5046.84	&	$>$239.67x	&	$>$3.74 \\
+		\cmidrule(r){1-7}	
+		Closure	&	11			&	749.65			&	14 & 291.28	&	2.57x	&	0.04 \\
+		Closure	&	12			&	3983.36			&	5 & 1914.45	&	2.08x	&	0.03 \\
+		Closure	&	13			&	16261.35		& 5 &	4362.61	&	3.73x	&	0.06 \\
 		\cmidrule(r){1-7}
-		Closure	&	11	&	749.65	&	14 & 291.28	&	2.57x	&	0.04 \\
-		Closure	&	12	&	3983.36	&	5 & 1914.45	&	2.08x	&	0.03 \\
-		Closure	&	13	&	16261.35	& 5 &	4362.61	&	3.73x	&	0.06 \\
+		GC Soundness2	&	9	&	217.31			&	10 & 200.85	&	1.08x	&	0.02 \\
+		GC Soundness2	&	10	&	 2855.30		&	7 &1376.89	&	2.07x	&	0.03 \\
 		\cmidrule(r){1-7}
-		GC Soundness2	&	9	&	217.31	&	10 & 200.85	&	1.08x	&	0.02 \\
-		GC Soundness2	&	10	&	 2855.30	&	7 &1376.89	&	2.07x	&	0.03 \\
-		\cmidrule(r){1-7}
-		GC Completeness	&	8	&	180.25	&	7 & 61.50	&	2.93x	&	0.05 \\
-		GC Completeness	&	9	&	18643.06	&	5 & 1825.60	&	10.21x	&	0.16 \\
+		GC Completeness	&	8	&	180.25			&	7 & 61.50	&	2.93x	&	0.05 \\
+		GC Completeness	&	9	&	18643.06		&	5 & 1825.60	&	10.21x	&	0.16 \\
 		\bottomrule
 		\\
 		\multicolumn{7}{l}{\begin{tiny}$^*$: Se ejecutó por 14 días sin que el \ssolver secuencial consiga un resultado\end{tiny}}
