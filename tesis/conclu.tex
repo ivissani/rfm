@@ -5,13 +5,25 @@
 
 \section{Conclusiones}
 
-En el presente trabajo desarrollamos una herramienta de \ssolving paralelo y distribuido, orientada en particular a la verificación automática de propiedades sobre modelos formales de sistemas. Adoptamos un enfoque \emph{divide-and-conquer}, basado en una técnica conocida, para el particionamiento recursivo de subproblemas difíciles. Lo implementamos sobre una arquitectura original, dando respuesta a los aspectos cruciales de escalabilidad, usabilidad y automatización. Identificamos un factor limitante para la eficiencia del enfoque de particionamiento. Propusimos una solución basada en herencia de cláusulas aprendidas. Diseñamos e implementamos diversos criterios y evaluamos su desempeño.
+En el presente trabajo desarrollamos una herramienta de \ssolving paralelo y
+distribuido, orientada en particular a la verificación automática de
+propiedades sobre modelos formales de sistemas. Adoptamos un enfoque \emph
+{divide-and-conquer}, basado en una técnica conocida, para el particionamiento
+recursivo de subproblemas difíciles. Lo implementamos sobre una arquitectura
+original, dando respuesta a los aspectos cruciales de escalabilidad,
+usabilidad y automatización. Identificamos un factor limitante para la
+eficiencia del enfoque de particionamiento. Propusimos una solución basada en
+herencia de cláusulas aprendidas. Diseñamos e implementamos diversos criterios
+y evaluamos su desempeño.
 
 \medskip
 
-Las principales conclusiones respecto de la herramienta paralela y distribuida propiamente dicha son:
+Las principales conclusiones respecto de la herramienta paralela y distribuida
+propiamente dicha son:
 
 \begin{itemize}
+
+\item Se lograron \emph{speedups} considerables en la mayoría de los casos. Incluso en uno de los problemas se consiguieron \emph{speedups} supralineales.
 
 \item La arquitectura resultó sólida y robusta, escalando sin inconvenientes al orden del centenar de \ws sobre decenas de equipos.
 
@@ -65,9 +77,17 @@ Las principales conclusiones respecto de la implementación y evaluación de cl�
 
 \subsubsection{Mejoras en la estrategia automatizada de toma de decisiones}
 
-Uno de los aspectos más importantes a seguir refinando es la estrategia automática de toma de decisiones que hace posible la operación no supervisada del sistema. La versión actual logra evitar la mayor parte de los errores más evidentes, y así resulta capaz de llevar a buen puerto verificaciones breves, medianas y muy largas de propiedades muy diversas. Sin embargo, hay diversas capacidades que podrían ser mejoradas en futuras versiones.
+Uno de los aspectos más importantes a seguir refinando es la estrategia
+automática de toma de decisiones que hace posible la operación no supervisada
+del sistema. La versión actual logra evitar la mayor parte de los errores más
+evidentes, y así resulta capaz de llevar a buen puerto verificaciones breves,
+medianas y muy largas de propiedades muy diversas. Sin embargo, hay diversas
+capacidades que podrían ser mejoradas en futuras versiones.
 
-Ante todo, los parámetros numéricos fijos restantes que se describieron en la sección~\ref{estrategia:implementada} deberían ser reemplazados por mecanismos autoajustables. También podrían refinarse los algoritmos y las métricas utilizadas para los mecanismos que ya son autoajustables. En particular:
+Ante todo, los parámetros numéricos fijos restantes que se describieron en la
+sección~\ref{estrategia:implementada} deberían ser reemplazados por mecanismos
+autoajustables. También podrían refinarse los algoritmos y las métricas
+utilizadas para los mecanismos que ya son autoajustables. En particular:
 
 \begin{itemize}
 	\item Además de métricas directas (como la cantidad de problemas producidos y consumidos) y sus derivadas de primer orden (tasas de producción y consumo sobre tiempo), considerar también las de segundo orden (velocidad de estas últimas, i.e. aceleración de las primeras).
@@ -80,30 +100,68 @@ Ante todo, los parámetros numéricos fijos restantes que se describieron en la 
 
 \subsubsection{Evaluar la herramienta en \emph{clusters} más grandes}
 
-Sería importante obtener acceso a (y cantidad suficiente de tiempo de cómputo en) grandes cantidades de \emph{hardware}. En primer lugar, para medir cómo escala el rendimiento conforme se agregan más y más \ws.
+Sería importante obtener acceso a (y cantidad suficiente de tiempo de cómputo
+en) grandes cantidades de \emph{hardware}. En primer lugar, para medir cómo
+escala el rendimiento conforme se agregan más y más \ws.
 
-También sería interesante forzar la llegada al punto en que los componentes centralizados sí se conviertan en un factor limitante, para poder determinar si eso ocurre, por ejemplo, para cientos o para miles de \ws, y para observar si surgen otros factores limitantes que no hayamos imaginado.
+También sería interesante forzar la llegada al punto en que los componentes
+centralizados sí se conviertan en un factor limitante, para poder determinar
+si eso ocurre, por ejemplo, para cientos o para miles de \ws, y para observar
+si surgen otros factores limitantes que no hayamos imaginado.
 
 
 \subsubsection{Diseñar y evaluar nuevos criterios de aprendizaje}
 
-Ante todo sería necesario correr más experimentos, sobre una mayor diversidad de casos de estudio y para \emph{scopes} más grandes; esto último requiere abundante tiempo de cómputo.
+Ante todo sería necesario correr más experimentos, sobre una mayor diversidad
+de casos de estudio y para \emph{scopes} más grandes; esto último requiere
+abundante tiempo de cómputo.
 
-Una ventaja en este sentido es el haber confirmado que ciertos criterios de aprendizaje no resultan beneficiosos. Dado que esos criterios solían ser los que más demoraban, su eliminación permitirá ahorrar tiempo de cómputo que podrá invertirse en la evaluación de nuevos criterios, diseñados en base a los que dieron mejores resultados.
+Una ventaja en este sentido es el haber confirmado que ciertos criterios de
+aprendizaje no resultan beneficiosos. Dado que esos criterios solían ser los
+que más demoraban, su eliminación permitirá ahorrar tiempo de cómputo que
+podrá invertirse en la evaluación de nuevos criterios, diseñados en base a los
+que dieron mejores resultados.
+
+En particular, en la Sección~\ref{sec:resultadosaprendizaje} mostramos que en
+los criterios por tamaño el rendimiento mejoraba a medida que se permitían
+cláusulas más grandes. Esto es explicable ya que los criterios con mayor
+tamaño incluyen a las cláusulas de los criterios con menor tamaño.
+Naturalmente, los criterios con mayor tamaño incluyen más cláusulas. Sabemos
+que al seguir aumentando el tamaño máximo de cláusula premitido, la cantidad
+de cláusulas conservadas aumentará a un punto tal que los perjuicios por
+\emph{overhead} serán mayores que los beneficios obtenidos por recorte del
+espacio de búsqueda. Sin embargo, en los experimentos realizados no se llegó a
+este punto. Creemos que vale la pena seguir incrementando el tamaño permitido
+para poder determinar dónde está este punto de inflexión y cómo se comporta
+con respecto al incremento en \emph{scope}.
 
 
 \subsubsection{Análisis de conflictos, \emph{backjumping} y eliminación de subproblemas}
 
-Sería importante pensar cómo llevar a cabo, a nivel distribuido, algo equivalente al análisis de conflictos que realizan las herramientas secuenciales (véase sección~\ref{backjumping}) de modo que permita lograr podas análogas a las que en secuencial se logran por medio del \emph{backtracking} no cronológico.
+Sería importante pensar cómo llevar a cabo, a nivel distribuido, algo
+equivalente al análisis de conflictos que realizan las herramientas
+secuenciales (véase sección~\ref{backjumping}) de modo que permita lograr
+podas análogas a las que en secuencial se logran por medio del
+\emph{backtracking} no cronológico.
 
-En la implementación distribuida, esto podría complementar el enfoque CDCL al permitirnos demostrar, durante o tras el análisis de un subproblema, que cierta cantidad de \emph{otros} subproblemas (como ser hermanos, primos o incluso ancestros) son necesariamente insatisfacibles, y así poder eliminarlos de las colas de pendientes y/o abortar sus análisis en curso, de haberlos.
+En la implementación distribuida, esto podría complementar el enfoque CDCL al
+permitirnos demostrar, durante o tras el análisis de un subproblema, que
+cierta cantidad de \emph{otros} subproblemas (como ser hermanos, primos o
+incluso ancestros) son necesariamente insatisfacibles, y así poder eliminarlos
+de las colas de pendientes y/o abortar sus análisis en curso, de haberlos.
 
 
 \subsubsection{Interfaz más práctica para la toma de decisiones manual}
 
-El mecanismo actual, basado en una consola interactiva, resulta de suma utilidad para intervenciones esporádicas en momentos clave de una corrida por lo demás automática. También permite controlar una corrida en forma totalmente manual, aunque esto no resulta del todo práctico debido a la gran cantidad de comandos involucrados y su extensión.
+El mecanismo actual, basado en una consola interactiva, resulta de suma
+utilidad para intervenciones esporádicas en momentos clave de una corrida por
+lo demás automática. También permite controlar una corrida en forma totalmente
+manual, aunque esto no resulta del todo práctico debido a la gran cantidad de
+comandos involucrados y su extensión.
 
-Sería mucho más amigable contar con algún tipo de interfaz gráfica en la que las tareas puedan arrastrarse entre \ws, partirse con un \emph{clic} sin necesidad de tipear largos identificadores de subproblema, etc.
+Sería mucho más amigable contar con algún tipo de interfaz gráfica en la que
+las tareas puedan arrastrarse entre \ws, partirse con un \emph{clic} sin
+necesidad de tipear largos identificadores de subproblema, etc.
 
 
 
