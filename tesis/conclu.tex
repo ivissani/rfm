@@ -126,14 +126,16 @@ En particular, en la Sección~\ref{sec:resultadosaprendizaje} mostramos que en
 los criterios por tamaño el rendimiento mejoraba a medida que se permitían
 cláusulas más grandes. Esto es explicable ya que los criterios con mayor
 tamaño incluyen a las cláusulas de los criterios con menor tamaño.
-Naturalmente, los criterios con mayor tamaño incluyen más cláusulas. Sabemos
-que al seguir aumentando el tamaño máximo de cláusula premitido, la cantidad
-de cláusulas conservadas aumentará a un punto tal que los perjuicios por
-\emph{overhead} serán mayores que los beneficios obtenidos por recorte del
-espacio de búsqueda. Sin embargo, en los experimentos realizados no se llegó a
-este punto. Creemos que vale la pena seguir incrementando el tamaño permitido
-para poder determinar dónde está este punto de inflexión y cómo se comporta
-con respecto al incremento en \emph{scope}.
+Naturalmente, los criterios con mayor tamaño incluyen más cláusulas. Por lo ya
+explicado en las Secciones~\ref{sec:pruning} y~\ref{sec:aboutcriteria}, lo
+esperable sería que al seguir aumentando el tamaño máximo de cláusula permitido,
+tarde o temprano la cantidad de cláusulas conservadas alcance un punto tal que
+los perjuicios por \emph{overhead} superen los beneficios obtenidos por recorte del
+espacio de búsqueda (de modo que seguir aumentándolo se vuelva contraproducente).
+Sin embargo, en los experimentos realizados no se llegó a este punto. Consideramos
+que vale la pena seguir incrementando el tamaño permitido para poder determinar
+dónde está este punto de inflexión y cómo se comporta con respecto al
+incremento en \emph{scope}.
 
 
 \subsubsection{Análisis de conflictos, \emph{backjumping} y eliminación de subproblemas}
