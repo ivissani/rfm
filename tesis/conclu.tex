@@ -2,8 +2,66 @@
 \chapter{Conclusiones y trabajo futuro}
 \label{conclu}
 
-\section{Trabajo futuro}
 
+\section{Conclusiones}
+
+En el presente trabajo desarrollamos una herramienta de \ssolving paralelo y distribuido, orientada en particular a la verificación automática de propiedades sobre modelos formales de sistemas. Adoptamos un enfoque \emph{divide-and-conquer}, basado en una técnica conocida, para el particionamiento recursivo de subproblemas difíciles. Lo implementamos sobre una arquitectura original, dando respuesta a los aspectos cruciales de escalabilidad, usabilidad y automatización. Identificamos un factor limitante para la eficiencia del enfoque de particionamiento. Propusimos una solución basada en herencia de cláusulas aprendidas. Diseñamos e implementamos diversos criterios y evaluamos su desempeño.
+
+\medskip
+
+Las principales conclusiones respecto de la herramienta paralela y distribuida propiamente dicha son:
+
+\begin{itemize}
+
+\item La arquitectura resultó sólida y robusta, escalando sin inconvenientes al orden del centenar de \ws sobre decenas de equipos.
+
+\item Para esa cantidad de \emph{hardware}, los (escasos pero cruciales) componentes centralizados no presentaron evidencia alguna de saturación. Incluso para corridas de problemas grandes se observó en esos puntos amplia capacidad ociosa.
+
+\item Se identificaron correctamente los principales desafíos a resolver para lograr una operación 100\% automatizada. Se diseñaron soluciones pragmáticas, logrando convergencia y resultados satisfactorios para un banco de problemas con características disímiles, en distintos tamaños y grados de dificultad.
+
+\end{itemize}
+
+
+
+Las principales conclusiones respecto de la implementación y evaluación de cláusulas aprendidas en la herramienta distribuida son:
+
+\begin{itemize}
+
+\item La herencia de cláusulas aprendidas efectivamente permitió mejorar la eficiencia del análisis distribuido.
+
+\item El grado en que eso ocurre parece depender fuertemente del problema.
+
+\item Tanto para problemas donde la mejora es significativa como para aquellos donde no lo es, el grado de mejora tiende a aumentar junto con el tamaño de la instancia.
+
+\item Es posible implementar un esquema de reuso de cláusulas aprendidas sin atentar contra la escalabilidad del sistema.
+
+\item De los criterios de selección de cláusulas que evaluamos, el que logró mejores resultados globales fue aquel que retiene las cláusulas de tamaño menor o igual a 6, sin hechos.
+
+\item Las mejoras en la eficiencia logradas gracias a la herencia de cláusulas aprendidas, si bien son significativas, no resuelven por completo el problema del retrabajo. Hay casos en que la eficiencia obtenida, a pesar de mejorar visiblemente respecto de la versión sin learning, sigue distando considerablemente del ideal lineal.
+
+\end{itemize}
+
+
+
+%[* Usando ese criterio, sobre los casos de estudio considerados el prototipo con herencia de cláusulas aprendidas logró un \emph{speedup} de ... [?]]
+
+
+
+
+%Entre los aportes originales de esta tesis cabe destacar:
+%
+%\begin{itemize}
+%
+%\item \ldots
+%
+%\item \ldots
+%
+%\item \ldots
+%
+%\end{itemize}
+
+
+\section{Trabajo futuro}
 
 \subsubsection{Mejoras en la estrategia automatizada de toma de decisiones}
 
