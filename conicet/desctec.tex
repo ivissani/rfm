@@ -1,0 +1,897 @@
+\documentclass{article}
+
+\usepackage[spanish]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage{framed}
+\usepackage{paralist}
+\usepackage[usenames]{color}
+\usepackage{colortbl}
+\usepackage{url}
+
+%A4 = 210x297 -- 3cm de margen.
+\usepackage[vcentering]{geometry}
+\geometry{top=4cm, bottom=4cm, right=3cm, left=3cm}
+
+\def \argentum{{\bf A}r_{\bf g}entum}
+
+\newcommand{\boxedcomment}[1]{%
+\begin{framed}
+ #1
+\end{framed}
+}
+
+\title{Fundamentos formales y herramientas para el desarrollo de software orientado a servicios}
+\author{Carlos Gustavo Lopez Pombo}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+
+
+\section{OBJETIVOS GENERALES}
+%\begin{framed}
+%(máx 1 pág)
+%
+%Objetivos Generales e impacto: Identificar el problema general en estudio, contextualizar el problema a nivel local, identificar que parte del problema se intenta abordar /contribuir con la investigación.
+%\end{framed}
+
+The world of software development has become intrinsically heterogeneous.  On the one hand, several languages and notations have been made available to help analysts and designers capture and model different aspects involved in software applications.  For instance, the UML \cite{omg-sysml04,omg-ocl04} offers a range of diagrammatic notions, from class diagrams to state diagrams, collaborations diagrams, and so on.  This proliferation reflects the need to reduce the complexity of developing large systems as each language allows (teams of) engineers to address a specific view or phase of the development process. The same happens at the level of the formalisms that can formally support the use of such languages and methods: equational logic has been used for datatypes, temporal logic for reactive behavior, higher-order functions for security, and so on. As a consequence, there are many different notations and input languages for tools. Users also have their own individual and collective biases and habits towards particular languages. In summary, the scenario that we are facing today is that of a multitude of modeling languages and supporting logics, and of tools for processing such languages by reasoning in the underlying logics.
+
+These design and development environment introduces heterogeneity as a major source of complexity,  as it makes it very difficult, even impossible, for engineers to understand how systems will behave and interact with people or other systems. This is why, in the last few years, theoretical computer science has been witnessing a growing interest in the problem of providing formal foundations for heterogeneous software design.
+
+On the other hand, in the context of global ubiquitous computing, the structure of software systems is becoming more and more dynamic as applications need to be able to respond and adapt to changes in the environment in which they operate.  For instance, the new paradigm of \emph{Service-Oriented Computing} (SOC) supports a new generation of software applications that run over globally available computational and network infrastructures where they can procure services on the fly (subject to a negotiation of \emph{Service Level Agreements} (SLAs) and bind to them so that, collectively, they can fulfill given business goals.  There is no control as to the nature of the components that an application can bind to.  In particular, development no longer takes place in a top-down process in which subsystems are developed and integrated by skilled engineers: in SOC, discovery and binding are performed by the middleware. Therefore, it is not necessarily true that this extra level of heterogeneity that derives from run time aspects can be handled through (design time) translations to a common language.
+
+\boxedcomment{From a general point of view, the objectives of the project are to focussed on making contributions in two fields by: 
+\begin{itemize}
+\item providing formal foundations for service oriented software design and development by supporting this new conception of heterogeneity derived from it, and
+\item commit ourselves to the development of tool support for software design, validation and verification.
+\end{itemize}
+
+Considering that a significant part of the software that is constructed these days fit in this new paradigm, we believe that the research in this field will have a major impact in bridging the gap between formal methods and industrial software development by being more close to bring them into the actual practice of software design and development.
+}
+
+
+\section{OBJETIVOS ESPECÍFICOS E HIPÓTESIS DE TRABAJO}
+%\begin{framed}
+%(máx 1 pág)
+%
+%Identificar los Objetivos específicos relacionados con el problema que se abordará. Describir la hipótesis de trabajo y como se abordará el problema en cuestión a través de la experimentación y estudio..
+%\end{framed}
+
+We already presented, and justified, the general context in which the research lines will be developed. There we stated that regarding service oriented software design, mainly two topics are of the greatest interest; on the one hand the provision of formal foundations capable of dealing with the heterogeneity derived from the variety of languages in which the software is designed, and how they are integrated in runtime; and on the other hand the provision of tools supporting the analysis of such descriptions, based on these foundations.
+
+The project proposes the development of these two aspects in an interrelated way. In both fields our group have already made contributions and they will be discussed in further sections. Regarding the problem of dealing with heterogeneous descriptions of software artifacts we propose the development of a theoretical framework more flexible than the institution / representation-based one. This is done to overcome the limitations coming from the fact the they are focused in solving design-time integration: an institution is the formalization of a logic, an institution representation provides the means for translating one logic into another in a semantics preserving way. Normally, dealing with heterogeneity is managed by translating the different languages into a single and more expressive one in which the different views are homogenized, therefore, integrated in a single description. The new framework, will be based on the notion of interoperability of languages and will address three important limitations of the approaches that are currently available: 
+\begin{inparaenum}[\itshape a\upshape)]
+\item the fact that, because they were defined to account for logics, institutions are not necessarily the right abstraction for addressing many of the languages and notations that are used for modeling or specifying systems; 
+\item the lack of a proper notion of specification for heterogeneous systems that can support dynamic (service-oriented) binding; and 
+\item the lack of appropriate tool support for formal methods based on these new concepts.  
+\end{inparaenum}
+
+Developing a framework with these features requires several tasks to be accomplished. The primary objective is the study of the state of the art in the field of heterogeneous specification in order to identify its limitations to deal with non-logical languages such as UML or SCA. The existing literature on heterogeneous specifications concentrate on logical languages formalized as institutions \cite{goguen:cmwlp84} and semantic preserving translations between them, formalized as institution morphisms \cite{goguen:jacm-39_1} and institution representations between institutions \cite{tarlecki:sadt-rtdts95}. Grothendieck institutions \cite{diaconescu:acs-10_4} are a step forward in the field of heterogeneous specifications because it internalizes  the translations as heterogeneous theory morphisms introducing the concept of a heterogeneous language whose models will be interpreted  according to the projections induced by these morphisms on the corresponding class of models. 
+
+In many cases, one can contrive encodings of such languages into institutions but at the cost of losing the meaning of a grammar or model theory.  For instance, institutions force mappings to be natural transformations over grammar functors, which is overly restrictive in situations where one can find (often partial) translations between (unstructured) sentences.  At the level of the model theory, the satisfaction condition (a structural property that requires satisfaction of sentences to be independent from signatures) prevents the definition of mappings that operate over subdomains that are signature-dependent.
+
+This is why we propose to work towards looser notions of specification formalisms (such as Fiadeiro's coordinated categories or Ehrig's specification logics) and develop a notion of interoperability that resorts not to representations or encodings but to a notion of connector akin to that used in software architecture.  A connector (a well known concept in software architecture literature) should support a given level of interoperability by declaring in its roles the elements that it needs to abstract from the languages being connected (which can be either syntactic or semantic, or a mixture of both) and, in its glue, the mechanism through which the integration is effected.
+
+One of the aims of the project is to develop theoretical foundations similar to those existing for logical languages but to non-logical ones, and based on the concept of interoperability, instead of representation of languages.
+
+We also pretend to include other features that has been also extensively studied for logical languages, like specifications structuring mechanisms \cite{borzyszkowski:tcs-286_2,lopezpombo:ictac10}. Structuring mechanisms provide a way to understand theories as the result of an dynamic procedure of system design. We believe that this is the correct way to understand how systems are build, which is in an incremental and evolving way. Thus,  it is a must in pushing this novel conception of heterogeneous software design forward, specially if one wants this methodology to be adopted in the practice of software design and development. 
+
+Regarding structuring mechanisms, one now has to take into account that they must operate on channels as well.  In particular, I propose to review the notion of higher-order connector developed in \cite{lopez+:acmtosem-12_1} for software architecture, itself inspired by the notion of higher-order module in algebraic specifications.
+
+\boxedcomment{The project will be committed to the development of theoretical foundations for the construction and composition of heterogeneous specifications based on the concept of interoperability (rather than the representation of languages) that can be used both at design and run time, and validate those foundations over software engineering notations, methods and languages in which heterogeneity is a key feature. To accomplish this I will:
+\begin{itemize}
+\item establish the limitations of the traditional institution-based approach to act as formal framework for languages that are not logical, or to deal with concepts like interoperability, or run time binding of services, both essentials in service-oriented architecture,
+\item  define the formal foundations for a heterogeneous framework based on the concept of interoperability. This is specially challenging and novel because, contrary to the possibilities enabled by the institution-based approach, run time support can not be resolved in a static fashion during the design phase,
+\item develop intuitive and easy to use experimental interfaces for already existing tools for software verification and validation, and
+\item  prototype a tools supporting heterogeneous service-oriented software design.
+\end{itemize}
+}
+
+
+\section{RELEVANCIA DEL PROBLEMA}
+%\begin{framed}
+%(máx 3 pág.)
+%
+%Desarrollar la importancia e impacto a nivel local, general y para la especialidad del problema, los objetivos y el conocimiento que se generará. Describir antecedentes, avances y el estado del arte ? búsqueda bibliográfica actualizada -.
+%\end{framed}
+
+%Most of everyday activities are sustained by the intervention of software artifacts, from digital music players, cel phones and home appliances, to systems running in critical areas such as automotive and aeronautics. It is known that removal of bugs in early stages of software development results in severe production and maintenance cost reductions. In more critical areas the inclusion of formal methods for software design, validation and verification has shown to reduce the potential risks coming from software failures. There are several examples of software failures provoked by informality in the design, weakness of the testing face and, specially, lack of validation and verification tasks in the process of software design and development; some of them reported millions of dollars in losses for the enterprises responsible of the production of the goods running the software. Critical tasks require formal and rigorous development processes because even human lives are at risk.
+%
+%From an economic point of view, todays valuable goods are those that integrate knowledge in their production process. Most of this goods involve some kind of software to be functional, thus being competitive in this branch of production require high quality standards. Formal methods contribute in rising these standards by enabling early bug detection, behavior certifications and the guaranty of certain properties satisfaction. In this sense, and considering the amount of technological companies that are starting to have factories in Argentina we believe that it is strategic to produce the knowledge and tool support enabling this competitive advantage.
+
+Most of everyday activities are sustained by the intervention of software artifacts, from digital music players, cel phones and home appliances, to systems running in critical areas such as automotive and aeronautics. We already mentioned that service oriented software is a growing novel paradigm in which business goals are accomplished by the collective intervention of agents. It is known that removal of bugs in early stages of software development results in severe production and maintenance cost reductions. In critical software the inclusion of formal methods for software design, validation and verification has shown to reduce the potential risks coming from software failures
+
+From an economic point of view, todays valuable goods are those that integrate knowledge in their production process. Most of this goods involve some kind of software to be functional, thus being competitive in this branch of production require high quality standards. Formal methods contribute in rising these standards by enabling early bug detection, behavior certifications and the guaranty of certain properties satisfaction. In this sense, and considering the amount of technological companies that are starting to have factories in Argentina we believe that it is strategic to produce the knowledge and tool support enabling this competitive advantage.
+
+Developing a formal framework for software development requires the definition of formal and rigorous foundations and the development and integration of tools supporting software design and analysis.
+
+To summarize the aspects the project must take into account we must recall in the following aspects:
+\begin{inparaenum}[\itshape a\upshape)]
+\item nowadays a language for software design and development is conceived as a collection of languages designed to reflect each particular behavior in the most appropriate language, thus introducing a heterogeneity as a decisive factor,
+\item the ontology behind service oriented software design lacks of formal foundations, specially respecting how a collection of services are dynamically discovered and bound at runtime, and
+\item the lack of intuitive and easy to use tool support for software design, validation and verification under this new conception of software pieces.
+\end{inparaenum}
+
+At a more concrete level, several contributions where made in order to deal with all these aspect. For instance, in the specific case of the UML (viewed as a paradigmatic example of an heterogeneous language for software design), Broy proposes a \emph{denotational system model} based on stream-processing functions in combination with abstract data types \cite{broy:TUM-I0612,broy:TUM-I0710,broy:TUM-I0711} in which diagrams are taken as predicates that a system model instance has to satisfy.  One can also find proposals for combinations of formalisms such as CSP and Z \cite{fischer+:fmoods97}, and extensions of the algebraic specification language CASL \cite{astesiano:tcs-286_44} with formalisms like CSP \cite{roggenbach:tcs-354_1} or Statecharts \cite{reggio:amast00}. However, these are ad-hoc combinations that only provide a partial answer to the problem and do not necessarily generalize to other languages.
+
+A more fundamental effort towards developing foundations for the methods and techniques that are needed to address heterogeneity has been attempted by building on the theory of institutions developed in the 80's by Goguen and Burstall \cite{goguen:cmwlp84}.  Institution provide a formal and generic definition of what a logical system is and how specifications in a logical system can be structured \cite{sannella:ic-76_2-3}.  Since then, institutions have developed in a number of directions, from an abstract theory of software specification and development \cite{tarlecki:nato-asimalles03} to a very general version of abstract model theory \cite{diaconescu08}, and offered a suitable formal framework for addressing heterogeneity \cite{mossakowski:tacas07,tarlecki:gabbay00}, including applications to the UML \cite{cengarle:cgm08}.
+
+The framework of institutions supports heterogeneity of formalisms through a number of mappings that can be established to encode or represent a logic in another through institution (co-)morphisms.  For instance, one can use co-spans of co-morphisms to represent two logics over a (richer) third one in which specifications over the weaker logics can be integrated -- this is the principle used in \cite{cengarle:cgm08} for the UML. More generally, one can think of ``universal'' institutions in the sense of logics that are powerful enough for many other logics to be encoded in them. An example of this approach is the definition of the formal foundations of the tool $\argentum$ \cite{lopezpombo:phdthesis}. There the author used fork algebra as a common language to which the heterogeneous set of theories describing the system are translated to in order to obtain a complete description of the system.  In the section regarding our contribution we will discuss our language independent approach for integrating partial heterogeneous descriptions into a complete view of the system.
+
+Diaconescu \cite{diaconescu:acs-10_4} developed a special kind of institution, know as Grothendieck institution, for handling certain aspects of heterogeneity. In a Grothendiek institution, the category of signatures is heterogeneous because it is obtained by flattening an indexed institution that represents the formalisms of interest. A heterogeneous language is obtained by gluing together all the languages corresponding to the indexes. This categorical formalization has been used in order to provide formal foundations for tools \cite{diaconescu:tcs-285_2,mossakowski:tacas07}.
+
+Although the use of (co-)morphisms from specification logics to a common framework provides a way of integrating heterogeneous specification in a homogeneous representation that can be analyzed through general-purpose tools, the whole overall approach based on the existence of a ``universal'' institution or the construction of a Grothendieck institution fails to address some important aspects of current software engineering practice:
+\begin{itemize}
+\item many languages and notations are not logical formalisms in the strict sense (in fact many are even only semi-formal such as the different kinds of diagrams used in the UML);
+\item frameworks such as {SCA} \cite{fiadeiro:wsfm06} (Service Component Architecture) involve specifications of entities that, like services, are themselves heterogeneous, i.e. they are composed of applications that play different roles in service provision and are discovered and assembled at run time, not design time;
+\item the \emph{process} of developing specifications itself needs to be supported, by which we mean the ability to build complex specifications from simpler, more tractable ones; in a heterogeneous setting, it is far from clear what structuring operations make sense and how their semantics should be defined when assembly takes place at run time, and
+\item tool support for validation and verification of software artifacts must be provided and they should be accompanied by intuitive interfaces in order to bridge the gap between the underlying formal methods and the engineering point of view. 
+\end{itemize}
+This means that we need a fundamentally new approach to heterogeneity based on an altogether different formal framework and tools implementing it.  
+
+We already discussed the actual importance of this new paradigm for software artifacts design. We also showed the lack of formal foundations for it. This is the reason why we believe that providing these formal foundation, together with tools support for software design, validation and verification, through easy to use and intuitive interfaces, is a must in the area of software engineering.
+
+
+\section{RESULTADOS PRELIMINARES Y APORTES DEL GRUPO AL ESTUDIO DEL PROBLEMA EN CUESTIÓN} 
+%\begin{framed}
+%(máx 3 pág.) 
+%
+%Describir con suficiente detalle los resultados ya obtenidos por el grupo, sean publicados o no, que indican la capacidad técnica del grupo y la dedicación previa del grupo para el estudio propuesto.
+%\end{framed}
+
+The people involved in the group has been working in formal methods in software engineering for a long time, and in most of the areas involved in the project has made significant contributions presented in recognized conferences and workshops and published in international journals. In severals of the areas we have collaborations with others researchers from Argentina and abroad. Now we explain the details of the contributions made by the group by classifying them into three areas: 
+\begin{inparaenum}[\itshape a\upshape)]
+\item topics related to service oriented computing,
+\item topics related to heterogeneity and formal foundations for software specification languages, and
+\item topics related with tool support for formal methods in software engineering.
+\end{inparaenum}
+
+
+\subsection*{Service Oriented Computing}
+Its been two years since we started a collaboration with professors Tomas S.E. Maibaum from McMasters University in Hamilton, Canada, and Nazareno Aguirre and Pablo Castro from Universidad Nacional de Rio Cuarto in Córdoba, Argentina. This joint work has already reported advances in several aspects. In particular, one of our research interests is on dynamic reconfiguration. This is one of the most relevant topics regarding runtime behavior. Our first results were presented in \cite{castro:ictac10}. As a constituent part of this work we developed a formal framework which gives semantics to a language for describing software architectures. This year I was invited by professor Tomas S.E. Maibaum to McMasters University as an invited researcher to write a journal version of this formalization which already has been sent to Theoretical Computer Science under the name \emph{An Abstract Heterogeneous Characterization of Component Based Systems in a Categorical Setting}. At this moment we are working on two other articles, the first one is a journal extended version of the dynamic reconfiguration setting based on the formalization presented in the article we sent to Theoretical Computer Science. In this case, preliminary definitions and results were presented in the meeting of IFIP WG 1.3 held in Salamanca during June 2012, where I was invited as an observer. The other one is also an emergence article of \cite{castro:ictac10}, it will also be sent to other is about using this framework to formalize the concept of promotion of schemas as is used in Z \cite{spivey88}, B \cite{abrial96}, and other languages.
+
+
+\subsection*{Heterogeneous languages for software specification}
+The area of heterogeneous software specification is where the group made its most relevant contributions. The principal investigator of the project did his PhD thesis in the formalization of a framework called $\argentum$ \cite{lopezpombo:phdthesis} for heterogeneous software specification based on the use of fork algebras as a ``universal'' institution. Partial results of this work were published in \cite{lopezpombo:amast06}. 
+
+Modularity is a key concept when aiming at good designs. In \cite{parnas:cacm-15_12,parnas:ieeetse-5_2}, Parnas extensively discusses how modular designs of software artifacts result in higher quality software by enabling reuse, separation of concerns and better maintainability. Since Parnas's foundational work, practitioners build software artifacts (and particularly software specifications), modularly. Thus, it is mandatory to produce formal support for this ontology for software design and construction. In the field of institution \cite{goguen:cmwlp84} the basis for the notion of modularity were established by Sanella and Tarlecki in \cite{sannella:ic-76_2-3}, by providing a set of structure-building operations that enable the modular construction of specifications from theories taken from a given institution, and continued by Borzyszkowski in\cite{borzyszkowski:tcs-286_2}, where he presented a logical system for the structure building operations introduced by Sanella and Tarlecki, as well as an extensive discussion on the conditions under which the proposed calculus is complete.
+
+In \cite{lopezpombo:ictac10} we presented a complete calculus for structured specifications in fork algebras, a logical system that do not meet the conditions required by Borzyszkowskis calculus. As a result of the presentation at ICTAC -- International Conference on Theoretical Aspects of Computing 2010, we have submitted an extended and language independent generalization of the calculus presented in this article to be evaluated for publication in Theoretical Computer Science. 
+
+Studying the structure building operations syntax and semantics, given by operations $\mathbf{Sig}$ and $\mathbf{Mod}$ a question arises: As we could like the structure of the specification not to induce new behavior, is it possible to define a function assigning to every structured specification a flat and monolithic one describing the exact same behavior? In general the answer is no. In \cite{lopezpombo+:wadt2012} we presented language independent and sufficient conditions for this assignment to exists providing a mechanism to give formal semantics to any structured specification in an appropriate, possibly more expressive institution.
+
+A known drawback of the theory of institutions is that they can only cope with monotonic logics leaving aside a large number of applications of logics in computer science as it is the use of non-monotonic logics for reasoning in terms of rely-guaranty properties of software systems, or even the logical implications of the data gathered from testing in the analysis of properties. The general idea is that in the case of monotonic logical reasoning properties validity is not subject to the appearance of new evidence invalidating them, thus the concept of assumption is not reflected. In \cite{cassano:wadt2012} we proposed a formalization of entailment systems for non-monotonic logics solving many of the problems the traditional interpretations have.
+
+
+\subsection*{Tool support for formal methods in software engineering}
+The group has produced several contributions in the field of tool support for formal methods in software engineering. The first one, \cite{lopezpombo:SRI-CSL-02-04}, was a semantic embedding of an extension of fork algebras in higher order  logic in order to use PVS \cite{owre:cade92} as an interactive theorem prover based on sequent calculus. 
+
+{\sf Alloy}\cite{jackson:acmtosem-11_2} is a specification language that has gain visibility because it enables the possibility of automatic validation of formal descriptions of software artifacts. This is done by translating an {\sf Alloy} specification, accompanied by a property, to a propositional logic formula, thus, it can be sent to an off-the-shelf sat-solver to search for a counterexample. As {\sf Alloy}'s language is relational logic, a first order language whose domains are relations, it is undecidable. Thus to have this translation to a sat problem requires the user to bound the size of the domains. This limits the conclusions we can draw from a search for a counterexample, while if {\sf Alloy} finds a counterexample the user have the certainty that the specification violates the property, if it does not the user can only infer that there is no witness of such violation within the given bounds. This bounded model checking process serves as a very important tool to gain confidence in the specification but will never provide a certification of the correctness of a specification with respect to a set of intended properties. In \cite{frias:icfem04} we presented a complete calculus based on the translation of the {\sf Alloy} language to a class of fork algebras, and from this work and \cite{lopezpombo:SRI-CSL-02-04}, in \cite{frias:tacas07}, we built a theorem prover for {\sf Alloy} called Dynamite (\url{http://www.dc.uba.ar/dps}). This tool has some very nice characteristics based on the integration of a powerful theorem prover such as \emph{PVS} (\emph{Prototype Verification System}) \cite{owre:cade92}, and a bounded model checker that assists the user in taking correct decisions while proving a property. These characteristics can be summarized as follows:
+\begin{itemize}
+\item the procedure of hiding a formula from a sequent is model checked in order to search for a counterexample exhibiting that the formula chosen to be hided is necessary to complete the proof, this is particularly useful because \emph{PVS} is based on sequent calculus and in this kind of calculi the amount of hypothesis and thesis in the sequent tend to grow rapidly as the depth of the proof grows obfuscating the proof,
+\item the inclusion of a lemma is model checked in order to gain confidence that the lemma could follow from the hypothesis present in the sequent, and
+\item the possibility of model check a sequent at any time during the proof in order to detect possible flaws.
+\end{itemize}
+The new {\sf Alloy} includes a feature called \emph{UnSat Core}. Once the sat-solver detects that the formula is not satisfiable, this feature returns a set of clauses which includes those conflicts that are preventing the formula to be satisfied. Using this we introduced a new feature that prunes the current sequent of a proof by eliminating formulas that are, potentially, not useful for completing the proof. This work was presented in \cite{moscato:ictac10}.
+
+It is a known fact that determining the satisfiability of a propositional formula is an NP-complete problem, thus requiring an intensive use of computational resources to be decided on a particular instance. One of the techniques to overcome this problem, and considering that nowadays hardware is a relatively cheap resource is to use available clusters of computers to divide the problem into relatively independent pieces and solve it in a parallel and distributed way. We have been working on in the construction of a parallel and distributed sat-solver to be used in the validation of {\sf Alloy} specifications. This tool was presented in \cite{rosner:abz10} under the name {\sf ParAlloy}. This technique is based on a sophisticated data structure called BED \cite{andersen:ic-179_2}, a variation of BDDs \cite{bryant:ieeetc-8}, which enables the possibility of breaking a sat problem in several subproblems in a very efficient way. This enables the possibility of, once the problem is declared to be difficult, divided into several pieces in order to balance the load between the available computing resources. This tool was efficiently used in the validation on object oriented programs we reported in \cite{galeotti:apv09,galeotti:issta10}.
+
+\boxedcomment{As we mentioned before, {\sf Alloy} is a first-order relational language which provides a good way of proving the viability of the techniques and a large community of users and researchers providing feedback on the results. In all the cases our contributions are independent of the language with the exception of well stablished requirements so all these results can be extended to any other language meeting the formal requirements.}
+
+A new direction in our research, which at this moment is strictly theoretical is the development of formal foundations for semantic tools for software verification. The origins of these logical tools can be traced back to the works of Beth \cite{beth59,beth:hintikka69}, Herbrand \cite{herbrand:goldfarb71} and Gentzen \cite{gentzen:szabo69}; Beth's ideas were used by Smullyan to formulate the tableau method for first-order predicate logic \cite{smullyan95}. Herbrand's and Gentzen's work inspired the formulation of resolution systems as presented by Robinson \cite{robinson:jacm-12_1}. These methods are strongly related to the semantics of a logic; and, therefore, they are often used for obtaining or finding models; notice that this is not possible in \textit{pure} deductive methods, such as natural deduction or Hilbert systems, as formalized by Meseguer. In \cite{lopezpombo:wadt2012} we introduced the definition of satisfiability calculus as a semantic counterpart of Meseguers proof calculus introduced in \cite{meseguer:lc87}. 
+
+\boxedcomment{We believe that this definition, together which the development of the ideas presented in \cite{cassano:wadt2012} (see the end of the previous subsection) will provide a general notion of analysis of properties that generalizes the actual notion of proof and counterexample search; thus providing foundations for the task of software verification by integrating several well-known techniques under a unique formalization.}
+
+
+\section{CONSTRUCCION DE LA HIPOTESIS y JUSTIFICACION GENERAL DE LA METODOLOGIA DE TRABAJO}
+%\begin{framed}
+%(máx 1 pág.) 
+% 
+%A partir de lo expuesto en la introducción y los datos preliminares proponer la hipótesis de trabajo y jutificar la metodología propuesta.
+%\end{framed}
+
+In the previous section we described a new conception of software development based on the idea that a software artifact is a collection of services that are discovered, bound and coordinated at runtime instead of the traditional point of view that assumes there is a closed world in which every component is present and completely described at design time. Traditional approaches present two main drawbacks that require formal foundations to be provided:
+\begin{inparaenum}[\itshape a\upshape)]
+\item the formal mechanisms for composing pieces of specification which enable the construction of software systems in a modular way do not cope with runtime behavior, and
+\item the heterogeneity arising from the fact that constituent services are discovered in a constantly changing runtime environment is not cleanly characterized by the notion of representation of logics.
+\end{inparaenum}
+
+Our working hypothesis regarding service oriented software construction is based on this lack of formal foundations for this new paradigm of software development. In this sense we will focus mainly on the theoretical development of a framework capable of characterizing this class of software systems.\\
+
+One of the main concerns of the project is related to the fact formal methods must be accompanied by tools supporting them, not only as a proof of concept but as a genuine possibility of applying them in order to obtain better quality software. Nowadays there exists lots of tools implementing a diversity of formal methods but usually they serve more as a justification of the potential application of formal methods than as real tools available for industrial strength software construction. 
+
+In the previous section we detailed the contributions made by our group in several aspects of the field of formal methods:
+\begin{inparaenum}[\itshape a\upshape)]
+\item formal foundations for software design, specially regarding heterogeneous specifications and structured specifications, 
+\item the introduction of the novel formalization of entailment systems for non-monotonic logics, 
+\item the formal definition of satisfiability calculus as a means to characterize the tools related to the semantic reasoning about systems,
+\item the large experience in the development of tools supporting software analysis, both from a syntactical and semantical point of view through theorem proving and model-checking (including parallel and distributed tools for computational intensive processes), respectively, and
+\item the recent contributions made in the field of dynamic reconfiguring systems, a primary concern in service oriented software.
+\end{inparaenum}
+
+Under this evidence, it is easy to understand the main aim of the project as the integration of our areas of expertise in the solution of a novel problem. Our experience in the field of formal languages for heterogeneous and structured specifications, together with the recent contributions in the field of dynamic reconfiguring software provide an outstanding starting point for the formal definition of the foundations for service oriented software architecture. As we mentioned before this foundations require the reformulation of several concepts as the notion of institution representation, which in this case must be replaced by the more flexible notion of language interoperability. 
+
+The definition of satisfiability calculus together with the well known notion of proof calculus provide formal foundations for the several tools involved in the validation and verification of software systems. Then, the recent formalization of entailment systems for non-monotonic logics will provide the formal tools for integrating these, apparently separate, techniques into a single and novel concept of \emph{software analysis} in which syntactic and semantic tools interoperate under a single process unifying verification and validation.
+
+Finally, our experience in developing tools will provide the means for constructing a all-in-one tool, with integrated formal and rigorous foundations, capable of enabling software design and analysis as a unique and indivisible process.
+
+
+\section{TIPO DE DISEÑO DE INVESTIGACION Y MÉTODOS}
+%\begin{framed}
+%(máx. 9 pág.)
+% 
+%Se deberá organizar el estudio propuesto en secciones mayores, correspondientes a los objetivos específicos, y, secciones menores, correspondientes a experimentos específicos para explicar:
+%\begin{enumerate}
+%\item La base racional de cada experimento o estudio propuesto. 
+%\item Como se llevara a cabo el experimento o estudio. 
+%\item Que controles se usarán ? en caso de ser necesarios - y porqué.
+%\item Que técnicas específicas se utilizarán discutiendo aspectos más críticos o modificaciones de manipulaciones habituales: Respecto a las técnicas y tecnologías empleadas (los métodos) si son parte del patrimonio del grupo y han sido descriptas en publicaciones propias o en los datos preliminares - no deberán detallarse y solo deberá citarse la fuente-. Explicar si se recibirá apoyo técnico de colaboradores.
+%\item Como se interpretaran los datos a la luz de lo que se quiere estudiar y como se contrastará con la hipótesis de trabajo.
+%\item Tratar de evaluar los potenciales problemas y limitaciones de la metodología y técnicas propuestas y en lo posible proponer alternativas.
+%\end{enumerate}
+%\end{framed}
+
+As we explained before there are two main areas of interests in which the contributions of the group will be focused. Throughout this section we will consider heterogeneity and structured specifications as a constituent aspect of the general problem we are adopting as a guideline for the project, which is the exploration of service oriented software construction in order to provide formal foundations for this new paradigm. In order to make this presentation more friendly we will try to separate the hypothesis from the methodology, being the hypothesis a succinct characterization of the problems we want to solve, and the methods an introduction to what we believe is the correct approach to solve them.
+
+
+\subsection*{Service Oriented Computing and heterogeneous languages for software specification}
+We already mentioned how global ubiquitous computing has moved the focus of software construction from a static closed world view to a more dynamic and constantly changing view in which a software must be understood as a collection of services that are discovered and bound at runtime by means of a service level agreements negotiation. This frameworks are usually grouped under the name of Service Oriented Computing (SOC). We also mentioned how this new conception brings a complete new level of heterogeneity and how the state of the art approaches for heterogeneous software specification, those coming from the field of algebraic specification and category theory, fail to characterize. 
+
+The first step in this direction will be the evaluation of the state of the art in the search of the limits the traditional approach to heterogeneity has when it is applied to this new conception of software artifact. We believe that the key concept here is the notion of interoperability of software pieces instead of the traditional communication over a common language usually identified with communication channels. Instead, interoperability is more related to the concept of port coming from the field of software architecture. There, the communication channel has its own behavior, similar to the role of a communication protocol which rules the negotiation of the terms under which the software components will be bound in order to provide the service. One way to interpret this notion within the well known concepts coming from institutions is the one we presented in the paper \emph{An Abstract Heterogeneous Characterization of Component Based Systems in a Categorical Setting} sent for evaluation to the journal Theoretical Computer Science.
+
+Based on the developed notion of interoperability, we propose to develop a notion of heterogeneous specification that generalises what is available over Grothendieck institutions \cite{diaconescu:acs-10_4} as used by Diaconescu and Futatsugi \cite{diaconescu:tcs-285_2}, and by Mossakowski \cite{mossakowski:tacas07} -- a ``collection" of theories in different institutions -- to the case in which we are not necessarily working with theories of logics (institutions) but elements of a configuration of specification formalisms.  In this case, a (heterogeneous) specification should be considered as a graph labelled by objects of those formalisms, interconnected by instances of the connectors that, in the configuration of formalisms, ensure the interoperability between the formalisms involved. 
+
+This should generalize, in the case where the languages are institutions, the concept of \emph{channel} \cite{fiadeiro:amast96}, and even the complex notion of \emph{connection} we presented in \emph{An Abstract Heterogeneous Characterization of Component Based Systems in a Categorical Setting}. In this new framework, the connector-based notion of channel should overcome problems that arise when working with Grothendieck institutions due to the fact that relations are established directly between logical descriptions by means of morphisms, which necessarily include the use of a morphism/institution representation between the different institutions. And the same happens in other approaches like Tarleckis ``universal'' institution.
+
+One of the challenges that we will have to address in this more general setting, is the ability to infer properties of these heterogeneous specifications based on the nature of the channels.  For instance, one of the structures that need to catered for in such a setting arises from the need to deal with situations in which different aspects need to be specified for the same entity, as in the UML. Depending on the nature of the channels, we should be able to formulate and analyze properties of compatibility or consistency.
+
+With regard of this aspect of the project contributions are expected to be more theoretical and related to the formal foundations of this new paradigm of software construction at the beginning. We believe that providing tool support for this kind of framework requires a maturation time in order for the ideas to grow into a consolidated and uniform corpus so we only plan to explore this practical aspects at the end of the project.\\
+
+\boxedcomment{The viability in accomplishing the objectives regarding this aspect of the project should be evaluated under the following scenario:
+\begin{itemize}
+\item the principal investigator has a two years collaboration, with several contributions made in international conferences and journals, with researchers of two universities, Prof. Tomas S.E. Maibaum at McMaster University, Hamilton, Ontario, Canada, and Prof. Nazareno Aguirre and Pablo Castro at Universidad Nacional de Río Cuarto, Río Cuarto, Córdoba, Argentina,
+\item there is a starting collaboration through the international project MEALS: Mobility between Europe and Argentina applying Logics to Systems financed by Marie Curie Actions under the program International Research Staff Exchange Scheme with Prof José Luiz Fiadeiro (a renown reference in this field) at Leicester University, Leicester, United Kingdom, and
+\item Ignacio Vissani is starting his PhD at the Department of computing, Facultad de Ciencias Exactas y Naturales, Universidad de Buenos Aires and will devote his research exclusively to this topics.
+\end{itemize}}
+
+
+\subsection*{Tool support for formal methods in software engineering}
+We already mentioned the contributions we made in the field of tool support for software verification and validation. We will continue working on the tools that are being developed because their underlying analysis techniques are still applicable to other formal descriptions as far they have a formally defined semantics. Thus the possibility of integrating these techniques with service oriented software formal description only requires for a semantics preserving translation from the formal description language to the internal language of the tools.
+
+Regarding the development of tool support we have separated the work under several separate working hypothesis:
+\begin{enumerate}
+% dynamite como una herramienta de análisis demostración + refutación (satisfiability calculus) [nueva interfaz que implementa el concepto de análisis] Francisco Facioni estudiante de grado
+\item \label{reengineering} the re-engineering of Dynamite as an analysis tool with a new and comprehensive interface,
+% aumento de la automatización del proceso de demostración (instanciación de existenciales) [] Mariano Moscato estudiante terminando su doctorado
+\item \label{instantiation} increase of the automation of the process of proving properties using Dynamite, and
+% parallel and distributed sat-solving (mecanismos de aprendizaje) [modificación del sat solver paralelo y distribuido] Ignacio Vissani estudiante de grado -- Nicolás Rosner estudiante terminando su doctorado
+\item \label{learning} implementation of distributed learning techniques for parallel and distributed sat-solving.
+% Argentum: una herramienta de diseño, verificación y validación de especificaciones heterogéneas (integración de los resultados propuestos en \cite{lopezpombo:phdthesis,lopezpombo:amast06} en una herramienta) Matías Barbeito estudiante de grado en colaboración con Marcelo F. Frias and Till Mossakowski
+%\item \label{heterogeneous} development of $\mathbf{A}r_\mathbf{g}entum$, a design, verification and validation tool for heterogeneous specifications.
+\end{enumerate}
+
+\subsubsection*{The re-engineering of Dynamite}
+% dynamite como una herramienta de análisis demostración + refutación (satisfiability calculus) [nueva interfaz que implementa el concepto de análisis] Francisco Facioni estudiante de grado
+The idea of re-engineering Dynamite is to turn it into a general interface for the validation and verification of software specifications under a novel concept of analysis as a unifying criteria of satisfaction of properties by relating proof calculi \cite{meseguer:lc87} with satisfiability calculi \cite{lopezpombo:wadt2012}. To accomplish this, several tasks must be developed. Todays version of Dynamite is an adapted version of \emph{PVS} that has the following drawbacks: 
+\begin{inparaenum}[\itshape a\upshape)]
+\item the theorem prover runs as a process within Emacs, its interface, with no independence,
+\item the relation between the theorem prover and the bounded model checker is asymmetric because {\sf Alloy} is used by \emph{PVS} as a validation tool, and
+\item there is no easy to use and intuitive way to work with a specification.
+\end{inparaenum}
+
+Our first step will be to decouple \emph{PVS} from Emacs enabling the theorem prover to run as an independent process interacting through a daemon listening in a users defined port. This also enables the possibility of \emph{PVS} to be running on a separate machine that provides theorem proving as a service. The same thing can be done with {\sf Alloy} thus, separating the interface of the tool from the services of validation and verification of specifications. At this point \emph{PVS} no longer needs to implement strategies that invoke {\sf Alloy} as a slave procedure. Now, this strategies can be moved to a more appropriate level of abstraction in which they are the result of a coordination of different formal methods with different purposes in the process of software analysis.
+
+This step of separation of the interface from the tools applying different formal methods not only is more appropriate from a software engineering point of view, but has some nice collateral advantages such as that the tools are interchangeable and so does the interfaces.
+
+Regarding Dynamite we plan to implement a complete new interface which includes several new features, but also new strategies for guiding the user in the task of proving properties of a specification. Some examples are:
+\begin{itemize}
+\item {\bf improved information presentation}: we will explore modern techniques of information presentation to enable a more intuitive manipulation of proofs and counterexamples in a graphical environment. All theorem provers are based on text mode interfaces and we believe this may be one of the reasons why this kind of tools are not included in industrial software development processes.
+\item {\bf Bridge the gap between specification and proof/counterexamples}: we will improve the relation between a software description and the meaning of proof steps and pieces of counterexamples enabling a two way modification and refactoring. The use of information obtained from the process of validation and/or verification is usually limited because they are understood as a separate task from the process of software specification.
+\end{itemize}
+
+\subsubsection*{Increase of the automation of Dynamite}
+% aumento de la automatización del proceso de demostración (instanciación de existenciales) [] Mariano Moscato estudiante terminando su doctorado
+One of the reasons why theorem provers, and together with that certification of satisfaction of properties, has not been introduced in industrial software development is the well known difficulty behind the task of proving theorems. Since the starting of the development of Dynamite we committed to making theorem proving the easier it can be by complementing the process of proving properties with several techniques for assisting the user.
+
+The next stage in the development of Dynamite will be then devoted to make it help the user in the task of building proofs in a more intelligent way. The main two aspects to develop are:
+\begin{itemize}
+\item {\bf Automatic instantiation of existential quantifiers}: it is a known fact that the most difficult part of a proof is to find witnesses for the existential quantifiers. We propose to implement a procedure for instantiation suggestion based on the use of {\sf Alloy} to build appropriate terms that, when used to instantiate the formula, do not violate the property.
+\item {\bf Automatization of the proof process}: we plan to implement machine learning techniques for proof steps suggestion. Software descriptions and properties usually exhibit a lot of common structures which, disregarding details, share structure and consequently their proofs has a good chance of being similar. Thus, we propose to implement the machinery needed for the interface to suggest possible courses of action while proving a property by considering what was done by users in similar situations.
+\end{itemize}
+
+%Once reached this point we plan to experiment with non-conventional interfaces. We first plan to improve the interface by adapting it to multitouch screens. We understand that the application of formal methods such as theorem proving has certain limits which are related to the fact that only highly qualified are really trained to properly apply them, but at the same time we strongly believe that most of the time, the avoid in their use also is related to the fact that there is no intuitive and easy to use way to apply them. This is the reason why we will experiment with this kind of interfaces that bring into the task of proving properties and manipulating software designs a lot of comfort which encloses a closer relation between the user and the study object. Furthermore, we propose, as a final step of this development, to adapt wireless HCI (human computer interface), such as that used to new gaming consoles, to enable a more natural, intuitive and easy to use interface thus, giving rise to a whole new conception of software validation and verification, from the point of view of tool usability.
+
+\subsubsection*{Implementation of distributed learning techniques for the parallel and distributed sat-solving}
+% parallel and distributed sat-solving (mecanismos de aprendizaje) [modificación del sat solver paralelo y distribuido] Ignacio Vissani estudiante de grado -- Nicolás Rosner estudiante terminando su doctorado
+Also regarding tool support we will continue working on the development of the parallel and distributed sat-solver we have been worked on until now. 
+
+The results achieved with respect of parallel and distributed model checking were reported in \cite{galeotti:apv09, rosner:abz10}. In \cite{galeotti:issta10} we presented the use of TACO for Java program validation, accompanied by a procedure for computing tight bounds for the relations appearing in the specification using only the information about structure invariants, and a novel symmetry breaking predicate based on the canonizing of the heap. We also are in the middle of the process of publishing these results in the journal Transactions on Software Engineering of IEEE.
+
+We already mentioned that determining the satisfiability of a propositional formula is an NP-complete problem. One of the main heuristics that help in the resolution of this problem is that modern sat-solvers count with learning mechanisms based on the detection of conflicts. In the process of sat-solving a conflict characterizes parts of the search space having no valuation satisfying the formula. These conflicts are stored as a ``lesson learnt'' from the traversing the decision tree characterizing the actual search state. This information has a global impact on the resolution of problem because it is used to produce non-chronological backtracking making more efficient the decision procedure. 
+
+Distributing the decision procedure by breaking the problem into smaller and , potentially, more simple sub-problems lack on having a corresponding learning method enabling two running processes to share the information learnt from decisions taken locally.
+
+Once of the problems we will work on is the adaptation of the learning techniques in order to implement them as a part of our distributed and parallel sat solver in order to be able to widen the search space that can be visited to look for counterexamples. 
+
+
+\subsection*{Threats to the project}
+As far as we can notice, the main threat is related to the fact that implementation of techniques developed, in a theoretical sense, within the project would not advance at the same pace the research does. This is usually the case with groups formed by people that comes from theoretical research. To cope with this we are already involving students that are finishing their degree studies and need to do a thesis to obtain their title. As this thesis must be a small work bounded in time to fit in a semester it constitute an ideal situation for:
+\begin{inparaenum}[\itshape a\upshape)]
+\item the student to experience being part of a research project thus providing the opportunity of continuing their studies in a postgraduate program, and
+\item us to have the theoretical developments of the project implemented and tested against case studies.
+\end{inparaenum}
+
+
+\section{CRONOGRAMA DE TRABAJO}
+%\begin{framed}
+%(máx. 1 pág.)
+% 
+%Se presentará una tabla de doble entrada con las tareas desagregadas y los tiempos estimados que consumirán.
+%\end{framed}
+
+The following tables present and approximate schedule for the tasks we will develop during the project. Tasks marked with an {\bf A} are those devoted to the development of theoretical foundation for service oriented software construction. Those marked with a {\bf B} are the ones that continues our research on combination of theorem proving and bounded model checking techniques and the development of innovative interfaces for these tasks. Finally, the tasks identified with a {\bf C} will be the ones related to the continuation of our development on parallel and distributed sat-solving.
+
+\begin{table}[ht!]
+\begin{center}
+\begin{scriptsize}
+\begin{tabular}{|p{4.5cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|}
+\hline
+\cellcolor[gray]{0.8} & \multicolumn{24}{|>{\columncolor[gray]{0.8}}c|}{{\bf Year 1}}\\
+\hline
+\multicolumn{1}{|>{\columncolor[gray]{0.8}}c|}{{\bf Task}} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{Apr.} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{May} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{June} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{July} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{Aug.} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{Sep.} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{Oct.} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{Nov.} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{Dec.} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{Jan.} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{Feb.} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{Mar.}\\
+\hline 
+{\bf A1)}\hspace{0.2cm}Study of UML and SCA formal semantics. & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} \\
+{\bf A2)}\hspace{0.2cm}Study of existing heterogeneous frameworks. & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} \\
+{\bf A3)}\hspace{0.2cm}Definition of framework features. & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} \\
+\hline
+{\bf B1)}\hspace{0.2cm}Separation of the interface. & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} \\
+{\bf B2)}\hspace{0.2cm}Development basic functionality. & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} \\
+{\bf B3)}\hspace{0.2cm}Development of basic strategies. & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} \\
+{\bf B4)}\hspace{0.2cm}Information presentation. & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{}\\
+\hline
+{\bf C1)}\hspace{0.2cm}Study on the sat-solver implementation. & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} \\
+{\bf C2)}\hspace{0.2cm}Basic modifications to do a proof of concept. & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} \\
+{\bf C3)}\hspace{0.2cm}Definition and execution of the benchmark. & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} \\
+{\bf C4)}\hspace{0.2cm}Implementation of the modifications. & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{}\\
+\hline
+\end{tabular}
+\end{scriptsize}
+\end{center}
+\end{table}
+
+\begin{table}[ht!]
+\begin{center}
+\begin{scriptsize}
+\begin{tabular}{|p{4.5cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|}
+\hline
+\cellcolor[gray]{0.8} & \multicolumn{24}{|>{\columncolor[gray]{0.8}}c|}{{\bf Year 2}}\\
+\hline
+\multicolumn{1}{|>{\columncolor[gray]{0.8}}c|}{{\bf Task}} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{Apr.} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{May} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{June} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{July} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{Aug.} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{Sep.} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{Oct.} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{Nov.} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{Dec.} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{Jan.} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{Feb.} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{Mar.}\\
+\hline 
+{\bf A3)}\hspace{0.2cm}Definition of framework features. & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} \\
+{\bf A4)}\hspace{0.2cm}Definition of the theoretical foundations of the framework. & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} \\
+{\bf A5)}\hspace{0.2cm}Development of case studies. & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} \\
+{\bf A6)}\hspace{0.2cm}Definition of the architecture of a tool for the framework. & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} \\
+\hline
+{\bf B4)}\hspace{0.2cm}Information presentation. & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} \\
+{\bf B5)}\hspace{0.2cm}Definition of the case studies and test. & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} \\
+{\bf B6)}\hspace{0.2cm}Report results. & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} \\
+{\bf B7)}\hspace{0.2cm}Adapt interface to touch technology. & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} \\
+{\bf B8)}\hspace{0.2cm}Test using the case studies. & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} \\
+{\bf B9)}\hspace{0.2cm}Comparative evaluation. & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} \\
+\hline
+{\bf C4)}\hspace{0.2cm}Implementation of the modifications. & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} \\
+{\bf C5)}\hspace{0.2cm}Execution of the benchmark. & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} \\
+{\bf C6)}\hspace{0.2cm}Refinement and optimization of the implementation. & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} \\
+{\bf C7)}\hspace{0.2cm}Report results. & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} \\
+\hline
+\end{tabular}
+\end{scriptsize}
+\end{center}
+\end{table}
+
+\begin{table}[ht!]
+\begin{center}
+\begin{scriptsize}
+\begin{tabular}{|p{4.5cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|p{0.4cm}|}
+\hline
+\cellcolor[gray]{0.8} & \multicolumn{24}{|>{\columncolor[gray]{0.8}}c|}{{\bf Year 3}}\\
+\hline
+\multicolumn{1}{|>{\columncolor[gray]{0.8}}c|}{{\bf Task}} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{Apr.} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{May} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{June} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{July} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{Aug.} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{Sep.} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{Oct.} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{Nov.} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{Dec.} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{Jan.} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{Feb.} & 
+\multicolumn{2}{|>{\columncolor[gray]{0.8}}p{0.4cm}|}{Mar.}\\
+\hline 
+{\bf A6)}\hspace{0.2cm}Definition of the architecture of a tool for the framework. & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} \\
+{\bf A7)}\hspace{0.2cm}Implementation of a prototype tool for the framework. & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} \\
+{\bf A8)}\hspace{0.2cm}Test using the case studies. & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} \\
+{\bf A9)}\hspace{0.2cm}Evaluation of the framework. & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} \\
+{\bf A9)}\hspace{0.2cm}Report results. & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} \\
+\hline
+{\bf B9)}\hspace{0.2cm}Comparative evaluation. & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} \\
+{\bf B6)}\hspace{0.2cm}report results. & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} \\
+{\bf B10)}\hspace{0.2cm}Adapt WiFi HCI standard software to run applications. & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} \\
+{\bf B11)}\hspace{0.2cm}Adapt interface to WiFi HCI software support. & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} \\
+{\bf B8)}\hspace{0.2cm}Test using the case studies. & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} \\
+{\bf B6)}\hspace{0.2cm}Report results. & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} & 
+\multicolumn{2}{|>{\columncolor{red}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor[gray]{1}}p{0.4cm}|}{} &
+\multicolumn{2}{|>{\columncolor{green}}p{0.4cm}|}{} \\
+\hline
+\end{tabular}
+\end{scriptsize}
+\end{center}
+\end{table}
+
+
+
+\bibliographystyle{alpha}
+\bibliography{bibdatabase}
+
+
+\end{document}
